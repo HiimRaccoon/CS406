@@ -1,0 +1,31 @@
+{
+  "all_candidate_rectangles_in_bounds": true,
+  "exactly_four_crops_each": true,
+  "train_membership_and_local_image_sha256_verified": 65,
+  "checks": [
+    {
+      "layout": "1536x662_384",
+      "in_bounds": true
+    },
+    {
+      "layout": "1536x662_416",
+      "in_bounds": true
+    },
+    {
+      "layout": "1536x662_448",
+      "in_bounds": true
+    },
+    {
+      "layout": "1030x703_384",
+      "in_bounds": true
+    },
+    {
+      "layout": "1030x703_416",
+      "in_bounds": true
+    },
+    {
+      "layout": "1030x703_448",
+      "in_bounds": true
+    }
+  ]
+}

@@ -1,0 +1,300 @@
+{
+  "status": "RECOMMENDATION ONLY; awaiting user design decision",
+  "source_manifest_sha256": "9cbd8b70e8522b5aa4a20fba4fa7b2ecea855cf377f98e41ebb162a07f8a8040",
+  "train_images_reviewed": 65,
+  "normalization_mean": [
+    0.485,
+    0.456,
+    0.406
+  ],
+  "normalization_std": [
+    0.229,
+    0.224,
+    0.225
+  ],
+  "preview_ui_fill_rgb": [
+    124,
+    116,
+    104
+  ],
+  "ui_preprocessing_status": "Draft template used for preview; coordinates and fill explicitly disclosed, not silently frozen",
+  "navigation_arrows": "intentionally retained",
+  "global_output": [
+    896,
+    384
+  ],
+  "local_output": [
+    320,
+    320
+  ],
+  "layouts": {
+    "1536x662": {
+      "raw_width": 1536,
+      "raw_height": 662,
+      "processed_width": 1536,
+      "processed_height": 648,
+      "footer_crop_px": 14,
+      "ui_masks": [
+        {
+          "name": "score",
+          "x": 1246,
+          "y": 8,
+          "width": 266,
+          "height": 72
+        },
+        {
+          "name": "controls",
+          "x": 6,
+          "y": 366,
+          "width": 76,
+          "height": 282
+        },
+        {
+          "name": "minimap_and_guess",
+          "x": 1250,
+          "y": 440,
+          "width": 262,
+          "height": 208
+        }
+      ],
+      "global_width": 896,
+      "global_height": 384,
+      "global_content_width": 896,
+      "global_content_height": 378,
+      "global_scale": 0.5833333333333334,
+      "base_large_crop_side": 384,
+      "raw_crop_side": 384,
+      "crops": [
+        {
+          "id": 1,
+          "color": "red",
+          "x": 115,
+          "y": 197,
+          "width": 384,
+          "height": 384,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.8333333333333334,
+          "zoom_vs_global": 1.4285714285714286
+        },
+        {
+          "id": 2,
+          "color": "blue",
+          "x": 422,
+          "y": 197,
+          "width": 384,
+          "height": 384,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.8333333333333334,
+          "zoom_vs_global": 1.4285714285714286
+        },
+        {
+          "id": 3,
+          "color": "green",
+          "x": 730,
+          "y": 197,
+          "width": 384,
+          "height": 384,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.8333333333333334,
+          "zoom_vs_global": 1.4285714285714286
+        },
+        {
+          "id": 4,
+          "color": "purple",
+          "x": 1037,
+          "y": 132,
+          "width": 384,
+          "height": 384,
+          "ui_mask_percent": 8.8134765625,
+          "effective_scale": 0.8333333333333334,
+          "zoom_vs_global": 1.4285714285714286
+        }
+      ],
+      "pairwise_overlap": [
+        {
+          "a": 1,
+          "b": 2,
+          "intersection_percent_of_one_crop": 20.052083333333332
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 1,
+          "b": 4,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 2,
+          "b": 3,
+          "intersection_percent_of_one_crop": 19.791666666666668
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 3,
+          "b": 4,
+          "intersection_percent_of_one_crop": 16.657850477430557
+        }
+      ],
+      "centers_relative": [
+        [
+          0.2,
+          0.6
+        ],
+        [
+          0.4,
+          0.6
+        ],
+        [
+          0.6,
+          0.6
+        ],
+        [
+          0.8,
+          0.5
+        ]
+      ],
+      "crop_union_scene_coverage_percent": 50.888651781121396
+    },
+    "1030x703": {
+      "raw_width": 1030,
+      "raw_height": 703,
+      "processed_width": 1030,
+      "processed_height": 689,
+      "footer_crop_px": 14,
+      "ui_masks": [
+        {
+          "name": "score",
+          "x": 740,
+          "y": 8,
+          "width": 266,
+          "height": 72
+        },
+        {
+          "name": "controls",
+          "x": 6,
+          "y": 407,
+          "width": 76,
+          "height": 282
+        },
+        {
+          "name": "minimap_and_guess",
+          "x": 827,
+          "y": 547,
+          "width": 180,
+          "height": 142
+        }
+      ],
+      "global_width": 896,
+      "global_height": 384,
+      "global_content_width": 574,
+      "global_content_height": 384,
+      "global_scale": 0.5573294629898403,
+      "base_large_crop_side": 384,
+      "raw_crop_side": 402,
+      "crops": [
+        {
+          "id": 1,
+          "color": "red",
+          "x": 5,
+          "y": 212,
+          "width": 402,
+          "height": 402,
+          "ui_mask_percent": 9.734907551793272,
+          "effective_scale": 0.7960199004975125,
+          "zoom_vs_global": 1.4282752902155889
+        },
+        {
+          "id": 2,
+          "color": "blue",
+          "x": 211,
+          "y": 212,
+          "width": 402,
+          "height": 402,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.7960199004975125,
+          "zoom_vs_global": 1.4282752902155889
+        },
+        {
+          "id": 3,
+          "color": "green",
+          "x": 417,
+          "y": 212,
+          "width": 402,
+          "height": 402,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.7960199004975125,
+          "zoom_vs_global": 1.4282752902155889
+        },
+        {
+          "id": 4,
+          "color": "purple",
+          "x": 623,
+          "y": 144,
+          "width": 402,
+          "height": 402,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.7960199004975125,
+          "zoom_vs_global": 1.4282752902155889
+        }
+      ],
+      "pairwise_overlap": [
+        {
+          "a": 1,
+          "b": 2,
+          "intersection_percent_of_one_crop": 48.756218905472636
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 1,
+          "b": 4,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 2,
+          "b": 3,
+          "intersection_percent_of_one_crop": 48.756218905472636
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 3,
+          "b": 4,
+          "intersection_percent_of_one_crop": 40.50889829459667
+        }
+      ],
+      "centers_relative": [
+        [
+          0.2,
+          0.6
+        ],
+        [
+          0.4,
+          0.6
+        ],
+        [
+          0.6,
+          0.6
+        ],
+        [
+          0.8,
+          0.5
+        ]
+      ],
+      "crop_union_scene_coverage_percent": 59.657023687065816
+    }
+  }
+}

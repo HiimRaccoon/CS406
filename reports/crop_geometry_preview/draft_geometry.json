@@ -1,0 +1,1593 @@
+{
+  "status": "DRAFT FOR TRAIN-ONLY VISUAL REVIEW; not frozen preprocessing",
+  "manifest_sha256": "9cbd8b70e8522b5aa4a20fba4fa7b2ecea855cf377f98e41ebb162a07f8a8040",
+  "source_commit": "33cb29d72974f1677efab0f56ed92360e5a9f712",
+  "verified_train_samples": 65,
+  "mask_fill_rgb": [
+    124,
+    116,
+    104
+  ],
+  "interpolation_for_visual_preview": "System.Drawing HighQualityBilinear",
+  "candidate_reference_crop_sides": [
+    384,
+    416,
+    448
+  ],
+  "layouts": {
+    "1536x662_384": {
+      "raw_width": 1536,
+      "raw_height": 662,
+      "processed_width": 1536,
+      "processed_height": 648,
+      "footer_crop_px": 14,
+      "ui_masks": [
+        {
+          "name": "score",
+          "x": 1246,
+          "y": 8,
+          "width": 266,
+          "height": 72
+        },
+        {
+          "name": "controls",
+          "x": 6,
+          "y": 366,
+          "width": 76,
+          "height": 282
+        },
+        {
+          "name": "minimap_and_guess",
+          "x": 1250,
+          "y": 440,
+          "width": 262,
+          "height": 208
+        }
+      ],
+      "global_width": 896,
+      "global_height": 384,
+      "global_content_width": 896,
+      "global_content_height": 378,
+      "global_scale": 0.5833333333333334,
+      "base_large_crop_side": 384,
+      "raw_crop_side": 384,
+      "crops": [
+        {
+          "id": 1,
+          "color": "red",
+          "x": 115,
+          "y": 197,
+          "width": 384,
+          "height": 384,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.8333333333333334,
+          "zoom_vs_global": 1.4285714285714286
+        },
+        {
+          "id": 2,
+          "color": "blue",
+          "x": 422,
+          "y": 197,
+          "width": 384,
+          "height": 384,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.8333333333333334,
+          "zoom_vs_global": 1.4285714285714286
+        },
+        {
+          "id": 3,
+          "color": "green",
+          "x": 730,
+          "y": 197,
+          "width": 384,
+          "height": 384,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.8333333333333334,
+          "zoom_vs_global": 1.4285714285714286
+        },
+        {
+          "id": 4,
+          "color": "purple",
+          "x": 1037,
+          "y": 132,
+          "width": 384,
+          "height": 384,
+          "ui_mask_percent": 8.8134765625,
+          "effective_scale": 0.8333333333333334,
+          "zoom_vs_global": 1.4285714285714286
+        }
+      ],
+      "pairwise_overlap": [
+        {
+          "a": 1,
+          "b": 2,
+          "intersection_percent_of_one_crop": 20.052083333333332
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 1,
+          "b": 4,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 2,
+          "b": 3,
+          "intersection_percent_of_one_crop": 19.791666666666668
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 3,
+          "b": 4,
+          "intersection_percent_of_one_crop": 16.657850477430557
+        }
+      ],
+      "centers_relative": [
+        [
+          0.2,
+          0.6
+        ],
+        [
+          0.4,
+          0.6
+        ],
+        [
+          0.6,
+          0.6
+        ],
+        [
+          0.8,
+          0.5
+        ]
+      ]
+    },
+    "1536x662_416": {
+      "raw_width": 1536,
+      "raw_height": 662,
+      "processed_width": 1536,
+      "processed_height": 648,
+      "footer_crop_px": 14,
+      "ui_masks": [
+        {
+          "name": "score",
+          "x": 1246,
+          "y": 8,
+          "width": 266,
+          "height": 72
+        },
+        {
+          "name": "controls",
+          "x": 6,
+          "y": 366,
+          "width": 76,
+          "height": 282
+        },
+        {
+          "name": "minimap_and_guess",
+          "x": 1250,
+          "y": 440,
+          "width": 262,
+          "height": 208
+        }
+      ],
+      "global_width": 896,
+      "global_height": 384,
+      "global_content_width": 896,
+      "global_content_height": 378,
+      "global_scale": 0.5833333333333334,
+      "base_large_crop_side": 416,
+      "raw_crop_side": 416,
+      "crops": [
+        {
+          "id": 1,
+          "color": "red",
+          "x": 99,
+          "y": 181,
+          "width": 416,
+          "height": 416,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.7692307692307693,
+          "zoom_vs_global": 1.3186813186813187
+        },
+        {
+          "id": 2,
+          "color": "blue",
+          "x": 406,
+          "y": 181,
+          "width": 416,
+          "height": 416,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.7692307692307693,
+          "zoom_vs_global": 1.3186813186813187
+        },
+        {
+          "id": 3,
+          "color": "green",
+          "x": 714,
+          "y": 181,
+          "width": 416,
+          "height": 416,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.7692307692307693,
+          "zoom_vs_global": 1.3186813186813187
+        },
+        {
+          "id": 4,
+          "color": "purple",
+          "x": 1021,
+          "y": 116,
+          "width": 416,
+          "height": 416,
+          "ui_mask_percent": 9.941290680473372,
+          "effective_scale": 0.7692307692307693,
+          "zoom_vs_global": 1.3186813186813187
+        }
+      ],
+      "pairwise_overlap": [
+        {
+          "a": 1,
+          "b": 2,
+          "intersection_percent_of_one_crop": 26.201923076923077
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 1,
+          "b": 4,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 2,
+          "b": 3,
+          "intersection_percent_of_one_crop": 25.96153846153846
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 3,
+          "b": 4,
+          "intersection_percent_of_one_crop": 22.107872596153847
+        }
+      ],
+      "centers_relative": [
+        [
+          0.2,
+          0.6
+        ],
+        [
+          0.4,
+          0.6
+        ],
+        [
+          0.6,
+          0.6
+        ],
+        [
+          0.8,
+          0.5
+        ]
+      ]
+    },
+    "1536x662_448": {
+      "raw_width": 1536,
+      "raw_height": 662,
+      "processed_width": 1536,
+      "processed_height": 648,
+      "footer_crop_px": 14,
+      "ui_masks": [
+        {
+          "name": "score",
+          "x": 1246,
+          "y": 8,
+          "width": 266,
+          "height": 72
+        },
+        {
+          "name": "controls",
+          "x": 6,
+          "y": 366,
+          "width": 76,
+          "height": 282
+        },
+        {
+          "name": "minimap_and_guess",
+          "x": 1250,
+          "y": 440,
+          "width": 262,
+          "height": 208
+        }
+      ],
+      "global_width": 896,
+      "global_height": 384,
+      "global_content_width": 896,
+      "global_content_height": 378,
+      "global_scale": 0.5833333333333334,
+      "base_large_crop_side": 448,
+      "raw_crop_side": 448,
+      "crops": [
+        {
+          "id": 1,
+          "color": "red",
+          "x": 83,
+          "y": 165,
+          "width": 448,
+          "height": 448,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.7142857142857143,
+          "zoom_vs_global": 1.2244897959183674
+        },
+        {
+          "id": 2,
+          "color": "blue",
+          "x": 390,
+          "y": 165,
+          "width": 448,
+          "height": 448,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.7142857142857143,
+          "zoom_vs_global": 1.2244897959183674
+        },
+        {
+          "id": 3,
+          "color": "green",
+          "x": 698,
+          "y": 165,
+          "width": 448,
+          "height": 448,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.7142857142857143,
+          "zoom_vs_global": 1.2244897959183674
+        },
+        {
+          "id": 4,
+          "color": "purple",
+          "x": 1005,
+          "y": 100,
+          "width": 448,
+          "height": 448,
+          "ui_mask_percent": 10.923549107142858,
+          "effective_scale": 0.7142857142857143,
+          "zoom_vs_global": 1.2244897959183674
+        }
+      ],
+      "pairwise_overlap": [
+        {
+          "a": 1,
+          "b": 2,
+          "intersection_percent_of_one_crop": 31.473214285714285
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 1,
+          "b": 4,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 2,
+          "b": 3,
+          "intersection_percent_of_one_crop": 31.25
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 3,
+          "b": 4,
+          "intersection_percent_of_one_crop": 26.906788105867346
+        }
+      ],
+      "centers_relative": [
+        [
+          0.2,
+          0.6
+        ],
+        [
+          0.4,
+          0.6
+        ],
+        [
+          0.6,
+          0.6
+        ],
+        [
+          0.8,
+          0.5
+        ]
+      ]
+    },
+    "1030x703_384": {
+      "raw_width": 1030,
+      "raw_height": 703,
+      "processed_width": 1030,
+      "processed_height": 689,
+      "footer_crop_px": 14,
+      "ui_masks": [
+        {
+          "name": "score",
+          "x": 740,
+          "y": 8,
+          "width": 266,
+          "height": 72
+        },
+        {
+          "name": "controls",
+          "x": 6,
+          "y": 407,
+          "width": 76,
+          "height": 282
+        },
+        {
+          "name": "minimap_and_guess",
+          "x": 827,
+          "y": 547,
+          "width": 180,
+          "height": 142
+        }
+      ],
+      "global_width": 896,
+      "global_height": 384,
+      "global_content_width": 574,
+      "global_content_height": 384,
+      "global_scale": 0.5573294629898403,
+      "base_large_crop_side": 384,
+      "raw_crop_side": 402,
+      "crops": [
+        {
+          "id": 1,
+          "color": "red",
+          "x": 5,
+          "y": 212,
+          "width": 402,
+          "height": 402,
+          "ui_mask_percent": 9.734907551793272,
+          "effective_scale": 0.7960199004975125,
+          "zoom_vs_global": 1.4282752902155889
+        },
+        {
+          "id": 2,
+          "color": "blue",
+          "x": 211,
+          "y": 212,
+          "width": 402,
+          "height": 402,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.7960199004975125,
+          "zoom_vs_global": 1.4282752902155889
+        },
+        {
+          "id": 3,
+          "color": "green",
+          "x": 417,
+          "y": 212,
+          "width": 402,
+          "height": 402,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.7960199004975125,
+          "zoom_vs_global": 1.4282752902155889
+        },
+        {
+          "id": 4,
+          "color": "purple",
+          "x": 623,
+          "y": 144,
+          "width": 402,
+          "height": 402,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.7960199004975125,
+          "zoom_vs_global": 1.4282752902155889
+        }
+      ],
+      "pairwise_overlap": [
+        {
+          "a": 1,
+          "b": 2,
+          "intersection_percent_of_one_crop": 48.756218905472636
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 1,
+          "b": 4,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 2,
+          "b": 3,
+          "intersection_percent_of_one_crop": 48.756218905472636
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 3,
+          "b": 4,
+          "intersection_percent_of_one_crop": 40.50889829459667
+        }
+      ],
+      "centers_relative": [
+        [
+          0.2,
+          0.6
+        ],
+        [
+          0.4,
+          0.6
+        ],
+        [
+          0.6,
+          0.6
+        ],
+        [
+          0.8,
+          0.5
+        ]
+      ]
+    },
+    "1030x703_416": {
+      "raw_width": 1030,
+      "raw_height": 703,
+      "processed_width": 1030,
+      "processed_height": 689,
+      "footer_crop_px": 14,
+      "ui_masks": [
+        {
+          "name": "score",
+          "x": 740,
+          "y": 8,
+          "width": 266,
+          "height": 72
+        },
+        {
+          "name": "controls",
+          "x": 6,
+          "y": 407,
+          "width": 76,
+          "height": 282
+        },
+        {
+          "name": "minimap_and_guess",
+          "x": 827,
+          "y": 547,
+          "width": 180,
+          "height": 142
+        }
+      ],
+      "global_width": 896,
+      "global_height": 384,
+      "global_content_width": 574,
+      "global_content_height": 384,
+      "global_scale": 0.5573294629898403,
+      "base_large_crop_side": 416,
+      "raw_crop_side": 435,
+      "crops": [
+        {
+          "id": 1,
+          "color": "red",
+          "x": 0,
+          "y": 196,
+          "width": 435,
+          "height": 435,
+          "ui_mask_percent": 8.996697053771964,
+          "effective_scale": 0.735632183908046,
+          "zoom_vs_global": 1.3199233716475096
+        },
+        {
+          "id": 2,
+          "color": "blue",
+          "x": 195,
+          "y": 196,
+          "width": 435,
+          "height": 435,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.735632183908046,
+          "zoom_vs_global": 1.3199233716475096
+        },
+        {
+          "id": 3,
+          "color": "green",
+          "x": 401,
+          "y": 196,
+          "width": 435,
+          "height": 435,
+          "ui_mask_percent": 0.3995243757431629,
+          "effective_scale": 0.735632183908046,
+          "zoom_vs_global": 1.3199233716475096
+        },
+        {
+          "id": 4,
+          "color": "purple",
+          "x": 595,
+          "y": 127,
+          "width": 435,
+          "height": 435,
+          "ui_mask_percent": 1.426872770511296,
+          "effective_scale": 0.735632183908046,
+          "zoom_vs_global": 1.3199233716475096
+        }
+      ],
+      "pairwise_overlap": [
+        {
+          "a": 1,
+          "b": 2,
+          "intersection_percent_of_one_crop": 55.172413793103445
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "intersection_percent_of_one_crop": 7.816091954022989
+        },
+        {
+          "a": 1,
+          "b": 4,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 2,
+          "b": 3,
+          "intersection_percent_of_one_crop": 52.64367816091954
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "intersection_percent_of_one_crop": 6.769718588981371
+        },
+        {
+          "a": 3,
+          "b": 4,
+          "intersection_percent_of_one_crop": 46.61434799841459
+        }
+      ],
+      "centers_relative": [
+        [
+          0.2,
+          0.6
+        ],
+        [
+          0.4,
+          0.6
+        ],
+        [
+          0.6,
+          0.6
+        ],
+        [
+          0.8,
+          0.5
+        ]
+      ]
+    },
+    "1030x703_448": {
+      "raw_width": 1030,
+      "raw_height": 703,
+      "processed_width": 1030,
+      "processed_height": 689,
+      "footer_crop_px": 14,
+      "ui_masks": [
+        {
+          "name": "score",
+          "x": 740,
+          "y": 8,
+          "width": 266,
+          "height": 72
+        },
+        {
+          "name": "controls",
+          "x": 6,
+          "y": 407,
+          "width": 76,
+          "height": 282
+        },
+        {
+          "name": "minimap_and_guess",
+          "x": 827,
+          "y": 547,
+          "width": 180,
+          "height": 142
+        }
+      ],
+      "global_width": 896,
+      "global_height": 384,
+      "global_content_width": 574,
+      "global_content_height": 384,
+      "global_scale": 0.5573294629898403,
+      "base_large_crop_side": 448,
+      "raw_crop_side": 469,
+      "crops": [
+        {
+          "id": 1,
+          "color": "red",
+          "x": 0,
+          "y": 179,
+          "width": 469,
+          "height": 469,
+          "ui_mask_percent": 8.32693068316656,
+          "effective_scale": 0.6823027718550106,
+          "zoom_vs_global": 1.2242359630419333
+        },
+        {
+          "id": 2,
+          "color": "blue",
+          "x": 178,
+          "y": 179,
+          "width": 469,
+          "height": 469,
+          "ui_mask_percent": 0,
+          "effective_scale": 0.6823027718550106,
+          "zoom_vs_global": 1.2242359630419333
+        },
+        {
+          "id": 3,
+          "color": "green",
+          "x": 384,
+          "y": 179,
+          "width": 469,
+          "height": 469,
+          "ui_mask_percent": 1.1938480003273308,
+          "effective_scale": 0.6823027718550106,
+          "zoom_vs_global": 1.2242359630419333
+        },
+        {
+          "id": 4,
+          "color": "purple",
+          "x": 561,
+          "y": 110,
+          "width": 469,
+          "height": 469,
+          "ui_mask_percent": 2.6186460327057977,
+          "effective_scale": 0.6823027718550106,
+          "zoom_vs_global": 1.2242359630419333
+        }
+      ],
+      "pairwise_overlap": [
+        {
+          "a": 1,
+          "b": 2,
+          "intersection_percent_of_one_crop": 62.046908315565034
+        },
+        {
+          "a": 1,
+          "b": 3,
+          "intersection_percent_of_one_crop": 18.12366737739872
+        },
+        {
+          "a": 1,
+          "b": 4,
+          "intersection_percent_of_one_crop": 0
+        },
+        {
+          "a": 2,
+          "b": 3,
+          "intersection_percent_of_one_crop": 56.07675906183369
+        },
+        {
+          "a": 2,
+          "b": 4,
+          "intersection_percent_of_one_crop": 15.639136028659626
+        },
+        {
+          "a": 3,
+          "b": 4,
+          "intersection_percent_of_one_crop": 53.100322329867566
+        }
+      ],
+      "centers_relative": [
+        [
+          0.2,
+          0.6
+        ],
+        [
+          0.4,
+          0.6
+        ],
+        [
+          0.6,
+          0.6
+        ],
+        [
+          0.8,
+          0.5
+        ]
+      ]
+    }
+  },
+  "samples": [
+    {
+      "relative_path": "United States/canvas_1630055193.jpg",
+      "label": "United States",
+      "label_id": 120,
+      "split": "train",
+      "group_id": "4118bea3b79cc2d1f487ae2d",
+      "sha256": "0000cc09aa0cc42b26da6255d57e08c4235699521511d90aa5cca19c8f45a39b",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Japan/canvas_1629430411.jpg",
+      "label": "Japan",
+      "label_id": 53,
+      "split": "train",
+      "group_id": "909c224813ae9a08e94a2183",
+      "sha256": "00267d4b980f6317f5b02c3fdbc849c82249e471019be8d77a89d99a7693087f",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "France/canvas_1629281943.jpg",
+      "label": "France",
+      "label_id": 35,
+      "split": "train",
+      "group_id": "c6cef18f8f725cb09e478f20",
+      "sha256": "0002811f6eea1c1c4ceae1564d6a1efe670cc969a03e60417a61adf49032bf80",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Vietnam/canvas_1629512178.jpg",
+      "label": "Vietnam",
+      "label_id": 123,
+      "split": "train",
+      "group_id": "bec17f99832b8f378dff5b53",
+      "sha256": "100053496281c209635be0208c56dd000e8f6e31f3bcbea50f9d76d3f9a23d94",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Brazil/canvas_1629956538.jpg",
+      "label": "Brazil",
+      "label_id": 16,
+      "split": "train",
+      "group_id": "989fb4622d3e7be4e7eab295",
+      "sha256": "002394ab3338378413a089079190df43ec1823449c30cadf31ddbc6619550148",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "South Africa/canvas_1629918928.jpg",
+      "label": "South Africa",
+      "label_id": 101,
+      "split": "train",
+      "group_id": "9e7aa7111bb78687728fd9a4",
+      "sha256": "000bedc2bace5e0ed3d8cb82c13802d59566ddb59cdf70a7601baae827a08644",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Australia/canvas_1630016638.jpg",
+      "label": "Australia",
+      "label_id": 7,
+      "split": "train",
+      "group_id": "8e9f7661ee7f72262b8f27d1",
+      "sha256": "001e9a7f0bc9dce07abbee9c1eae814c0770f5a697c79b28c47c9529b6ca0202",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Norway/canvas_1630026229.jpg",
+      "label": "Norway",
+      "label_id": 81,
+      "split": "train",
+      "group_id": "5b3977424bee2a3990c19a1c",
+      "sha256": "0005bfd47f92307f68bc6ae2fd76739d97616a299a7ad4b2280f11244011ef3e",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "India/canvas_1629771011.jpg",
+      "label": "India",
+      "label_id": 46,
+      "split": "train",
+      "group_id": "f7d93269be8d2682ae51a92d",
+      "sha256": "001485efaff1f3baa935bfe1dc1f963d7340049e3e9309d9364bd22b3e169627",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Thailand/canvas_1629613136.jpg",
+      "label": "Thailand",
+      "label_id": 112,
+      "split": "train",
+      "group_id": "af1c2cd1db6d2d37d291de0a",
+      "sha256": "0000d2823f01d491a20273e13fd37a0f830ee03ae3e704fe930aaa833b4270e5",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Turkey/canvas_1629305104.jpg",
+      "label": "Turkey",
+      "label_id": 114,
+      "split": "train",
+      "group_id": "66e771582658e9343265e47b",
+      "sha256": "006cf7d633ba5b6b432bedf6fb4e0b28c3cc4538cb5e25a0b187b69b808e52b3",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Russia/canvas_1629544043.jpg",
+      "label": "Russia",
+      "label_id": 94,
+      "split": "train",
+      "group_id": "a7e9fde44d7afef18706a07d",
+      "sha256": "004582bb6bc913c2000785b83669c9f81d09c900afb295f613862c82b9ed02f8",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Kenya/canvas_1629398983.jpg",
+      "label": "Kenya",
+      "label_id": 56,
+      "split": "train",
+      "group_id": "137bf2eb28912dacce1eccd1",
+      "sha256": "009f1dc275c9aeb192dfd354e5a0b081d9598add19d125e4956737ecd681fb59",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Indonesia/canvas_1629476966.jpg",
+      "label": "Indonesia",
+      "label_id": 47,
+      "split": "train",
+      "group_id": "95b18b8319e9ea30a6c337c9",
+      "sha256": "017ba44db1bb9b0b629a9a0e08b4f71e07e3f22c10c95aa3bfa3925f29abf518",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "United Kingdom/canvas_1630213486.jpg",
+      "label": "United Kingdom",
+      "label_id": 119,
+      "split": "train",
+      "group_id": "08cbe5b875be24fc5211c273",
+      "sha256": "0048060ed2544c8403f8a19b82cf73bdc1bbd663c1a49b7f04539cca403314e0",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Peru/canvas_1629822651.jpg",
+      "label": "Peru",
+      "label_id": 85,
+      "split": "train",
+      "group_id": "ca5ff502ba2af472f1cad63a",
+      "sha256": "009b5d49bfea9a24af3d7fa6010021dbcadb72e6568a20576456dc27b5d06a95",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Iceland/canvas_1629397451.jpg",
+      "label": "Iceland",
+      "label_id": 45,
+      "split": "train",
+      "group_id": "35edb63451c49cadc39e19ee",
+      "sha256": "03537da668e439dd0a1e73bf61e7b81ef0533f06602d11cb70d0564ab22f38e4",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Jordan/canvas_1630039276.jpg",
+      "label": "Jordan",
+      "label_id": 55,
+      "split": "train",
+      "group_id": "a57f0e4b496aed51d4fca784",
+      "sha256": "004fbd4240465584afa6e47bf9b7f51e0c2b72069ad29b1f13aed6b8d01c2da7",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Bangladesh/canvas_1629520264.jpg",
+      "label": "Bangladesh",
+      "label_id": 9,
+      "split": "train",
+      "group_id": "80a4505d9d98a1b71a85ce0f",
+      "sha256": "0077e8c9e3332f9218c9428d0011944fde55efcecd8065676aa9840d9500d149",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Sweden/canvas_1629938865.jpg",
+      "label": "Sweden",
+      "label_id": 108,
+      "split": "train",
+      "group_id": "80fafa76ca789c503627354d",
+      "sha256": "0082e4e6c5505c5f24fcb52e8e11c40a67d707516fd14f175967191b7b6dfae4",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Aland/canvas_1629786076.jpg",
+      "label": "Aland",
+      "label_id": 0,
+      "split": "train",
+      "group_id": "f4c63a764a41df64323434c9",
+      "sha256": "049717a7280a767916775d9378d83203d4bca8e33ea3f8bbbe63322f28270bbf",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Antarctica/canvas_1629620842.jpg",
+      "label": "Antarctica",
+      "label_id": 4,
+      "split": "train",
+      "group_id": "1096a495e10c5e32823bf4d2",
+      "sha256": "78759b77149646df362f6830286e0f2741c98886b3b653174e04111de3471995",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "American Samoa/canvas_1630125422.jpg",
+      "label": "American Samoa",
+      "label_id": 2,
+      "split": "train",
+      "group_id": "7a0c1c51c2f52f0e54b84e49",
+      "sha256": "601c400a9d67415e68930965d54a69275e0caf7db34ae8d9965ce9d18b57b6a0",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Netherlands/canvas_1629390980.jpg",
+      "label": "Netherlands",
+      "label_id": 76,
+      "split": "train",
+      "group_id": "13f8ef59339fe98d7dbb3035",
+      "sha256": "0014ea205f37b5d5f9f4c87a198843d40fdc3920fcd479bc6141811038d71c45",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Argentina/canvas_1630265960.jpg",
+      "label": "Argentina",
+      "label_id": 5,
+      "split": "train",
+      "group_id": "928c15a7358cce3dc98b45a6",
+      "sha256": "cec71c7c8920ede9ff3a1ed9c5897063a47d1970cdd562f050011bc7e8b4d147",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Australia/canvas_1630265936.jpg",
+      "label": "Australia",
+      "label_id": 7,
+      "split": "train",
+      "group_id": "2285781a24d4f7b487b00cf7",
+      "sha256": "3d047ad0adfa3bbd8491d370a29788bdb9ab2dc0d20cec1fcf9b18313ef818ef",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Brazil/canvas_1630265675.jpg",
+      "label": "Brazil",
+      "label_id": 16,
+      "split": "train",
+      "group_id": "a8256131273603ac496733f7",
+      "sha256": "8ca0e37dff4d40c0dc4970213df60a86626a3439da3475a404e9d7a846190609",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Brazil/canvas_1630265859.jpg",
+      "label": "Brazil",
+      "label_id": 16,
+      "split": "train",
+      "group_id": "8a5dcc38fd9e386d210406f2",
+      "sha256": "7280832c86e61702adcf4523a3a8917dc4e1e911037f82b4a0eb9af2fa2b3b78",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Canada/canvas_1630265888.jpg",
+      "label": "Canada",
+      "label_id": 19,
+      "split": "train",
+      "group_id": "231bdd29a73d39a5ef630438",
+      "sha256": "a5e1f55e4309bc7413761cd741fa09b0ecd9ecda3c55bd9fe4bc8ae563ec1f64",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Canada/canvas_1630265912.jpg",
+      "label": "Canada",
+      "label_id": 19,
+      "split": "train",
+      "group_id": "028eb7331ad1f0107a7010ad",
+      "sha256": "4d1c93bee22ee91ad553997987cfb1bc28faf441fa662cf924ca441cf1201bf6",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Colombia/canvas_1630265387.jpg",
+      "label": "Colombia",
+      "label_id": 22,
+      "split": "train",
+      "group_id": "46e6bd41e2c59e900bb4a695",
+      "sha256": "bd326abefb11d3ca289df72fbcf2dee7acc14652baff852a49100b4ff0200419",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "France/canvas_1630265375.jpg",
+      "label": "France",
+      "label_id": 35,
+      "split": "train",
+      "group_id": "97eb1bb1cd6eb41b2a4b7d9a",
+      "sha256": "8862ea092cad26fe3d00e798b05643bbbedceefd4815fa63a9f257d59085779c",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "France/canvas_1630265536.jpg",
+      "label": "France",
+      "label_id": 35,
+      "split": "train",
+      "group_id": "d2368f3f9ecda626e4258563",
+      "sha256": "ddbc12eccf1e1b26d122f3061f40566bd3cab93403645d7d2c75fc80aa61344d",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "France/canvas_1630265598.jpg",
+      "label": "France",
+      "label_id": 35,
+      "split": "train",
+      "group_id": "d7d807efe478e71e26460c7c",
+      "sha256": "2eda92af2809251f6b2897ecb865ecd5dd55a8be635ca07ccdd349315d734da3",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "France/canvas_1630265841.jpg",
+      "label": "France",
+      "label_id": 35,
+      "split": "train",
+      "group_id": "875574f126a94b8c9995d4d2",
+      "sha256": "f6e850b6a8107ae18d71fd1cb05db4931d25b658e332de4264bf7b71c16981f3",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Germany/canvas_1630265477.jpg",
+      "label": "Germany",
+      "label_id": 36,
+      "split": "train",
+      "group_id": "986c1e68b6efec97c6d1ad55",
+      "sha256": "5bcafa82817b21fb17cc6e6d580495cf55fa5fce64211e8a2f0d2d95b62703da",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Germany/canvas_1630265707.jpg",
+      "label": "Germany",
+      "label_id": 36,
+      "split": "train",
+      "group_id": "d6bba0b9f495c992579f5d1c",
+      "sha256": "81d8fa438ea4e9d481bfcdb66450d9b4a87b970dc2e69c96beba1f4f535f9982",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Ghana/canvas_1630265483.jpg",
+      "label": "Ghana",
+      "label_id": 37,
+      "split": "train",
+      "group_id": "e04c6e6b7d0917697d754784",
+      "sha256": "62383ebd09eb8dce58f7eb02c9a698be08dbd9d0f3fc37f97bb7b901cdb5f12f",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Iceland/canvas_1630265542.jpg",
+      "label": "Iceland",
+      "label_id": 45,
+      "split": "train",
+      "group_id": "5be77eb113d618593aeb7005",
+      "sha256": "1d581b65bcc0869195e4c26a070bffca872caa73fee9199c01de1beb08594ca6",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Japan/canvas_1630265394.jpg",
+      "label": "Japan",
+      "label_id": 53,
+      "split": "train",
+      "group_id": "93e0471f660050ea8db51765",
+      "sha256": "cedc04c7ad053465598e3a25769e7d2493920343196b58487dbc3063f4f32ccd",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Japan/canvas_1630265548.jpg",
+      "label": "Japan",
+      "label_id": 53,
+      "split": "train",
+      "group_id": "cfee8773cf04ce6aba5403f1",
+      "sha256": "9aa3f5fcdc0b5e1d56b1bd598be5698f2bd39dae963ad81864863fec6b501cd5",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Japan/canvas_1630265664.jpg",
+      "label": "Japan",
+      "label_id": 53,
+      "split": "train",
+      "group_id": "0dde203931144df785b89753",
+      "sha256": "8880dcc50cee5b7a9d194307e095613689ab93c1759dfee41b7eb9eea0939a1c",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Montenegro/canvas_1630265894.jpg",
+      "label": "Montenegro",
+      "label_id": 72,
+      "split": "train",
+      "group_id": "09febda7c3a2e003627ccda1",
+      "sha256": "176a894c1fb05b3877c07a810198b6dbc7dd725e8e941af4ad283970df81a513",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Netherlands/canvas_1630265948.jpg",
+      "label": "Netherlands",
+      "label_id": 76,
+      "split": "train",
+      "group_id": "c843559b36808d55b39e12a3",
+      "sha256": "c8ca48fe201ec0425062278472a77e65ee3afde294034f3b399ed8ceceb6eaf7",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Norway/canvas_1630265416.jpg",
+      "label": "Norway",
+      "label_id": 81,
+      "split": "train",
+      "group_id": "53597c350391026e9dc74547",
+      "sha256": "a024bc4d90198dfd904ccb4f795bc93f35c3d7d6883a8745eb11f3771fd82279",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Norway/canvas_1630265435.jpg",
+      "label": "Norway",
+      "label_id": 81,
+      "split": "train",
+      "group_id": "2cc52c12ec319bc562a47807",
+      "sha256": "f0c78b6be59ceb163eeef839579a35c2dc0c96b8717486109bffc0d788676a8c",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Portugal/canvas_1630265787.jpg",
+      "label": "Portugal",
+      "label_id": 89,
+      "split": "train",
+      "group_id": "4a88d50e3181f2d2263818d2",
+      "sha256": "0f1ec00d4233a963fe862f607b8ff3fcb530cfea832af5dad8bea9101359cb28",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Russia/canvas_1630265502.jpg",
+      "label": "Russia",
+      "label_id": 94,
+      "split": "train",
+      "group_id": "23dd50a3749f164b753a6d2e",
+      "sha256": "b27ca0250b987f797ebcb4e9365bb59df0d80332492262ca4d697c9054cfbe28",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Russia/canvas_1630265847.jpg",
+      "label": "Russia",
+      "label_id": 94,
+      "split": "train",
+      "group_id": "4407b76e6ee270cf83a243b2",
+      "sha256": "e6a36572a6b2e6673ada6362be710358be20401fde781d521f0f234ca083268b",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Slovenia/canvas_1630265769.jpg",
+      "label": "Slovenia",
+      "label_id": 100,
+      "split": "train",
+      "group_id": "a6dcd9741ab7500c240cc3ee",
+      "sha256": "8af2ea5e95a45053693f104d2b0594be897b300fcd33c55fc82aef1e839514c1",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "South Africa/canvas_1630265775.jpg",
+      "label": "South Africa",
+      "label_id": 101,
+      "split": "train",
+      "group_id": "e5f0e4dd91589a27a0754d96",
+      "sha256": "63d2a53f3f6d47d201fea6116ece358a35ed513a4ca590802a28fb9566bce431",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Spain/canvas_1630265592.jpg",
+      "label": "Spain",
+      "label_id": 105,
+      "split": "train",
+      "group_id": "427abd16ca137ef94f25de77",
+      "sha256": "61a2d690f7a6d303ddef390f458870a8efe79788ef9b542f648800f991a07a85",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Sweden/canvas_1630265560.jpg",
+      "label": "Sweden",
+      "label_id": 108,
+      "split": "train",
+      "group_id": "449e76792c1315e6619a0cdc",
+      "sha256": "145fa3ef3015645135d646d8bc857556f3dfd40e08c31651749794b744e5ea64",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Sweden/canvas_1630265651.jpg",
+      "label": "Sweden",
+      "label_id": 108,
+      "split": "train",
+      "group_id": "20a43bbdd4815b12414bee0a",
+      "sha256": "443d2480c50dbc42c6dbc9448e4a04e5349c41609d348155283263740a2a038f",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Sweden/canvas_1630265669.jpg",
+      "label": "Sweden",
+      "label_id": 108,
+      "split": "train",
+      "group_id": "021fbfd60e034fcab1d19338",
+      "sha256": "c3dc1b126da3e0d2d067c403c2b498dd6eb14fdc4d5492dea6af171ce7b87454",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Thailand/canvas_1630265429.jpg",
+      "label": "Thailand",
+      "label_id": 112,
+      "split": "train",
+      "group_id": "cff3b17aa3074f83611b4757",
+      "sha256": "565162b039c93b80a1d82114a5df6ebfd615d4d2f07417d1726ca667153b596b",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Ukraine/canvas_1630265906.jpg",
+      "label": "Ukraine",
+      "label_id": 117,
+      "split": "train",
+      "group_id": "ecc92a7d60a2710eb5980c98",
+      "sha256": "07b383713195d70c01028449ec9900c9bf67b807eaf39d6df71e319cccad44de",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "United Kingdom/canvas_1630265722.jpg",
+      "label": "United Kingdom",
+      "label_id": 119,
+      "split": "train",
+      "group_id": "5553e829662e95cf6f787933",
+      "sha256": "a7d2ac9b916e5821df15c8acd0be16474e7f40e205c29902c614ff89c17a31f7",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "United States/canvas_1630265441.jpg",
+      "label": "United States",
+      "label_id": 120,
+      "split": "train",
+      "group_id": "bc22fdfae055f79acf07323f",
+      "sha256": "027abe85b085e0a47a47760c6acc862da9f69dade2b683c3b1ab15df548a305d",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "United States/canvas_1630265554.jpg",
+      "label": "United States",
+      "label_id": 120,
+      "split": "train",
+      "group_id": "2aebb9a43670bd2e4a80a402",
+      "sha256": "8a4ea803ca520af16974e2b2e6768faca669cdbe926cb32917a4eb8f5b3f9c0e",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "United States/canvas_1630265610.jpg",
+      "label": "United States",
+      "label_id": 120,
+      "split": "train",
+      "group_id": "faa5e1f5407cc04c1fd6f840",
+      "sha256": "805991dbc18cd4bc98e331a0974687bc3a4a9eae8b4ffafed5c72ea273ac0268",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "United States/canvas_1630265734.jpg",
+      "label": "United States",
+      "label_id": 120,
+      "split": "train",
+      "group_id": "d355c3fcf7519d72d244bf71",
+      "sha256": "9548d81f9b5c977e1b512d423f1eb23b3b40d847023352580b5b996a3943dc84",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "United States/canvas_1630265853.jpg",
+      "label": "United States",
+      "label_id": 120,
+      "split": "train",
+      "group_id": "b8b62fdcb644297985c8d2ab",
+      "sha256": "afbad47b872cb1da3de6ba130a9c2e0d25b7b148683850ba8c5185bdf88c49ea",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "United States/canvas_1630265900.jpg",
+      "label": "United States",
+      "label_id": 120,
+      "split": "train",
+      "group_id": "66ba2f418c3802e5d90ced7b",
+      "sha256": "6de0ffee1790966fb619b25ab4823d6dcb5cd80e193e4b5d686a4539e4030bf4",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "United States/canvas_1630265942.jpg",
+      "label": "United States",
+      "label_id": 120,
+      "split": "train",
+      "group_id": "40f43bf167690b7f6aaad686",
+      "sha256": "199e775500ce91c8319b83ec705c657202befdd0aa6e77d6c25049577ec9b032",
+      "width": 1030,
+      "height": 703
+    }
+  ],
+  "detail_samples": [
+    {
+      "relative_path": "Vietnam/canvas_1629512178.jpg",
+      "label": "Vietnam",
+      "label_id": 123,
+      "split": "train",
+      "group_id": "bec17f99832b8f378dff5b53",
+      "sha256": "100053496281c209635be0208c56dd000e8f6e31f3bcbea50f9d76d3f9a23d94",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Japan/canvas_1629430411.jpg",
+      "label": "Japan",
+      "label_id": 53,
+      "split": "train",
+      "group_id": "909c224813ae9a08e94a2183",
+      "sha256": "00267d4b980f6317f5b02c3fdbc849c82249e471019be8d77a89d99a7693087f",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Kenya/canvas_1629398983.jpg",
+      "label": "Kenya",
+      "label_id": 56,
+      "split": "train",
+      "group_id": "137bf2eb28912dacce1eccd1",
+      "sha256": "009f1dc275c9aeb192dfd354e5a0b081d9598add19d125e4956737ecd681fb59",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Iceland/canvas_1629397451.jpg",
+      "label": "Iceland",
+      "label_id": 45,
+      "split": "train",
+      "group_id": "35edb63451c49cadc39e19ee",
+      "sha256": "03537da668e439dd0a1e73bf61e7b81ef0533f06602d11cb70d0564ab22f38e4",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Japan/canvas_1630265548.jpg",
+      "label": "Japan",
+      "label_id": 53,
+      "split": "train",
+      "group_id": "cfee8773cf04ce6aba5403f1",
+      "sha256": "9aa3f5fcdc0b5e1d56b1bd598be5698f2bd39dae963ad81864863fec6b501cd5",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Sweden/canvas_1630265669.jpg",
+      "label": "Sweden",
+      "label_id": 108,
+      "split": "train",
+      "group_id": "021fbfd60e034fcab1d19338",
+      "sha256": "c3dc1b126da3e0d2d067c403c2b498dd6eb14fdc4d5492dea6af171ce7b87454",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "France/canvas_1630265536.jpg",
+      "label": "France",
+      "label_id": 35,
+      "split": "train",
+      "group_id": "d2368f3f9ecda626e4258563",
+      "sha256": "ddbc12eccf1e1b26d122f3061f40566bd3cab93403645d7d2c75fc80aa61344d",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "France/canvas_1630265841.jpg",
+      "label": "France",
+      "label_id": 35,
+      "split": "train",
+      "group_id": "875574f126a94b8c9995d4d2",
+      "sha256": "f6e850b6a8107ae18d71fd1cb05db4931d25b658e332de4264bf7b71c16981f3",
+      "width": 1030,
+      "height": 703
+    }
+  ],
+  "comparison_samples": [
+    {
+      "relative_path": "Vietnam/canvas_1629512178.jpg",
+      "label": "Vietnam",
+      "label_id": 123,
+      "split": "train",
+      "group_id": "bec17f99832b8f378dff5b53",
+      "sha256": "100053496281c209635be0208c56dd000e8f6e31f3bcbea50f9d76d3f9a23d94",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Japan/canvas_1629430411.jpg",
+      "label": "Japan",
+      "label_id": 53,
+      "split": "train",
+      "group_id": "909c224813ae9a08e94a2183",
+      "sha256": "00267d4b980f6317f5b02c3fdbc849c82249e471019be8d77a89d99a7693087f",
+      "width": 1536,
+      "height": 662
+    },
+    {
+      "relative_path": "Japan/canvas_1630265548.jpg",
+      "label": "Japan",
+      "label_id": 53,
+      "split": "train",
+      "group_id": "cfee8773cf04ce6aba5403f1",
+      "sha256": "9aa3f5fcdc0b5e1d56b1bd598be5698f2bd39dae963ad81864863fec6b501cd5",
+      "width": 1030,
+      "height": 703
+    },
+    {
+      "relative_path": "Sweden/canvas_1630265669.jpg",
+      "label": "Sweden",
+      "label_id": 108,
+      "split": "train",
+      "group_id": "021fbfd60e034fcab1d19338",
+      "sha256": "c3dc1b126da3e0d2d067c403c2b498dd6eb14fdc4d5492dea6af171ce7b87454",
+      "width": 1030,
+      "height": 703
+    }
+  ]
+}
