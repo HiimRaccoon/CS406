@@ -10,13 +10,14 @@ from .config import fingerprint, load_config, parser, validate
 from .dataset import FixedManifest, PilotDataset, build_loader
 from .engine import make_scaler, synchronize, train_window
 from .models import build_model, build_optimizer, pretrained_metadata
-from .runtime import apply_runtime, create_run, environment, identity, run_lock, validate_gates, write_json
+from .runtime import (apply_runtime, create_run, environment, identity, is_strict_p0_evidence,
+                      run_lock, validate_gates, write_json)
 from ..preprocessing.geoguessr_v1 import PREPROCESS_SHA256, Preprocessor
 
 
 def feasibility_context(cfg, manifest, weights, env):
     policy = cfg.get("resolution_policy", {})
-    return {"version": 1, "protocol_id": cfg["protocol_id"],
+    return {"version": 2, "feasibility_mode": cfg["feasibility"]["mode"], "protocol_id": cfg["protocol_id"],
             "ordered_candidates": policy.get("ordered_candidates"), "criteria_id": policy.get("criteria_id"),
             "feasibility": cfg["feasibility"], "seed": cfg["seed"],
             "runtime": cfg["runtime"], "initialization": cfg["initialization"],
@@ -51,6 +52,8 @@ def validate_resolution_evidence(cfg, context=None):
             raise ValueError("Fallback evidence must be a genuine earlier HR feasibility/OOM failure under the same policy")
         previous = report.get("feasibility_context")
         digest = report.get("feasibility_fingerprint")
+        if not is_strict_p0_evidence(report) or report.get("fallback_eligible") is not True:
+            raise ValueError("HR feasibility fallback requires eligible strict criteria mode evidence")
         if (not context or not isinstance(previous, dict) or digest != fingerprint(previous)
                 or digest != fingerprint(context) or previous != context):
             raise ValueError("HR feasibility context/fingerprint mismatch; prior failure cannot reject this resolution")
@@ -64,13 +67,16 @@ def validate_resolution_evidence(cfg, context=None):
 def failure_summary(cfg, folder, exc):
     context_path = folder / "feasibility_context.json"
     context = json.loads(context_path.read_text(encoding="utf-8")) if context_path.exists() else None
-    return {"purpose": "pilot", "stage": "p0", "experiment": cfg["experiment"], "status": "fail",
+    result = {"purpose": "pilot", "stage": "p0", "experiment": cfg["experiment"], "status": "fail",
             "failure_kind": "oom" if isinstance(exc, torch.cuda.OutOfMemoryError) else "infrastructure_or_numerical",
             "protocol_id": cfg["protocol_id"], "global_wh": cfg["global_wh"],
             "resolution_policy": cfg.get("resolution_policy"), "batch": cfg["batch"],
             "effective_batch": cfg["batch"]["microbatch"] * cfg["batch"]["accumulation"],
             "error_type": type(exc).__name__, "error": str(exc), "automatic_fallback": False,
+            "feasibility": cfg["feasibility"], "assessment": "not_assessed", "fallback_eligible": False,
             **evidence_fields(context)}
+    result["fallback_eligible"] = result["failure_kind"] == "oom" and is_strict_p0_evidence(result)
+    return result
 
 
 def run(cfg, folder):
@@ -127,21 +133,25 @@ def run(cfg, folder):
         memory.update(epoch_peak_allocated_bytes=torch.cuda.max_memory_allocated(device),
                       epoch_peak_reserved_bytes=torch.cuda.max_memory_reserved(device))
     criteria = cfg["feasibility"]
-    reserved = max(v for k, v in memory.items() if "reserved" in k) / 2**30
     failures = []
-    if reserved > criteria["max_peak_reserved_gib"]:
-        failures.append("peak reserved VRAM exceeds declared threshold")
-    if measured["images_per_second"] < criteria["min_images_per_second"]:
-        failures.append("steady-state throughput below declared threshold")
-    if epoch and epoch["seconds"] > criteria["max_epoch_seconds"]:
-        failures.append("full-epoch walltime exceeds declared threshold")
+    strict = criteria["mode"] == "criteria"
+    if strict:
+        reserved = max(v for k, v in memory.items() if "reserved" in k) / 2**30
+        if reserved > criteria["max_peak_reserved_gib"]:
+            failures.append("peak reserved VRAM exceeds declared threshold")
+        if measured["images_per_second"] < criteria["min_images_per_second"]:
+            failures.append("steady-state throughput below declared threshold")
+        if epoch and epoch["seconds"] > criteria["max_epoch_seconds"]:
+            failures.append("full-epoch walltime exceeds declared threshold")
     timing = {"benchmark_warmup": warmup, "steady_state": measured, "full_epoch": epoch,
               "scope": "end-to-end train batches including loader/transfer/numerical checks; excludes validation/checkpoint I/O"}
     write_json(folder / "timing.json", timing)
     write_json(folder / "memory.json", memory)
     return {"purpose": "pilot", "stage": "p0", "experiment": cfg["experiment"],
             "protocol_id": cfg["protocol_id"], **evidence_fields(context),
-            "status": "fail" if failures else "pass", "failures": failures,
+            "status": ("fail" if failures else "pass") if strict else "measured", "failures": failures,
+            "assessment": "assessed" if strict else "not_assessed",
+            "fallback_eligible": strict and bool(failures), "feasibility": criteria,
             "failure_kind": "criteria" if failures else None,
             "seed": cfg["seed"], "global_wh": cfg["global_wh"], "batch": cfg["batch"],
             "effective_batch": cfg["batch"]["microbatch"] * cfg["batch"]["accumulation"],
@@ -173,7 +183,7 @@ def main():
             raise
         write_json(folder / "run_summary.json", result)
     print(folder)
-    if result["status"] != "pass":
+    if result["status"] not in {"pass", "measured"}:
         raise SystemExit(1)
 
 

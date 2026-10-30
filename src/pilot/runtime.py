@@ -5,6 +5,7 @@ import contextlib
 import datetime as dt
 import importlib.metadata
 import json
+import math
 import os
 import platform
 import random
@@ -150,6 +151,32 @@ def run_lock(folder):
                 fcntl.flock(stream, fcntl.LOCK_UN)
 
 
+def is_strict_p0_evidence(summary):
+    """Verify explicit criteria mode bound to its context; never infer mode from status."""
+    context, feasibility = summary.get("feasibility_context"), summary.get("feasibility")
+    if (summary.get("purpose") != "pilot" or summary.get("stage") != "p0"
+            or not isinstance(context, dict) or not isinstance(feasibility, dict)
+            or context.get("version") != 2 or feasibility.get("mode") != "criteria"
+            or context.get("feasibility_mode") != "criteria" or context.get("feasibility") != feasibility):
+        return False
+    try:
+        if summary.get("feasibility_fingerprint") != fingerprint(context):
+            return False
+    except (TypeError, ValueError):
+        return False
+    keys = ["max_peak_reserved_gib", "min_images_per_second"]
+    budget = context.get("budget")
+    if not isinstance(budget, dict) or type(budget.get("full_epoch")) is not bool:
+        return False
+    full_epoch = budget["full_epoch"]
+    if summary.get("full_epoch_measured") is True and full_epoch is not True:
+        return False
+    if full_epoch:
+        keys.append("max_epoch_seconds")
+    return all(type(feasibility.get(k)) in {int, float} and math.isfinite(feasibility[k])
+               and feasibility[k] > 0 for k in keys)
+
+
 def validate_gates(cfg, manifest):
     report = json.loads(Path(cfg["gates"]["conformance_report"]).read_text(encoding="utf-8"))
     if (report.get("status") != "pass" or report.get("preprocessing_sha256") != PREPROCESS_SHA256
@@ -170,7 +197,9 @@ def validate_gates(cfg, manifest):
             raise ValueError("P0 gate must include E1, E1-HR, E2")
         effective = cfg["batch"]["microbatch"] * cfg["batch"]["accumulation"]
         for s in summaries:
-            if (s.get("stage") != "p0" or s.get("status") != "pass" or not s.get("full_epoch_measured")
+            if not is_strict_p0_evidence(s):
+                raise ValueError("P1 requires strict criteria P0 evidence with bound mode; measured reports are ineligible")
+            if (s.get("stage") != "p0" or s.get("status") != "pass" or s.get("full_epoch_measured") is not True
                     or s.get("fingerprints") != manifest.fingerprints
                     or s.get("preprocessing_sha256") != PREPROCESS_SHA256
                     or s.get("effective_batch") != effective or s.get("runtime_policy") != cfg["runtime"]

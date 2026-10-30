@@ -29,7 +29,7 @@ def complete_config(stage="p0", exp="e1"):
     c["gates"]["conformance_report"] = "unused"
     if stage == "p0":
         c["budget"] = {"warmup_updates": 1, "measure_updates": 1, "full_epoch": True}
-        c["feasibility"] = {"max_peak_reserved_gib": 30, "min_images_per_second": 1, "max_epoch_seconds": 3600}
+        c["feasibility"] = {"mode": "criteria", "max_peak_reserved_gib": 30, "min_images_per_second": 1, "max_epoch_seconds": 3600}
     else:
         c["budget"]["max_epochs"] = 2
         c["scheduler"].update(warmup_updates=1, start_factor=.1, min_lr=1e-6)

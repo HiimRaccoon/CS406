@@ -99,6 +99,7 @@
     "full_epoch": false
   },
   "feasibility": {
+    "mode": "measurement_only",
     "max_peak_reserved_gib": null,
     "min_images_per_second": null,
     "max_epoch_seconds": null

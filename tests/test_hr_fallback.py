@@ -15,7 +15,7 @@ def fallback_case(tmp_path):
     cfg["resolution_policy"]["batch_policy"]["candidate_batches"].append({"microbatch": 1, "accumulation": 2})
     cfg["global_wh"] = [1024, 448]
     cfg["batch"] = {"microbatch": 1, "accumulation": 2}
-    context = {"version": 1, "protocol_id": cfg["protocol_id"],
+    context = {"version": 2, "feasibility_mode": "criteria", "budget": cfg["budget"], "protocol_id": cfg["protocol_id"],
                "ordered_candidates": cfg["resolution_policy"]["ordered_candidates"],
                "criteria_id": cfg["resolution_policy"]["criteria_id"],
                "feasibility": cfg["feasibility"], "seed": cfg["seed"],
@@ -29,6 +29,7 @@ def fallback_case(tmp_path):
               "failure_kind": "oom", "global_wh": [1344, 576],
               "resolution_policy": copy.deepcopy(cfg["resolution_policy"]),
               "batch": {"microbatch": 2, "accumulation": 1}, "effective_batch": 2,
+              "feasibility": copy.deepcopy(cfg["feasibility"]), "fallback_eligible": True,
               "feasibility_context": copy.deepcopy(context), "feasibility_fingerprint": fingerprint(context)}
     path = tmp_path / "prior.json"
     cfg["resolution_policy"]["prior_failure_reports"] = [str(path)]

@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 from .config import fingerprint
-from .runtime import write_json
+from .runtime import is_strict_p0_evidence, write_json
 from ..preprocessing.geoguessr_v1 import sha256_file
 
 
@@ -64,6 +64,12 @@ def export_reviewed_recipe(source, recipe_id, rows, output_root):
         row = next((r for r in rows if Path(r["run_dir"]) == Path(run_dir).resolve()), None)
         if row is None or row["summary"]["status"] not in {"pass", "complete"}:
             raise ValueError("Recipe must reference successful collected pilot runs")
+        if row["summary"]["stage"] == "p0":
+            if (not is_strict_p0_evidence(row["summary"]) or row["summary"]["status"] != "pass"
+                    or row["summary"].get("full_epoch_measured") is not True
+                    or row["config"].get("feasibility") != row["summary"].get("feasibility")
+                    or row["config"].get("budget", {}).get("full_epoch") is not True):
+                raise ValueError("Recipe P0 evidence must be a strict criteria full-epoch pass, never measurement-only")
         selected.append(row)
     profiles = {(r["summary"]["stage"], r["summary"]["experiment"]) for r in selected}
     if profiles != {(stage, exp) for stage in ("p0", "p1") for exp in ("e1", "e1hr", "e2")}:
@@ -101,10 +107,12 @@ def main():
         p.error("No pilot summaries found; do not create fabricated pilot results")
     args.output.parent.mkdir(parents=True, exist_ok=True)
     lines = ["# UIT pilot results — diagnostic only", "", "No official experiment, test evaluation, or automatic LR/resolution ranking.",
-             "", "| Run | Stage/profile | Status | Seed |", "|---|---|---|---|"]
+             "Measured runs are diagnostics, not feasibility passes or recipe evidence.",
+             "", "| Run | Stage/profile | Mode | Status | Seed |", "|---|---|---|---|---|"]
     for r in rows:
         s = r["summary"]
-        lines.append(f"| {Path(r['run_dir']).name} | {s['stage']}/{s['experiment']} | {s['status']} | {r['config']['seed']} |")
+        mode = s.get("feasibility", {}).get("mode", "n/a")
+        lines.append(f"| {Path(r['run_dir']).name} | {s['stage']}/{s['experiment']} | {mode} | {s['status']} | {r['config']['seed']} |")
     lines += ["", "## Environment, measurements, failures and declared policy", "",
               "Full evidence below includes resolved numeric values, environment, pass/fail and failure reasons. "
               "A numeric value is not frozen merely because it appears in a pilot config. "

@@ -31,8 +31,8 @@ Dùng `git clone https://github.com/HiimRaccoon/CS406.git repo` hoặc `git pull
 - [ ] Chuẩn bị env, dataset root và offline weight file.
 - [ ] Tests CPU pass; exact artifact checks pass.
 - [ ] Conformance trên target environment pass, gồm train+val image hash audit, không mở test images.
-- [ ] Review/fill pilot seed, initialization, optimizer/runtime policy, batch, bounded budgets và feasibility thresholds.
-- [ ] Resolve pre-P0 threshold blocker: legitimate predeclared constraints hoặc separately approved measurement-only patch; không dùng fake thresholds, không promote exploratory reports thành comparable passes.
+- [ ] Review/fill explicit P0 mode, seed, initialization, optimizer/runtime policy, batch và bounded budgets. Full reviewed SHA/conformance vẫn mandatory ở cả hai mode.
+- [ ] First diagnostics dùng `measurement_only` (thresholds có thể null); sau review measurements mới freeze legitimate thresholds và chạy fresh `criteria` full epochs. Không promote measured reports thành comparable passes hoặc dùng measurement-only OOM cho HR resolution fallback.
 - [ ] E1-HR reviewed ordered list/selection rule; không tự thêm fallback hoặc chọn theo score.
 - [ ] P0: một reviewed config mỗi job. P1 chỉ sau ba passing full-epoch P0 summaries và budget review.
 

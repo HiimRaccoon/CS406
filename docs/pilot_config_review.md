@@ -1,8 +1,8 @@
 # Pre-P0 pilot configuration review
 
-Base: reviewed harness commit `e1121d1`. Phạm vi: chuẩn bị config; không chạy GPU/Slurm, không official experiment, không thay source/architecture/preprocessing/split. Master spec vẫn draft. File này không phải `training_recipe_v1`.
+Base preparation đã được review ở commit `82a9614`; task tiếp theo chỉ thêm minimal P0 measurement-only mode và strict evidence guards. Không chạy GPU/Slurm, không official experiment, không thay architecture/preprocessing/split. Master spec vẫn draft. File này không phải `training_recipe_v1`.
 
-**Kết luận quan trọng:** đã có thể chọn common protocol và initial attempts, nhưng **chưa thể chạy measurement-only P0 bằng harness hiện tại** nếu chưa có feasibility thresholds hợp lệ. Không điền thresholds giả để vượt config check. Đề xuất patch tối thiểu ở mục 5 chỉ là proposal, **chưa implement** trong task này.
+**Cập nhật:** minimal `measurement_only` đã implement để first diagnostics không cần fake thresholds. Vẫn cần data root, offline pretrained path/full reviewed SHA và target conformance thật; chưa có GPU run. `criteria` vẫn cần legitimate constraints trước strict acceptance; không promote measurement reports thành pass.
 
 ## 1. Trạng thái các quyết định
 
@@ -11,11 +11,11 @@ Base: reviewed harness commit `e1121d1`. Phạm vi: chuẩn bị config; không 
 - **MUST BE DETERMINED BY GPU P0:** measurements và quyết định feasibility/final comparable batch cần evidence UIT.
 - **DEFER UNTIL P1 / OFFICIAL SEARCH:** không điền full P1 hoặc official LR/seeds/horizon ở task này.
 
-Templates gốc `configs/pilot/*.json` giữ nguyên. Chín file trong [reviewed/](../configs/pilot/reviewed/README.md) là **`.example.json`**, không phải server-ready configs; còn placeholders bắt buộc fail `--check-config`. Không có report hoặc measurement GPU mới.
+Original P0 templates thêm `feasibility.mode=null` để bắt buộc chọn explicit, không default; P1 templates giữ nguyên. Chín file [reviewed/](../configs/pilot/reviewed/README.md) vẫn là **`.example.json`**, chưa server-ready. Sáu exploratory examples dùng `measurement_only`, ba comparable-final dùng `criteria`; mọi thresholds vẫn null tới review phù hợp. Không có report hoặc measurement GPU mới.
 
 ## 2. Review từng field pending
 
-Đã kiểm mọi leaf `null` của cả bảy JSON templates gốc. `P0/P1` chỉ các profile tương ứng; `N/A` là field không được dùng bởi policy đã chọn, không phải giá trị server còn thiếu. Mỗi field chưa chắc chắn có hàng riêng.
+Đã kiểm mọi leaf `null` của cả bảy JSON templates gốc: 58 paths ở preparation ban đầu, thêm `feasibility.mode` thành 59. `P0/P1` chỉ các profile tương ứng; `N/A` là field không được dùng bởi policy đã chọn, không phải giá trị server còn thiếu. Mỗi field chưa chắc chắn có hàng riêng.
 
 | Field | Current status | Freeze before P0? | Proposed value / rule | Reason | Needs GPU evidence? |
 |---|---|---|---|---|---|
@@ -68,6 +68,7 @@ Templates gốc `configs/pilot/*.json` giữ nguyên. Chín file trong [reviewed
 | `batch.microbatch` | null P0/P1 | Initial only | A: `2`; chỉ nếu OOM thì B: `1` | Không tuyên bố max feasible batch | Có |
 | `batch.accumulation` | null P0/P1 | Initial only | A: `1`; B: `2` | Giữ exploratory effective batch 2 khi giảm microbatch | Final value cần P0/review |
 | Effective original-image batch | Derived, chưa final | Initial only | A/B đều `2`; comparable-final còn pending | Không tính 5 E2 views thành 5 samples | Có + common-budget review |
+| `feasibility.mode` | null trong ba P0 templates; explicit trong examples | Có, theo phase | Exploratory `measurement_only`; comparable-final `criteria`; P1 không thêm mode | Tách first diagnostics khỏi acceptance; không implicit default | Không |
 | `feasibility.max_peak_reserved_gib` | null P0 | Freeze rule, chưa numeric | Proposal: `0.90 × actual logical-device total bytes / 2^30` | 10% engineering safety margin, không scientific/optimal threshold | Cần actual MIG capacity metadata |
 | `feasibility.min_images_per_second` | null P0 | Chưa | Derive từ approved epoch/job budget; không lấy 0/epsilon để pass | Chưa có deadline/throughput target hợp lệ | Cần budget + measurements để review |
 | `feasibility.max_epoch_seconds` | null P0 | Chưa | Derive job walltime minus overhead/reserve và epochs/job | Không suy từ arbitrary 72h example thành threshold project | Cần actual constraints + epoch timing |
@@ -124,27 +125,22 @@ Sau exploratory, chọn feasible microbatch `m_i`, rồi user review một `B_fi
 
 Tạo **ba fresh comparable-final runs** với common B_final, cùng numerical/runtime/optimizer/seed/init policy, actual constraints, full epoch và environment. Không warm-start từ exploratory models, không chỉnh status/result files thủ công. Nếu đổi runtime hoặc threshold contract, rerun affected measurements; không dùng old failure để reject resolution dưới protocol mới.
 
-## 5. Circular dependency và minimal patch proposal — CHƯA IMPLEMENT
+## 5. Circular dependency đã được xử lý bằng minimal mode
 
-`src/pilot/config.py::validate` bắt buộc `max_peak_reserved_gib` và `min_images_per_second` ở mọi P0, thêm `max_epoch_seconds` khi full epoch. `p0_feasibility.py::run` luôn đánh giá criteria và trả pass/fail. Hiện không có measurement-only mode. Vì chưa có approved throughput/job budget, việc điền min IPS cực nhỏ hoặc epoch limit cực lớn chỉ để chạy là giả lập một acceptance contract.
+Harness cũ bắt buộc thresholds ở mọi P0, gây circular dependency khi chưa có approved throughput/job budget. Patch hiện tại yêu cầu `feasibility.mode` explicit và chỉ bỏ numeric threshold requirements trong `measurement_only`; không bỏ full SHA, artifacts/conformance, seed/init/optimizer/runtime, finite windows, batch/HR policy, no-test/no-search gates.
 
 Batch policy không buộc biết max feasible batch trước measurement nếu khai báo **initial attempt** như A/B ở mục 4. Giới hạn hiện tại là mỗi candidate chỉ có một batch row trong một resolution-selection protocol; vì vậy batch retry dùng protocol riêng, không carry OOM sang resolution rejection. Chưa cần thêm batch-search code hoặc final effective batch để chuẩn bị first attempt.
 
-Hai cách hợp lệ:
+| Mode | Requirements và result |
+|---|---|
+| `measurement_only` | Thresholds có thể null; finite workload vẫn đo/sync/reset memory như trước. Success: `measured`, `not_assessed`, `fallback_eligible=false`. OOM: fail/oom; infrastructure/numerical: fail/infrastructure_or_numerical. Mọi measurement-only outcome đều ineligible cho HR fallback, P1 hoặc recipe |
+| `criteria` | Required positive VRAM/throughput thresholds; positive epoch threshold khi full_epoch=true. Giữ actual pass/fail comparisons. Genuine strict criteria/OOM failures chỉ eligible HR khi verified matching context/batch policy; pass không phải fallback failure |
 
-1. **Giữ code hiện tại:** user xác nhận actual UIT constraints và một engineering runtime budget trước; derive/review numeric thresholds, sau đó chạy các examples đã hoàn thiện. Đây không đòi score hoặc biết trước throughput, nhưng hiện thiếu budget đó.
-2. **Khuyến nghị cho first measurements:** review một minimal measurement-only patch. Task này chỉ ghi proposal, không tự sửa approved harness.
+Mode được bind vào `feasibility_context` version 2 (explicit `feasibility_mode` và feasibility dict) và fingerprint. HR validator từ chối measured status, noncriteria/missing/forged mode, ineligible hoặc unmatched context; không dùng measurement-only OOM để reject resolution. Reports cũ thiếu mode evidence phải được đo lại theo strict protocol, không sửa JSON để promote.
 
-Proposal cụ thể:
+P1 gate và recipe export chỉ nhận P0 **criteria + pass + full epoch**, với mode/fingerprint được verify và các identity/common-batch/runtime checks giữ nguyên. Collector vẫn giữ pass/fail/measured/complete/interrupted records để diagnostic reporting; không derive thresholds hoặc tự freeze recipe.
 
-- `feasibility.mode`: default `criteria` cho backward compatibility; thêm `measurement_only` explicit. Không thêm architecture hoặc search loop.
-- `config.py`: chỉ measurement-only được không có thresholds; vẫn bắt buộc exact full weight SHA, artifacts/conformance, batch policy, seeds/runtime và finite windows. Strict criteria mode vẫn giữ toàn bộ requirements.
-- `p0_feasibility.py`: vẫn đo/sync/reset memory/finite train windows; successful measurement-only trả `status="measured"`, `assessment="not_assessed"`, `fallback_eligible=false`, không `pass`. OOM/numerical failures vẫn lưu đủ context, nhưng không dùng làm resolution rejection evidence trong criteria protocol.
-- Bind assessment mode/phase vào feasibility context/fingerprint; HR evidence validator từ chối measurement-only hoặc missing eligibility. Không diễn giải report cũ thành strict pass.
-- `runtime.py` P1 gate: chỉ accepted comparable criteria pass với full_epoch=true; tuyệt đối không nhận `measured` hoặc exploratory summaries. Điều kiện status/pass/full-epoch hiện có được giữ và làm explicit với mode.
-- Collector giữ raw diagnostic records, không auto-freeze threshold/recipe. CPU tests cần kiểm measurement không leak thành passing evidence, missing hash vẫn fail, bounded budget và HR policy vẫn được giữ.
-
-Không đặt field `feasibility.mode` vào current examples vì code hiện tại chưa hiểu semantic đó. Không bypass bằng unknown JSON field hoặc sửa result status. Như vậy examples **cố ý fail config check cho tới khi có legitimate thresholds**, hoặc có patch mode được review riêng.
+Workflow: **UIT conformance → measurement-only exploratory P0 → review actual VRAM/throughput/epoch constraints → freeze legitimate thresholds → fresh strict comparable P0 E1/E1-HR/E2 → strict passing full-epoch summaries mới được gate P1**. Một declared config vẫn chỉ chạy một workload; không thêm LR/batch/resolution/threshold search hoặc P1 implementation.
 
 ## 6. Cách derive thresholds mà không invent measurement
 
@@ -177,7 +173,7 @@ Tất cả templates/examples vẫn `expected_weight_sha256=null`. Không tải 
 
 **Còn cần user review/đầu vào thật:**
 
-1. Chọn legitimate predeclared thresholds từ job budget, hoặc approve minimal measurement-only patch ở mục 5. Đây là execution blocker, chưa được âm thầm giải bằng code.
+1. First exploratory dùng explicit measurement-only, không còn numeric-threshold blocker. Legitimate thresholds vẫn phải được review/freeze sau first measurements và trước fresh strict comparable runs.
 2. Xác nhận actual logical GPU capacity, CUDA/package lock, CPU allocation ≥4, RAM/walltime envelope và target conformance report; numeric VRAM threshold theo capacity rule cần review.
 3. Lấy file pretrained thật, review full hash và pin cùng digest vào mọi runtime config; resolve dataset/weight/report paths.
 4. Xác nhận initial A→B batch/window policy trước submit. Không review numeric resolution fallback ở task này; chỉ candidate 1344×576.
@@ -187,6 +183,6 @@ Không có architecture/training-framework changes, không GPU/Slurm/server exec
 
 ## 9. Preparation checks
 
-Local CPU verification: 58 unique null-field paths trong original templates đều có hàng review; chín examples đều bị validator từ chối trên mandatory placeholders thật, không phải trên common runtime/optimizer/init choices. Existing suite: **66 tests passed, 1 opt-in GPU test skipped**. Chín readiness CLI checks cũng phải fail trước model/run creation. Chưa có actual UIT conformance/P0/P1 mới.
+Preparation ở commit 82a9614 đã kiểm đủ 58 paths; mode patch thêm path thứ 59. Exploratory readiness check vẫn phải fail trên missing real paths/full hash/conformance report, nhưng không còn fail vì thresholds null. Comparable-final vẫn fail khi thiếu batch/thresholds. CPU regression tests kiểm missing/invalid mode, criteria constraints, measured/OOM results, mode/fingerprint forgery, HR/P1/recipe guards và existing no-test/full-SHA checks.
 
-34 protected source/spec/original-template/artifact hashes giữ nguyên. Chỉ thêm preparation examples/review và cập nhật references/upload manifest; measurement-only patch vẫn chưa được implement.
+Mode patch chỉ thay P0 validation/assessment và shared evidence checks/collector, cùng P0 config mode fields/tài liệu/tests. P1 templates/runner, model architectures, frozen preprocessing/split và official protocol không thay đổi. Không có actual UIT conformance/P0/P1 hoặc GPU measurement mới.

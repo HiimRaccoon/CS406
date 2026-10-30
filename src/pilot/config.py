@@ -60,9 +60,11 @@ def validate(cfg: dict):
                      "clipping.enabled", "gates.conformance_report"]
         if stage == "p0":
             required += ["budget.warmup_updates", "budget.measure_updates", "budget.full_epoch",
-                         "feasibility.max_peak_reserved_gib", "feasibility.min_images_per_second"]
-            if get("budget.full_epoch"):
-                required += ["feasibility.max_epoch_seconds"]
+                         "feasibility.mode"]
+            if get("feasibility.mode") == "criteria":
+                required += ["feasibility.max_peak_reserved_gib", "feasibility.min_images_per_second"]
+                if get("budget.full_epoch"):
+                    required += ["feasibility.max_epoch_seconds"]
         else:
             required += ["budget.max_epochs", "scheduler.warmup_updates", "scheduler.start_factor",
                          "scheduler.min_lr", "checkpoint.tolerance", "checkpoint.tie_break", "gates.p0_summaries"]
@@ -144,10 +146,17 @@ def validate(cfg: dict):
         raise ConfigError("Invalid clipping threshold")
     budget = cfg["budget"]
     if stage == "p0":
-        if any(cfg["feasibility"][k] <= 0 for k in ("max_peak_reserved_gib", "min_images_per_second")):
-            raise ConfigError("P0 feasibility thresholds must be positive")
-        if budget["full_epoch"] and cfg["feasibility"]["max_epoch_seconds"] <= 0:
-            raise ConfigError("Positive full-epoch walltime threshold required")
+        mode = cfg["feasibility"]["mode"]
+        if not isinstance(mode, str) or mode not in {"criteria", "measurement_only"}:
+            raise ConfigError("feasibility.mode must explicitly be criteria or measurement_only")
+        if mode == "criteria":
+            keys = ["max_peak_reserved_gib", "min_images_per_second"]
+            if budget["full_epoch"]:
+                keys.append("max_epoch_seconds")
+            for key in keys:
+                value = cfg["feasibility"][key]
+                if type(value) not in {int, float} or not math.isfinite(value) or value <= 0:
+                    raise ConfigError(f"Positive P0 feasibility constraint required: {key}")
         if type(budget["full_epoch"]) is not bool:
             raise ConfigError("full_epoch must be explicit")
         for key in ("warmup_updates", "measure_updates"):

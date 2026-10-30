@@ -8,7 +8,14 @@ Các JSON này chỉ dành cho **pilot**. Giá trị `null` là quyết định 
 
 Copy template sang `configs/pilot/local/` (ignored), review/điền numeric values trước khi chạy. Giữ nguyên `purpose`, experiment profile, preprocessing path, `.05` weight decay và E1/E2 global resolution.
 
-Pre-P0 preparation mới nằm trong [reviewed/](reviewed/README.md): chín `.example.json` cho exploratory A/B và comparable-final, cùng [field review](../../docs/pilot_config_review.md). Common choices đã được điền riêng ở examples; original templates giữ nguyên. Examples chưa server-ready: hash/path/report/thresholds vẫn pending. Current harness chưa có measurement-only mode; không điền fake thresholds để vượt config check.
+Pre-P0 preparation nằm trong [reviewed/](reviewed/README.md): chín `.example.json` cho exploratory A/B và comparable-final, cùng [field review](../../docs/pilot_config_review.md). Original P0 templates có `feasibility.mode=null`, bắt buộc chọn explicit; không có default. Exploratory examples chọn `measurement_only`, comparable-final chọn `criteria`. P1 templates không thêm mode. Examples chưa server-ready: hash/path/report thật còn thiếu; comparable-final còn thiếu batch/thresholds.
+
+| P0 mode | Validation và kết quả |
+|---|---|
+| `measurement_only` | Thresholds có thể null; mọi gate/seed/init/batch/runtime/full-SHA/finite-window requirement khác giữ nguyên. Thành công: `status=measured`, `assessment=not_assessed`, `fallback_eligible=false`; OOM/infrastructure/numerical vẫn fail và ineligible |
+| `criteria` | Bắt buộc positive VRAM/throughput constraints, thêm epoch-time constraint khi full_epoch=true. Workload thành công được đánh giá `pass/fail` như trước; không tự derive thresholds |
+
+Workflow: UIT conformance → measurement-only exploratory P0 → user review số đo/constraints → freeze legitimate thresholds → fresh strict comparable P0 E1/E1-HR/E2. **Chỉ strict criteria pass với full epoch** mới được gate P1 hoặc làm P0 evidence khi export recipe. `measured` không phải experiment result hoặc feasibility pass.
 
 Các nhóm phải khai báo:
 
@@ -24,6 +31,7 @@ Các nhóm phải khai báo:
 | `runtime` | Mọi boolean/dtype explicit; workers >0 cần prefetch factor. AMP enabled chỉ float16/bfloat16; scaler enabled cần toàn bộ scaler fields |
 | P0 `budget` | Benchmark warmup updates, measured updates, full-epoch flag. Hai windows nối tiếp cùng iterator, không cycle; tổng updates phải vừa một train epoch |
 | P0 `feasibility` | Reviewed peak-reserved GiB, min original-images/s, max full-epoch seconds; mọi threshold được dùng phải >0 |
+| P0 `feasibility.mode` | Required explicit `criteria` hoặc `measurement_only`. Chỉ measurement-only được bỏ/null thresholds; full pretrained SHA và các gates khác không đổi |
 | P1 `budget` | Predetermined finite max epochs, cùng budget cho ba profiles; không dừng vì đạt score mong muốn |
 | P1 `scheduler` | Warmup update count, start factor, cosine min LR; horizon = updates/epoch × max epochs |
 | P1 `checkpoint` | Supported validation Macro-F1 tolerance và tie-break `earlier` hoặc `nll` |
@@ -44,7 +52,7 @@ E1-HR `global_wh` chưa chọn sẵn. `[1344,576]` trong `ordered_candidates` ch
 
 `batch_policy.effective_batch` là common original-image batch; `batch_policy.candidate_batches` là bảng `{microbatch, accumulation}` theo đúng thứ tự `ordered_candidates`, được review **trước candidate đầu tiên**. Mỗi hàng phải có cùng effective batch và actual batch phải khớp hàng của candidate đang chạy. Có thể dùng microbatch khác nhau giữa candidates khi đã khai báo/review trước; không dùng OOM từ oversized/unapproved microbatch để reject resolution.
 
-Fallback cần genuine OOM/criteria failures của **tất cả** candidate đứng trước, cùng `protocol_id`, ordered list/criteria ID, thresholds, seed, runtime, initialization, dataset/split/preprocessing, full pretrained SHA và reviewed batch policy. `feasibility_context.json` được ghi sau khi verify artifacts/weight/preprocessing và trước model allocation; cả criteria và OOM summaries chứa full context + fingerprint và actual batch/effective batch. Code so sánh context/fingerprint và kiểm actual predecessor batch với bảng đã review. Failure trước khi verify identity không có bound context, không được dùng làm fallback. Không chấp nhận lỗi file/package/numerical, không tự loop resolution hoặc dùng score.
+Fallback cần genuine **strict criteria** OOM/criteria failures của **tất cả** candidate đứng trước, cùng `protocol_id`, ordered list/criteria ID, thresholds, seed, runtime, initialization, dataset/split/preprocessing, full pretrained SHA và reviewed batch policy. `feasibility_context.json` version 2 bind explicit mode vào context/fingerprint trước model allocation. Failure summary phải có `fallback_eligible=true`; measurement-only OOM luôn false. Reports thiếu/khác/forged mode/fingerprint hoặc chỉ được đổi status không đủ evidence. Code vẫn so sánh toàn context và kiểm actual predecessor batch. Failure trước verified identity và lỗi file/package/numerical không eligible. Không auto-loop resolution hoặc dùng score.
 
 P0 passing summaries dùng làm P1 gate phải cùng runtime, seed, initialization, common effective batch, weights/data/preprocessing/source/environment. Own profile phải giữ resolution/microbatch. P0 exploratory microbatch failures vẫn lưu riêng; khi chốt common effective batch, tạo ba passing P0 measurements tương ứng trước P1.
 

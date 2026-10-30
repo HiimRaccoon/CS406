@@ -80,7 +80,10 @@
     "batch_policy": {
       "effective_batch": null,
       "candidate_batches": [
-        {"microbatch": null, "accumulation": null}
+        {
+          "microbatch": null,
+          "accumulation": null
+        }
       ]
     }
   },
@@ -90,6 +93,7 @@
     "full_epoch": null
   },
   "feasibility": {
+    "mode": null,
     "max_peak_reserved_gib": null,
     "min_images_per_second": null,
     "max_epoch_seconds": null
