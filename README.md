@@ -2,7 +2,8 @@
 
 ConvNeXt-Tiny benchmark trên fixed split 124 quốc gia/vùng lãnh thổ. Main scope: E1 full-image, E1-HR higher-resolution full-image, E2 shared-encoder global/local, E3 natural head retraining vs class-uniform cRT trên frozen E1/E2 features.
 
-- [Master experiment specification — DRAFT, chưa frozen](docs/master_spec.md).
+- [Master specification — DRAFT FOR USER REVIEW](docs/master_spec.md): objective, ASCII workflows, experiment matrix, FIXED/PENDING recipe và [project checklist](docs/master_spec.md#project-checklist); chưa frozen, chưa authorize implementation.
+- [Grillme đã review](docs/grillme.md): biên bản 34 câu hỏi và các quyết định nguồn cho master draft.
 - [Preprocessing v1 — frozen](docs/preprocessing_v1.md), [config](configs/preprocessing/geoguessr_v1.json) và [checksum](configs/preprocessing/geoguessr_v1.sha256).
 - [Fixed split artifacts và provenance](artifacts/baseline124/README.md); không regenerate từ seed 406.
 - [Train-only UI QA: 297 ảnh, 124 labels](reports/preprocessing_qa_v1/qa_review_vi.md).
@@ -11,4 +12,4 @@ ConvNeXt-Tiny benchmark trên fixed split 124 quốc gia/vùng lãnh thổ. Main
 
 Geometry E2 v1: global 896×384; bốn raw local crops 384×384 hoặc 402×402 theo layout → 320×320; navigation arrows được chủ động giữ. Geometry không mở lại thành search branch. Candidate 416/448 chỉ là visual design alternatives lịch sử.
 
-Phạm vi công việc hiện tại chỉ gồm preprocessing/geometry và fixed-split reproducibility. Master spec và pilot plan là draft chờ người dùng review lại sau khi toàn bộ grill/preprocessing review kết thúc. Không tự động mở rộng master spec, tạo experiment-specific specs/training code hoặc chuyển sang implementation/pilot khi chưa có yêu cầu tiếp theo.
+Master spec đã được viết lại để người dùng review; vẫn là draft, không phải frozen specification. Preprocessing/geometry và fixed split có version riêng đã freeze. Pilot vẫn deferred; không tạo experiment-specific specs/training code hoặc chạy pilot/model/training trong task viết tài liệu. Các bước tiếp theo phải theo workflow và được người dùng review/yêu cầu riêng.
