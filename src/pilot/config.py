@@ -7,6 +7,7 @@ import hashlib
 import json
 import math
 import os
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -14,6 +15,12 @@ ROOT = Path(__file__).resolve().parents[2]
 
 class ConfigError(ValueError):
     pass
+
+
+def normalize_weight_sha256(value):
+    if not isinstance(value, str) or not re.fullmatch(r"[0-9a-f]{64}", value.strip().lower()):
+        raise ConfigError("expected_weight_sha256 must be a reviewed full 64-character SHA-256")
+    return value.strip().lower()
 
 
 def fingerprint(value) -> str:
@@ -42,7 +49,7 @@ def validate(cfg: dict):
     if stage == "conformance":
         required += ["samples_per_layout", "output_dir"]
     else:
-        required += ["protocol_id", "seed", "paths.weights", "paths.runs_dir", "global_wh",
+        required += ["protocol_id", "seed", "paths.weights", "paths.runs_dir", "global_wh", "expected_weight_sha256",
                      "batch.microbatch", "batch.accumulation", "initialization.method", "initialization.seed",
                      "runtime.device", "runtime.num_workers", "runtime.pin_memory", "runtime.persistent_workers",
                      "runtime.cpu_threads", "runtime.amp.enabled", "runtime.amp.dtype", "runtime.scaler.enabled",
@@ -82,6 +89,7 @@ def validate(cfg: dict):
         if type(cfg["samples_per_layout"]) is not int or cfg["samples_per_layout"] < 1:
             raise ConfigError("samples_per_layout must be a positive integer")
         return cfg
+    cfg["expected_weight_sha256"] = normalize_weight_sha256(cfg["expected_weight_sha256"])
     for key in ["seed", "initialization.seed", "batch.microbatch", "batch.accumulation",
                 "runtime.num_workers", "runtime.cpu_threads"]:
         value = get(key)
@@ -161,6 +169,18 @@ def validate(cfg: dict):
             raise ConfigError("E1-HR needs reviewed ordered_candidates and criteria_id; runner never loops resolutions")
         if policy["ordered_candidates"].index(wh) > 0 and not policy.get("prior_failure_reports"):
             raise ConfigError("Fallback candidate requires explicit prior failure reports")
+        batch_policy = policy.get("batch_policy", {})
+        effective = batch_policy.get("effective_batch")
+        batches = batch_policy.get("candidate_batches", [])
+        if type(effective) is not int or effective < 1 or len(batches) != len(policy["ordered_candidates"]):
+            raise ConfigError("E1-HR needs a reviewed batch_policy: effective_batch and one batch per ordered candidate")
+        for batch in batches:
+            if (not isinstance(batch, dict) or set(batch) != {"microbatch", "accumulation"}
+                    or any(type(batch[k]) is not int or batch[k] < 1 for k in batch)
+                    or batch["microbatch"] * batch["accumulation"] != effective):
+                raise ConfigError("Reviewed HR candidate batches must have the same positive effective batch")
+        if cfg["batch"] != batches[policy["ordered_candidates"].index(wh)]:
+            raise ConfigError("Actual HR batch is outside the reviewed candidate batch policy")
     return cfg
 
 

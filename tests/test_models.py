@@ -1,4 +1,5 @@
 import pytest
+import hashlib
 import torch
 from torchvision.models import convnext_tiny
 from torchvision.ops import StochasticDepth
@@ -37,4 +38,32 @@ def test_head_init_rng_and_offline_integrity(tmp_path):
     bad = tmp_path / "convnext_tiny-983f1562.pth"
     bad.write_bytes(b"not the pretrained weight file")
     with pytest.raises(ValueError, match="SHA-256"):
-        build_model("e1", bad, {"method": "linear_default", "seed": 21})
+        build_model("e1", bad, {"method": "linear_default", "seed": 21}, "0" * 64)
+
+
+def test_missing_full_sha_rejected_even_for_matching_filename(tmp_path):
+    path = tmp_path / "convnext_tiny-983f1562.pth"
+    path.write_bytes(b"synthetic file, never pretrained")
+    with pytest.raises(ValueError, match="expected_weight_sha256"):
+        build_model("e1", path, {"method": "linear_default", "seed": 21}, None)
+
+
+def test_full_digest_checked_beyond_the_filename_prefix(tmp_path, monkeypatch):
+    from src.pilot import models
+    path = tmp_path / "convnext_tiny-983f1562.pth"
+    path.write_bytes(b"synthetic content")
+    # Simulate two digest results sharing the official prefix; suffix mismatch must fail before load.
+    monkeypatch.setattr(models, "sha256_file", lambda _: "983f1562" + "a" * 56)
+    with pytest.raises(ValueError, match="SHA-256 mismatch"):
+        build_model("e1", path, {"method": "linear_default", "seed": 21}, "983f1562" + "b" * 56)
+
+
+def test_full_matching_digest_loads_cpu_state_and_logs_hash(tmp_path):
+    path = tmp_path / "convnext_tiny-983f1562.pth"
+    # Actual hash of a synthetic random-weight CPU fixture, never a claimed pretrained digest.
+    backbone = convnext_tiny(weights=None, stochastic_depth_prob=.1)
+    torch.save(backbone.state_dict(), path)
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()
+    model, metadata = build_model("e1", path, {"method": "linear_default", "seed": 21}, digest.upper())
+    assert metadata["sha256"] == digest
+    assert torch.equal(next(model.features.parameters()), next(backbone.features.parameters()))

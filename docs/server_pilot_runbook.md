@@ -89,7 +89,7 @@ curl --fail --location https://download.pytorch.org/models/convnext_tiny-983f156
 sha256sum "$CS406_WEIGHTS_PATH"
 ```
 
-File phải tên đúng `convnext_tiny-983f1562.pth`, digest bắt đầu `983f1562` theo official filename. Capture **full SHA-256 thực tế**, có thể pin vào `expected_weight_sha256` trong reviewed configs; không có full hash giả điền sẵn. `build_model` kiểm prefix và full hash nếu pin, strict-load ImageNet state dictionary, không tự download và không dùng `weights.transforms()`. E1/E1-HR/E2 build độc lập từ cùng file, drop-path max `.1` theo explicit TorchVision block-linear schedule, cùng recorded initialization rule.
+File phải tên đúng `convnext_tiny-983f1562.pth`. Sau khi lấy file thật, tính/review **full SHA-256 thực tế** rồi **bắt buộc điền `expected_weight_sha256` trong mọi P0/P1 config trước GPU chạy**. Hash phải đủ 64 hex characters, được normalize thành lowercase. Config check fail nếu thiếu/null/invalid hash; `build_model` yêu cầu actual full digest bằng expected full digest, không dựa vào prefix `983f1562` làm integrity gate. Templates vẫn null cho tới khi hash thật được review; không có full hash giả điền sẵn. Conformance không cần pretrained weight. Model strict-load ImageNet state dictionary, không tự download và không dùng `weights.transforms()`. E1/E1-HR/E2 build độc lập từ cùng file, drop-path max `.1` theo explicit TorchVision block-linear schedule, cùng recorded initialization rule.
 
 ```bash
 cd "$CS406_REPO"
@@ -107,6 +107,8 @@ Kiểm report `status=pass`, labels124, counts34997/7497/7502, `test_images_open
 CPU unit tests dùng tiny synthetic models để kiểm accumulation, checkpoints/RNG và bounded control flow; không phải GeoGuessr training. GPU smoke tách riêng, chỉ chạy khi chủ động opt in trong GPU allocation:
 
 ```bash
+# Chỉ điền digest đã review, giống expected_weight_sha256 trong pilot configs.
+export CS406_EXPECTED_WEIGHT_SHA256="<reviewed-full-sha256>"
 CS406_GPU_SMOKE=1 python -m pytest -q -m gpu
 ```
 
@@ -124,7 +126,9 @@ Trước comparable timing, freeze ít nhất: worker count, pin/persistent/pref
 
 Classifier phải chọn explicit method/seed cho cả ba architectures, không chỉ E3. `linear_default` log exact reset rule + torch version; `trunc_normal` cần std/bias. Không kế thừa classifier/optimizer từ E1 sang E2.
 
-E1-HR: `1344×576` chỉ first candidate; `global_wh` chưa điền. Review ordered candidate list, suitability/aspect ratio, criteria ID và feasibility thresholds **trước chạy**. Nếu first candidate pass thì giữ nó. Không try resolution khác vì muốn validation score tốt hơn. Không có numeric fallback mới trong repo; nếu thật sự fail feasibility/OOM, người dùng review fallback và failure evidence trước job riêng. Lỗi package/path/numerical không đủ để chuyển fallback.
+E1-HR: `1344×576` chỉ first candidate; `global_wh` chưa điền. Review ordered candidate list, suitability/aspect ratio, criteria ID, feasibility thresholds và `resolution_policy.batch_policy` **trước candidate đầu chạy**. Bảng `candidate_batches` có một `{microbatch, accumulation}` cho mỗi ordered candidate, cùng `effective_batch`; actual batch phải khớp hàng tương ứng. Không dùng oversized/unapproved microbatch rồi lấy OOM làm lý do reject resolution. Nếu first candidate pass thì giữ nó; không chọn theo validation score.
+
+P0 ghi `feasibility_context.json` sau verify dataset/preprocessing/offline full weight digest và trước model allocation. Context + fingerprint được đưa vào cả criteria và OOM failure summaries, ràng buộc protocol ID, ordered list/criteria ID, thresholds, seed, runtime, initialization, split/preprocessing/weight identity và reviewed batch policy (cùng source/environment/device/budget). Khi fallback, validator phải khớp context/fingerprint và kiểm actual batch/effective batch của từng predecessor. Reports cũ thiếu context, lỗi trước khi identity được verify hoặc lỗi package/path/numerical không đủ để chuyển fallback. Giữ nguyên mọi failure reports; runner vẫn chạy đúng **một** declared resolution/job. Không có numeric fallback mới trong task này.
 
 P0 LR chỉ sanity-check stability, không validation; record mọi retry. P0 không chứng minh convergence. Có thể kiểm microbatch thủ công bằng run riêng, giữ failure logs; không có automatic architecture/LR/resolution search.
 
@@ -155,7 +159,7 @@ squeue -u "$USER"
 
 `logs/` phải tồn tại **trước** sbatch vì Slurm mở stdout trước script. Không submit trên login node bằng Python trực tiếp. `CS406_PYTHON`, repo/config/data/weights/run variables phải được export cho job; script dùng exact venv interpreter, không phụ thuộc shell activation trong batch.
 
-Mỗi P0 run có `config_resolved.json`, `environment.json`, `model_metadata.json`, `timing.json`, `memory.json`, `run_summary.json`; lỗi sớm có thể chỉ config + failure summary. Không checkpoint P0. Inspect status/pass-fail, failure type, steady-state original-images/s, per-microbatch/update time, loader-wait fraction, full-epoch seconds, peak allocated/reserved bytes và thresholds. Timing sync CUDA trước/sau, reset peaks sau benchmark warmup; end-to-end gồm input/transfer/train/numerical checks, không tách riêng kernel-only FLOPs performance. Full epoch **không gồm validation/checkpoint I/O**; P1 ghi epoch walltime train+validation riêng, checkpoint I/O ngoài timer.
+Mỗi P0 run có `config_resolved.json`, `environment.json`, `feasibility_context.json`, `model_metadata.json`, `timing.json`, `memory.json`, `run_summary.json`; lỗi sớm có thể chỉ config + failure summary. Không checkpoint P0. Inspect status/pass-fail, failure type, steady-state original-images/s, per-microbatch/update time, loader-wait fraction, full-epoch seconds, peak allocated/reserved bytes và thresholds. Timing sync CUDA trước/sau, reset peaks sau benchmark warmup; end-to-end gồm input/transfer/train/numerical checks, không tách riêng kernel-only FLOPs performance. Full epoch **không gồm validation/checkpoint I/O**; P1 ghi epoch walltime train+validation riêng, checkpoint I/O ngoài timer.
 
 Nếu OOM/failure, folder giữ nguyên; sửa config theo reviewed feasibility rule rồi tạo run ID mới. Không ghi đè để che trial lỗi. Warmup/measurement là finite windows; no validation/model-quality claim. Tìm microbatch phù hợp rồi chốt common effective batch theo original images; E2 năm views vẫn một sample. Nếu changed accumulation để match common batch, tạo passing P0 summaries mới cho ba profiles. P1 gate yêu cầu full epoch measured trên cả ba.
 

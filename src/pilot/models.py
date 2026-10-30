@@ -7,6 +7,7 @@ import torch
 from torch import nn
 from torchvision.models import ConvNeXt_Tiny_Weights, convnext_tiny
 
+from .config import normalize_weight_sha256
 from ..preprocessing.geoguessr_v1 import sha256_file
 
 WEIGHTS = ConvNeXt_Tiny_Weights.IMAGENET1K_V1
@@ -55,18 +56,25 @@ class PilotModel(nn.Module):
         return self.classifier(global_feature)
 
 
-def build_model(experiment, weights_path, initialization, expected_sha256=None):
+def pretrained_metadata(weights_path, expected_sha256):
+    expected_sha256 = normalize_weight_sha256(expected_sha256)
     path = Path(weights_path)
     if path.name != WEIGHT_FILENAME or not path.is_file():
         raise FileNotFoundError(f"Offline weight file required: {WEIGHT_FILENAME}; set CS406_WEIGHTS_PATH")
     digest = sha256_file(path)
-    if not digest.startswith("983f1562") or (expected_sha256 and digest != expected_sha256):
+    if digest != expected_sha256:
         raise ValueError("Pretrained weight SHA-256 mismatch")
+    return {"enum": str(WEIGHTS), "filename": path.name, "sha256": digest}
+
+
+def build_model(experiment, weights_path, initialization, expected_sha256):
+    metadata = pretrained_metadata(weights_path, expected_sha256)
+    path = Path(weights_path)
     # Architecture is built with the enum's exact state dictionary, offline. Never invoke transforms/download.
     backbone = convnext_tiny(weights=None, stochastic_depth_prob=.1)
     backbone.load_state_dict(torch.load(path, map_location="cpu", weights_only=True), strict=True)
     model = PilotModel(backbone, experiment, initialization)
-    return model, {"enum": str(WEIGHTS), "filename": path.name, "sha256": digest,
+    return model, {**metadata,
                    "initialization": model.initialization, "max_drop_path_rate": .1,
                    "depth_schedule": "TorchVision block-index linear ramp 0..0.1"}
 

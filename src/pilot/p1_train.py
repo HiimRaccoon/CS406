@@ -55,7 +55,7 @@ def run(cfg, folder, resume=None, stop_requested=lambda: False):
     apply_runtime(cfg)
     device = torch.device("cuda")
     model, weights = build_model(cfg["experiment"], cfg["paths"]["weights"], cfg["initialization"],
-                                cfg.get("expected_weight_sha256"))
+                                cfg["expected_weight_sha256"])
     model.to(device)
     optimizer, groups = build_optimizer(model, cfg["optimizer"])
     env = environment(cfg)

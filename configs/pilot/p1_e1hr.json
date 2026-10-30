@@ -77,7 +77,13 @@
       ]
     ],
     "criteria_id": null,
-    "prior_failure_reports": []
+    "prior_failure_reports": [],
+    "batch_policy": {
+      "effective_batch": null,
+      "candidate_batches": [
+        {"microbatch": null, "accumulation": null}
+      ]
+    }
   },
   "budget": {
     "max_epochs": null

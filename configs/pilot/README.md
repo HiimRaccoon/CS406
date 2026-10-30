@@ -14,6 +14,7 @@ Các nhóm phải khai báo:
 |---|---|
 | `protocol_id`, `seed` | Predetermined pilot protocol và training seed; không tự lấy split seed 406 |
 | `paths` | Dataset root chứa trực tiếp thư mục labels; offline pretrained file; output root |
+| `expected_weight_sha256` | **Mandatory trước P0/P1**: full 64 hex characters của file thật đã lấy/hash/review. Normalize whitespace/case thành lowercase; null, prefix hoặc invalid digest bị từ chối trước model build. Conformance không cần weight |
 | `initialization` | `linear_default` hoặc `trunc_normal`; exact seed. Trunc-normal cần `std`, `bias`; trường không áp dụng có thể để null |
 | `optimizer` | AdamW LR, hai betas, eps; decay `.05` cho Conv/Linear weights, bias/LN/layer-scale không decay |
 | `augmentation` | Explicit enabled; nếu bật cần brightness/contrast amplitudes `[0,1]`; brightness rồi contrast, một draw mỗi original image/epoch |
@@ -37,7 +38,11 @@ u >= W: f + (b-f)/2 * (1 + cos(pi * (u-W)/(T-W-1)))
 
 Nếu cosine chỉ có một update, dùng floor. Phải `0 <= W < T`; resume giữ nguyên `T`. Last incomplete accumulation group chia loss theo đúng số original images thực có. LR không scale thêm theo số views.
 
-E1-HR `global_wh` chưa chọn sẵn. `[1344,576]` trong `ordered_candidates` chỉ ghi first candidate đã thảo luận. Trước P0 phải review ordered list, `criteria_id`, thresholds và aspect-ratio suitability. Chỉ chạy first candidate; nếu pass thì freeze. Fallback cần các genuine OOM/feasibility failure reports cho **tất cả** candidate đứng trước, cùng reviewed list/criteria ID; code không loop và không chấp nhận lỗi file/package/numerical làm lý do resolution fallback. Task này không thêm fallback numeric values.
+E1-HR `global_wh` chưa chọn sẵn. `[1344,576]` trong `ordered_candidates` chỉ ghi first candidate đã thảo luận. Trước P0 phải review ordered list, `criteria_id`, thresholds, aspect-ratio suitability và `resolution_policy.batch_policy`. Chỉ chạy first candidate; nếu pass thì freeze. Task này không thêm fallback numeric values.
+
+`batch_policy.effective_batch` là common original-image batch; `batch_policy.candidate_batches` là bảng `{microbatch, accumulation}` theo đúng thứ tự `ordered_candidates`, được review **trước candidate đầu tiên**. Mỗi hàng phải có cùng effective batch và actual batch phải khớp hàng của candidate đang chạy. Có thể dùng microbatch khác nhau giữa candidates khi đã khai báo/review trước; không dùng OOM từ oversized/unapproved microbatch để reject resolution.
+
+Fallback cần genuine OOM/criteria failures của **tất cả** candidate đứng trước, cùng `protocol_id`, ordered list/criteria ID, thresholds, seed, runtime, initialization, dataset/split/preprocessing, full pretrained SHA và reviewed batch policy. `feasibility_context.json` được ghi sau khi verify artifacts/weight/preprocessing và trước model allocation; cả criteria và OOM summaries chứa full context + fingerprint và actual batch/effective batch. Code so sánh context/fingerprint và kiểm actual predecessor batch với bảng đã review. Failure trước khi verify identity không có bound context, không được dùng làm fallback. Không chấp nhận lỗi file/package/numerical, không tự loop resolution hoặc dùng score.
 
 P0 passing summaries dùng làm P1 gate phải cùng runtime, seed, initialization, common effective batch, weights/data/preprocessing/source/environment. Own profile phải giữ resolution/microbatch. P0 exploratory microbatch failures vẫn lưu riêng; khi chốt common effective batch, tạo ba passing P0 measurements tương ứng trước P1.
 

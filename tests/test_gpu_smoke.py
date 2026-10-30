@@ -13,7 +13,8 @@ def test_cuda_offline_pretrained_forward_backward():
     if not torch.cuda.is_available():
         pytest.skip("CUDA unavailable")
     path = os.environ["CS406_WEIGHTS_PATH"]
-    m, metadata = build_model("e2", path, {"method": "linear_default", "seed": 101})
+    m, metadata = build_model("e2", path, {"method": "linear_default", "seed": 101},
+                              os.environ["CS406_EXPECTED_WEIGHT_SHA256"])
     # Synthetic diagnostic initialization seed only, not the research seed protocol.
     m.cuda().train()
     views = {"global": torch.rand(1, 3, 384, 896, device="cuda"),

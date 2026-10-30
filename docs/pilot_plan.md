@@ -1,15 +1,20 @@
 # UIT pilot và các training parameters còn cần freeze (DRAFT / DEFERRED)
 
-**Trạng thái: DRAFT / DEFERRED — chưa được phép triển khai hoặc chạy.** Task hiện tại chỉ patch protocol để người dùng review, không activate pilot, chạy Slurm/model/training, tạo training code hoặc sửa frozen preprocessing. Các giá trị chưa được review vẫn pending; không tự chọn numeric values, fallback resolutions hoặc seed IDs.
+**Trạng thái kế hoạch: DRAFT; pilot execution / P0 / P1: DEFERRED — chưa chạy.**
 
-Chưa có kết quả GPU benchmark trong workspace local và chưa bắt đầu implementation/training. Các gate dưới đây không phải authorization để chạy experiment.
+- **Pilot harness implementation: implemented**, self-contained trong `src/pilot/`; preprocessing reusable trong `src/preprocessing/`.
+- **Pilot execution / P0 / P1: DEFERRED — chưa chạy**; chưa có GPU benchmark hoặc Slurm job.
+- **Official E1/E1-HR/E2 implementation: chưa bắt đầu**; pilot code không phải official framework.
+- **Master spec vẫn draft, chưa authorize official experiments**. Các gate bên dưới không tự cấp phép chạy pilot/experiment.
+
+Task hiện tại chỉ patch harness/tests/tài liệu trước deployment; không chạy GPU/Slurm hoặc sửa frozen preprocessing. Các giá trị chưa được review vẫn pending; không tự chọn numeric values, fallback resolutions, full pretrained hash hoặc seed IDs.
 
 ## Gate 1: dataset và environment
 
 1. Chọn runtime root `/datastore/binhvp/<my-folder>/`, giữ đường dẫn trong run/Slurm config; không sửa các relative paths của manifest.
 2. Xác minh SHA-256 của bốn artifact theo `provenance.json`, original summary fingerprints, label IDs, split counts và class support. Trước pilot đầu tiên trên một bản dataset mới, kiểm tra file tồn tại và SHA-256 ảnh theo manifest; lưu audit gắn với dataset root/fingerprint, không hash lại toàn bộ mỗi epoch.
 3. Ghi package lock của PyTorch/TorchVision/Pillow và phiên bản CUDA/cuDNN/driver, GPU/MIG name, CPU/RAM allocation. Mọi main experiment dùng cùng environment lock. Không tự đổi backend khi một dependency không hỗ trợ contract.
-4. Tải đúng pretrained file `convnext_tiny-983f1562.pth`, lưu full SHA-256; dùng cùng file cho cả ba architecture. Không dùng default alias để thay checkpoint ngoài ý muốn.
+4. Tải đúng pretrained file `convnext_tiny-983f1562.pth`, tính/review full SHA-256 và **bắt buộc pin `expected_weight_sha256` trước P0/P1**; dùng cùng file cho cả ba architecture. Config check từ chối null/invalid full hash; model chỉ load khi actual full digest khớp chính xác expected digest. Conformance không cần weight. Không dùng default alias hoặc chỉ SHA prefix làm integrity gate.
 
 ## Gate 2: conformance với preprocessing v1
 
@@ -23,7 +28,7 @@ Chưa có kết quả GPU benchmark trong workspace local và chưa bắt đầu
 - Repeated deterministic evaluation preprocessing của cùng ảnh trong cùng environment phải khớp. Train jitter dùng cùng một draw cho mọi view và giữ fill/padding; val/test/E3 cache tắt jitter.
 - Nếu backend/library update làm khác numerical outputs, ghi nhận và xử lý versioning, không đổi v1 âm thầm. Numerical tolerance trong cùng runtime phải chặt; không tuyên bố bitwise equality giữa GPU/CPU hoặc giữa các decoder khác nhau khi chưa kiểm tra.
 
-Gate này kiểm chứng implementation của specification đã freeze; không phải geometry search. Python launcher local không khả dụng trong phiên chuẩn bị spec nên gate chưa được thực thi bằng TorchVision tại local.
+Gate này kiểm chứng implementation của specification đã freeze; không phải geometry search. Local CPU TorchVision conformance và train/validation hash audit đã pass trong bước implement harness; target UIT environment/root vẫn phải chạy lại gate trước pilot. Đây không phải P0/P1 execution hoặc GPU benchmark.
 
 ## Gate 3: hai stage pilot và các pre-run rules
 

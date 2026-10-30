@@ -1,7 +1,12 @@
 """End-to-end control flow with tiny synthetic CPU data; no real pilot run."""
 from pathlib import Path
 from types import SimpleNamespace
+import copy
+import hashlib
+import json
+import sys
 
+import pytest
 import torch
 from torch.utils.data import Dataset
 
@@ -27,7 +32,8 @@ def setup_runner(monkeypatch, module, manifest):
     cpu_torch = SimpleNamespace(device=lambda _: torch.device("cpu"),
                                 cuda=SimpleNamespace(reset_peak_memory_stats=lambda _: None,
                                                      max_memory_allocated=lambda _: 0,
-                                                     max_memory_reserved=lambda _: 0))
+                                                     max_memory_reserved=lambda _: 0,
+                                                     OutOfMemoryError=torch.cuda.OutOfMemoryError))
     monkeypatch.setattr(module, "torch", cpu_torch)
     monkeypatch.setattr(module, "FixedManifest", lambda _: manifest)
     monkeypatch.setattr(module, "apply_runtime", lambda _: torch.manual_seed(37))
@@ -42,6 +48,10 @@ def test_p0_full_epoch_and_original_image_count(monkeypatch, tmp_path, manifest)
     setup_runner(monkeypatch, p0, manifest)
     cfg = complete_config()
     cfg["paths"]["runs_dir"] = str(tmp_path)
+    weights = tmp_path / "convnext_tiny-983f1562.pth"
+    weights.write_bytes(b"synthetic CPU integration fixture; never pretrained")
+    cfg["paths"]["weights"] = str(weights)
+    cfg["expected_weight_sha256"] = hashlib.sha256(weights.read_bytes()).hexdigest()
     # Four microbatches available: one warmup, one measured, separate full epoch.
     folder = create_run(cfg, "synthetic-p0")
     result = p0.run(cfg, folder)
@@ -49,6 +59,48 @@ def test_p0_full_epoch_and_original_image_count(monkeypatch, tmp_path, manifest)
     assert result["timing"]["steady_state"]["samples"] == 2
     assert result["timing"]["full_epoch"]["samples"] == 7
     assert result["test_images_opened"] == 0
+
+
+@pytest.mark.parametrize("kind", ["oom", "criteria"])
+def test_p0_failure_summary_preserves_verified_fallback_context(monkeypatch, tmp_path, manifest, kind):
+    setup_runner(monkeypatch, p0, manifest)
+    cfg = complete_config(exp="e1hr")
+    cfg["paths"]["runs_dir"] = str(tmp_path)
+    weights = tmp_path / "convnext_tiny-983f1562.pth"
+    weights.write_bytes(b"synthetic CPU failure test; never pretrained")
+    cfg["paths"]["weights"] = str(weights)
+    cfg["expected_weight_sha256"] = hashlib.sha256(weights.read_bytes()).hexdigest()
+    cfg["resolution_policy"]["ordered_candidates"].append([1024, 448])
+    cfg["resolution_policy"]["batch_policy"]["candidate_batches"].append({"microbatch": 1, "accumulation": 2})
+    if kind == "oom":
+        def injected_allocation_failure(*args):
+            raise torch.cuda.OutOfMemoryError("synthetic exception; no GPU allocation")
+        monkeypatch.setattr(p0, "build_model", injected_allocation_failure)
+        error = torch.cuda.OutOfMemoryError
+    else:
+        cfg["feasibility"]["min_images_per_second"] = 1e30
+        error = SystemExit
+    monkeypatch.setattr(p0, "load_config", lambda *args, **kwargs: cfg)
+    monkeypatch.setattr(sys, "argv", ["pilot", "--config", "unused", "--run-id", "failure-evidence"])
+    with pytest.raises(error):
+        p0.main()
+    summary_path = tmp_path / "failure-evidence/run_summary.json"
+    report = json.loads(summary_path.read_text())
+    assert report["failure_kind"] == kind
+    context = report["feasibility_context"]
+    assert context["protocol_id"] == "unit-test-only"
+    assert context["pretrained_sha256"] == hashlib.sha256(weights.read_bytes()).hexdigest()
+    assert context["fingerprints"] == manifest.fingerprints
+    assert context["runtime"] == cfg["runtime"] and context["initialization"] == cfg["initialization"]
+    fallback = copy.deepcopy(cfg)
+    fallback["global_wh"] = [1024, 448]
+    fallback["batch"] = {"microbatch": 1, "accumulation": 2}
+    fallback["resolution_policy"]["prior_failure_reports"] = [str(summary_path)]
+    p0.validate_resolution_evidence(fallback, context)
+    report["batch"]["microbatch"] = 64
+    summary_path.write_text(json.dumps(report))
+    with pytest.raises(ValueError, match="batch"):
+        p0.validate_resolution_evidence(fallback, context)
 
 
 def test_p1_bounded_history_and_resumption(monkeypatch, tmp_path, manifest):
