@@ -1,0 +1,87 @@
+{
+  "purpose": "pilot",
+  "stage": "p0",
+  "protocol_id": "cs406-prep0-fp32-v1-exploratory-a",
+  "experiment": "e2",
+  "seed": 3406,
+  "preprocessing_config": "configs/preprocessing/geoguessr_v1.json",
+  "artifacts_dir": "artifacts/baseline124",
+  "paths": {
+    "data_root": null,
+    "weights": null,
+    "runs_dir": "runs/pilot"
+  },
+  "expected_weight_sha256": null,
+  "global_wh": [
+    896,
+    384
+  ],
+  "batch": {
+    "microbatch": 2,
+    "accumulation": 1
+  },
+  "initialization": {
+    "method": "linear_default",
+    "seed": 3406,
+    "std": null,
+    "bias": null
+  },
+  "optimizer": {
+    "lr": 0.0001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.05
+  },
+  "augmentation": {
+    "enabled": false,
+    "brightness": 0.0,
+    "contrast": 0.0
+  },
+  "clipping": {
+    "enabled": false,
+    "max_norm": null
+  },
+  "runtime": {
+    "device": "cuda",
+    "num_workers": 2,
+    "pin_memory": true,
+    "persistent_workers": true,
+    "prefetch_factor": 2,
+    "cpu_threads": 2,
+    "amp": {
+      "enabled": false,
+      "dtype": "float32"
+    },
+    "scaler": {
+      "enabled": false,
+      "init_scale": null,
+      "growth_factor": null,
+      "backoff_factor": null,
+      "growth_interval": null
+    },
+    "tf32_matmul": false,
+    "tf32_cudnn": false,
+    "matmul_precision": "highest",
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": false,
+    "torch_compile": false
+  },
+  "gates": {
+    "conformance_report": null
+  },
+  "budget": {
+    "warmup_updates": 5,
+    "measure_updates": 20,
+    "full_epoch": false
+  },
+  "feasibility": {
+    "max_peak_reserved_gib": null,
+    "min_images_per_second": null,
+    "max_epoch_seconds": null
+  }
+}

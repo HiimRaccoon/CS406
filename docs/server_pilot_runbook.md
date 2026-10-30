@@ -114,6 +114,8 @@ CS406_GPU_SMOKE=1 python -m pytest -q -m gpu
 
 ## 4. Review và điền configs trước P0
 
+Trước bước này, đọc [pre-P0 config review](pilot_config_review.md) và [prepared examples](../configs/pilot/reviewed/README.md). Có examples exploratory A/B và comparable-final với common FP32 policy; chúng không phải frozen training recipe hoặc ready-to-submit configs. **Current harness bắt buộc feasibility thresholds:** nếu chưa có legitimate throughput/epoch budget, cần review proposal measurement-only trước; task chuẩn bị config chưa implement mode đó. Không tự điền thresholds giả hoặc lấy short exploratory run làm final P0 evidence. Original templates và full P1 configs vẫn pending; không có GPU job được chạy trong bước chuẩn bị này.
+
 ```bash
 cp configs/pilot/p0_e1.json configs/pilot/local/p0_e1.json
 cp configs/pilot/p0_e1hr.json configs/pilot/local/p0_e1hr.json

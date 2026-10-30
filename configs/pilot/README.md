@@ -8,6 +8,8 @@ Các JSON này chỉ dành cho **pilot**. Giá trị `null` là quyết định 
 
 Copy template sang `configs/pilot/local/` (ignored), review/điền numeric values trước khi chạy. Giữ nguyên `purpose`, experiment profile, preprocessing path, `.05` weight decay và E1/E2 global resolution.
 
+Pre-P0 preparation mới nằm trong [reviewed/](reviewed/README.md): chín `.example.json` cho exploratory A/B và comparable-final, cùng [field review](../../docs/pilot_config_review.md). Common choices đã được điền riêng ở examples; original templates giữ nguyên. Examples chưa server-ready: hash/path/report/thresholds vẫn pending. Current harness chưa có measurement-only mode; không điền fake thresholds để vượt config check.
+
 Các nhóm phải khai báo:
 
 | Nhóm | Contract |
