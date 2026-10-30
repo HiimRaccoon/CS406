@@ -1,0 +1,28 @@
+{
+  "qa_version": "ui-qa-v1",
+  "preprocessing_id": "geoguessr-ui-global-local-v1",
+  "preprocessing_sha256": "4f49dd41738168cfc65d4322fbe1b659ef5595229bb487ad86dd671a26a8903f",
+  "sample_manifest_sha256": "2ea34f3ca2118679ceb67120853814768e9410679f37f960dadc924006fb3c89",
+  "train_images": 297,
+  "layout_counts": {
+    "1536x662": 256,
+    "1030x703": 41
+  },
+  "labels": 124,
+  "all_samples_train": true,
+  "all_sample_file_sha256_verified": true,
+  "all_297_images_decoded_for_qa": true,
+  "visual_review_pages": 13,
+  "visual_review": "All 13 UI contact sheets reviewed. No visible score/controls/minimap/Guess region extending outside the fixed templates was identified; footer attribution remains below the 14px crop boundary in reviewed samples.",
+  "template_changes_from_draft": [],
+  "local_geometry_changes": [],
+  "classification_scores_used": false,
+  "validation_test_images_used": false,
+  "renderer": "System.Drawing, visualization only",
+  "training_backend_executed": false,
+  "limitations": [
+    "Sample-based UI inspection is not proof for every image in the full dataset.",
+    "No TorchVision backend numerical conformance claimed locally; run prescribed checks on UIT before pilot.",
+    "Dynamic navigation arrows and embedded Street View watermarks intentionally remain."
+  ]
+}

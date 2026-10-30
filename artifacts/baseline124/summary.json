@@ -1,0 +1,29 @@
+{
+  "data_root_at_preparation": "F:\\geoguessr\\compressed_dataset",
+  "seed": 406,
+  "num_classes": 124,
+  "raw_images": 49997,
+  "valid_images": 49997,
+  "kept_images": 49996,
+  "excluded_corrupt_images": 0,
+  "removed_byte_duplicates": 1,
+  "val_fraction": 0.15,
+  "test_fraction": 0.15,
+  "split_unit": "independent group; approximate fractions by group count",
+  "split_counts": {
+    "train": 34997,
+    "val": 7497,
+    "test": 7502
+  },
+  "class_coverage": {
+    "train": 124,
+    "val": 106,
+    "test": 111
+  },
+  "grouping": "SHA256 only",
+  "geographic_independence_verified": false,
+  "limitation": "Near-duplicate/same-place images may remain. Supply reviewed groups with --groups-csv.",
+  "manifest_sha256": "9cbd8b70e8522b5aa4a20fba4fa7b2ecea855cf377f98e41ebb162a07f8a8040",
+  "labels_sha256": "5f7e8f5810e9ac8c43c1c22b2e4febe2e7a6174629b9031d3e943fce511832aa",
+  "support_sha256": "ff46f4074464644f573b4ca64eb61320a61a8cc3daed3a3886a350cbc3c6fb75"
+}

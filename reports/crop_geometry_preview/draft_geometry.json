@@ -1,5 +1,5 @@
 {
-  "status": "DRAFT FOR TRAIN-ONLY VISUAL REVIEW; not frozen preprocessing",
+  "status": "HISTORICAL VISUAL DESIGN ALTERNATIVES ONLY; main geometry frozen in configs/preprocessing/geoguessr_v1.json; 416/448 are not main experiments",
   "manifest_sha256": "9cbd8b70e8522b5aa4a20fba4fa7b2ecea855cf377f98e41ebb162a07f8a8040",
   "source_commit": "33cb29d72974f1677efab0f56ed92360e5a9f712",
   "verified_train_samples": 65,
@@ -1589,5 +1589,6 @@
       "width": 1030,
       "height": 703
     }
-  ]
+  ],
+  "authoritative_config": "../../configs/preprocessing/geoguessr_v1.json"
 }

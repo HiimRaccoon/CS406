@@ -1,0 +1,41 @@
+{
+  "status": "pass",
+  "preprocessing_id": "geoguessr-ui-global-local-v1",
+  "preprocessing_sha256": "4f49dd41738168cfc65d4322fbe1b659ef5595229bb487ad86dd671a26a8903f",
+  "exact_source_artifacts_verified": 4,
+  "manifest_rows": 49996,
+  "split_counts": {
+    "train": 34997,
+    "val": 7497,
+    "test": 7502
+  },
+  "class_coverage": {
+    "train": 124,
+    "val": 106,
+    "test": 111
+  },
+  "class_support_matches_manifest": true,
+  "all_manifest_layouts_supported": true,
+  "layouts_by_split": {
+    "1536x662": {
+      "train": 34956,
+      "val": 7491,
+      "test": 7494
+    },
+    "1030x703": {
+      "train": 41,
+      "val": 6,
+      "test": 8
+    }
+  },
+  "local_crops_match_approved_centers": true,
+  "all_rectangles_in_bounds": true,
+  "letterbox_shapes_verified": true,
+  "qa_train_images": 297,
+  "qa_local_sha256_verified": true,
+  "qa_decoded_images": 297,
+  "relative_document_links_verified": 57,
+  "utf8_verified": true,
+  "torchvision_numerical_backend_executed": false,
+  "required_next_gate": "UIT preprocessing numerical conformance before pilot"
+}

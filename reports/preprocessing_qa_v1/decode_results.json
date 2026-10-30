@@ -1,0 +1,2378 @@
+[
+    {
+        "qa_index":  1,
+        "relative_path":  "United Kingdom/canvas_1629419422.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  2,
+        "relative_path":  "United States/canvas_1629615048.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  3,
+        "relative_path":  "New Zealand/canvas_1630136557.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  4,
+        "relative_path":  "Japan/canvas_1629914790.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  5,
+        "relative_path":  "Philippines/canvas_1629903924.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  6,
+        "relative_path":  "United States/canvas_1630056577.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  7,
+        "relative_path":  "Russia/canvas_1629963270.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  8,
+        "relative_path":  "Peru/canvas_1629583892.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  9,
+        "relative_path":  "United Kingdom/canvas_1629916638.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  10,
+        "relative_path":  "Thailand/canvas_1629397055.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  11,
+        "relative_path":  "Japan/canvas_1629917527.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  12,
+        "relative_path":  "India/canvas_1630100863.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  13,
+        "relative_path":  "United Kingdom/canvas_1629265962.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  14,
+        "relative_path":  "United Arab Emirates/canvas_1630020651.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  15,
+        "relative_path":  "Brazil/canvas_1629847379.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  16,
+        "relative_path":  "Thailand/canvas_1629748403.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  17,
+        "relative_path":  "Colombia/canvas_1629500826.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  18,
+        "relative_path":  "Lesotho/canvas_1629872756.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  19,
+        "relative_path":  "Australia/canvas_1629845351.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  20,
+        "relative_path":  "United States/canvas_1630269745.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  21,
+        "relative_path":  "United States/canvas_1629750333.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  22,
+        "relative_path":  "Taiwan/canvas_1629958737.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  23,
+        "relative_path":  "United States/canvas_1629851596.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  24,
+        "relative_path":  "France/canvas_1629713052.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  25,
+        "relative_path":  "Japan/canvas_1630281713.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  26,
+        "relative_path":  "United States/canvas_1629784325.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  27,
+        "relative_path":  "Senegal/canvas_1630271208.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  28,
+        "relative_path":  "United Kingdom/canvas_1629687144.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  29,
+        "relative_path":  "South Africa/canvas_1630069170.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  30,
+        "relative_path":  "Thailand/canvas_1630214228.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  31,
+        "relative_path":  "United States/canvas_1629407794.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  32,
+        "relative_path":  "United States/canvas_1630280343.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  33,
+        "relative_path":  "Russia/canvas_1629838408.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  34,
+        "relative_path":  "New Zealand/canvas_1630075980.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  35,
+        "relative_path":  "Greece/canvas_1630028384.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  36,
+        "relative_path":  "United Kingdom/canvas_1630047763.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  37,
+        "relative_path":  "Japan/canvas_1629939687.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  38,
+        "relative_path":  "United Kingdom/canvas_1629585738.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  39,
+        "relative_path":  "Germany/canvas_1629912932.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  40,
+        "relative_path":  "Brazil/canvas_1629706423.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  41,
+        "relative_path":  "United States/canvas_1629513918.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  42,
+        "relative_path":  "United States/canvas_1629389056.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  43,
+        "relative_path":  "Netherlands/canvas_1629327362.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  44,
+        "relative_path":  "United States/canvas_1630291314.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  45,
+        "relative_path":  "Canada/canvas_1630016026.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  46,
+        "relative_path":  "France/canvas_1629418838.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  47,
+        "relative_path":  "United States/canvas_1629938674.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  48,
+        "relative_path":  "United States/canvas_1629965086.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  49,
+        "relative_path":  "United States/canvas_1630027520.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  50,
+        "relative_path":  "France/canvas_1629281943.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  51,
+        "relative_path":  "Malaysia/canvas_1629520566.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  52,
+        "relative_path":  "United States/canvas_1630048754.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  53,
+        "relative_path":  "Japan/canvas_1629775674.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  54,
+        "relative_path":  "Brazil/canvas_1629900414.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  55,
+        "relative_path":  "Poland/canvas_1630286737.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  56,
+        "relative_path":  "France/canvas_1629284061.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  57,
+        "relative_path":  "United States/canvas_1630055086.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  58,
+        "relative_path":  "Mexico/canvas_1630053779.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  59,
+        "relative_path":  "Thailand/canvas_1629433044.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  60,
+        "relative_path":  "United States/canvas_1629407523.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  61,
+        "relative_path":  "Japan/canvas_1629427304.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  62,
+        "relative_path":  "United States/canvas_1629304036.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  63,
+        "relative_path":  "United Kingdom/canvas_1629766981.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  64,
+        "relative_path":  "Finland/canvas_1629315765.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  65,
+        "relative_path":  "Thailand/canvas_1629840801.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  66,
+        "relative_path":  "Bulgaria/canvas_1630053066.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  67,
+        "relative_path":  "France/canvas_1629273338.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  68,
+        "relative_path":  "United States/canvas_1629268716.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  69,
+        "relative_path":  "United States/canvas_1629829551.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  70,
+        "relative_path":  "Laos/canvas_1630274140.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  71,
+        "relative_path":  "Malaysia/canvas_1629866495.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  72,
+        "relative_path":  "United States/canvas_1629285419.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  73,
+        "relative_path":  "Uruguay/canvas_1630278775.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  74,
+        "relative_path":  "United States/canvas_1630029425.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  75,
+        "relative_path":  "Japan/canvas_1629274006.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  76,
+        "relative_path":  "Japan/canvas_1629544842.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  77,
+        "relative_path":  "United States/canvas_1630281313.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  78,
+        "relative_path":  "United States/canvas_1629750444.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  79,
+        "relative_path":  "United States/canvas_1629434071.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  80,
+        "relative_path":  "Russia/canvas_1629692679.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  81,
+        "relative_path":  "Poland/canvas_1629755898.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  82,
+        "relative_path":  "Brazil/canvas_1629740244.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  83,
+        "relative_path":  "Japan/canvas_1629420508.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  84,
+        "relative_path":  "Denmark/canvas_1630285015.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  85,
+        "relative_path":  "Greece/canvas_1630106116.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  86,
+        "relative_path":  "South Africa/canvas_1629301408.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  87,
+        "relative_path":  "United States/canvas_1630075478.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  88,
+        "relative_path":  "Japan/canvas_1629523602.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  89,
+        "relative_path":  "United States/canvas_1629824098.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  90,
+        "relative_path":  "United Kingdom/canvas_1630077276.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  91,
+        "relative_path":  "United States/canvas_1629728737.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  92,
+        "relative_path":  "Taiwan/canvas_1630017940.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  93,
+        "relative_path":  "Germany/canvas_1629268128.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  94,
+        "relative_path":  "United States/canvas_1629765275.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  95,
+        "relative_path":  "Spain/canvas_1629430528.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  96,
+        "relative_path":  "New Zealand/canvas_1629280675.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  97,
+        "relative_path":  "Croatia/canvas_1629525173.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  98,
+        "relative_path":  "United Kingdom/canvas_1629402199.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  99,
+        "relative_path":  "Sweden/canvas_1630137644.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  100,
+        "relative_path":  "Singapore/canvas_1630282972.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  101,
+        "relative_path":  "Israel/canvas_1629269692.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  102,
+        "relative_path":  "Peru/canvas_1629320001.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  103,
+        "relative_path":  "Australia/canvas_1629537562.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  104,
+        "relative_path":  "Brazil/canvas_1629507770.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  105,
+        "relative_path":  "Andorra/canvas_1630022733.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  106,
+        "relative_path":  "Finland/canvas_1630132737.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  107,
+        "relative_path":  "Indonesia/canvas_1630021927.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  108,
+        "relative_path":  "Thailand/canvas_1630002235.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  109,
+        "relative_path":  "Japan/canvas_1629942360.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  110,
+        "relative_path":  "Thailand/canvas_1629574219.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  111,
+        "relative_path":  "Japan/canvas_1629393312.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  112,
+        "relative_path":  "France/canvas_1629920268.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  113,
+        "relative_path":  "Brazil/canvas_1630061667.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  114,
+        "relative_path":  "United States/canvas_1630015430.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  115,
+        "relative_path":  "France/canvas_1629900315.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  116,
+        "relative_path":  "United States/canvas_1629787088.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  117,
+        "relative_path":  "United States/canvas_1629592982.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  118,
+        "relative_path":  "United Kingdom/canvas_1630031063.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  119,
+        "relative_path":  "Russia/canvas_1629907754.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  120,
+        "relative_path":  "Sweden/canvas_1629678548.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  121,
+        "relative_path":  "Brazil/canvas_1629866767.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  122,
+        "relative_path":  "Ireland/canvas_1630021171.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  123,
+        "relative_path":  "Australia/canvas_1629330853.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  124,
+        "relative_path":  "Canada/canvas_1630211625.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  125,
+        "relative_path":  "Egypt/canvas_1629671312.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  126,
+        "relative_path":  "Montenegro/canvas_1629722155.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  127,
+        "relative_path":  "Australia/canvas_1629929636.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  128,
+        "relative_path":  "Norway/canvas_1629669268.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  129,
+        "relative_path":  "United States/canvas_1629439487.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  130,
+        "relative_path":  "United States/canvas_1629973002.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  131,
+        "relative_path":  "France/canvas_1629390898.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  132,
+        "relative_path":  "Russia/canvas_1629710709.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  133,
+        "relative_path":  "Turkey/canvas_1630005371.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  134,
+        "relative_path":  "Israel/canvas_1629279809.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  135,
+        "relative_path":  "United States/canvas_1629615980.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  136,
+        "relative_path":  "United States/canvas_1629521294.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  137,
+        "relative_path":  "Finland/canvas_1630019831.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  138,
+        "relative_path":  "United States/canvas_1629354581.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  139,
+        "relative_path":  "France/canvas_1629261789.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  140,
+        "relative_path":  "Sri Lanka/canvas_1630082480.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  141,
+        "relative_path":  "Malaysia/canvas_1630123531.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  142,
+        "relative_path":  "Lithuania/canvas_1629782844.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  143,
+        "relative_path":  "Eswatini/canvas_1630089373.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  144,
+        "relative_path":  "Botswana/canvas_1629686334.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  145,
+        "relative_path":  "Brazil/canvas_1629473686.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  146,
+        "relative_path":  "France/canvas_1629532415.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  147,
+        "relative_path":  "United States/canvas_1629442982.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  148,
+        "relative_path":  "United States/canvas_1629583576.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  149,
+        "relative_path":  "Slovenia/canvas_1630118969.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  150,
+        "relative_path":  "United States/canvas_1630020712.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  151,
+        "relative_path":  "United Kingdom/canvas_1629920548.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  152,
+        "relative_path":  "Philippines/canvas_1630079534.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  153,
+        "relative_path":  "Puerto Rico/canvas_1630030164.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  154,
+        "relative_path":  "United States/canvas_1629354702.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  155,
+        "relative_path":  "Norway/canvas_1629506919.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  156,
+        "relative_path":  "Denmark/canvas_1629711634.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  157,
+        "relative_path":  "Colombia/canvas_1629425161.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  158,
+        "relative_path":  "Finland/canvas_1629404349.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  159,
+        "relative_path":  "Austria/canvas_1629788292.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  160,
+        "relative_path":  "Italy/canvas_1630278545.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  161,
+        "relative_path":  "Albania/canvas_1629780994.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  162,
+        "relative_path":  "South Korea/canvas_1630080939.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  163,
+        "relative_path":  "Argentina/canvas_1629271504.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  164,
+        "relative_path":  "Jordan/canvas_1630093795.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  165,
+        "relative_path":  "Chile/canvas_1629919676.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  166,
+        "relative_path":  "Slovakia/canvas_1629991789.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  167,
+        "relative_path":  "Cambodia/canvas_1629693676.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  168,
+        "relative_path":  "Romania/canvas_1629568102.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  169,
+        "relative_path":  "Portugal/canvas_1629544848.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  170,
+        "relative_path":  "Kenya/canvas_1629840275.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  171,
+        "relative_path":  "Hungary/canvas_1629515452.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  172,
+        "relative_path":  "Ukraine/canvas_1629717264.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  173,
+        "relative_path":  "Bhutan/canvas_1629917248.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  174,
+        "relative_path":  "American Samoa/canvas_1629306405.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  175,
+        "relative_path":  "Latvia/canvas_1629442741.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  176,
+        "relative_path":  "Dominican Republic/canvas_1630085895.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  177,
+        "relative_path":  "Ecuador/canvas_1629419759.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  178,
+        "relative_path":  "Kyrgyzstan/canvas_1629847466.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  179,
+        "relative_path":  "Isle of Man/canvas_1629711970.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  180,
+        "relative_path":  "Ghana/canvas_1629574110.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  181,
+        "relative_path":  "Belgium/canvas_1629479983.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  182,
+        "relative_path":  "Iceland/canvas_1629545086.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  183,
+        "relative_path":  "Reunion/canvas_1630047164.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  184,
+        "relative_path":  "North Macedonia/canvas_1629574446.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  185,
+        "relative_path":  "Switzerland/canvas_1629939844.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  186,
+        "relative_path":  "Estonia/canvas_1630213467.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  187,
+        "relative_path":  "Nigeria/canvas_1630106928.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  188,
+        "relative_path":  "Tunisia/canvas_1629832982.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  189,
+        "relative_path":  "Czechia/canvas_1629503410.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  190,
+        "relative_path":  "Palestine/canvas_1630291061.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  191,
+        "relative_path":  "Thailand/canvas_1629613136.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  192,
+        "relative_path":  "Bangladesh/canvas_1629515275.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  193,
+        "relative_path":  "Martinique/canvas_1629328768.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  194,
+        "relative_path":  "Guatemala/canvas_1630064143.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  195,
+        "relative_path":  "Bolivia/canvas_1629422100.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  196,
+        "relative_path":  "Pakistan/canvas_1629826398.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  197,
+        "relative_path":  "Indonesia/canvas_1629476966.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  198,
+        "relative_path":  "Costa Rica/canvas_1629848866.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  199,
+        "relative_path":  "Serbia/canvas_1630141303.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  200,
+        "relative_path":  "Hong Kong/canvas_1629707360.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  201,
+        "relative_path":  "Guam/canvas_1630271965.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  202,
+        "relative_path":  "Belarus/canvas_1629851649.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  203,
+        "relative_path":  "Malta/canvas_1629261373.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  204,
+        "relative_path":  "Faroe Islands/canvas_1630082307.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  205,
+        "relative_path":  "Uganda/canvas_1629720219.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  206,
+        "relative_path":  "Mongolia/canvas_1630005007.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  207,
+        "relative_path":  "South Georgia and South Sandwich Islands/canvas_1629684166.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  208,
+        "relative_path":  "Luxembourg/canvas_1629994171.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  209,
+        "relative_path":  "Aland/canvas_1630056267.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  210,
+        "relative_path":  "Aland/canvas_1629786076.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  211,
+        "relative_path":  "Madagascar/canvas_1629430417.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  212,
+        "relative_path":  "San Marino/canvas_1629355746.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  213,
+        "relative_path":  "Vietnam/canvas_1630220332.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  214,
+        "relative_path":  "South Sudan/canvas_1629508853.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  215,
+        "relative_path":  "Antarctica/canvas_1629620842.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  216,
+        "relative_path":  "China/canvas_1629391011.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  217,
+        "relative_path":  "Jordan/canvas_1630039276.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  218,
+        "relative_path":  "Greenland/canvas_1629963079.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  219,
+        "relative_path":  "Northern Mariana Islands/canvas_1629697491.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  220,
+        "relative_path":  "Macao/canvas_1630277697.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  221,
+        "relative_path":  "Jersey/canvas_1629737742.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  222,
+        "relative_path":  "Vietnam/canvas_1629512178.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  223,
+        "relative_path":  "US Virgin Islands/canvas_1629752382.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  224,
+        "relative_path":  "Venezuela/canvas_1629523615.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  225,
+        "relative_path":  "Lebanon/canvas_1629929475.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  226,
+        "relative_path":  "Japan/canvas_1629430411.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  227,
+        "relative_path":  "Bangladesh/canvas_1629520264.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  228,
+        "relative_path":  "Curacao/canvas_1629283902.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  229,
+        "relative_path":  "United States/canvas_1630055193.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  230,
+        "relative_path":  "American Samoa/canvas_1630125422.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  231,
+        "relative_path":  "Mozambique/canvas_1629929152.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  232,
+        "relative_path":  "Qatar/canvas_1630079605.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  233,
+        "relative_path":  "Peru/canvas_1629822651.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  234,
+        "relative_path":  "Pitcairn Islands/canvas_1629572931.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  235,
+        "relative_path":  "Monaco/canvas_1629925370.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  236,
+        "relative_path":  "Netherlands/canvas_1629390980.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  237,
+        "relative_path":  "Turkey/canvas_1629305104.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  238,
+        "relative_path":  "Nepal/canvas_1630276271.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  239,
+        "relative_path":  "Paraguay/canvas_1630216530.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  240,
+        "relative_path":  "Tanzania/canvas_1629391391.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  241,
+        "relative_path":  "Brazil/canvas_1629956538.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  242,
+        "relative_path":  "Gibraltar/canvas_1630269350.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  243,
+        "relative_path":  "Sweden/canvas_1629938865.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  244,
+        "relative_path":  "Iraq/canvas_1629846796.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  245,
+        "relative_path":  "Russia/canvas_1629544043.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  246,
+        "relative_path":  "South Africa/canvas_1629918928.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  247,
+        "relative_path":  "Norway/canvas_1630026229.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  248,
+        "relative_path":  "United Kingdom/canvas_1630213486.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  249,
+        "relative_path":  "Svalbard and Jan Mayen/canvas_1629930585.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  250,
+        "relative_path":  "Iceland/canvas_1629397451.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  251,
+        "relative_path":  "India/canvas_1629771011.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  252,
+        "relative_path":  "Bermuda/canvas_1630302375.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  253,
+        "relative_path":  "Australia/canvas_1630016638.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  254,
+        "relative_path":  "Kenya/canvas_1629398983.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  255,
+        "relative_path":  "Myanmar/canvas_1629852883.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  256,
+        "relative_path":  "Armenia/canvas_1629782851.jpg",
+        "split":  "train",
+        "decoded_width":  1536,
+        "decoded_height":  662,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  257,
+        "relative_path":  "Argentina/canvas_1630265960.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  258,
+        "relative_path":  "Australia/canvas_1630265936.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  259,
+        "relative_path":  "Brazil/canvas_1630265675.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  260,
+        "relative_path":  "Brazil/canvas_1630265859.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  261,
+        "relative_path":  "Canada/canvas_1630265888.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  262,
+        "relative_path":  "Canada/canvas_1630265912.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  263,
+        "relative_path":  "Colombia/canvas_1630265387.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  264,
+        "relative_path":  "France/canvas_1630265375.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  265,
+        "relative_path":  "France/canvas_1630265536.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  266,
+        "relative_path":  "France/canvas_1630265598.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  267,
+        "relative_path":  "France/canvas_1630265841.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  268,
+        "relative_path":  "Germany/canvas_1630265477.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  269,
+        "relative_path":  "Germany/canvas_1630265707.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  270,
+        "relative_path":  "Ghana/canvas_1630265483.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  271,
+        "relative_path":  "Iceland/canvas_1630265542.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  272,
+        "relative_path":  "Japan/canvas_1630265394.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  273,
+        "relative_path":  "Japan/canvas_1630265548.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  274,
+        "relative_path":  "Japan/canvas_1630265664.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  275,
+        "relative_path":  "Montenegro/canvas_1630265894.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  276,
+        "relative_path":  "Netherlands/canvas_1630265948.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  277,
+        "relative_path":  "Norway/canvas_1630265416.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  278,
+        "relative_path":  "Norway/canvas_1630265435.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  279,
+        "relative_path":  "Portugal/canvas_1630265787.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  280,
+        "relative_path":  "Russia/canvas_1630265502.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  281,
+        "relative_path":  "Russia/canvas_1630265847.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  282,
+        "relative_path":  "Slovenia/canvas_1630265769.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  283,
+        "relative_path":  "South Africa/canvas_1630265775.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  284,
+        "relative_path":  "Spain/canvas_1630265592.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  285,
+        "relative_path":  "Sweden/canvas_1630265560.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  286,
+        "relative_path":  "Sweden/canvas_1630265651.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  287,
+        "relative_path":  "Sweden/canvas_1630265669.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  288,
+        "relative_path":  "Thailand/canvas_1630265429.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  289,
+        "relative_path":  "Ukraine/canvas_1630265906.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  290,
+        "relative_path":  "United Kingdom/canvas_1630265722.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  291,
+        "relative_path":  "United States/canvas_1630265441.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  292,
+        "relative_path":  "United States/canvas_1630265554.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  293,
+        "relative_path":  "United States/canvas_1630265610.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  294,
+        "relative_path":  "United States/canvas_1630265734.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  295,
+        "relative_path":  "United States/canvas_1630265853.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  296,
+        "relative_path":  "United States/canvas_1630265900.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    },
+    {
+        "qa_index":  297,
+        "relative_path":  "United States/canvas_1630265942.jpg",
+        "split":  "train",
+        "decoded_width":  1030,
+        "decoded_height":  703,
+        "decoded_successfully":  true
+    }
+]

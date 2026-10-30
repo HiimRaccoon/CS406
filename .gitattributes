@@ -1,0 +1,11 @@
+# Preserve the exact source bytes used by fixed-split fingerprints.
+artifacts/baseline124/manifest.csv -text
+artifacts/baseline124/summary.json -text
+artifacts/baseline124/labels.json -text
+artifacts/baseline124/class_support.csv -text
+
+# Keep versioned specification and checksum bytes stable across platforms.
+configs/preprocessing/*.json text eol=lf
+configs/preprocessing/*.sha256 text eol=lf
+docs/*.md text eol=lf
+reports/preprocessing_qa_v1/*.json text eol=lf

@@ -1,5 +1,5 @@
 {
-  "status": "RECOMMENDATION ONLY; awaiting user design decision",
+  "status": "FROZEN; superseded by versioned authoritative config",
   "source_manifest_sha256": "9cbd8b70e8522b5aa4a20fba4fa7b2ecea855cf377f98e41ebb162a07f8a8040",
   "train_images_reviewed": 65,
   "normalization_mean": [
@@ -12,12 +12,7 @@
     0.224,
     0.225
   ],
-  "preview_ui_fill_rgb": [
-    124,
-    116,
-    104
-  ],
-  "ui_preprocessing_status": "Draft template used for preview; coordinates and fill explicitly disclosed, not silently frozen",
+  "ui_preprocessing_status": "Frozen: footer 14px and listed static rectangles; exact float mean fill and TorchVision tensor bilinear antialias=True defined by authoritative config",
   "navigation_arrows": "intentionally retained",
   "global_output": [
     896,
@@ -296,5 +291,18 @@
       ],
       "crop_union_scene_coverage_percent": 59.657023687065816
     }
-  }
+  },
+  "authoritative_config": "../../configs/preprocessing/geoguessr_v1.json",
+  "authoritative_config_sha256": "4f49dd41738168cfc65d4322fbe1b659ef5595229bb487ad86dd671a26a8903f",
+  "historical_preview_fill_rgb8": [
+    124,
+    116,
+    104
+  ],
+  "training_mask_fill_rgb_float": [
+    0.485,
+    0.456,
+    0.406
+  ],
+  "train_images_ui_qa": 297
 }

@@ -1,0 +1,125 @@
+label_id,label,raw_images,valid_images,unique_images,groups,train,val,test,policy
+0,Aland,9,9,9,9,7,1,1,train_val_test
+1,Albania,41,41,41,41,29,6,6,train_val_test
+2,American Samoa,16,16,16,16,12,2,2,train_val_test
+3,Andorra,13,13,13,13,9,2,2,train_val_test
+4,Antarctica,1,1,1,1,1,0,0,train_only
+5,Argentina,689,689,689,689,483,103,103,train_val_test
+6,Armenia,1,1,1,1,1,0,0,train_only
+7,Australia,1704,1704,1704,1704,1192,256,256,train_val_test
+8,Austria,347,347,347,347,243,52,52,train_val_test
+9,Bangladesh,106,106,106,106,74,16,16,train_val_test
+10,Belarus,1,1,1,1,1,0,0,train_only
+11,Belgium,219,219,219,219,153,33,33,train_val_test
+12,Bermuda,3,3,3,3,1,1,1,train_val_test
+13,Bhutan,20,20,20,20,14,3,3,train_val_test
+14,Bolivia,116,116,116,116,82,17,17,train_val_test
+15,Botswana,144,144,144,144,100,22,22,train_val_test
+16,Brazil,2320,2320,2320,2320,1624,348,348,train_val_test
+17,Bulgaria,217,217,217,217,151,33,33,train_val_test
+18,Cambodia,118,118,118,118,82,18,18,train_val_test
+19,Canada,1382,1382,1382,1382,968,207,207,train_val_test
+20,Chile,326,326,326,326,228,49,49,train_val_test
+21,China,13,13,13,13,9,2,2,train_val_test
+22,Colombia,251,251,251,251,175,38,38,train_val_test
+23,Costa Rica,27,27,27,27,19,4,4,train_val_test
+24,Croatia,129,129,129,129,91,19,19,train_val_test
+25,Curacao,9,9,9,9,7,1,1,train_val_test
+26,Czechia,257,257,257,257,179,39,39,train_val_test
+27,Denmark,198,198,198,198,138,30,30,train_val_test
+28,Dominican Republic,22,22,22,22,16,3,3,train_val_test
+29,Ecuador,93,93,93,93,65,14,14,train_val_test
+30,Egypt,27,27,27,27,19,4,4,train_val_test
+31,Estonia,99,99,99,99,69,15,15,train_val_test
+32,Eswatini,62,62,62,62,44,9,9,train_val_test
+33,Faroe Islands,9,9,9,9,7,1,1,train_val_test
+34,Finland,1049,1049,1049,1049,735,157,157,train_val_test
+35,France,3573,3573,3573,3573,2501,536,536,train_val_test
+36,Germany,698,698,698,698,488,105,105,train_val_test
+37,Ghana,107,107,106,106,74,16,16,train_val_test
+38,Gibraltar,1,1,1,1,1,0,0,train_only
+39,Greece,248,248,248,248,174,37,37,train_val_test
+40,Greenland,11,11,11,11,7,2,2,train_val_test
+41,Guam,8,8,8,8,6,1,1,train_val_test
+42,Guatemala,79,79,79,79,55,12,12,train_val_test
+43,Hong Kong,66,66,66,66,46,10,10,train_val_test
+44,Hungary,168,168,168,168,118,25,25,train_val_test
+45,Iceland,54,54,54,54,38,8,8,train_val_test
+46,India,160,160,160,160,112,24,24,train_val_test
+47,Indonesia,288,288,288,288,202,43,43,train_val_test
+48,Iraq,2,2,2,2,1,0,1,train_test_only
+49,Ireland,290,290,290,290,202,44,44,train_val_test
+50,Isle of Man,11,11,11,11,7,2,2,train_val_test
+51,Israel,326,326,326,326,228,49,49,train_val_test
+52,Italy,789,789,789,789,553,118,118,train_val_test
+53,Japan,3840,3840,3840,3840,2688,576,576,train_val_test
+54,Jersey,12,12,12,12,8,2,2,train_val_test
+55,Jordan,85,85,85,85,59,13,13,train_val_test
+56,Kenya,130,130,130,130,90,20,20,train_val_test
+57,Kyrgyzstan,72,72,72,72,50,11,11,train_val_test
+58,Laos,61,61,61,61,43,9,9,train_val_test
+59,Latvia,117,117,117,117,81,18,18,train_val_test
+60,Lebanon,8,8,8,8,6,1,1,train_val_test
+61,Lesotho,65,65,65,65,45,10,10,train_val_test
+62,Lithuania,140,140,140,140,98,21,21,train_val_test
+63,Luxembourg,25,25,25,25,17,4,4,train_val_test
+64,Macao,13,13,13,13,9,2,2,train_val_test
+65,Madagascar,13,13,13,13,9,2,2,train_val_test
+66,Malaysia,423,423,423,423,297,63,63,train_val_test
+67,Malta,55,55,55,55,39,8,8,train_val_test
+68,Martinique,2,2,2,2,1,0,1,train_test_only
+69,Mexico,901,901,901,901,631,135,135,train_val_test
+70,Monaco,2,2,2,2,1,0,1,train_test_only
+71,Mongolia,83,83,83,83,59,12,12,train_val_test
+72,Montenegro,32,32,32,32,22,5,5,train_val_test
+73,Mozambique,1,1,1,1,1,0,0,train_only
+74,Myanmar,2,2,2,2,1,0,1,train_test_only
+75,Nepal,1,1,1,1,1,0,0,train_only
+76,Netherlands,579,579,579,579,405,87,87,train_val_test
+77,New Zealand,557,557,557,557,389,84,84,train_val_test
+78,Nigeria,123,123,123,123,87,18,18,train_val_test
+79,North Macedonia,35,35,35,35,25,5,5,train_val_test
+80,Northern Mariana Islands,10,10,10,10,6,2,2,train_val_test
+81,Norway,675,675,675,675,473,101,101,train_val_test
+82,Pakistan,19,19,19,19,13,3,3,train_val_test
+83,Palestine,46,46,46,46,32,7,7,train_val_test
+84,Paraguay,2,2,2,2,1,0,1,train_test_only
+85,Peru,270,270,270,270,188,41,41,train_val_test
+86,Philippines,219,219,219,219,153,33,33,train_val_test
+87,Pitcairn Islands,1,1,1,1,1,0,0,train_only
+88,Poland,863,863,863,863,605,129,129,train_val_test
+89,Portugal,242,242,242,242,170,36,36,train_val_test
+90,Puerto Rico,46,46,46,46,32,7,7,train_val_test
+91,Qatar,1,1,1,1,1,0,0,train_only
+92,Reunion,29,29,29,29,21,4,4,train_val_test
+93,Romania,346,346,346,346,242,52,52,train_val_test
+94,Russia,1761,1761,1761,1761,1233,264,264,train_val_test
+95,San Marino,4,4,4,4,2,1,1,train_val_test
+96,Senegal,75,75,75,75,53,11,11,train_val_test
+97,Serbia,62,62,62,62,44,9,9,train_val_test
+98,Singapore,707,707,707,707,495,106,106,train_val_test
+99,Slovakia,108,108,108,108,76,16,16,train_val_test
+100,Slovenia,66,66,66,66,46,10,10,train_val_test
+101,South Africa,1183,1183,1183,1183,829,177,177,train_val_test
+102,South Georgia and South Sandwich Islands,1,1,1,1,1,0,0,train_only
+103,South Korea,243,243,243,243,171,36,36,train_val_test
+104,South Sudan,1,1,1,1,1,0,0,train_only
+105,Spain,1075,1075,1075,1075,753,161,161,train_val_test
+106,Sri Lanka,85,85,85,85,59,13,13,train_val_test
+107,Svalbard and Jan Mayen,1,1,1,1,1,0,0,train_only
+108,Sweden,726,726,726,726,508,109,109,train_val_test
+109,Switzerland,173,173,173,173,121,26,26,train_val_test
+110,Taiwan,547,547,547,547,383,82,82,train_val_test
+111,Tanzania,1,1,1,1,1,0,0,train_only
+112,Thailand,944,944,944,944,660,142,142,train_val_test
+113,Tunisia,87,87,87,87,61,13,13,train_val_test
+114,Turkey,268,268,268,268,188,40,40,train_val_test
+115,US Virgin Islands,6,6,6,6,4,1,1,train_val_test
+116,Uganda,55,55,55,55,39,8,8,train_val_test
+117,Ukraine,114,114,114,114,80,17,17,train_val_test
+118,United Arab Emirates,70,70,70,70,48,11,11,train_val_test
+119,United Kingdom,2484,2484,2484,2484,1738,373,373,train_val_test
+120,United States,12014,12014,12014,12014,8410,1802,1802,train_val_test
+121,Uruguay,57,57,57,57,39,9,9,train_val_test
+122,Venezuela,1,1,1,1,1,0,0,train_only
+123,Vietnam,15,15,15,15,11,2,2,train_val_test

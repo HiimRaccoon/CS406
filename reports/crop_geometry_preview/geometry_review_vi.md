@@ -2,7 +2,7 @@
 
 ## Phạm vi và trạng thái
 
-Đây là đề xuất thiết kế từ visual preview, chưa được người dùng chốt thành preprocessing cuối cùng. Không train model, không dùng validation/test score và không mở thêm experiment branch. Các mức 384/416/448 dưới đây chỉ được so sánh bằng hình ảnh.
+**Geometry 384/402 và UI preprocessing đã frozen thành v1 sau khi người dùng review/chốt và hoàn tất UI QA train-only.** Nguồn chuẩn hiện tại là [versioned config](../../configs/preprocessing/geoguessr_v1.json) và [preprocessing specification](../../docs/preprocessing_v1.md). Phần dưới ghi lại quá trình visual design lịch sử; các mức 416/448 không phải main experiments. Không train model, không dùng validation/test score và không mở thêm experiment branch.
 
 - Dùng đúng 65 ảnh `split == train` đã chọn từ fixed manifest: 24 ảnh layout 1536 × 662 và toàn bộ 41 ảnh train layout 1030 × 703.
 - Đã kiểm tra lại membership, SHA-256 manifest và SHA-256 của 65 file local trước khi tạo preview.
@@ -58,9 +58,9 @@ Overlap ở đây là diện tích giao chia cho diện tích một crop, không
 
 Layout nhỏ có nhiều overlap hơn vì giữ mức zoom tương đối so với global trong một frame hẹp hơn. Đây là đánh đổi của proposal, không phải bốn vùng độc lập hoàn toàn. Union của bốn crop phủ khoảng 50,9% / 59,7% diện tích frame sau footer crop; phần này bao gồm cả vùng UI mask nằm trong crop. Global giữ toàn cảnh còn lại.
 
-## Draft UI template dùng trong các preview
+## UI template v1 và implementation preview lịch sử
 
-Các tọa độ này được đưa ra để người dùng review cùng geometry, chưa tự động coi là quyết định đã chốt. Crop 14 pixel sát đáy, sau đó mask các hình chữ nhật sau; không crop mạnh toàn ảnh và không che navigation arrows bằng một vùng giữa ảnh.
+Các tọa độ sau đã được giữ nguyên khi freeze v1 sau QA 297 train images. Crop 14 pixel sát đáy, sau đó mask các hình chữ nhật sau; không crop mạnh toàn ảnh và không che navigation arrows bằng một vùng giữa ảnh.
 
 | Layout | Thành phần | x | y | width | height |
 |---|---|---:|---:|---:|---:|
@@ -71,8 +71,8 @@ Các tọa độ này được đưa ra để người dùng review cùng geomet
 | 1030 × 703 | Controls/compass | 6 | 407 | 76 | 282 |
 | 1030 × 703 | Minimap + Guess | 827 | 547 | 180 | 142 |
 
-- Màu fill trong preview: RGB `(124,116,104)`, gần ImageNet mean trong thang 8-bit; đây là lựa chọn hiển thị được khai báo, chưa khóa chính sách fill cho training. Nếu triển khai fill chính xác bằng ImageNet mean trong tensor float thì cần ghi rõ để không nhầm với số nguyên này.
-- Preview dùng `System.Drawing HighQualityBilinear`; đây chưa phải cam kết rằng tensor resize trong training sẽ có pixel giống hệt renderer này. Kernel/antialias của pipeline cuối cần được ghi explicit.
+- Màu fill trong PNG preview lịch sử là RGB `(124,116,104)`. Training v1 dùng chính xác `[0.485,0.456,0.406]` trong RGB float32 [0,1], không làm tròn uint8, theo versioned config.
+- PNG preview dùng `System.Drawing HighQualityBilinear`. Training v1 dùng `torchvision.transforms.functional.resize` trên CPU float32 tensor, bilinear và explicit `antialias=True`; không tuyên bố renderer PNG có output số học giống backend này.
 - Cùng một ảnh đã xử lý UI cấp raw được dùng cho global và mọi local tile. Annotation đường màu/số crop không được đưa vào model input.
 - Navigation arrows được chủ động giữ lại theo quyết định của người dùng. Các watermark chìm của Street View vẫn có thể còn trong scene; không mô tả pipeline là loại sạch mọi overlay.
 
@@ -109,4 +109,4 @@ Các ví dụ khó trong proposal 384/402:
 
 Metadata có thể kiểm tra lại: [recommended_geometry.json](recommended_geometry.json), [draft_geometry.json](draft_geometry.json), [geometry_checks.json](geometry_checks.json).
 
-Sau khi người dùng review/chốt proposal và các chi tiết UI, freeze geometry trước LR search. Các phương án không chọn chỉ là tài liệu preview, không tự động trở thành thí nghiệm huấn luyện hoặc ablation.
+Geometry và UI đã freeze trước LR search; xem [UI QA mở rộng](../preprocessing_qa_v1/qa_review_vi.md). Các phương án không chọn chỉ là tài liệu preview, không tự động trở thành thí nghiệm huấn luyện hoặc ablation. Phần còn lại chuyển sang [master spec](../../docs/master_spec.md) và [UIT pilot parameters](../../docs/pilot_plan.md), không mở geometry search.

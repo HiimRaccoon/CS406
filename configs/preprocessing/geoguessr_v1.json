@@ -1,0 +1,368 @@
+{
+  "schema_version": "1.0.0",
+  "preprocessing_id": "geoguessr-ui-global-local-v1",
+  "status": "frozen",
+  "frozen_client_date": "2026-10-30",
+  "change_policy": "Any later change to UI rectangles, crop geometry, fill, resize backend, interpolation, antialias, rounding, ordering, or normalization requires a new preprocessing version; no geometry search in main scope.",
+  "source_split": {
+    "version": "baseline124-v1",
+    "directory": "artifacts/baseline124",
+    "source_repository": "https://github.com/HiimRaccoon/cs406-geoguessr",
+    "source_commit": "33cb29d72974f1677efab0f56ed92360e5a9f712",
+    "sha256": {
+      "manifest.csv": "9cbd8b70e8522b5aa4a20fba4fa7b2ecea855cf377f98e41ebb162a07f8a8040",
+      "summary.json": "cf3dcf909aefd17c531cd115d6c30e54bbeb3dbd13962f974317ccde8a2f3e4b",
+      "labels.json": "5f7e8f5810e9ac8c43c1c22b2e4febe2e7a6174629b9031d3e943fce511832aa",
+      "class_support.csv": "ff46f4074464644f573b4ca64eb61320a61a8cc3daed3a3886a350cbc3c6fb75"
+    },
+    "split_names": {
+      "train": "train",
+      "validation": "val",
+      "test": "test"
+    },
+    "expected_counts": {
+      "train": 34997,
+      "val": 7497,
+      "test": 7502
+    },
+    "num_output_labels": 124,
+    "regeneration_allowed": false
+  },
+  "coordinate_convention": {
+    "sizes": "[width,height]",
+    "rectangles": "[x,y,width,height], origin top-left, half-open integer intervals",
+    "frame": "decoded raw RGB after removing footer; top-left origin unchanged",
+    "rounding": "floor(value+0.5) for nonnegative values; do not use Python round()",
+    "authoritative_local_geometry": "Use per-layout integer local_crops_xywh. Centers are design provenance; never recompute crop side during training."
+  },
+  "decode": {
+    "backend": "Pillow.Image.open(...).convert(\"RGB\")",
+    "apply_exif_transpose": false,
+    "unknown_layout": "raise an error; never silently scale UI templates",
+    "corrupt_image": "raise an error; never skip or replace a sample silently"
+  },
+  "tensor": {
+    "conversion": "torchvision.transforms.functional.pil_to_tensor(rgb).to(torch.float32).div(255.0)",
+    "layout": "CHW",
+    "device": "cpu",
+    "dtype": "float32",
+    "rgb_range": [
+      0,
+      1
+    ],
+    "intermediate_uint8_requantization": false,
+    "preprocessing_amp": false
+  },
+  "ui": {
+    "sequence": [
+      "remove bottom footer",
+      "apply shared train-only photometric transform to valid scene pixels when enabled",
+      "fill static UI rectangles",
+      "construct global/local views",
+      "resize and letterbox",
+      "normalize"
+    ],
+    "mask_fill_rgb_float": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "fill_space": "RGB float32 in [0,1], before normalization; never round to 8-bit",
+    "navigation_arrows": "intentionally retained; no arrow detector or central road mask",
+    "other_watermarks": "Embedded Street View watermarks may remain; do not claim complete overlay removal",
+    "same_for": [
+      "E1",
+      "E1-HR",
+      "E2",
+      "E3 feature extraction"
+    ]
+  },
+  "resize": {
+    "backend": "torchvision.transforms.functional.resize",
+    "tensor_input_required": true,
+    "interpolation": "torchvision.transforms.InterpolationMode.BILINEAR",
+    "antialias": true,
+    "size_argument_order": "[height,width]",
+    "align_corners": "torchvision tensor bilinear implementation uses False; no custom override",
+    "max_size": null,
+    "device": "cpu",
+    "dtype": "float32",
+    "use_pil_resize": false,
+    "use_system_drawing": false
+  },
+  "letterbox": {
+    "preserve_aspect_ratio": true,
+    "scale": "min(target_width/source_width,target_height/source_height)",
+    "content_width": "min(target_width,max(1,floor(source_width*scale+0.5)))",
+    "content_height": "min(target_height,max(1,floor(source_height*scale+0.5)))",
+    "placement": "center; left=floor((target_width-content_width)/2), top=floor((target_height-content_height)/2); remainder goes right/bottom",
+    "padding_rgb_float": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "apply_padding_after_resize": true,
+    "post_resize_mask_reapplication": false,
+    "edge_policy": "Antialias can blend scene and mean-filled UI pixels at boundaries; do not quantize or hard-threshold/re-mask resized edges."
+  },
+  "views": {
+    "baseline_global_output_wh": [
+      896,
+      384
+    ],
+    "local_output_wh": [
+      320,
+      320
+    ],
+    "local_count": 4,
+    "local_source": "same UI-processed raw float tensor as global; never crop resized global or padded canvas",
+    "local_resize": "resize square crop directly to [320,320] with the same bilinear/antialias backend",
+    "local_order": [
+      "left",
+      "middle_left",
+      "middle_right",
+      "right_raised"
+    ],
+    "local_crop_randomness": false,
+    "allow_content_aware_crop_rejection": false,
+    "E1_HR": "Uses identical decode/UI/fill/resize/letterbox/normalization rules. Only full-image target WH is supplied by a separately frozen run config after UIT pilot; no compute-matching constraint."
+  },
+  "normalization": {
+    "backend": "torchvision.transforms.functional.normalize",
+    "mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "std": [
+      0.229,
+      0.224,
+      0.225
+    ],
+    "inplace": false,
+    "stage": "after resize and padding",
+    "use_weights_transforms": false
+  },
+  "train_photometric_hook": {
+    "enabled_only": "E1/E1-HR/E2 training; disabled for validation, test, and E3 deterministic caches",
+    "parameters": "one brightness/contrast draw per original image; amplitudes live in the training recipe and must be frozen before LR search",
+    "scope": "valid scene pixels in footer-cropped raw float tensor; exclude static UI pixels from photometric statistics; preserve masks/padding by filling UI after photometric changes",
+    "order": [
+      "brightness",
+      "contrast"
+    ],
+    "brightness": "clamp(image*b,0,1) on valid pixels",
+    "contrast": "grayscale weights [0.2989,0.587,0.114]; mean over valid pixels of brightness-adjusted scene; clamp(c*image+(1-c)*mean,0,1)",
+    "shared_across_all_views": true,
+    "validation_or_test_randomness": false
+  },
+  "layouts": {
+    "1536x662": {
+      "raw_wh": [
+        1536,
+        662
+      ],
+      "footer_crop_bottom_px": 14,
+      "processed_wh": [
+        1536,
+        648
+      ],
+      "masks_xywh": [
+        {
+          "name": "score",
+          "xywh": [
+            1246,
+            8,
+            266,
+            72
+          ]
+        },
+        {
+          "name": "controls",
+          "xywh": [
+            6,
+            366,
+            76,
+            282
+          ]
+        },
+        {
+          "name": "minimap_and_guess",
+          "xywh": [
+            1250,
+            440,
+            262,
+            208
+          ]
+        }
+      ],
+      "local_crop_side_px": 384,
+      "local_centers_relative_wh": [
+        [
+          0.2,
+          0.6
+        ],
+        [
+          0.4,
+          0.6
+        ],
+        [
+          0.6,
+          0.6
+        ],
+        [
+          0.8,
+          0.5
+        ]
+      ],
+      "local_crops_xywh": [
+        [
+          115,
+          197,
+          384,
+          384
+        ],
+        [
+          422,
+          197,
+          384,
+          384
+        ],
+        [
+          730,
+          197,
+          384,
+          384
+        ],
+        [
+          1037,
+          132,
+          384,
+          384
+        ]
+      ],
+      "baseline_letterbox_content_wh": [
+        896,
+        378
+      ],
+      "baseline_letterbox_padding_ltrb": [
+        0,
+        3,
+        0,
+        3
+      ]
+    },
+    "1030x703": {
+      "raw_wh": [
+        1030,
+        703
+      ],
+      "footer_crop_bottom_px": 14,
+      "processed_wh": [
+        1030,
+        689
+      ],
+      "masks_xywh": [
+        {
+          "name": "score",
+          "xywh": [
+            740,
+            8,
+            266,
+            72
+          ]
+        },
+        {
+          "name": "controls",
+          "xywh": [
+            6,
+            407,
+            76,
+            282
+          ]
+        },
+        {
+          "name": "minimap_and_guess",
+          "xywh": [
+            827,
+            547,
+            180,
+            142
+          ]
+        }
+      ],
+      "local_crop_side_px": 402,
+      "local_centers_relative_wh": [
+        [
+          0.2,
+          0.6
+        ],
+        [
+          0.4,
+          0.6
+        ],
+        [
+          0.6,
+          0.6
+        ],
+        [
+          0.8,
+          0.5
+        ]
+      ],
+      "local_crops_xywh": [
+        [
+          5,
+          212,
+          402,
+          402
+        ],
+        [
+          211,
+          212,
+          402,
+          402
+        ],
+        [
+          417,
+          212,
+          402,
+          402
+        ],
+        [
+          623,
+          144,
+          402,
+          402
+        ]
+      ],
+      "baseline_letterbox_content_wh": [
+        574,
+        384
+      ],
+      "baseline_letterbox_padding_ltrb": [
+        161,
+        0,
+        161,
+        0
+      ]
+    }
+  },
+  "qa": {
+    "scope": "UI template QA only; no classification scores, no validation/test images, no crop-geometry tuning",
+    "sample_manifest": "reports/preprocessing_qa_v1/sample_manifest.json",
+    "sample_manifest_sha256": "2ea34f3ca2118679ceb67120853814768e9410679f37f960dadc924006fb3c89",
+    "train_images": 297,
+    "labels": 124,
+    "main_layout": 256,
+    "minor_layout": 41,
+    "visual_renderer": "System.Drawing, visualization only; not the training resize backend",
+    "visual_pages": 13,
+    "training_backend_conformance": "Must be checked in UIT runtime before pilot; no local TorchVision preprocessing execution claimed."
+  },
+  "provenance_sources": [
+    "https://docs.pytorch.org/vision/stable/generated/torchvision.transforms.functional.resize.html",
+    "https://docs.pytorch.org/vision/stable/generated/torchvision.transforms.functional.pil_to_tensor.html",
+    "https://docs.pytorch.org/vision/stable/generated/torchvision.transforms.functional.normalize.html"
+  ]
+}
