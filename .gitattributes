@@ -9,3 +9,7 @@ configs/preprocessing/*.json text eol=lf
 configs/preprocessing/*.sha256 text eol=lf
 docs/*.md text eol=lf
 reports/preprocessing_qa_v1/*.json text eol=lf
+src/**/*.py text eol=lf
+tests/*.py text eol=lf
+configs/pilot/*.json text eol=lf
+scripts/slurm/*.sbatch text eol=lf

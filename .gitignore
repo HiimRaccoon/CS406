@@ -1,0 +1,17 @@
+/data/
+/pretrained/
+/runs/
+/logs/
+/reports/pilot/
+/.tools/
+/.venv/
+/env/
+/configs/pilot/local/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.pt
+*.pth
+*.out
+.env
+.env.*

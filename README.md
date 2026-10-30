@@ -9,7 +9,27 @@ ConvNeXt-Tiny benchmark trên fixed split 124 quốc gia/vùng lãnh thổ. Main
 - [Train-only UI QA: 297 ảnh, 124 labels](reports/preprocessing_qa_v1/qa_review_vi.md).
 - [Crop geometry visual review](reports/crop_geometry_preview/geometry_review_vi.md).
 - [UIT pilot plan — DRAFT, deferred](docs/pilot_plan.md).
+- [Server pilot runbook](docs/server_pilot_runbook.md) và [upload checklist](SERVER_UPLOAD_CHECKLIST.md): setup, offline weights, conformance, P0/P1, resume và collection.
+- [Pilot implementation handoff](docs/pilot_implementation_review.md): ranh giới code, validation evidence, pending values và toàn bộ file mới/sửa.
 
 Geometry E2 v1: global 896×384; bốn raw local crops 384×384 hoặc 402×402 theo layout → 320×320; navigation arrows được chủ động giữ. Geometry không mở lại thành search branch. Candidate 416/448 chỉ là visual design alternatives lịch sử.
 
-Master spec đã được viết lại để người dùng review; vẫn là draft, không phải frozen specification. Preprocessing/geometry và fixed split có version riêng đã freeze. Pilot vẫn deferred; không tạo experiment-specific specs/training code hoặc chạy pilot/model/training trong task viết tài liệu. Các bước tiếp theo phải theo workflow và được người dùng review/yêu cầu riêng.
+Master spec vẫn là draft, chưa frozen; preprocessing/geometry và fixed split có version riêng đã freeze. Theo yêu cầu mới, repo có **pilot harness self-contained**, chưa chạy GPU pilot hoặc official experiments. Numeric pilot configs còn pending và cần review trước khi submit. Không có official E1/E2/E3 implementation.
+
+```text
+src/
+├── preprocessing/   # frozen v1 implementation, reusable
+└── pilot/           # dataset/models/metrics/P0/P1/checkpoint/collection, pilot only
+```
+
+Không có permanent `src/data/`, `src/models/` hoặc `src/training/`. Sau pilot và review `e1_spec.md`, reusable components mới có thể được promote có chủ đích.
+
+CPU checks từ repo root, sau khi cài dependencies:
+
+```bash
+python -m pytest -q
+python -m src.pilot.dataset
+python -m src.pilot.conformance --config configs/pilot/conformance.json --data-root /path/to/geoguessr
+```
+
+P0/P1 cần CUDA, offline pretrained file và reviewed configs; xem [config contract](configs/pilot/README.md). Không có automatic LR/resolution search, test evaluator, distributed training hoặc E3 code. Pilot code không cấp phép chạy official experiments hay chuyển master spec thành frozen.

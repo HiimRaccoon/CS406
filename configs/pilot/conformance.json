@@ -1,0 +1,12 @@
+{
+  "purpose": "pilot",
+  "stage": "conformance",
+  "preprocessing_config": "configs/preprocessing/geoguessr_v1.json",
+  "artifacts_dir": "artifacts/baseline124",
+  "paths": {
+    "data_root": null
+  },
+  "cpu_threads": 1,
+  "samples_per_layout": 1,
+  "output_dir": "reports/pilot/conformance"
+}

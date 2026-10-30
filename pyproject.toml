@@ -1,0 +1,9 @@
+[project]
+name = "cs406-uit-pilot"
+version = "0.1.0"
+description = "Single-GPU pilot harness only; no official experiment or E3 implementation"
+requires-python = ">=3.11,<3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["gpu: opt-in CUDA smoke checks"]

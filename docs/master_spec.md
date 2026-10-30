@@ -192,9 +192,10 @@ Các controls và recipe choices dưới đây không tự động trở thành 
 | Starting point | E1/E1-HR/E2 khởi tạo độc lập từ cùng file; không kế thừa E1 checkpoint/optimizer/scheduler |
 | Fine-tuning | Full model từ epoch 1, có LR warmup; không classifier-only phase |
 | Optimizer | AdamW |
+| Scheduler | LR warmup, sau đó cosine LR decay; warmup duration, cosine parameters, max epochs và minimum/final LR nếu protocol cần vẫn PENDING, không tự điền numeric values |
 | Layer learning rates | Không LLRD; LR_head = LR_backbone |
 | Weight decay | 0.05 cho trainable Conv/Linear weights; không decay bias và LayerNorm parameters; explicit parameter groups |
-| Stochastic depth | **max_drop_path_rate = 0.1**; cùng explicit depth schedule tuyến tính theo block depth từ 0 đến 0.1; không tuning riêng |
+| Stochastic depth | **max_drop_path_rate = 0.1** đã chốt; E1/E1-HR/E2 dùng cùng explicit depth schedule, không tuning riêng. Linear 0 → 0.1 theo block depth là schedule của implementation TorchVision ConvNeXt-Tiny được chọn ([nguồn](https://github.com/pytorch/vision/blob/main/torchvision/models/convnext.py)), không phải một schedule/hyperparameter đã được separately optimized bằng thí nghiệm |
 | Loss | Standard CE; E2 chỉ một CE sau fusion, không auxiliary local loss |
 | Class weights/sampling | **Natural training distribution, không class weighting hoặc sqrt_inverse weighting** |
 | Long-tail treatment | Chủ động cô lập sang E3; không mang class-weight recipe từ repo cũ sang |
@@ -245,8 +246,9 @@ Effective batch size tính theo **original images**; năm E2 views vẫn là m�
 | Resolution | Final E1-HR full-image resolution; không compute-match E2 |
 | Batch | Microbatch từng architecture, gradient accumulation, common effective batch size |
 | LR | Exact four LR values |
+| Training seeds | Exact numeric ID của 1 tuning seed và 3 final training seeds; cần freeze trước official LR search/final runs. Split seed vẫn là 406, không thay đổi membership |
 | Horizon/selection | Max epochs, warmup duration, early-stopping patience, tolerance và tie-break |
-| Optimizer/scheduler | AdamW numeric details còn thiếu; cosine scheduler numeric details |
+| Optimizer/scheduler | AdamW numeric details còn thiếu; cosine schedule parameters và minimum/final LR nếu protocol cần |
 | Numerics | AMP details, gradient clipping nếu có |
 | Augmentation | Brightness/contrast amplitudes |
 | Head | Exact initialization; E3 head optimizer/LR/budget và sampling mechanics |

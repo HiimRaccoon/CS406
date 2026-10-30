@@ -1,0 +1,87 @@
+{
+  "purpose": "pilot",
+  "stage": "p1",
+  "protocol_id": null,
+  "experiment": "e2",
+  "seed": null,
+  "preprocessing_config": "configs/preprocessing/geoguessr_v1.json",
+  "artifacts_dir": "artifacts/baseline124",
+  "paths": {
+    "data_root": null,
+    "weights": null,
+    "runs_dir": "runs/pilot"
+  },
+  "expected_weight_sha256": null,
+  "global_wh": [
+    896,
+    384
+  ],
+  "batch": {
+    "microbatch": null,
+    "accumulation": null
+  },
+  "initialization": {
+    "method": null,
+    "seed": null,
+    "std": null,
+    "bias": null
+  },
+  "optimizer": {
+    "lr": null,
+    "betas": null,
+    "eps": null,
+    "weight_decay": 0.05
+  },
+  "augmentation": {
+    "enabled": null,
+    "brightness": null,
+    "contrast": null
+  },
+  "clipping": {
+    "enabled": null,
+    "max_norm": null
+  },
+  "runtime": {
+    "device": "cuda",
+    "num_workers": null,
+    "pin_memory": null,
+    "persistent_workers": null,
+    "prefetch_factor": null,
+    "cpu_threads": null,
+    "amp": {
+      "enabled": null,
+      "dtype": null
+    },
+    "scaler": {
+      "enabled": null,
+      "init_scale": null,
+      "growth_factor": null,
+      "backoff_factor": null,
+      "growth_interval": null
+    },
+    "tf32_matmul": null,
+    "tf32_cudnn": null,
+    "matmul_precision": null,
+    "cudnn_benchmark": null,
+    "cudnn_deterministic": null,
+    "deterministic_algorithms": null,
+    "deterministic_warn_only": null,
+    "torch_compile": null
+  },
+  "gates": {
+    "conformance_report": null,
+    "p0_summaries": null
+  },
+  "budget": {
+    "max_epochs": null
+  },
+  "scheduler": {
+    "warmup_updates": null,
+    "start_factor": null,
+    "min_lr": null
+  },
+  "checkpoint": {
+    "tolerance": null,
+    "tie_break": null
+  }
+}
