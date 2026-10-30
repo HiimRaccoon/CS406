@@ -109,4 +109,4 @@ Các ví dụ khó trong proposal 384/402:
 
 Metadata có thể kiểm tra lại: [recommended_geometry.json](recommended_geometry.json), [draft_geometry.json](draft_geometry.json), [geometry_checks.json](geometry_checks.json).
 
-Geometry và UI đã freeze trước LR search; xem [UI QA mở rộng](../preprocessing_qa_v1/qa_review_vi.md). Các phương án không chọn chỉ là tài liệu preview, không tự động trở thành thí nghiệm huấn luyện hoặc ablation. Phần còn lại chuyển sang [master spec](../../docs/master_spec.md) và [UIT pilot parameters](../../docs/pilot_plan.md), không mở geometry search.
+Geometry và UI đã freeze; xem [UI QA mở rộng](../preprocessing_qa_v1/qa_review_vi.md). Các phương án không chọn chỉ là tài liệu preview, không tự động trở thành thí nghiệm huấn luyện hoặc ablation. [Master spec](../../docs/master_spec.md) và [pilot plan](../../docs/pilot_plan.md) chỉ là draft, chưa frozen và không được tự động triển khai. Công việc hiện tại chỉ gồm preprocessing/geometry/split reproducibility; mọi bước tiếp theo chờ người dùng review và yêu cầu riêng. Không mở geometry search.

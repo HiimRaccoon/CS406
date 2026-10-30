@@ -1,6 +1,8 @@
-# CS406 GeoGuessr — master experiment specification
+# CS406 GeoGuessr — master experiment specification (DRAFT)
 
-Trạng thái: hướng nghiên cứu và preprocessing v1 đã chốt; các giá trị phụ thuộc UIT pilot được đánh dấu pending. Tài liệu này không cấp phép mở thêm experiment branches hoặc bắt đầu implementation training trước chỉ thị của người dùng.
+**Trạng thái: DRAFT — chưa phải frozen master specification.** Nội dung dưới đây là bản ghi các thảo luận/đề xuất hiện tại, sẽ được người dùng review lại sau khi toàn bộ grill và preprocessing review kết thúc. Chỉ cập nhật/freeze master spec khi có yêu cầu tiếp theo của người dùng.
+
+Phạm vi công việc hiện tại chỉ gồm preprocessing/geometry và fixed-split reproducibility. Không tiếp tục mở rộng tài liệu này, không tạo experiment-specific specs hoặc training code, không implement/chạy E1/E1-HR/E2/E3 và không tự động chuyển sang pilot. Preprocessing v1 và split artifacts có version/fingerprint riêng, không đồng nghĩa master spec đã được freeze.
 
 ## Mục tiêu và scope
 

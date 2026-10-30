@@ -1,6 +1,8 @@
-# UIT pilot và các training parameters còn cần freeze
+# UIT pilot và các training parameters còn cần freeze (DRAFT — deferred)
 
-Đây là kế hoạch diagnostic để hoàn thiện recipe, không mở thêm main experiment branches. Chưa có kết quả GPU benchmark trong workspace local và chưa bắt đầu implementation/training.
+**Trạng thái: DRAFT, deferred; chưa được phép triển khai hoặc chạy.** Giữ tài liệu này như ghi chú thảo luận hiện có, không tiếp tục mở rộng cho tới khi người dùng review xong toàn bộ grill/preprocessing và yêu cầu bước tiếp theo. Công việc hiện tại chỉ gồm preprocessing/geometry/split reproducibility; không tự động chuyển sang pilot hoặc tạo training code.
+
+Chưa có kết quả GPU benchmark trong workspace local và chưa bắt đầu implementation/training. Các gate dưới đây không phải authorization để chạy experiment.
 
 ## Gate 1: dataset và environment
 
