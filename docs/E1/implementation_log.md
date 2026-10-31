@@ -24,3 +24,5 @@ T03: complete. RED: new task tests failed before implementation (see local .tool
 T04: complete. RED: new task tests failed before implementation (see local .tools/e1-t04-red.log). GREEN: 3 passed; tests/e1/test_metrics.py. Task commit follows on e1-implementation; no GPU work.
 
 T05: complete. RED: new task tests failed before implementation (see local .tools/e1-t05-red.log). GREEN: 4 passed; tests/e1/test_engine.py. Task commit follows on e1-implementation; no GPU work.
+
+T06: complete. RED: new task tests failed before implementation (see local .tools/e1-t06-red.log). GREEN: 2 passed; tests/e1/test_checkpoint.py; fsync Windows writable-handle correction and valid atomic-failure fixture. Task commit follows on e1-implementation; no GPU work.

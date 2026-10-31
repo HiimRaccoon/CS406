@@ -101,9 +101,9 @@ Dependencies define execution order; they do not request parallel agents or auth
 
 ### T06 - Checkpoints
 
-- [ ] Write failing `tests/e1/test_checkpoint.py` tests for full-state equivalence, atomic-save recovery, and wrong-identity/budget/pilot-kind rejection.
-- [ ] Implement `src/e1/checkpoint.py`; restore the original budget, RNG/loaders, optimizer/scheduler, history, and selected-checkpoint state.
-- [ ] Pass boundary-zero/partial-epoch replay checks and commit.
+- [x] Write failing `tests/e1/test_checkpoint.py` tests for full-state equivalence, atomic-save recovery, and wrong-identity/budget/pilot-kind rejection.
+- [x] Implement `src/e1/checkpoint.py`; restore the original budget, RNG/loaders, optimizer/scheduler, history, and selected-checkpoint state.
+- [x] Pass boundary-zero/partial-epoch replay checks and commit.
 
 ### T07 - Single-Run Execution
 
