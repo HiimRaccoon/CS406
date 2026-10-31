@@ -113,9 +113,9 @@ Dependencies define execution order; they do not request parallel agents or auth
 
 ### T08 - Tuning and Final Declarations
 
-- [ ] Write failing `tests/e1/test_campaign.py` tests for exactly four tuning declarations, four-way seed disjointness, valid full-budget evidence, locked selection, and three fresh final declarations.
-- [ ] Implement `src/e1/campaign.py` with the reviewed LR-trial tie rule; declaration/selection must not submit jobs. Preparing or validating declarations is not execution authorization: T11a stops after selection, and final seeds require G3b.
-- [ ] Pass all campaign guards, including rejection of a tuning-to-final automatic launch, and commit; final runs must not warm-start from tuning checkpoints.
+- [x] Write failing `tests/e1/test_campaign.py` tests for exactly four tuning declarations, four-way seed disjointness, valid full-budget evidence, locked selection, and three fresh final declarations.
+- [x] Implement `src/e1/campaign.py` with the reviewed LR-trial tie rule; declaration/selection must not submit jobs. Preparing or validating declarations is not execution authorization: T11a stops after selection, and final seeds require G3b.
+- [x] Pass all campaign guards, including rejection of a tuning-to-final automatic launch, and commit; final runs must not warm-start from tuning checkpoints.
 
 ### T09 - Reports
 

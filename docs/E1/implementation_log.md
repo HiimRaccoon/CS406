@@ -32,3 +32,5 @@ Ruling: last.pt carries a CPU snapshot of selected weights; best.pt is reporting
 Ruling: private setup edges in CPU integration fixtures provide tiny counts and a synthetic identity, with no production bypass option ? exercises the real eight-epoch runner/checkpoints/engine while campaign validation rejects such evidence ? cost if wrong: target CUDA acceptance remains necessary at T10.
 
 T07: complete. RED: new task tests failed before implementation (see local .tools/e1-t07-red.log). GREEN: 38 passed through T07; synthetic eight-epoch/flat/decreasing/replay/lock checks; expected CPU pin-memory warning. Task commit follows on e1-implementation; no GPU work.
+
+T08: complete. RED: new task tests failed before implementation (see local .tools/e1-t08-red.log). GREEN: 8 passed; tests/e1/test_campaign.py; no automatic job launch. Task commit follows on e1-implementation; no GPU work.
