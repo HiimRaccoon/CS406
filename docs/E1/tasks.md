@@ -89,9 +89,9 @@ Dependencies define execution order; they do not request parallel agents or auth
 
 ### T04 - Metrics
 
-- [ ] Write failing `tests/e1/test_metrics.py` tests, including the hand-calculated cross-bucket F1 oracle from the plan.
-- [ ] Implement `src/e1/metrics.py`; pass full-split/support/bucket/Top-k checks.
-- [ ] Verify metadata bucket coverage and commit.
+- [x] Write failing `tests/e1/test_metrics.py` tests, including the hand-calculated cross-bucket F1 oracle from the plan.
+- [x] Implement `src/e1/metrics.py`; pass full-split/support/bucket/Top-k checks.
+- [x] Verify metadata bucket coverage and commit.
 
 ### T05 - Epoch Engine
 
