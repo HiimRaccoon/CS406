@@ -95,9 +95,9 @@ Dependencies define execution order; they do not request parallel agents or auth
 
 ### T05 - Epoch Engine
 
-- [ ] Write failing `tests/e1/test_engine.py` tests for short-tail weighting, optimizer updates, the reviewed schedule oracle, and fixed checkpoint ties.
-- [ ] Implement `src/e1/engine.py`; require tau=1e-6/earlier and a full eight-epoch schedule regardless of selected epoch.
-- [ ] Pass tests, verify nonfinite behavior, and commit without adding validation-based stopping.
+- [x] Write failing `tests/e1/test_engine.py` tests for short-tail weighting, optimizer updates, the reviewed schedule oracle, and fixed checkpoint ties.
+- [x] Implement `src/e1/engine.py`; require tau=1e-6/earlier and a full eight-epoch schedule regardless of selected epoch.
+- [x] Pass tests, verify nonfinite behavior, and commit without adding validation-based stopping.
 
 ### T06 - Checkpoints
 
