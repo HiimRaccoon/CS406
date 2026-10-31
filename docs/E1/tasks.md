@@ -1,8 +1,8 @@
 # E1 Task Ledger
 
-**G0 APPROVED - T00 contract prepared for separate G1 review; implementation and official execution have not started.**
+**G1 APPROVED - T01-T09 implementation authorized; target GPU work and official execution remain blocked.**
 
-Date: **2026-10-31**. Authority: [specs.md](specs.md), the [T00 user decision record](t00_review.md), and the complete [E1 numeric contract v1](e1_numeric_contract_v1.json) with its [checksum](e1_numeric_contract_v1.sha256), submitted for G1 review. Execution interfaces and future red/green verification are defined in [plan.md](plan.md), now reconciled to these decisions and T11a/T11b gates. G0 and R1-R4/R6-R9 input decisions are recorded; G1 is NOT approved.
+Date: **2026-10-31**. Authority: [specs.md](specs.md), the [T00 user decision record](t00_review.md), and the complete [E1 numeric contract v1](e1_numeric_contract_v1.json) with its [checksum](e1_numeric_contract_v1.sha256), submitted for G1 review. Execution interfaces and future red/green verification are defined in [plan.md](plan.md), now reconciled to these decisions and T11a/T11b gates. G0 and R1-R4/R6-R9 input decisions are recorded; G1 is PASS; see [g1_approval.json](g1_approval.json) and [implementation evidence](implementation_log.md).
 
 This T00 revision changes only planning/review documents and the complete contract/checksum. Checked items below evidence G0 and contract preparation only. T00 is not fully complete until G1 review/freeze, explicit implementation authorization, execution-method selection, and the reviewed commit workflow occur. No production modules, tests, scripts, runbooks, or run artifacts are created.
 
@@ -19,7 +19,7 @@ This T00 revision changes only planning/review documents and the complete contra
 ## 2. Approval Gates
 
 - [x] **G0 - design and planning approval:** User explicitly approved the E1 spec, implementation plan, and task ledger for T00 only on 2026-10-31; see [verbatim decision record](t00_review.md). This does not authorize implementation.
-- [ ] **G1 - numeric-contract freeze and implementation authorization:** After T00 prepares the complete versioned official numeric contract, source evidence/checksum, and reconciled dependent plan/test-oracle changes, the user reviews/freezes that contract and explicitly authorizes implementation to begin. No production E1 implementation task T01+ may start before G1 PASS. R5 and the fixed protocol guardrails are not reopened.
+- [x] **G1 - numeric-contract freeze and implementation authorization:** After T00 prepares the complete versioned official numeric contract, source evidence/checksum, and reconciled dependent plan/test-oracle changes, the user reviews/freezes that contract and explicitly authorizes implementation to begin. No production E1 implementation task T01+ may start before G1 PASS. R5 and the fixed protocol guardrails are not reopened.
 - [ ] **G2 - implementation acceptance:** Required local/CPU and authorized UIT target acceptance is evidenced through T10; the user reviews readiness and concrete tuning declarations. G2 does not authorize official tuning or final training.
 - [ ] **G3a - official LR tuning authorization:** User reviews G2 readiness, concrete tuning declarations, and the reviewed UIT target environment/runtime identity, then explicitly authorizes only official LR tuning through T11a. Final training remains unauthorized.
 - [ ] **G3b - final-training authorization:** After T11a stops and hands off its completed tuning ledger and selected-LR evidence, the user explicitly reviews them and authorizes the selected configuration for the three official final seeds through T11b. G3a or automatic LR selection cannot satisfy G3b.
@@ -67,13 +67,13 @@ Dependencies define execution order; they do not request parallel agents or auth
 
 - [x] Record G0 approval for T00 only and the user's complete R1-R4/R6-R9 decisions in [t00_review.md](t00_review.md). Preserve R5; retain lowercase `src/e1/` and `tests/e1/` as expressly instructed. No implementation authorization is inferred.
 - [x] Prepare/inspect the complete versioned numeric contract/checksum with source evidence and reconcile dependent plan/test oracles. Submit the complete artifact for separate G1 review; all required official numeric inputs are recorded. Validation is limited to documentation/contract checks, not implementation tests or target evidence.
-- [ ] Record the user's G1 review/freeze of the complete contract, explicit implementation authorization, and selected execution method; commit the approved input artifacts through the reviewed workflow. Keep T01+ blocked until G1 PASS.
+- [x] Record the user's G1 review/freeze of the complete contract, explicit implementation authorization, and selected execution method; commit the approved input artifacts through the reviewed workflow. Keep T01+ blocked until G1 PASS.
 
 ### T01 - Configuration
 
-- [ ] Write failing `tests/e1/test_config.py` tests and define isolated synthetic fixtures in `tests/e1/conftest.py`.
-- [ ] Implement `src/e1/config.py` and the package marker; run the T01 verification command to pass.
-- [ ] Verify all fixed rules and unresolved-field failures, inspect the scoped diff, and commit.
+- [x] Write failing `tests/e1/test_config.py` tests and define isolated synthetic fixtures in `tests/e1/conftest.py`.
+- [x] Implement `src/e1/config.py` and the package marker; run the T01 verification command to pass.
+- [x] Verify all fixed rules and unresolved-field failures, inspect the scoped diff, and commit.
 
 ### T02 - Data
 
@@ -152,4 +152,4 @@ For future authorized implementation, follow each task's technical red/green/che
 
 Test fixtures may exercise eight epochs with tiny CPU models; they are not UIT measurements or official experiment records. Runtime policy, source identity, and artifact validation must prevent synthetic evidence from becoming official campaign evidence.
 
-Current deliverables are the complete T00 numeric contract/checksum, user decision/provenance record, and reconciled plan/ledger. G0 is PASS; T00 preparation is evidenced, but T00 remains open pending G1 and its approval/commit step. G1, G2, G3a, G3b, T01-T10, T11a, T11b, official code, jobs, and evaluation remain unapproved or unexecuted as applicable. No implementation tests, GPU/Slurm jobs, tuning, or training are run. Next: user G1 review/freeze of the exact contract/checksum and planning diff, explicit implementation authorization, and execution-method selection. Target smoke needs separate authorization; tuning waits for G3a; final training waits for G3b after T11a's mandatory handoff. Final test evaluation stays separately authorized and locked; E1-HR/E2/E3 do not start automatically.
+G1 was explicitly approved on 2026-11-01 for the exact contract SHA-256 in [g1_approval.json](g1_approval.json). T00 is complete with approval/commit evidence. T01-T09 are authorized in order; individual task checkboxes require their actual verification and commits. See [implementation_log.md](implementation_log.md). The immutable contract's preparation snapshot and earlier review documents remain historical records; their open-G1 wording is not current authorization state. T10 target GPU work, G2, G3a, G3b, tuning/final training and test access remain blocked. No gate or training decision is changed by implementation.
