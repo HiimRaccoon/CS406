@@ -77,9 +77,9 @@ Dependencies define execution order; they do not request parallel agents or auth
 
 ### T02 - Data
 
-- [ ] Write failing `tests/e1/test_data.py` tests for artifact/path/test-access isolation, both input layouts, natural tails, and reviewed epoch/RNG behavior.
-- [ ] Implement `src/e1/data.py`, importing frozen preprocessing unchanged; pass data and existing preprocessing tests.
-- [ ] Confirm that no split/preprocessing bytes changed and commit.
+- [x] Write failing `tests/e1/test_data.py` tests for artifact/path/test-access isolation, both input layouts, natural tails, and reviewed epoch/RNG behavior.
+- [x] Implement `src/e1/data.py`, importing frozen preprocessing unchanged; pass data and existing preprocessing tests.
+- [x] Confirm that no split/preprocessing bytes changed and commit.
 
 ### T03 - Model and Optimizer
 
