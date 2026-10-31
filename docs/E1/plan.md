@@ -6,11 +6,11 @@
 
 **Architecture:** Keep official E1 behavior in a small `src/e1/` package. Reuse frozen `src/preprocessing/` directly; deliberately adapt tested pilot mechanics into E1-owned modules with explicit official identities, rather than treating the pilot runner as the official implementation. Separate single-run execution, campaign declarations/selection, and selected-checkpoint reporting.
 
-**Tech Stack:** Python 3.11, PyTorch/TorchVision, Pillow, NumPy, pytest, JSON/CSV, and single-GPU UIT/Slurm. Actual official package/runtime adoption remains R8 in the specification; do not change dependencies or introduce a framework before that review.
+**Tech Stack:** Python 3.11, PyTorch/TorchVision, Pillow, NumPy, pytest, JSON/CSV, and single-GPU UIT/Slurm. The exact target software/runtime lock is recorded in the T00 numeric contract below; local fixture execution is not target acceptance. No dependency upgrade or new framework is authorized.
 
 **Spec:** [specs.md](specs.md), reviewed E1 decisions recorded through commit `2d784446424005f727dd01a86d97d06775ad7d0d`.
 
-**Status:** DRAFT FOR REVIEW, documentation only. The request to write this plan does not approve the whole specification, resolve its numeric review register, create runnable files, or authorize training. [tasks.md](tasks.md) is the dependency/completion ledger; this plan owns interfaces and verification details.
+**Status (2026-10-31):** G0 APPROVED for T00 only. The complete [E1 numeric contract v1](e1_numeric_contract_v1.json) and [checksum](e1_numeric_contract_v1.sha256) are submitted for separate G1 review. [T00 review and user decision record](t00_review.md) records the authority and supersedes the specification's historical NEEDS REVIEW entries for R1-R4/R6-R9. G1 is NOT approved; no implementation or experiment has started. [tasks.md](tasks.md) owns gate/dependency state; this plan owns technical interfaces and future verification. Package paths remain lowercase `src/e1/` and `tests/e1/`, as expressly reconfirmed by the user.
 
 ## Global Constraints
 
@@ -23,9 +23,9 @@
 - AdamW decay 0.05 for Conv/Linear weights; zero decay for biases, LayerNorm, and ConvNeXt layer-scale parameters. Every trainable parameter appears exactly once.
 - Successful tuning/final runs complete exactly eight training epochs and eight full validations. Early stopping is OFF; validation performance never shortens or extends a run.
 - Supported validation Macro-F1 selects checkpoints using `tau=1e-6`, tie-break `earlier`; all reported metrics come from that checkpoint.
-- Warmup then cosine uses the full eight-epoch optimizer-update horizon. Official schedule details remain unresolved; never reuse the three-epoch P1 horizon.
+- Warmup then cosine uses the reviewed full eight-epoch horizon of 139992 optimizer updates, with 1000 warmup updates, start factor 0.1, and absolute floor 1e-6. Use the explicit T00 update convention below; never reuse the three-epoch P1 horizon.
 - Exactly four LR candidates with one tuning seed, then the selected LR with three final seeds. All four training seed IDs are distinct; the tuning ID is absent from the final set.
-- Pilot seed 3406 and LR 1e-4 are diagnostic references, not official defaults. No P1-v2, E2/E3 implementation, geometry search, or extra ablation.
+- Official tuning seed is 1001; final seeds are [2001,3001,4001]. The user-selected common LR grid is [2.5e-5,5e-5,1e-4,2e-4]; its 1e-4 member is an explicit T00 decision, not automatic pilot promotion. Seeds 3406 and 406 are excluded from official training. No P1-v2, E2/E3 implementation, geometry search, or extra ablation.
 - No test-image access during implementation, smoke, tuning, training, or validation. A final test evaluator is outside this implementation plan.
 - Resume preserves the original eight-epoch budget, selected-checkpoint state, scheduler/RNG state, and identity. Pilot checkpoints cannot be official resume inputs.
 
@@ -39,19 +39,22 @@ These failure modes need observable tests at the interfaces named below:
 4. Interruption/restart, including persistent workers and a partial epoch, must preserve order/jitter, state, and budget: T02, T06, T07, and T10.
 5. Seed overlap, a failed/short LR trial, cross-bucket false positives, or a report from the wrong checkpoint must not contaminate selection/aggregation: T01, T04, T08, and T09.
 
-## Approval Gates and Unresolved Inputs
+## Approval Gates and Reviewed Inputs
 
 | Gate | Required before proceeding | Current state |
 |---|---|---|
-| G0 - design/plan approval | User reviews the specification, this plan, and the task ledger; separately authorizes implementation and chooses its execution method | Open; writing documents is the only authorized work in this task |
-| G1 - numeric contract | Resolve spec R1-R4 and R6-R8; record R9 conventions needed by the implemented reporting/selection behavior | Open; no LR values, numeric seed IDs, batch adoption, schedule, optimizer details, RNG/init binding, or runtime adoption chosen here |
+| G0 - design/plan approval | User approves the specification, this plan, and task ledger as the planning basis for T00 only | PASS; explicit user approval recorded in t00_review.md |
+| G1 - contract freeze and implementation authorization | User reviews/freezes the complete versioned numeric contract/checksum and reconciled plan, explicitly authorizes T01+, and selects the execution method | NOT approved; complete contract submitted for review |
 | G2 - implementation acceptance | T01-T10 pass their relevant CPU/target checks; user reviews readiness and concrete run declarations | Not started |
-| G3 - official execution | Explicit authorization for the reviewed tuning/final configurations and UIT execution | Not granted by this plan |
+| G3a - official tuning | Explicit authorization after G2 for only the four declared UIT/Slurm tuning trials through T11a | Not granted; stop and hand off after LR selection |
+| G3b - final training | Separate explicit review of completed T11a ledger/selected LR and authorization for three final seeds through T11b | Not granted; G3a cannot authorize final seeds |
 | Final test access | Separate final-evaluation specification/authorization after locked checkpoints/protocol | Outside scope |
+
+Target GPU smoke in T10 also requires its own explicit target-work authorization. G1 permits implementation only; G2 does not authorize tuning or final training.
 
 R5 is already FIXED: eight epochs, full validation every epoch, no early stopping, checkpoint tau=1e-6/earlier. Layer-scale no-decay and seed disjointness are also fixed. Do not reopen those choices or add stopping-related numeric requirements.
 
-**T00 is the first execution prerequisite.** If an unresolved choice affects an interface, numerical oracle, or fixture, record the user's decision and update that part of this draft before implementing it. Do not let a task author choose a research value to make the plan runnable. Synthetic test values are local fixtures, never proposals for the official LR grid or seed set.
+**T00 is the first execution prerequisite.** The user has supplied all applicable R1-R4/R6-R9 decisions. The complete contract and reconciled numerical oracles are review artifacts until G1 is explicitly approved. Do not replace reviewed values with defaults. Synthetic oracle values below are local fixtures, not additional official LR candidates or seed IDs.
 
 ## Proposed File Structure
 
@@ -72,7 +75,7 @@ The following files are planned, not created by this documentation task. The pac
 | `tests/e1/conftest.py`, `tests/e1/test_*.py` | E1 behavior tests; fixtures remain synthetic and isolated | T01-T10 |
 | `scripts/slurm/e1_train.sbatch`, `docs/E1/runbook.md` | One declared run/job and reviewed deployment instructions | T10 |
 
-Future reviewed numeric files belong under `configs/training/` with a versioned ID/checksum chosen during G1; actual run artifacts belong under a separate E1 run root, never `runs/pilot/`. Campaign-specific resolved declarations and `selection.json` are execution artifacts, not additional research recipes. Do not create any of these files now.
+T00 creates only `docs/E1/e1_numeric_contract_v1.json` and its checksum as the complete numeric contract for G1 review. Actual run artifacts belong under the reviewed `/datastore/binhvp/BuiTrongTan/CS406/runs/E1`, never `runs/pilot/`. Campaign-specific resolved declarations and `selection.json` are later execution artifacts, not additional research recipes. The implementation files above and run declarations are not created during T00.
 
 Existing `src/pilot/`, pilot tests/scripts, frozen preprocessing/configs, and split artifacts remain unchanged. Adapt only the needed mechanics into E1-owned code and verify them through E1 tests. Direct imports from `src.pilot` must not become an unreviewed official runtime dependency. No new general-purpose abstractions or third-party dependencies are planned.
 
@@ -89,16 +92,30 @@ Use dictionaries for serialized contracts rather than a generic configuration fr
 
 ## Task T00: Review and Freeze the Inputs
 
-**Dependencies:** none. **Files:** review [specs.md](specs.md), [pilot report](../../reports/pilot/pilot_results.md), and this plan; future recipe/checksum files only after user review.
+**Dependencies:** G0 PASS. **Files:** [specs.md](specs.md), [pilot report](../../reports/pilot/pilot_results.md), [T00 review record](t00_review.md), this plan, task ledger, and complete `docs/E1/e1_numeric_contract_v1.{json,sha256}` for G1 review.
 
-- [ ] Obtain G0 review and separate implementation authorization; leave all implementation tasks unchecked until that occurs.
-- [ ] Record exact R1 LR candidates and LR-trial tie/failure rule; exact R2 four distinct numeric seed IDs; R3 batch; R4 schedule details; R6 betas/eps/clipping; R7 initialization/RNG binding; and R8 environment/runtime/allocation adoption.
-- [ ] Record the applicable R9 reporting/std convention and final-evaluation handoff without unlocking test access. R5 requires no new decision.
-- [ ] Review/freeze the complete numeric contract and checksum; do not auto-export a partial recipe or assume the pilot collector accepts a changed official contract.
-- [ ] Reconcile any resulting interface/test-oracle changes in this plan. Synthetic expected LR endpoints must be written from the reviewed formula, not inferred by calling the production scheduler.
+- [x] Record G0 approval for T00 only; implementation remains blocked pending G1.
+- [x] Record exact R1 LR candidates and LR-trial tie/failure rule; exact R2 four distinct numeric seed IDs; R3 batch; R4 schedule details; R6 betas/eps/clipping; R7 initialization/RNG binding; and R8 environment/runtime/allocation adoption.
+- [x] Record R9 reporting/std convention and final-evaluation handoff without unlocking test access. R5 requires no new decision.
+- [x] Prepare and inspect the complete numeric contract/checksum for G1 review; do not auto-export a partial recipe or use the pilot collector as an official contract validator.
+- [x] Reconcile dependent plan/test oracles below using the reviewed formula, without implementation or test execution.
+- [ ] Obtain the user's G1 review/freeze of the exact contract, explicit implementation authorization, and selected execution method. Keep T01+ blocked until this occurs.
 - [ ] Record approval/provenance and commit only the reviewed documents/recipe. A recipe hash identifies content; it is not evidence of user approval by itself.
 
 **Acceptance:** every required official value has an explicit reviewed source; no pilot numeric promotion; G1 is recorded. If it remains incomplete, stop dependent execution and report the unresolved fields rather than choosing them.
+
+### T00 numerical conventions and future test oracles
+
+The JSON contract is the complete numeric authority submitted for G1. These independent expected values specify later T01/T04/T05/T08/T09 tests; no production scheduler, model, or test is run during T00.
+
+- **T01/T02:** exactly four LRs `[2.5e-5,5e-5,1e-4,2e-4]`; tuning seed `1001`; final seeds `[2001,3001,4001]`; reject `3406`/`406` as training IDs. Effective batch 2, microbatch 2, accumulation 1, `drop_last=false`: `ceil(34997/2)=17499` updates/epoch and `17499*8=139992` total updates. The last training microbatch contains one image. Future E1-HR/E2 share the grid/common effective batch under their own gates; E1 microbatch adoption does not implement or launch them.
+- **T02/T03/T06:** use the precise pilot-derived seed encoding documented in the contract, bound to official IDs; initialize the biased 768-to-124 head with isolated CPU `linear_default` RNG. Preserve all required RNG/loader state on boundary resume; epoch indices are 0..7. No Python `hash()` or hard-coded pilot seed.
+- **T04/T09:** rank all 124 logits descending, with ascending label ID for exact ties, without perturbing logits. An all-equal synthetic row ranks IDs `[0,1,2,3,4]` first; target 4 is outside Top-1/3 and inside Top-5. Keep the full-split cross-bucket F1 oracle above unchanged.
+- **T05:** for zero-based update being executed `u`, candidate LR `L`, `W=1000`, `N=139992`, `f=1e-6`, use `L*(0.1+0.9*u/W)` for `u<W`, otherwise `f+(L-f)/2*(1+cos(pi*(u-W)/(N-W-1)))`. Apply the LR before its optimizer update; increment completed updates afterward. Index 0 uses `0.1L`, index 1000 uses `L`, index 139991 uses exactly `1e-6`; reject an attempted update beyond N. Checkpoint selection never changes N.
+- **T05 independent synthetic scheduler oracle:** `L=1`, `W=2`, `N=6`, start factor `0.1`, floor `0.01` yields used-update LRs `[0.1,0.55,1.0,0.7525,0.2575,0.01]`. Compare interior values with numerical tolerance and require the endpoint floor exactly. These fixture values are not official candidates.
+- **T08:** after all four valid complete trials, compute `M=max(selected_checkpoint_f1)` once, retain candidates with `M-score<=1e-6`, then choose the lowest LR. Do not use sequential pairwise ties, NLL, or trial order. Independent oracle: scores `[0.5000000,0.5000006,0.5000012,0.4900000]` in grid order select `5e-5`; the lowest LR is outside the maximum-anchored tolerance. Reversing trial records must not change selection. A candidate unable to supply full-budget valid evidence stops selection for user review; operational interruption may resume the same declared trial without changing its budget or search space.
+- **T09 independent aggregation oracle:** synthetic fractions `[0.1,0.2,0.3]` have arithmetic mean `0.2` and sample std `0.1` (`ddof=1`), displayed as `20.0000% +/- 10.0000%`. Aggregate unrounded per-seed values; machine-readable artifacts retain full precision.
+- **T07/T10:** enforce the contract's package/runtime lock, pre-start `PYTHONHASHSEED=str(official_run_seed)`, 4 CPUs, 16384 MiB RAM, account `uit`, QoS `mig2-35`, `normal`/`gpu:2g.35gb:1`, and `09:00:00` walltime. Record actual driver/device/allocation; no fixed MIG UUID. A material environment change must obtain T10/G2 acceptance under the actual environment before official work proceeds. No target checks are executed in T00.
 
 ## Task T01: Official Configuration and Synthetic Fixtures
 
@@ -161,7 +178,7 @@ Class 0 F1 must be 2/3, including the false positive from class 1.
 Filtering to tail GT rows first would incorrectly produce F1=1.
 ```
 
-- [ ] Assert Top-k ranking still includes unsupported output labels and bucket coverage derives only from unique n_train. Use distinct synthetic scores for ranking tests; record any reviewed ranking/report convention from R9.
+- [ ] Assert Top-k ranking still includes unsupported output labels and bucket coverage derives only from unique n_train. Test both distinct logits and exact ties using the T00 ascending-label-ID oracle; never perturb logits to break ties.
 - [ ] Run `python -m pytest tests/e1/test_metrics.py -q` and inspect the failure.
 - [ ] Implement the metric interface and schema; do not compute Macro-F1 separately per minibatch or recompute bucket F1 from filtered confusion matrices.
 - [ ] Rerun tests, compare fixed metadata bucket counts against the spec, and commit.
@@ -183,7 +200,7 @@ def test_checkpoint_tie_does_not_use_nll():
     assert select_checkpoint(current, selected) is False
 ```
 
-- [ ] After R4 review, write independent expected LR endpoint/update fixtures for the adopted formula. Assert an eight-epoch horizon, unchanged by an earlier selected epoch, and rejection of changed scheduler configuration on restore. These are schedule tests, not an LR search.
+- [ ] Write independent expected LR endpoint/update fixtures from the reviewed T00 formula and synthetic oracle. Assert the full 139992-update eight-epoch horizon, unchanged by an earlier selected epoch, exact final floor, and rejection of changed scheduler configuration on restore. These are schedule tests, not an LR search.
 - [ ] Run `python -m pytest tests/e1/test_engine.py -q`, implement the interfaces, then rerun to pass. Preserve sample weighting, unscaled-gradient checks, explicit numerical failure, and reviewed clipping/runtime behavior; no skipped-update budget extension.
 - [ ] Commit the engine and tests. Evaluation uses model.eval() without augmentation, never advances the optimizer/scheduler, and can return validation prediction rows when explicitly requested.
 
@@ -219,7 +236,7 @@ def test_checkpoint_tie_does_not_use_nll():
 
 - [ ] Test that four reviewed LR values produce exactly four declarations with the same tuning seed and eight-epoch budget. Test that three final declarations use three distinct seeds excluding the tuning seed and only the locked selected LR.
 - [ ] Reject duplicate/extra/missing candidates, incomplete or failed trial sets presented as complete, wrong seed/recipe/checkpoint identity, records marked as synthetic/test fixtures, metric values from a different epoch, and a modified selection file.
-- [ ] Pin the reviewed R1 LR-trial tie rule independently of the earlier-epoch checkpoint tie-break. Do not infer that lower LR, earlier trial, or lower NLL wins an LR tie unless explicitly reviewed.
+- [ ] Pin the reviewed maximum-anchored R1 LR-trial tie rule using the T00 oracle and permuted trial order. Require all four complete valid outcomes; select the lowest LR within 1e-6 of the maximum selected-checkpoint supported F1. If a candidate cannot complete validly, stop for user review; do not drop/replace it or introduce a fifth LR. Record interruptions and same-trial boundary resumes.
 - [ ] Run `python -m pytest tests/e1/test_campaign.py -q`; implement the interfaces and explicit failure/retry ledger without automatic new candidates, batch changes, or job submission; rerun to pass.
 - [ ] Commit. Final training initializes from ImageNet; the selected tuning checkpoint is provenance for LR selection, not a warm-start source.
 
@@ -231,7 +248,7 @@ def test_checkpoint_tie_does_not_use_nll():
 
 - [ ] Test selection of an earlier best.pt while the full run completed eight epochs; every exported metric/prediction must match that checkpoint, not last.pt or the best epoch for another metric.
 - [ ] Test overall/per-class/bucket CSV/JSON, confusion/most-confused pairs, path/label-ID Top-k predictions, unsupported classes, and full learning-curve/history preservation.
-- [ ] Reject aggregation unless there are exactly three complete distinct final seeds, disjoint from tuning, sharing the locked recipe/selection. Test the reviewed std convention with a hand-calculated synthetic oracle; do not replace scores with an ensemble.
+- [ ] Reject aggregation unless final seeds are exactly [2001,3001,4001], disjoint from tuning seed 1001, sharing the locked recipe/selection and complete budgets. Use arithmetic mean/sample std (ddof=1), the T00 hand-calculated oracle, full-precision artifacts, and percentage displays to four decimals; never round before aggregation or replace scores with an ensemble.
 - [ ] Run `python -m pytest tests/e1/test_report.py -q`; implement the interfaces, rerun to pass, and commit. Do not implement or expose a test-split evaluator in this task.
 
 ## Task T10: UIT Readiness and Authorized Smoke
@@ -244,12 +261,18 @@ def test_checkpoint_tie_does_not_use_nll():
 - [ ] After target authorization, verify actual environment/weight/dataset/conformance identity and run a bounded synthetic/train-only smoke for real model loading, full-size forward/backward, finite gradients, memory, and interrupted/resumed behavior. Record the observed results as smoke/acceptance evidence, not an official trial or a P1-v2 study.
 - [ ] Review readiness and concrete run declarations with the user; commit the implementation/runbook and acceptance record through the approved publishing workflow. G2 remains open until target checks are actually evidenced, not merely listed here.
 
-## Task T11: Separately Authorized Official Execution and Handoff
+## Task T11a: Official LR Tuning and Mandatory User Handoff
 
-**Dependencies:** T00-T10, G2 PASS, and G3 authorization. **Files:** execution artifacts under the reviewed E1 run root, campaign ledger/selection, and final E1 validation report; no new architecture or code branch is implied.
+**Dependencies:** T00-T10, G1 PASS, G2 PASS, and explicit G3a authorization. **Files:** tuning artifacts under the reviewed E1 run root and campaign ledger/selection; no new architecture or code branch is implied.
 
 - [ ] Review the four resolved tuning declarations, shared numeric contract, walltime/resume plan, and seed roles before submitting any job. Execute only the four declared LRs with the single tuning seed; retain failures/retries and require full eight-epoch completion before equal-budget selection.
 - [ ] Lock the selected LR using R1 and the selected-checkpoint supported validation Macro-F1, preserving the full four-trial ledger. Freeze the selected configuration without copying tuning model/optimizer state into final runs.
+- [ ] STOP after selection and hand off the complete tuning ledger/selected-LR evidence to the user. Do not launch final seeds; obtain separate G3b review/authorization. Keep test locked.
+
+## Task T11b: Separately Authorized Final Training and Handoff
+
+**Dependencies:** completed T11a handoff, G1 PASS, G2 PASS, and explicit G3b authorization. **Files:** final-seed artifacts and E1 validation report under the reviewed output root.
+
 - [ ] Review and execute the three final declarations under their distinct, disjoint final seeds. Require eight training epochs/eight validations per successful run and unchanged full scheduler horizons on resume.
 - [ ] Generate selected-checkpoint validation analysis and mean/std reports using T09. Preserve per-seed checkpoints and lineage for possible later E3 work; do not create feature caches.
 - [ ] Review results/limitations and archive the artifact inventory. Test remains locked: final test evaluation requires its own later authorization, not automatic continuation of this task.
@@ -260,6 +283,6 @@ During future implementation, use the smallest meaningful red/green check for ea
 
 Do not mark an implementation task complete because this plan names its files or tests. Each task needs its observable acceptance evidence and scoped diff. `tasks.md` tracks the same IDs and gate state; update it only when the corresponding work is genuinely complete.
 
-**Self-review performed for this draft:** spec Sections 3-5 map to T01-T03; Sections 6-8 to T01/T03/T05-T08; Sections 9-10 to T04/T06-T10; pilot-evidence limitations and open decisions to T00/T10; acceptance to the tests above and G2. Eight-epoch execution, fixed checkpoint ties, layer-scale no-decay, seed disjointness, test isolation, and full-budget resume have explicit checks. Numeric schedule/RNG/reporting oracles are conditional on the user's unresolved decisions, never agent-invented defaults.
+**T00 self-review:** spec Sections 3-5 map to T01-T03; Sections 6-8 to T01/T03/T05-T08; Sections 9-10 to T04/T06-T10; pilot-evidence limits and runtime acceptance to T00/T10; acceptance to future tests and G2. The complete contract records the user's R1-R4/R6-R9 decisions. Schedule, seed, ranking, trial-selection, and std oracles are reconciled above; T11a/T11b retain separate gates. All implementation checks remain unexecuted.
 
-The next step is user review of [specs.md](specs.md), this plan, and [tasks.md](tasks.md), followed by selection of an execution method and separate authorization if implementation is desired. No task below the approval gates runs automatically.
+The next step is separate G1 review/freeze of the complete contract/checksum and planning diff, explicit implementation authorization, and selection of the execution method. G0 and input decisions do not satisfy G1. No task below the approval gates runs automatically.

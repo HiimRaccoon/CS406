@@ -7,7 +7,10 @@ artifacts/baseline124/class_support.csv -text
 # Keep versioned specification and checksum bytes stable across platforms.
 configs/preprocessing/*.json text eol=lf
 configs/preprocessing/*.sha256 text eol=lf
+docs/E1/*.json text eol=lf
+docs/E1/*.sha256 text eol=lf
 docs/*.md text eol=lf
+docs/E1/*.md text eol=lf
 reports/preprocessing_qa_v1/*.json text eol=lf
 src/**/*.py text eol=lf
 tests/*.py text eol=lf
