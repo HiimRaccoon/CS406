@@ -119,9 +119,9 @@ Dependencies define execution order; they do not request parallel agents or auth
 
 ### T09 - Reports
 
-- [ ] Write failing `tests/e1/test_report.py` tests for selected-checkpoint lineage, validation exports, and the reviewed three-seed std convention.
-- [ ] Implement `src/e1/report.py` using the shared E1 metrics/evaluation interface; reject incomplete, overlapping, or inconsistent final-seed records.
-- [ ] Pass report checks and commit; no test-split evaluator or E3 caching is added.
+- [x] Write failing `tests/e1/test_report.py` tests for selected-checkpoint lineage, validation exports, and the reviewed three-seed std convention.
+- [x] Implement `src/e1/report.py` using the shared E1 metrics/evaluation interface; reject incomplete, overlapping, or inconsistent final-seed records.
+- [x] Pass report checks and commit; no test-split evaluator or E3 caching is added.
 
 ### T10 - UIT Deployment and Acceptance
 

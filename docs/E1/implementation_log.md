@@ -34,3 +34,5 @@ Ruling: private setup edges in CPU integration fixtures provide tiny counts and 
 T07: complete. RED: new task tests failed before implementation (see local .tools/e1-t07-red.log). GREEN: 38 passed through T07; synthetic eight-epoch/flat/decreasing/replay/lock checks; expected CPU pin-memory warning. Task commit follows on e1-implementation; no GPU work.
 
 T08: complete. RED: new task tests failed before implementation (see local .tools/e1-t08-red.log). GREEN: 8 passed; tests/e1/test_campaign.py; no automatic job launch. Task commit follows on e1-implementation; no GPU work.
+
+T09: complete. RED: new task tests failed before implementation (see local .tools/e1-t09-red.log). GREEN: 3 passed; tests/e1/test_report.py; selected-checkpoint exports and sample-std aggregation. Task commit follows on e1-implementation; no GPU work.
