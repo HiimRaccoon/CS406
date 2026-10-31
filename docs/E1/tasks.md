@@ -107,9 +107,9 @@ Dependencies define execution order; they do not request parallel agents or auth
 
 ### T07 - Single-Run Execution
 
-- [ ] Write failing `tests/e1/test_train.py` integration tests proving eight epochs/eight validations even with flat or decreasing validation F1.
-- [ ] Implement `src/e1/train.py` with explicit preflight/runtime records, single-writer locking, operational interruption, and atomic checkpoint/history handling.
-- [ ] Pass the E1 CPU suite, verify no production bypass flags or test-image path, and commit.
+- [x] Write failing `tests/e1/test_train.py` integration tests proving eight epochs/eight validations even with flat or decreasing validation F1.
+- [x] Implement `src/e1/train.py` with explicit preflight/runtime records, single-writer locking, operational interruption, and atomic checkpoint/history handling.
+- [x] Pass the E1 CPU suite, verify no production bypass flags or test-image path, and commit.
 
 ### T08 - Tuning and Final Declarations
 

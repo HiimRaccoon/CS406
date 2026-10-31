@@ -26,3 +26,9 @@ T04: complete. RED: new task tests failed before implementation (see local .tool
 T05: complete. RED: new task tests failed before implementation (see local .tools/e1-t05-red.log). GREEN: 4 passed; tests/e1/test_engine.py. Task commit follows on e1-implementation; no GPU work.
 
 T06: complete. RED: new task tests failed before implementation (see local .tools/e1-t06-red.log). GREEN: 2 passed; tests/e1/test_checkpoint.py; fsync Windows writable-handle correction and valid atomic-failure fixture. Task commit follows on e1-implementation; no GPU work.
+
+Ruling: last.pt carries a CPU snapshot of selected weights; best.pt is reporting-only and rebuilt from that snapshot after resume ? repairs crashes between atomic replacements without rolling back optimizer budget ? cost if wrong: an extra model-weight copy in last.pt; CPU interruption equivalence covers scientific state.
+
+Ruling: private setup edges in CPU integration fixtures provide tiny counts and a synthetic identity, with no production bypass option ? exercises the real eight-epoch runner/checkpoints/engine while campaign validation rejects such evidence ? cost if wrong: target CUDA acceptance remains necessary at T10.
+
+T07: complete. RED: new task tests failed before implementation (see local .tools/e1-t07-red.log). GREEN: 38 passed through T07; synthetic eight-epoch/flat/decreasing/replay/lock checks; expected CPU pin-memory warning. Task commit follows on e1-implementation; no GPU work.
