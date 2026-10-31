@@ -1,357 +1,428 @@
-# E1 — ConvNeXt-Tiny full-image baseline specification
+# E1 - ConvNeXt-Tiny Full-Image Baseline Specification
 
-**DRAFT FOR USER REVIEW — chưa frozen, chưa authorize implementation hoặc official runs.**
+**DRAFT FOR USER REVIEW - not frozen; does not authorize implementation or official runs.**
 
-Ngày soạn: **2026-10-31**, đối chiếu repo tới commit **`d055f5c5abe2915ad5329e7bc5c7d5edcc1b9ce9`**. Tài liệu định nghĩa E1 sau khi UIT pilot đã hoàn tất. Phạm vi task hiện tại chỉ viết spec; không tạo training code, runnable config, training recipe hoặc job. Các mục **NEEDS REVIEW** là điều kiện phải giải quyết trước official runs, không phải chỗ để implementation tự chọn defaults.
+Revision date: **2026-10-31**. This document completely replaces the previous E1 draft at repository commit **`7f7c37782a49a804c88ffd07d5334ac6ee2115a5`**. It incorporates the user's reviewed E1 decisions: a fixed eight-epoch training budget with early stopping disabled, explicit no-decay ConvNeXt layer-scale parameters, and disjoint tuning/final training seeds. Other unresolved official values remain **NEEDS REVIEW**; an implementation must not supply them through defaults.
 
-## 1. Mục đích, nguồn chuẩn và giới hạn
+This is a specification revision only. It creates no implementation code, runnable configuration, training recipe, Slurm job, or experiment. The rest of the repository remains unchanged.
 
-E1 là baseline **country/territory classification 124 labels**, dùng một full-image view **896×384**, làm reference cho E1-HR/E2 và representation nguồn cho E3 về sau. Mục tiêu là benchmark classification performance trên **exact fixed split hiện có**, phân tích overall accuracy và long-tail recognition; không đặt một single winner metric giữa các phương pháp.
+## 1. Purpose, Source Authority, and Scope
 
-Nguồn được dùng theo vai trò:
+E1 is the **124-label country/territory classification baseline**, using one full-image view at **896 x 384**. It provides the reference for E1-HR/E2 and, later, an E1 representation source for E3. Its research objective is to benchmark classification performance on the **existing exact fixed split** and analyze overall-accuracy versus long-tail-recognition trade-offs. There is no single winner metric for comparing methods.
 
-| Nguồn | Thẩm quyền trong E1 |
+Sources have distinct roles:
+
+| Source | Authority for E1 |
 |---|---|
-| [Master spec](../master_spec.md), [Grillme](../grillme.md) | Các quyết định research/architecture đã thống nhất; master vẫn draft |
-| [Frozen preprocessing config](../../configs/preprocessing/geoguessr_v1.json), [preprocessing spec](../preprocessing_v1.md) | Contract deterministic preprocessing v1; không sửa để phù hợp implementation |
-| [Split provenance](../../artifacts/baseline124/provenance.json) và bốn fixed artifacts | Exact membership, label IDs, counts và fingerprints |
-| [Pilot plan](../pilot_plan.md), [post-execution review](../pilot_config_review.md), [pilot report](../../reports/pilot/pilot_results.md) | Trạng thái pilot đã hoàn tất, các quyết định sau pilot và phần official còn mở |
-| [Server runbook](../server_pilot_runbook.md), archived configs/history, `src/pilot/` | Bằng chứng runtime và reference implementation; không tự trở thành official E1 framework |
+| [Master specification](../master_spec.md), [design review record](../grillme.md) | Established research and architecture decisions; the master specification remains a draft |
+| [Frozen preprocessing configuration](../../configs/preprocessing/geoguessr_v1.json), [preprocessing specification](../preprocessing_v1.md) | The deterministic preprocessing v1 contract; implementation convenience cannot change it |
+| [Split provenance](../../artifacts/baseline124/provenance.json) and the four fixed artifacts | Exact split membership, label IDs, counts, and fingerprints |
+| [Pilot plan](../pilot_plan.md), [post-execution configuration review](../pilot_config_review.md), [pilot report](../../reports/pilot/pilot_results.md) | Completed pilot gates, recorded measurements, and unresolved official-training adoption decisions |
+| [Server runbook](../server_pilot_runbook.md), archived pilot configurations/history, and `src/pilot/` | Execution evidence and reference mechanics; not an automatically approved official E1 framework |
 
-Các câu trong Grillme/preprocessing/runbook còn ghi “pilot deferred”, “chưa chạy UIT” hoặc “E1-HR chưa chốt” được hiểu theo thời điểm tài liệu lịch sử. Trạng thái post-execution mới hơn là conformance PASS, strict P0 PASS, bounded P1 COMPLETE; không yêu cầu P1-v2. Frozen preprocessing v1 không thay đổi vì cập nhật trạng thái này.
+**Precedence for this revision:** the user's three newly reviewed E1 decisions override older statements in the referenced documents that permit performance-based stopping, leave layer-scale decay undecided, or leave tuning/final seed overlap undecided. Those historical documents are not modified by this task. All other fixed research, dataset, and preprocessing decisions remain in force.
 
-**Ngoài scope E1:** local views/fusion, E1-HR training, cRT/head retraining/cache, class balancing, LLRD, pretrained comparison, strong augmentation, geometry search, test-driven tuning và robustness/unseen-location study. Viết spec này không mở thêm experiment hoặc ablation.
+Historical statements that the pilot was deferred, UIT execution had not occurred, or the E1-HR resolution was undecided describe earlier preparation stages. Current post-execution evidence records target conformance PASS, strict P0 PASS, and bounded P1 COMPLETE. No P1-v2 is required. Updating execution status does not change frozen preprocessing v1 or turn diagnostic pilot scores into official results.
 
-## 2. Trạng thái các quyết định
+**Outside E1 scope:** local views or fusion, E1-HR training, cRT/head retraining/feature caching, class balancing, LLRD, pretrained-checkpoint comparisons, strong augmentation, geometry searches, test-driven tuning, and robustness/unseen-location studies. This specification adds no experiment or ablation branch.
 
-| Thành phần | Trạng thái |
+## 2. Decision Status
+
+| Component | Status |
 |---|---|
-| Exact split, 124-label mapping, preprocessing v1 | FROZEN tại các nguồn chuẩn |
-| E1 architecture, pretrained starting point, natural CE, max drop-path 0.1, decay 0.05, head LR multiplier 1 | Đã thống nhất; ghi lại trong bản spec chờ review |
-| Brightness/contrast amplitudes 0.10/0.10 | REVIEWED / ACCEPTED từ train-only preview; P1 đã dùng |
-| Official max_epochs | **8**, đã được user review/freeze sau pilot; là trần budget chung E1/E1-HR/E2 |
-| LR tuning và seeds protocol | **4 LR × 1 tuning seed**, rồi selected LR × **3 final training seeds** |
-| Exact four-LR values và numeric official seed IDs | **NEEDS REVIEW**, chưa được chọn |
-| Official batch, runtime, init, optimizer details, scheduler và stopping details | **NEEDS REVIEW** theo bảng mục 12; pilot cung cấp reference, không tự promote |
-| Master/spec approval, official implementation, smoke, tuning, final runs, test evaluation | Chưa hoàn thành |
+| Exact split, 124-label mapping, preprocessing v1 | FROZEN at their authoritative sources |
+| E1 architecture, pretrained starting point, natural unweighted CE, maximum stochastic depth 0.1, head LR multiplier 1 | Established design decisions, documented in this draft for review |
+| Optimizer decay groups | FIXED: decay 0.05 for Conv/Linear weights; zero decay for biases, LayerNorm parameters, and ConvNeXt layer-scale parameters |
+| Brightness/contrast amplitudes 0.10/0.10 | REVIEWED / ACCEPTED through train-only visual review; used in P1 |
+| Official training budget | FIXED: `max_epochs = 8`, full validation after every completed epoch, `early_stopping = OFF`; successful tuning and final runs complete all eight epochs |
+| Checkpoint selection | FIXED: supported validation Macro-F1 over epochs 1-8, `tau = 1e-6`, tie-break `earlier`; independent of training termination |
+| LR tuning/final protocol | Four LR candidates with one tuning seed, then the selected LR with three final training seeds |
+| Seed-set relationship | FIXED: one tuning seed and three distinct final seeds; all four IDs are distinct, and the tuning seed is excluded from the final set |
+| Exact four-LR values and exact numeric training seed IDs | NEEDS REVIEW; no values are selected in this revision |
+| Official batch, runtime, initialization/RNG binding, AdamW betas/eps, clipping, and warmup/cosine details | NEEDS REVIEW as listed in Section 12; pilot values are references, not implicit official defaults |
+| Specification approval, official implementation, smoke, tuning, final runs, and test evaluation | Not completed by this document |
 
-## 3. Dataset, labels và quyền truy cập split
+## 3. Dataset, Labels, and Split Access
 
-Reuse nguyên byte `artifacts/baseline124/{manifest.csv,summary.json,labels.json,class_support.csv}`. Nguồn cũ: `HiimRaccoon/cs406-geoguessr`, commit **`33cb29d72974f1677efab0f56ed92360e5a9f712`**. Không regenerate membership từ seed **406**, re-stratify, re-dedup để đổi split hoặc sort lại label mapping.
+Reuse `artifacts/baseline124/{manifest.csv,summary.json,labels.json,class_support.csv}` byte for byte. Their original repository is `HiimRaccoon/cs406-geoguessr`, source commit **`33cb29d72974f1677efab0f56ed92360e5a9f712`**. Do not regenerate membership from split seed **406**, re-stratify, deduplicate again to alter membership, or reorder the label mapping.
 
-| Split | Unique images | GT-supported labels | Quyền trong E1 development/tuning |
+| Split | Unique images | GT-supported labels | Access during E1 development and tuning |
 |---|---:|---:|---|
-| train | 34997 | 124 | Training; natural sampling; train-only diagnostic samples |
-| val | 7497 | 106 | Full deterministic validation; checkpoint/LR selection |
-| test | 7502 | 111 | Chỉ metadata; ảnh khóa đến final evaluation được authorize riêng |
-| Tổng | 49996 | 124 outputs | Exact fixed membership |
+| train | 34997 | 124 | Training under natural sampling; train-only diagnostic samples |
+| val | 7497 | 106 | Full deterministic validation; checkpoint and LR selection |
+| test | 7502 | 111 | Metadata only; image access remains locked until separately authorized final evaluation |
+| Total | 49996 | 124 outputs | Exact fixed membership |
 
-Dataset raw có 49997 ảnh, đã loại **1 byte duplicate**; grouping cũ chỉ dựa SHA-256. Không claim geographic independence hoặc panorama-disjoint split. Không lọc extreme-tail khỏi training/evaluation. E1 luôn giữ đủ **124 logits**, kể cả các lớp không có GT trong validation/test.
+The raw dataset contains 49997 images; **one byte duplicate** was removed. Original grouping was based only on SHA-256. Geographic independence and panorama-disjoint membership are not established. Do not remove extreme-tail classes from training or evaluation. E1 always produces **124 logits**, including labels without ground-truth support in the validation or test split.
 
-`labels.json` là list: **index chính là label_id**, từ 0 đến 123. Ví dụ kiểm tra mapping: `0=Aland`, `120=United States`, `123=Vietnam`; không chuẩn hóa lại tên country/territory. Runtime data root chứa trực tiếp các label folders; relative paths trong manifest giữ nguyên. `data_root_at_preparation` trong summary là lịch sử, không phải path bắt buộc trên UIT.
+`labels.json` is an ordered list: its **index is the label ID**, from 0 through 123. Mapping checks include `0=Aland`, `120=United States`, and `123=Vietnam`. Preserve the country/territory names exactly. The runtime data root directly contains the label folders; manifest-relative paths remain unchanged. The summary's `data_root_at_preparation` records a historical path, not a required UIT runtime location.
 
-Trước model allocation phải kiểm:
+Before allocating the model, verify:
 
-- SHA-256/bytes của bốn artifacts với provenance và frozen config; summary fingerprints, split counts, class coverage, từng `label_id ↔ label`, class support và unique paths/image hashes phải nhất quán.
-- Dataset root resolve đúng manifest; chặn path traversal, file thiếu/corrupt, sai decoded layout hoặc label. Báo lỗi và ghi failure; không bỏ/replacement mẫu im lặng.
-- Có valid target conformance/hash-audit record cho đúng dataset root và packages; audit đủ **34997 train + 7497 val**, không đọc test bytes. Dataset immutable sau audit; audit lại khi root/content thay đổi, không hash toàn bộ mỗi epoch.
-- Train/validation loader từ chối `split=test` trước khi mở file. Đọc test membership/counts từ artifacts không cấp phép mở ảnh. Final test evaluator thuộc bước sau có authorization riêng.
+- The four artifacts' full SHA-256 digests and byte counts against provenance and the frozen configuration. Summary fingerprints, split counts, class coverage, label IDs/names, class support, unique paths, and unique image hashes must agree.
+- Dataset-root resolution and path containment. Missing/corrupt files, invalid decoded layouts, or label mismatches must produce a recorded failure; never silently skip or replace a sample.
+- A valid target conformance/hash-audit record for the actual dataset root and package environment, covering **34997 train plus 7497 validation images** without reading test bytes. Keep the dataset immutable after the audit; repeat the audit when root/content changes, not every epoch.
+- Train and validation loaders reject `split=test` before opening a file. Reading test counts or membership from metadata does not authorize opening test images. A final test evaluator belongs to a later, separately authorized phase.
 
-Full hashes không duplicate ở đây: dùng [provenance](../../artifacts/baseline124/provenance.json) và `source_split.sha256` trong frozen config làm nguồn kiểm chứng.
+The full artifact hashes are maintained in [provenance](../../artifacts/baseline124/provenance.json) and `source_split.sha256` in the frozen preprocessing configuration, rather than duplicated as a second independent hash table here.
 
-## 4. Input và preprocessing E1
+Split seed **406** controls the already-fixed dataset membership and is unrelated to training-seed selection. It must not be used as an implicit training-seed default or as a reason to create new membership.
 
-Preprocessing ID **`geoguessr-ui-global-local-v1`**, config SHA-256:
+## 4. E1 Input and Preprocessing
+
+Preprocessing ID: **`geoguessr-ui-global-local-v1`**. Configuration SHA-256:
 
 `4f49dd41738168cfc65d4322fbe1b659ef5595229bb487ad86dd671a26a8903f`
 
-E1 chỉ lấy **global view** từ [reusable preprocessing](../../src/preprocessing/geoguessr_v1.py). Không tạo local views, không dùng PNG preview làm input, không dùng `weights.transforms()`, center-crop 224, resize kéo giãn hoặc backend thay thế.
+E1 uses only the **global view** from the [reusable preprocessing module](../../src/preprocessing/geoguessr_v1.py). It does not construct local views or use preview PNGs as model inputs. Do not use `weights.transforms()`, a 224-pixel center crop, aspect-ratio distortion, or an alternative resize backend.
 
-Trình tự cho một ảnh:
+The per-image sequence is:
 
-1. Pillow decode RGB, không EXIF transpose; nhận đúng layout decoded `1536×662` hoặc `1030×703`.
-2. `pil_to_tensor` → CPU RGB CHW **float32 [0,1]**; không intermediate uint8 requantization hoặc preprocessing AMP.
-3. Bỏ footer **14 px**. Tạo valid-scene mask từ UI rectangles trong frozen config; giữ nguyên navigation arrows theo ngoại lệ đã review.
-4. Train: áp dụng một draw brightness/contrast trên valid scene, brightness trước contrast. Exclude UI khỏi statistics; fill UI **sau** jitter bằng exact mean. Val/final test: không jitter.
-5. Preserve-aspect-ratio letterbox về **WH=[896,384]**, tensor bilinear CPU float32, `antialias=True`; half-up rounding `floor(value+0.5)`, centered placement, remainder right/bottom.
-6. Normalize sau resize/padding bằng ImageNet mean **[0.485,0.456,0.406]**, std **[0.229,0.224,0.225]**, `inplace=False`.
+1. Decode RGB using Pillow without EXIF transposition. Accept only decoded raw layouts `1536 x 662` and `1030 x 703`.
+2. Convert through `pil_to_tensor` to CPU RGB CHW **float32 in [0,1]**. No intermediate uint8 requantization or preprocessing AMP is allowed.
+3. Remove the bottom **14-pixel** footer. Construct the valid-scene mask from the frozen UI rectangles. Intentionally retain navigation arrows under the reviewed exception.
+4. During training, apply one brightness/contrast draw to valid scene pixels, with brightness before contrast. Exclude UI pixels from photometric statistics and fill UI **after** jitter with the exact mean. Validation and final test preprocessing have no jitter.
+5. Preserve aspect ratio and letterbox to **WH=[896,384]**, using CPU float32 tensor bilinear resize with `antialias=True`. Use half-up rounding `floor(value+0.5)`, centered placement, and any extra padding pixel on the right/bottom.
+6. Normalize after resize/padding using ImageNet mean **[0.485,0.456,0.406]** and standard deviation **[0.229,0.224,0.225]**, with `inplace=False`.
 
-UI fill và letterbox fill là exact mean trên float32, không làm tròn thành màu uint8; không hard-remask biên sau resize. Pixel nội thất mask/padding gần zero sau normalize; antialias có thể trộn scene ở biên.
+UI and letterbox fills use the exact float32 mean, never a rounded uint8 color. Do not reapply a hard mask after resize. Constant mask interiors and padding are approximately zero after normalization; antialiasing may blend scene content at boundaries.
 
-| Layout raw | Frame sau footer | Resized content | Padding L/T/R/B | Output CHW |
+| Raw layout | Frame after footer removal | Resized content | Padding L/T/R/B | Output CHW |
 |---|---|---|---|---|
-| 1536×662 | 1536×648 | 896×378 | 0/3/0/3 | [3,384,896] |
-| 1030×703 | 1030×689 | 574×384 | 161/0/161/0 | [3,384,896] |
+| 1536 x 662 | 1536 x 648 | 896 x 378 | 0/3/0/3 | [3,384,896] |
+| 1030 x 703 | 1030 x 689 | 574 x 384 | 161/0/161/0 | [3,384,896] |
 
-Mask coordinates/công thức photometric lấy đúng frozen config, không tạo một bản tọa độ độc lập trong E1. Navigation arrows và một số watermark được giữ có chủ ý; không claim loại sạch mọi UI.
+Use the frozen configuration for mask coordinates and photometric formulas; E1 must not introduce a separately maintained coordinate table. Navigation arrows and some watermarks intentionally remain. Do not describe preprocessing as removing every UI overlay.
 
 ### Augmentation
 
-Train brightness và contrast có amplitude **0.10**, tương ứng mỗi factor trong **[0.90,1.10]**; hai factors được sample cho mỗi original image. Đề xuất giữ hai independent uniform draws của pilot, thuộc RNG adoption R7 trước official runs. Dùng công thức valid-scene brightness/contrast đã freeze, không thay bằng `ColorJitter` mặc định có order/statistics khác. Val/test deterministic, không TTA. Không flip, random crop, RandAugment, Random Erasing, Mixup/CutMix hoặc label smoothing trong main E1.
+Training brightness and contrast amplitudes are **0.10/0.10**, placing each factor in **[0.90,1.10]**. Sample factors per original image. Retaining the pilot's two independent uniform draws is proposed for official adoption under R7; the official RNG binding remains subject to review. Use the frozen valid-scene brightness/contrast formulas, not an implicit `ColorJitter` implementation with different ordering or statistics.
 
-Đề xuất tái dùng RNG key `(training_seed, epoch, relative_path, "jitter")` và epoch-order seeding của pilot để jitter không phụ thuộc persistent-worker scheduling; **official RNG policy cần review tại mục 12**. Không dùng Python hash không ổn định để derive sample seeds.
+Validation/test preprocessing is deterministic, without test-time augmentation. The main E1 recipe excludes flips, random crops, RandAugment, Random Erasing, Mixup/CutMix, and label smoothing.
 
-## 5. Model contract
+Reusing the pilot RNG key `(training_seed, epoch, relative_path, "jitter")` and epoch-order seeding is proposed so that jitter does not depend on persistent-worker scheduling. **Official RNG adoption remains NEEDS REVIEW in Section 12.** Do not derive sample seeds from Python's process-dependent built-in hash.
+
+## 5. Model Contract
 
 ```mermaid
 flowchart LR
     A[Raw RGB screenshot] --> B[Frozen UI preprocessing + E1 global 896 x 384]
     B --> C[ConvNeXt-Tiny features]
     C --> D[Global average pooling + pretrained final LayerNorm]
-    D --> E[Flatten: 768-d representation]
+    D --> E[Flatten: 768-dimensional representation]
     E --> F[New Linear 768 to 124, with bias]
     F --> G[124 raw logits]
 ```
 
 | Boundary | Contract |
 |---|---|
-| Model input | Batched floating tensor [N,3,384,896]; một view/original image |
-| Feature extractor | ConvNeXt-Tiny pretrained features, không thay block/depth/channel design |
-| Representation | Giữ pretrained global average pooling và final LayerNorm; flatten thành [N,768] |
-| Classifier | Linear(768,124), bias=True; mới khởi tạo, không giữ ImageNet 1000-class linear head |
-| Forward output | [N,124] raw logits; không softmax trước CE |
-| Trainable | Toàn bộ representation + new classifier từ epoch 1 |
-| Stochastic depth | Explicit max **0.1**, cùng TorchVision block-index linear schedule 0→0.1 đã chọn; không tuning schedule/rate riêng |
-| Evaluation mode | Tắt stochastic depth và train-time randomness trước validation/final inference |
+| Model input | Batched floating tensor [N,3,384,896]; one view per original image |
+| Feature extractor | Pretrained ConvNeXt-Tiny features; no block/depth/channel redesign |
+| Representation | Retain pretrained global average pooling and final LayerNorm, then flatten to [N,768] |
+| Classifier | New Linear(768,124), bias=True; do not retain the ImageNet 1000-class linear head |
+| Forward output | [N,124] raw logits; do not apply softmax before CE |
+| Trainable parameters | The entire representation and new classifier from epoch 1 |
+| Stochastic depth | Explicit maximum **0.1**, using the selected TorchVision block-index linear schedule from 0 to 0.1; no separate rate/schedule tuning |
+| Evaluation mode | Disable stochastic depth and training randomness for validation/final inference |
 
-Starting point: **`torchvision.models.ConvNeXt_Tiny_Weights.IMAGENET1K_V1`**, filename **`convnext_tiny-983f1562.pth`**, full reviewed SHA-256:
+The common starting point is **`torchvision.models.ConvNeXt_Tiny_Weights.IMAGENET1K_V1`**, filename **`convnext_tiny-983f1562.pth`**, with the reviewed full SHA-256:
 
 `983f1562536e84ff750a1576fb08e54de751dbf2e17c0d8a4a13704341fdcd3d`
 
-Kiểm exact filename, existence và full digest trước load; không chỉ prefix `983f1562`, không default alias, không tự download checkpoint khác khi thiếu file. Strict-load pretrained state, giữ pretrained representation/final LayerNorm, chỉ thay classification linear head. Mỗi tuning/final run khởi tạo độc lập từ cùng file, optimizer/scheduler mới; không warm-start từ P0/P1, trial LR khác hoặc checkpoint GeoGuessr cũ.
+Check the exact filename, file existence, and full digest before loading. The `983f1562` prefix or a default weight alias is not sufficient. Do not download a different checkpoint when the file is unavailable. Strict-load the pretrained state, preserve the pretrained representation/final LayerNorm, and replace only the classification linear head.
 
-New-head initialization phải explicit, deterministic và log exact rule/framework/seed. Pilot đã dùng `linear_default`: kaiming_uniform_(a=sqrt(5)), bias U(-1/sqrt(768),+1/sqrt(768)), isolated CPU RNG rồi restore outer RNG. **Đề xuất giữ rule này; adoption và seed binding chưa được freeze cho official E1.** Không hard-code pilot init seed 3406.
+Every tuning trial and final run starts independently from the same ImageNet file with fresh optimizer and scheduler state. Do not warm-start from P0/P1, another LR trial, or an older GeoGuessr checkpoint.
 
-## 6. Loss và optimization invariants
+New-head initialization must be explicit, deterministic, and recorded with its exact rule, framework version, and seed behavior. The pilot used `linear_default`: `kaiming_uniform_(a=sqrt(5))`, bias `U(-1/sqrt(768),+1/sqrt(768))`, and an isolated CPU RNG whose outer state is restored. **Keeping this rule is proposed; official adoption and seed binding remain NEEDS REVIEW.** Do not hard-code the pilot initialization seed 3406.
 
-- **Standard unweighted CE** trên natural training distribution, `label_smoothing=0`; không class weighting, `sqrt_inverse`, oversampling hoặc balanced sampler. Long-tail treatment chủ động cô lập sang E3.
-- Mỗi completed training epoch duyệt đủ **34997 unique train images một lần**, shuffle theo training seed/epoch, không replacement; giữ tail batch (`drop_last=False`). Validation đủ 7497 ảnh, không shuffle/augmentation.
-- **AdamW**; fixed weight decay **0.05** cho trainable Conv/Linear weights, không decay bias hoặc LayerNorm. Explicit optimizer groups phải bao phủ mỗi trainable parameter đúng một lần. Pilot cũng không decay ConvNeXt `layer_scale`; official enumeration/adoption phải được review, không bỏ hoặc nhóm trùng parameter do tên module khác.
-- `LR_head = LR_backbone`, multiplier **1**, không LLRD, không freeze-head-first phase. Chỉ tuning một base LR mỗi architecture; mọi parameter group dùng cùng scheduler trajectory.
-- **LR warmup rồi cosine decay**, schedule theo optimizer updates. AdamW betas/eps, clipping/numerics và scheduler numeric values không lấy library defaults hoặc copy pilot im lặng; xem mục 12.
+## 6. Loss and Optimization Invariants
 
-Train CE và validation NLL là sample mean, không average không trọng số các batch means. Mọi nonfinite loss/logits/gradient hoặc OOM phải fail/report; không silently skip update, bỏ batch hoặc đổi microbatch/resolution/LR để vẫn trả một success run.
+- Use **standard unweighted CE** on the natural training distribution, with `label_smoothing=0`. Do not use class weighting, `sqrt_inverse`, oversampling, or balanced sampling. Long-tail treatment is intentionally isolated to E3.
+- Every completed training epoch visits all **34997 unique train images exactly once**, shuffled by the reviewed training-seed/epoch policy, without replacement. Retain the tail batch with `drop_last=False`. Validation covers all 7497 images without shuffle or augmentation.
+- Use **AdamW** with the fixed decay groups below. Every trainable parameter must belong to exactly one explicitly enumerated optimizer group.
+- Use `LR_head = LR_backbone`, multiplier **1**, with no LLRD and no classifier-only warmup phase. Tune only one base LR per architecture; all parameter groups share its scheduler trajectory.
+- Use **LR warmup followed by cosine decay**, scheduled by optimizer updates. AdamW betas/eps, clipping/numerics, and the unresolved warmup/cosine details must not come from unreviewed library defaults or silent pilot copying.
 
-### Batch và optimizer-update accounting
+### Fixed weight-decay groups
 
-Với single GPU, microbatch `m`, accumulation `a`, nominal effective batch **B=m×a original images**. Loss của một accumulation group có `D` actual images là tổng CE trên group chia **D**, kể cả tail microbatch/group. Chỉ optimizer-step/scheduler-step sau khi group hoàn tất; validation không advance scheduler.
+| Parameter category | Weight decay | Status |
+|---|---:|---|
+| Trainable Conv weights | 0.05 | FIXED |
+| Trainable Linear weights, including the new classifier weight | 0.05 | FIXED |
+| Biases | 0.0 | FIXED |
+| LayerNorm parameters | 0.0 | FIXED |
+| ConvNeXt layer-scale parameters | 0.0 | FIXED |
 
-Với natural epoch, giữ tail:
+ConvNeXt layer-scale parameters remain trainable under full fine-tuning but **always belong to the no-decay group**. This is an E1 optimization invariant, not a tunable option or unresolved adoption decision. Record the actual parameter-name enumeration and verify that no parameter is duplicated or omitted when module names differ from the pilot implementation. Any unexpected parameter category must be reported rather than assigned through an implicit fallback policy.
+
+Training CE and validation NLL are sample means, not unweighted averages of batch means. Nonfinite loss/logits/gradients or OOM must fail and be reported; never silently skip an update, omit a batch, or change microbatch/resolution/LR while reporting the same run as successful.
+
+### Batch and optimizer-update accounting
+
+For one GPU, microbatch `m` and accumulation `a` give nominal effective batch **B=m*a original images**. An accumulation group with `D` actual images uses summed CE divided by **D**, including short tail microbatches/groups. Perform optimizer/scheduler steps only after the group is complete. Validation does not advance the scheduler.
+
+For a natural epoch with retained tails:
 
 ```text
 microbatches_per_epoch = ceil(34997 / m)
 updates_per_epoch = ceil(microbatches_per_epoch / a)
-planned_max_updates = updates_per_epoch * 8
+planned_total_updates = updates_per_epoch * 8
 ```
 
-**Pilot** đã dùng `m=2,a=1,B=2`. **Nếu** official review giữ nguyên thì 17499 updates/epoch và tối đa **139992** completed updates cho 8 epochs; đây là phép tính có điều kiện, **chưa freeze official batch**. Không dùng horizon P1 **52497** updates cho official 8 epochs. Future E1-HR/E2 phải giữ common effective batch và budget đã review; không tự ưu tiên E1 bằng batch/horizon/tuning budget khác.
+The **pilot** used `m=2,a=1,B=2`. **If** official review adopts that batch, the count is 17499 updates per epoch and **139992** updates for a successful eight-epoch run. This is a conditional calculation, **not a newly frozen official batch**. The P1 horizon of **52497** updates must not be reused as an official eight-epoch horizon.
 
-## 7. Official run protocol
+Future E1-HR/E2 comparisons must retain the reviewed common effective batch, LR-trial budget, and compatible training protocol through their own specifications. This E1 revision does not implement those methods or authorize silently changing their settings.
 
-### 7.1 Preflight và smoke
+## 7. Official Run Protocol
 
-Trước official execution: spec được review, numeric contract được freeze/version/hash, dataset/preprocessing/pretrained/environment được verify, implementation/smoke được review riêng. Smoke dùng synthetic inputs hoặc train-only samples để kiểm wiring/numerics/resume; không test access, không tính smoke thành final seed hoặc trial thắng.
+### 7.1 Preflight and smoke
 
-Pilot hoàn tất không yêu cầu chạy P1-v2. Nếu implementation/environment khác làm cần acceptance check thì chỉ kiểm đúng phần thay đổi và ghi bằng chứng; không mở thêm architecture/optimization search.
+Before official execution, the specification must be reviewed, the required numeric contract must be frozen/versioned/hashed, dataset/preprocessing/pretrained/environment identity must be verified, and implementation/smoke acceptance must be reviewed separately. Smoke uses synthetic inputs or train-only samples to check wiring, numerics, and resume behavior. It has no test access and is neither a final seed nor a winning tuning trial.
 
-### 7.2 LR tuning
+Completed pilot execution does not require P1-v2. If an implementation/environment change requires an acceptance check, verify the affected contract and record the evidence without opening a new architecture or optimization search.
 
-E1 chạy đúng **4 distinct positive base LR values × 1 official tuning seed**, cùng maximum **8 epochs**, warmup/cosine, stopping/checkpoint rule và effective batch đã freeze. Exact grid và seed còn NEEDS REVIEW. Grid phải chung với E1-HR/E2 trước official search; không thêm trial E1 vì score chưa như mong muốn.
+### 7.2 Fixed budget and validation cadence
 
-Mỗi trial chọn checkpoint theo mục 8; chọn LR bằng **supported validation Macro-F1 tại checkpoint đó**. Lưu/công bố đủ cả bốn LR, outcomes, best epoch/metrics và history của trial không được chọn. Tie rule giữa LR trials phải xác định trước. Failure/retry là record riêng với nguyên nhân; không bỏ failure khỏi search ledger hoặc âm thầm thay LR thứ năm.
+**Official E1 uses `max_epochs = 8`, full validation after every completed epoch, and `early_stopping = OFF`.** Every LR trial and every final training run that is reported as complete must finish all eight training epochs and all eight validation passes.
 
-### 7.3 Final training
+All four LR trials receive the same full eight-epoch budget. Validation performance cannot terminate a run, shorten a trial, extend training, or change its remaining allocation. A checkpoint selected from an earlier epoch does not reduce the completed training budget.
 
-Sau LR selection, freeze selected configuration rồi train **3 official final seeds** độc lập, từ cùng ImageNet pretrained file. Không chạy `4 LR × 3 seeds`, không chọn best seed theo test, không coi pilot checkpoint là một final seed. Official tuning/final numeric seed IDs và quan hệ giữa các seed sets phải được review trước; không mặc định seed tuning khác/trùng final set hoặc seed 3406 được dùng lại.
+A numerical/infrastructure failure must be recorded as a failure. A job interruption may be resumed from its saved boundary, but an interrupted prefix is not a completed trial or final run. Such operational conditions do not authorize a validation-based stopping rule or a shorter success definition.
 
-Không warm-start final run từ winning LR trial. Final seeds không mở lại LR/grid/augmentation; khác biệt seed chỉ ảnh hưởng optimization/batch/augmentation/init randomness theo policy chung. Split seed 406 và membership giữ nguyên.
+### 7.3 LR tuning
 
-Test chỉ được mở trong final evaluation phase sau khi protocol/checkpoints đã khóa và có authorization. Trong task spec, implementation, smoke, tuning và final training/validation, test images vẫn không được mở. Không refit thêm trên train+val vì điều đó đổi fixed benchmark protocol.
+Run **four distinct positive base LR candidates with one official tuning seed**. All trials share the fixed eight-epoch budget, reviewed warmup/cosine details, checkpoint rule, effective batch, optimizer/runtime policy, and initialization/RNG contract. The exact grid and numeric tuning seed remain NEEDS REVIEW.
 
-## 8. Checkpoint selection, early stopping và scheduler
+Freeze the common four-value grid for E1/E1-HR/E2 before official search. Do not add an E1 trial because the observed score is unsatisfactory. Every trial starts independently from the pinned ImageNet weights.
 
-**Đã chốt metric:** validation **Macro-F1 trên các lớp có ground-truth support**. Full validation ở mỗi completed epoch; mọi metrics được report cho một run phải xuất phát từ **chính `best.pt` được chọn**, không lấy best Top-1/Top-k của epoch khác. `last.pt` phục vụ resume, không tự là reported model.
+For each completed trial, select its checkpoint using Section 8, then select the LR using **supported validation Macro-F1 at that selected checkpoint**. Publish all four LR values, outcomes, selected epoch/metrics, and full histories, including unsuccessful or unselected trials. The **LR-trial tie rule remains NEEDS REVIEW** and is separate from the already-fixed checkpoint tie-break.
 
-Trước official search phải chốt và serialize rõ:
+Record failures/retries with their causes. Do not erase failures from the ledger, silently substitute a fifth LR, or present incomplete trials as equal-budget completed comparisons.
 
-| Rule | Yêu cầu |
+### 7.4 Disjoint training seeds and final training
+
+Freeze the numeric IDs before official runs under this **fixed seed-set rule**:
+
+- Exactly **one official tuning seed**.
+- Exactly **three distinct official final-training seeds**.
+- **All four seed IDs are distinct**: the tuning seed must not appear in the final-seed set.
+- Pilot seed **3406 is not automatically reused**; using any pilot ID would require an explicit reviewed numeric selection under the same disjointness rule.
+- Split seed **406 remains unrelated to training seeds** and never regenerates or changes membership.
+
+The exact numeric IDs remain **NEEDS REVIEW**. Their disjointness is already frozen and must not be presented as an open choice.
+
+After LR selection, freeze the selected configuration and train it from scratch under the three final seeds. The protocol is **four LR candidates x one tuning seed, followed by selected LR x three final seeds**, not four LRs x three seeds. Final runs start from the same ImageNet file with fresh optimizer/scheduler state, never from the winning tuning trial or a pilot checkpoint.
+
+Final seeds do not reopen LR/grid/augmentation decisions. They change only initialization/optimization/batch-order/augmentation randomness under the reviewed seed contract. Do not cherry-pick the best seed using test results or count the pilot as a final run. Each successful final run completes the full eight-epoch budget even if its selected checkpoint is earlier.
+
+Test images remain locked throughout specification work, implementation, smoke, tuning, and training/validation. Final test evaluation is a separate authorized phase after protocol/checkpoints are locked. Do not refit on train plus validation because that would change the fixed benchmark protocol.
+
+## 8. Checkpoint Selection and the Fixed Scheduler Horizon
+
+**Training termination and checkpoint selection are independent.** Every successful official run completes epochs **1-8**. Full validation follows each completed epoch. The reported model is `best.pt`, selected by **Macro-F1 over ground-truth-supported validation classes**, using **`tau = 1e-6`** and **tie-break `earlier`**.
+
+| Rule | Reviewed requirement |
 |---|---|
-| Checkpoint tolerance `tau` | Giá trị rất nhỏ trên thang metric [0,1]; exact numeric còn NEEDS REVIEW |
-| Tie-break | Một rule cố định: earlier hoặc NLL trong tolerance; official lựa chọn còn NEEDS REVIEW |
-| Patience / min_delta | Numeric, monitoring-start policy và cách reset counter phải freeze trước trials |
-| LR-trial tie-break | Không chọn tùy ý hoặc dựa test khi checkpoint scores bằng/gần nhau |
-| Scheduler horizon | Tính từ maximum 8 epochs và reviewed batch; không đổi horizon theo observed best epoch hoặc early stop |
+| Training budget | Eight completed training epochs and eight full validation passes |
+| Performance-based early stopping | OFF; validation scores never stop training |
+| Checkpoint metric | Supported validation Macro-F1 |
+| Checkpoint tolerance | `tau = 1e-6` on the [0,1] metric scale |
+| Checkpoint tie-break | `earlier`; validation NLL does not break checkpoint ties |
+| Candidate checkpoints | Completed epochs 1 through 8, all considered under the same rule |
+| Scheduler horizon | The full reviewed eight-epoch optimizer-update budget, independent of the selected epoch |
+| LR-trial tie rule | NEEDS REVIEW; do not infer it from the checkpoint tie-break |
 
-Reference comparator của pilot: replace checkpoint khi `current_f1 - selected_f1 > tau`; trong tolerance, `earlier` giữ checkpoint đã chọn, còn `nll` chỉ replace khi NLL tốt hơn. Pilot dùng **tau=1e-6, earlier**; **đề xuất tái dùng**, chưa coi là official freeze. Nếu dùng rule này, “best” có thể thấp hơn peak đơn lẻ trong tolerance; report selected score/epoch và full history để minh bạch.
+Use the chronological tolerance comparator consistently: select the first completed epoch initially; at each later epoch, replace the selected checkpoint only when `current_f1 - selected_f1 > 1e-6`. Within tolerance, retain the already-selected, earlier epoch. A lower F1 never replaces the selected checkpoint. Do not use NLL, Top-1, training loss, or test results to override this rule.
 
-Early-stopping tracking phải tách bạch với checkpoint tolerance/tie-break: xác định metric reference, improvement threshold, counter reset và điều kiện dừng sau patience completed validations. Không để cải thiện NLL trong F1 tie tự reset patience nếu policy không quy định. Các chi tiết này cần review, không tự suy ra patience từ pilot chỉ có 3 epochs.
+Here, "best" means the checkpoint selected under this fixed tolerance/earlier rule. An individual raw F1 peak within tolerance can be higher than the selected score; report the selected epoch/score and the full history rather than mixing metrics from different epochs.
 
-Maximum **8** là upper bound, không ép mọi run phải train đúng 8 nếu reviewed early-stopping rule dừng trước. Lưu `completed_epochs`, `optimizer_updates`, `best_epoch`, `stop_reason` và history đầy đủ. Không kéo dài horizon, reset warmup, chọn epoch bằng test hoặc tune stopping riêng sau khi thấy curve từng architecture.
+All reported Top-1/Top-3/Top-5, Macro-F1, Weighted-F1, per-class, and bucket metrics for a run must come from **that same selected checkpoint**. `last.pt` exists for resume and is not automatically the reported model. Both checkpoints remain traceable even when they refer to the same final epoch.
 
-## 9. Metrics và error analysis
+Compute the scheduler's planned total updates from the reviewed batch accounting in Section 6 and the full **eight-epoch** budget before the run starts. Do not shorten the horizon to the selected best epoch, reuse the three-epoch P1 horizon, restart warmup after an interruption, or extend the budget through resume. Official warmup duration/start factor and cosine formula/floor details remain NEEDS REVIEW; the full eight-epoch horizon requirement itself is fixed.
 
-Gọi `C[i,j]` là confusion count với GT=i, prediction=j trên **toàn split được evaluate**. Per-class F1 dùng đủ TP/FP/FN của class đó, kể cả FP đến từ GT class/bucket khác. Với GT support>0 mà không prediction đúng, F1=0. Với support=0, F1 lưu **null/not evaluated**, không ép zero để đưa vào supported macro.
+Record planned/completed epochs and updates, the selected checkpoint epoch/score, full validation history, and the termination reason. A successful run terminates because the eight-epoch budget is complete, not because validation stopped improving.
+
+## 9. Metrics and Error Analysis
+
+Let `C[i,j]` be the count with ground-truth label `i` and predicted label `j` over the **entire evaluated split**. Compute each class's F1 from its complete TP/FP/FN counts, including false positives contributed by ground-truth samples in other classes or frequency buckets.
+
+A GT-supported class with no correct predictions receives F1=0. A class with zero GT support has F1 recorded as **null/not evaluated** and is excluded from supported Macro-F1, rather than being inserted into that average as zero.
 
 | Output | Definition |
 |---|---|
-| Top-1 / Top-3 / Top-5 | Sample accuracy, rank đủ **124 outputs**; không mask classes thiếu evaluation support |
-| Macro-F1 supported | Mean per-class F1 trên supported GT classes của split; validation denominator **106**, final test **111** theo metadata |
-| Weighted-F1 | Per-class F1 weighted bởi **GT evaluation support**, không dùng train frequencies |
-| NLL | Unweighted mean CE trên evaluation samples; diagnostic/possible predefined tie-break, không thay selection metric |
-| Per-class CSV | label_id/name, train count/bucket, GT support, predicted count, precision, recall, F1; ghi rõ unsupported classes |
+| Top-1 / Top-3 / Top-5 | Sample accuracy ranking all **124 outputs**; never mask labels because the evaluation split lacks their GT support |
+| Supported Macro-F1 | Mean per-class F1 over GT-supported classes in the split: **106** for validation and **111** for final test according to fixed metadata |
+| Weighted-F1 | Per-class F1 weighted by **evaluation GT support**, not training frequencies |
+| NLL | Unweighted mean evaluation CE; reported as a diagnostic, never used to select checkpoints or break their ties under the fixed F1/earlier rule |
+| Per-class CSV | Label ID/name, unique train count/bucket, GT support, predicted count, precision, recall, and F1, explicitly identifying unsupported classes |
 
-Main classification metrics report cùng nhau; không tuyên bố một phương pháp thắng duy nhất chỉ dựa một scalar. Không dùng average minibatch Macro-F1 hoặc lọc logits xuống 106/111 classes.
+Report the main classification metrics together. Do not declare a single method winner from one scalar, average minibatch Macro-F1 values, or reduce output rankings to 106/111 classes. The LR-trial tie rule, if it uses any secondary information, must be separately reviewed before tuning.
 
 ### Frequency-bucket contract
 
-Membership theo **unique n_train sau dedup/fixed split**, không theo raw counts, val/test support hoặc số lần resampling. Metadata đã đọc từ [class_support.csv](../../artifacts/baseline124/class_support.csv):
+Class membership is based on **unique n_train after deduplication and the fixed split**, never raw counts, validation/test support, or resampling frequency. The [class-support artifact](../../artifacts/baseline124/class_support.csv) establishes:
 
-| n_train bucket | Total classes | Unique train images | Val supported classes | Val samples |
+| n_train bucket | Total classes | Unique train images | Validation-supported classes | Validation samples |
 |---|---:|---:|---:|---:|
-| 1–19 | 42 | 243 | 24 | 49 |
-| 20–99 | 37 | 2077 | 37 | 445 |
-| 100–499 | 29 | 7049 | 29 | 1513 |
-| ≥500 | 16 | 25628 | 16 | 5490 |
-| 1–2, subset của 1–19 | 20 | 21 | 2 | 2 |
+| 1-19 | 42 | 243 | 24 | 49 |
+| 20-99 | 37 | 2077 | 37 | 445 |
+| 100-499 | 29 | 7049 | 29 | 1513 |
+| >=500 | 16 | 25628 | 16 | 5490 |
+| 1-2, a subset of 1-19 | 20 | 21 | 2 | 2 |
 
-Mỗi evaluated bucket báo total classes, GT-supported classes, evaluation samples, Macro-F1 và Top-1/3/5. Bucket Macro-F1 lấy từ per-class F1 **đã tính trên toàn evaluation split** rồi average supported classes trong bucket; không lọc GT rows trước khi tính F1. Bucket Top-k tính trên samples có GT thuộc bucket, nhưng vẫn rank đủ 124 outputs. Bucket không có supported GT: metrics null, không fabricate zero.
+For each evaluated bucket, report total classes, GT-supported classes, evaluation samples, Macro-F1, and Top-1/Top-3/Top-5. Compute bucket Macro-F1 by averaging the supported bucket classes' per-class F1 values **already computed on the entire evaluation split**. Do not first filter GT rows and discard cross-bucket false positives.
 
-Final E1 report mean ± standard deviation qua đủ **3 seeds**, kèm từng seed; phải khai báo convention tính std trong reporting contract trước aggregate. Không chọn seed tốt nhất, không average logits thành ensemble để thay cho mean individual-model scores. Full validation history/learning curves và confusion/most-confused pairs phải có để nhìn tính ổn định, không chỉ peak score. Extreme-tail 1–2 samples được diễn giải thận trọng.
+Bucket Top-k uses samples whose GT belongs to that bucket, while ranking all 124 outputs. A bucket without GT support has null metrics, not fabricated zero scores. Keep membership fixed across methods and seeds.
 
-## 10. Runtime, RNG, resume và output contract
+The final E1 report includes each of the **three distinct final seeds** and their mean plus/minus standard deviation. The standard-deviation convention remains NEEDS REVIEW and must be stated before aggregation. Do not choose the best seed or replace individual-model score aggregation with an averaged-logit ensemble. Retain full validation histories/learning curves, confusion matrices, and most-confused pairs. Interpret results from the 1-2-image extreme tail cautiously.
 
-### Runtime và reproducibility
+## 10. Runtime, RNG, Resume, and Output Contract
 
-Target là single UIT GPU/Slurm, dự kiến partition `normal`, GRES `gpu:2g.35gb:1`; GPU work trong allocation. Pilot ghi H200 MIG 2g.35gb, Python 3.11.17, torch 2.8.0+cu128, torchvision 0.23.0+cu128, CUDA 12.8, cuDNN 91002. Official environment/runtime adoption còn review; ghi resolved package/driver/device/allocation và actual Torch settings, không chỉ config mong muốn.
+### Runtime and reproducibility
 
-Đề xuất giữ runtime/loader deterministic FP32 pilot làm starting contract; bảng mục 12 liệt kê các giá trị để review **một lần**, không mở runtime ablation. Không tự đổi AMP, TF32, workers hoặc compile riêng E1 giữa trials. Dataset/preprocessing conformance phải phù hợp target packages/root; archived pass không thay check cần thiết khi các điều kiện đó đã đổi.
+The target is single-GPU UIT/Slurm execution, with the expected partition `normal` and GRES `gpu:2g.35gb:1`; GPU work belongs inside an allocation. Pilot records identify an H200 MIG 2g.35gb, Python 3.11.17, torch 2.8.0+cu128, torchvision 0.23.0+cu128, CUDA 12.8, and cuDNN 91002. Official runtime/environment adoption remains subject to review.
 
-Official seed contract phải cover Python/NumPy/CPU/CUDA, classifier initialization, sample order, augmentation, worker/DataLoader generators và process environment. Đề xuất tái dùng deterministic derived-seed mechanics trong [pilot dataset](../../src/pilot/dataset.py), nhưng bind với **official seed IDs**, không hard-code 3406/PYTHONHASHSEED pilot. Persistent workers phải nhận đúng epoch; restart job không được lặp jitter/order của epoch 0.
+Record resolved package versions, driver/device/allocation metadata, process environment, and actual Torch settings, not merely the requested configuration. Keeping the pilot's deterministic FP32 runtime/loader policy is proposed in Section 12 as a single common adoption decision, not a runtime ablation. Do not change AMP, TF32, worker counts, or compile policy independently for one E1 trial.
 
-### Checkpoint/resume
+Dataset/preprocessing conformance must match the actual target packages and dataset root. An archived pass does not replace the required check when those conditions change.
 
-Official checkpoint có identity/type riêng, không nhận `kind=bounded_pilot_checkpoint` làm official resume. `last.pt` ghi atomic ở completed epoch boundary; lưu model, optimizer, scheduler, AMP/scaler nếu dùng, completed epoch/update counters, full resolved config/hash, data/labels/preprocessing/pretrained fingerprints, official source/environment identity, RNG/loader state, best/history và **early-stopping state**.
+The official RNG contract covers Python, NumPy, CPU/CUDA RNGs, classifier initialization, epoch order, augmentation, and worker/DataLoader generators. Reusing the deterministic derived-seed mechanics from the [pilot dataset](../../src/pilot/dataset.py) is proposed, but the binding must use reviewed official IDs satisfying the **four-distinct-ID tuning/final rule**. Do not hard-code pilot seed 3406 or its `PYTHONHASHSEED` value. Persistent workers must receive the correct epoch; restarting a job must not repeat epoch-zero ordering or jitter.
 
-Resume đúng run từ `last.pt`, giữ cùng seed/config/horizon/source/runtime identity; reject mismatch. Không resume từ `best.pt` để quay lại thêm budget, không warm-start từ pilot/trial khác. Interrupted partial epoch được replay từ last committed boundary; không tính replay thành extra completed epoch hoặc extend 8-epoch budget. Có initial boundary checkpoint để recover khi epoch đầu chưa hoàn thành; không ghi đè run/trial cũ bằng run mới. Single-writer lock ngăn hai jobs cùng folder.
+### Checkpoint and resume
 
-Bundle UIT hiện có không chứa một interrupted/resumed diagnostic riêng. Pilot checkpoint code và synthetic CPU tests là reference, không tự xác nhận CUDA resume equivalence của official E1; acceptance phải kiểm dưới reviewed runtime khi implementation được authorize. Điều này không yêu cầu thêm P1-v2 hoặc mở convergence study mới.
+An official checkpoint has its own identity/type. Do not accept `kind=bounded_pilot_checkpoint` as official resume input. Write `last.pt` atomically at a completed epoch boundary, including model, optimizer, scheduler, optional AMP/scaler state, completed epoch/update counters, the fixed eight-epoch planned budget, full resolved configuration/hash, data/label/preprocessing/pretrained fingerprints, official source/environment identity, RNG/loader state, selected-checkpoint information, and full history.
 
-Pilot `identity()`/`validate_gates()` và checkpoint helpers là reference. **Không require official source fingerprint bằng pilot source fingerprint**: code official sẽ khác; lưu reference pilot identity và official implementation identity riêng. Gate phải kiểm các contract phù hợp, không bypass chỉ vì pilot source equality không còn đúng. Spec này không tự approve một refactor/permanent `src/data/`, `src/models/`, `src/training/` framework.
+Resume the same run from `last.pt` with unchanged seed/configuration/source/runtime identity and the **original eight-epoch budget**. Reject identity or budget mismatches. Do not resume from `best.pt` to roll back optimization and add budget, or warm-start from a pilot or another LR trial.
 
-### Required artifacts sau implementation được authorize
+Replay an interrupted partial epoch from the last committed boundary. Log replayed operational work separately; it neither counts as an additional completed epoch nor authorizes training past epoch eight. Keep an initial boundary checkpoint for recovery before epoch one completes. Do not overwrite an existing run with a new trial. Enforce a single writer for each run folder.
 
-Tên/format dưới đây là contract đầu ra để review, chưa có official run files được tạo:
+Interruption is an operational state, not validation-based early stopping. Resume must complete the remaining part of the original full budget; it cannot change the selected-checkpoint rule, shrink the scheduler horizon, reset warmup, or extend training. Successful completion is possible only after all eight epochs and their full validations are recorded.
 
-| Artifact | Nội dung bắt buộc |
+The supplied UIT bundle does not contain a separate interrupted/resumed diagnostic execution. Pilot checkpoint code and synthetic CPU tests provide references, not automatic evidence of official CUDA resume equivalence. Validate the reviewed runtime's behavior during authorized implementation acceptance without requiring P1-v2 or a new convergence study.
+
+Pilot `identity()`/`validate_gates()` and checkpoint helpers are references. **Do not require the official source fingerprint to equal the pilot source fingerprint**: official implementation will have its own source identity. Keep pilot evidence references and official implementation identity separate, while validating the applicable data/preprocessing/pretrained/runtime contracts. This document does not approve an unsolicited permanent `src/data/`, `src/models/`, or `src/training/` refactor.
+
+### Required artifacts after implementation is authorized
+
+These are output requirements for review, not official run files created by this revision:
+
+| Artifact | Required contents |
 |---|---|
-| Resolved config + recipe/spec reference/hash | stage tuning/final, run/trial ID, official seed, base LR, all numeric/runtime policies, immutable source/data/preprocessing/pretrained identity |
-| Environment/model/optimizer metadata | Versions/GPU/allocation/env, architecture/head/drop-path/init rule, enumerated decay groups, parameter counts |
-| `history.json`, `metrics.csv`, learning curves | Mọi completed epoch: train loss/count, updates, LR endpoints, validation metrics, timing, memory; không xóa epoch/trial không đẹp |
-| `best.pt`, `last.pt` | Chọn/report và resume theo hai vai trò ở trên; full state cần thiết |
-| `run_summary.json` | Success/failure/interrupted/early-stop status, planned/completed budget, selected epoch/score, stop/failure reason, test-access status |
-| Tuning ledger | Bốn reviewed LR trials cùng outcomes, selected LR và rationale theo validation rule |
-| Selected-checkpoint analysis | Validation overall/per-class/bucket metrics, predictions theo manifest path/label ID với Top-k, confusion matrix; test outputs chỉ ở final-evaluation phase |
-| Three-seed report | Từng seed và mean ± std, coverage/limitations; không gọi pilot scores là official results |
+| Resolved configuration and recipe/spec reference/hash | Tuning/final stage, run/trial ID, official seed and its role, base LR, every numeric/runtime policy, fixed eight-epoch budget, early stopping OFF, and source/data/preprocessing/pretrained identity |
+| Environment/model/optimizer metadata | Versions, GPU/allocation/environment, architecture/head/drop-path/initialization rules, enumerated decay/no-decay groups including no-decay layer-scale parameters, and parameter counts |
+| `history.json`, `metrics.csv`, learning curves | Every completed epoch: train loss/sample count, updates, LR endpoints, validation metrics, timing, and memory; a complete run contains all eight epochs |
+| `best.pt`, `last.pt` | Separate selection/reporting and resume roles; full state needed for their contracts |
+| `run_summary.json` | Complete/failure/interrupted status, planned/completed budget, selected epoch/score, termination/failure reason, and test-access status; no validation-based shortened-success status |
+| Tuning ledger | All four reviewed LR candidates and their outcomes, full-budget completion evidence, selected LR, and the reviewed trial-selection/tie rationale |
+| Selected-checkpoint analysis | Validation overall/per-class/bucket metrics, predictions keyed by manifest path/label ID with Top-k, and confusion matrix; test outputs only during final evaluation |
+| Three-seed report | Each disjoint final-seed run and mean plus/minus standard deviation, coverage, and limitations; pilot scores remain diagnostic |
 
-Timing phải ghi scope: train-only, train+validation, checkpoint/report I/O hoặc full job walltime. Report throughput theo original images và peak allocated/reserved riêng; không dùng P0 VRAM/throughput làm acceptance score threshold của official E1. Efficiency chỉ secondary information.
+Clearly distinguish train-only timing, training plus validation, checkpoint/report I/O, and full-job walltime. Report throughput in original images and peak allocated/reserved memory separately. P0 efficiency measurements are not official E1 score requirements; efficiency remains secondary information.
 
-E3 về sau có thể lấy representation trước classifier từ từng **selected official final-seed E1 checkpoint**; E1 giữ identity/checkpoints để trace được lineage. Không cache features hoặc implement E3 trong task/spec E1 này.
+Later E3 work may use the pre-classifier representation from each **selected official final-seed E1 checkpoint**. Preserve identity/checkpoint lineage for that handoff. Do not cache features or implement E3 within this E1 revision.
 
-## 11. Pilot evidence: được phép kết luận gì
+## 11. Pilot Evidence and Its Interpretation
 
-| Evidence E1 | Kết quả đã đọc | Giới hạn |
+| E1 evidence | Recorded result | Limit |
 |---|---|---|
-| [Strict P0 summary](../../reports/pilot/evidence/uit_2026-10-31/p0/e1/run_summary.json), [config](../../reports/pilot/evidence/uit_2026-10-31/p0/e1/config_resolved.json) | pass, assessed, criteria, full epoch; batch 2/1; train epoch 2080.53 s; steady-state 16.9549 img/s, full epoch 16.8212 img/s; reserved peak 1.99023 GiB window / 1.99414 GiB epoch | Feasibility của declared workload, không phải convergence hoặc maximum batch |
-| [Bounded P1 config](../../reports/pilot/evidence/uit_2026-10-31/p1/e1/config_resolved.json), [summary](../../reports/pilot/evidence/uit_2026-10-31/p1/e1/run_summary.json) | complete 3/3, 52497 updates, diagnostic seed 3406/LR 1e-4; official_experiment=false | Bounded diagnostic, không phải official run hoặc 8-epoch evidence |
+| [Strict P0 summary](../../reports/pilot/evidence/uit_2026-10-31/p0/e1/run_summary.json), [configuration](../../reports/pilot/evidence/uit_2026-10-31/p0/e1/config_resolved.json) | pass, assessed, criteria, full epoch; microbatch/accumulation 2/1; train epoch 2080.53 s; steady-state 16.9549 img/s and full-epoch 16.8212 img/s; reserved peak 1.99023 GiB in the measured window and 1.99414 GiB over the epoch | Feasibility of the declared workload, not convergence or maximum feasible batch |
+| [Bounded P1 configuration](../../reports/pilot/evidence/uit_2026-10-31/p1/e1/config_resolved.json), [summary](../../reports/pilot/evidence/uit_2026-10-31/p1/e1/run_summary.json) | complete 3/3 epochs, 52497 updates, diagnostic seed 3406 and LR 1e-4; official_experiment=false | Bounded diagnostic execution, not an official run or eight-epoch result |
 
-Các số P0 chỉ chứng minh workload/batch đã đo khả thi dưới policy đó; không chứng minh batch optimal. P1 kiểm optimization behavior hữu hạn, không chứng minh convergence hoặc official 8 epochs là tối ưu. Cả P0/P1 ghi `test_images_opened=0`; target conformance và tất cả pilot profiles đã pass theo [report](../../reports/pilot/pilot_results.md). Manifest evidence đã được sửa self-entry; checksum của **47 payload files PASS**.
+P0 establishes feasibility only under the measured policy; it does not establish an optimal batch. P1 demonstrates bounded optimization behavior, not convergence or optimality of an eight-epoch budget. Both E1 summaries record `test_images_opened=0`; target conformance and all pilot profiles passed according to the [pilot report](../../reports/pilot/pilot_results.md). The evidence manifest excludes its former self-entry, and all **47 payload hashes PASS**.
 
-[P1 history](../../reports/pilot/evidence/uit_2026-10-31/p1/e1/history.json) và [CSV](../../reports/pilot/evidence/uit_2026-10-31/p1/e1/metrics.csv) khớp:
+The [P1 history](../../reports/pilot/evidence/uit_2026-10-31/p1/e1/history.json) and [metrics CSV](../../reports/pilot/evidence/uit_2026-10-31/p1/e1/metrics.csv) agree:
 
-| Epoch | Train CE | Val NLL | Val Top-1 | Val Macro-F1 supported |
+| Epoch | Train CE | Validation NLL | Validation Top-1 | Supported validation Macro-F1 |
 |---|---:|---:|---:|---:|
 | 1 | 1.956166 | 1.430387 | 0.615179 | 0.191439 |
 | 2 | 0.990609 | 0.977231 | 0.727758 | 0.347943 |
 | 3 | 0.378864 | 0.856378 | 0.761238 | 0.395442 |
 
-Best diagnostic epoch=3; Top-3=0.898093, Top-5=0.936508, Weighted-F1=0.747391 tại cùng epoch. Reserved VRAM ổn định 2141192192 bytes qua ba epochs. E1 P1 data-wait fraction khoảng 16.4–19.2%; không suy ra loader đã optimal hoặc tự mở worker search. Không đặt acceptance requirement “official E1 phải vượt pilot 0.395442”; failure/success của implementation dựa correctness/protocol, không ép score mong muốn.
+The best diagnostic checkpoint is epoch three, with Top-3=0.898093, Top-5=0.936508, and Weighted-F1=0.747391 from the same epoch. Reserved memory stayed at 2141192192 bytes across all three epochs. E1 P1 data-wait fractions were approximately 16.4-19.2%; this is not evidence of optimal loader settings or authorization for a worker search.
 
-## 12. Review register trước official execution
+Do not impose an implementation acceptance threshold requiring official E1 to exceed the pilot's 0.395442 Macro-F1. Correctness/protocol compliance and measured model quality are different questions. The diagnostic LR **1e-4** and pilot seed **3406** are not silently promoted to official values. No P1-v2 is required for this specification review.
 
-Các đề xuất dưới đây nhằm hoàn thiện **một common recipe**, không tạo experiment branch. Chưa có `configs/training/training_recipe_v1` và không xuất partial recipe khi các field bắt buộc còn mở.
+## 12. Review Register Before Official Execution
 
-| ID | Cần review/freeze | Pilot evidence / đề xuất để review | Trạng thái |
+The remaining proposals complete **one common recipe**; they add no experiment branch. No `configs/training/training_recipe_v1` is created, and a partial recipe must not be exported while required official fields are unresolved.
+
+| ID | Item | Evidence or proposal for review | Status |
 |---|---|---|---|
-| R1 | Exact 4 distinct base LR values; trial tie/failure accounting | Chỉ có diagnostic 1e-4; **không tự tạo grid** hoặc refine theo pilot validation score | NEEDS REVIEW |
-| R2 | Exact 1 tuning + 3 final seed IDs; quan hệ seed sets/init seed binding | Pilot 3406, split 406; **không tự chọn official IDs** | NEEDS REVIEW |
-| R3 | Common effective batch và E1 microbatch/accumulation | Đề xuất giữ pilot **B=2, m=2, a=1**, đã strict-pass cả ba profiles; chưa promote | NEEDS REVIEW |
-| R4 | Warmup duration/start factor; cosine formula/floor/horizon 8 epochs | Pilot warmup 1000, factor 0.1, floor 1e-6, horizon 3 epochs. Đề xuất giữ update-based warmup/cosine semantics; official numeric values phải review cùng grid/batch | NEEDS REVIEW |
-| R5 | Patience, min_delta, monitoring start/reset; checkpoint tau/tie; LR-trial tie | Pilot không early-stop; tau=1e-6/earlier chỉ là reference/đề xuất cho checkpoint, không quyết định patience | NEEDS REVIEW |
-| R6 | AdamW betas/eps, complete decay enumeration, clipping | Đề xuất betas [0.9,0.999], eps 1e-8, clipping off; decay 0.05/no-bias/no-LN đã chốt; pilot layer_scale no decay cần ghi explicit trong adoption | NEEDS REVIEW phần adoption |
-| R7 | New-classifier initialization và RNG/worker/resume contract | Đề xuất linear_default isolated CPU RNG, sample/epoch keyed jitter/order của pilot; bind official seeds, verify resume/stopping behavior | NEEDS REVIEW |
-| R8 | Official runtime/environment và Slurm/output adoption | Đề xuất FP32, AMP/scaler/TF32/compile off; highest matmul, cuDNN benchmark off, deterministic true/warn_only false; workers=2, pin/persistent=true, prefetch=2, threads=2; target package set đã đo. Review env vars/allocation/walltime, không copy pilot seed vào env | NEEDS REVIEW |
-| R9 | Reporting convention và final-evaluation handoff | Freeze std convention, LR/metric tie conventions và test-unlock ownership trước aggregate/evaluation; không mở test trong training | NEEDS REVIEW |
+| R1 | Exact four distinct base LR values; LR-trial tie/failure accounting | Only diagnostic LR 1e-4 is established by the pilot. Do not invent a grid or refine it using pilot validation scores. The LR-trial tie rule is not the checkpoint tie rule. | NEEDS REVIEW |
+| R2 | Exact one tuning ID and three final-training IDs | **All four IDs must be distinct**, and the tuning ID is excluded from the final set. This relationship is fixed; only the numeric IDs remain unresolved. Pilot 3406 is not automatically reused; split seed 406 is unrelated. | NEEDS REVIEW: numeric IDs only |
+| R3 | Official common effective batch and E1 microbatch/accumulation | Retaining pilot B=2, m=2, a=1 is proposed because all three profiles passed strict feasibility at that batch. It is not automatically an official adoption. | NEEDS REVIEW |
+| R4 | Warmup duration/start factor and cosine formula/floor details | Pilot values were 1000 warmup updates, start factor 0.1, floor 1e-6, and a three-epoch horizon. Review official details with the LR grid and batch. The official horizon must cover the full eight epochs and cannot follow the selected epoch. | NEEDS REVIEW: schedule details only |
+| R5 | Full training budget and checkpoint rule | Eight epochs, full validation after every epoch, early stopping OFF; supported validation Macro-F1 over epochs 1-8, tau=1e-6, earlier checkpoint tie-break. These are reviewed invariants, not unresolved choices. | FIXED; verify implementation compliance |
+| R6 | AdamW betas, AdamW eps, and gradient clipping | Pilot betas [0.9,0.999], eps 1e-8, and clipping OFF are proposals. Weight decay 0.05 for Conv/Linear weights and zero decay for biases/LayerNorm/ConvNeXt layer-scale are already fixed and excluded from this review. | NEEDS REVIEW: betas/eps/clipping only |
+| R7 | New-classifier initialization and official RNG/worker/resume binding | Retaining linear_default with isolated CPU RNG and sample/epoch-keyed jitter/order is proposed. Bind only to the reviewed, disjoint official IDs and verify full-budget resume behavior. | NEEDS REVIEW |
+| R8 | Official runtime/environment and Slurm/output adoption | Proposed pilot policy: FP32; AMP/scaler/TF32/compile OFF; highest matmul precision; cuDNN benchmark OFF; deterministic algorithms ON, warn_only=false; workers=2, pin/persistent=true, prefetch=2, threads=2; recorded target packages. Review environment variables/allocation/walltime without copying the pilot seed. | NEEDS REVIEW |
+| R9 | Reporting convention and final-evaluation handoff | Review the standard-deviation convention, any remaining reporting conventions, and final test-unlock ownership. Checkpoint tau/earlier and seed disjointness are fixed; LR-trial ties remain under R1. Test stays locked during training. | NEEDS REVIEW |
 
-**Đã resolved, không grill lại:** architecture, full-image 896×384, fixed split/labels, preprocessing v1, exact pretrained file/full hash, natural unweighted CE, drop-path max 0.1, weight decay 0.05, head multiplier 1, augmentation 0.10/0.10, max_epochs **8**, 4-LR/1-seed rồi 3-final-seed protocol. Không cần P1-v2 để viết/review E1 spec.
+**Resolved decisions must not be reopened as implicit searches:** ConvNeXt-Tiny full-image E1, 896 x 384 input, exact split/labels, frozen preprocessing v1, exact ImageNet checkpoint/full hash, full fine-tuning from epoch one, natural unweighted CE, maximum stochastic depth 0.1, the explicit decay/no-decay groups, head LR multiplier 1, brightness/contrast 0.10/0.10, full eight-epoch budget with early stopping OFF, checkpoint tau=1e-6/earlier, and disjoint one-tuning/three-final seed sets.
 
-Review spec có thể thống nhất architecture/functional requirements trước, nhưng official LR search/final runs phải đợi R1–R8 được resolve thành versioned complete numeric recipe và các conventions liên quan ở R9 được ghi explicit. Không để `null`, “use default” hoặc pilot fallback tự resolve một official required field.
+Architecture and functional requirements may be reviewed before every numeric value is chosen. Official LR search/final runs still require the applicable open items R1-R4 and R6-R8 to be resolved into a complete versioned numeric contract, with relevant R9 conventions established before aggregation/evaluation. **R5 is already fixed.** Do not let `null`, "use default," or pilot fallbacks resolve required official fields.
 
-## 13. Implementation acceptance khi được yêu cầu sau review
+## 13. Implementation Acceptance After Separate Authorization
 
-| Acceptance check | Bằng chứng cần có |
+| Acceptance check | Required evidence |
 |---|---|
-| Dataset isolation | Exact fingerprints/counts/label mapping; train/val complete; test access từ chối trước file open |
-| Preprocessing | Hai raw layouts → đúng [3,384,896], fill/padding/rounding/backend đúng v1; jitter không thay mask/padding; deterministic eval |
-| Architecture/load | Full pretrained SHA mandatory, mismatch fail; giữ pretrained representation/LN; logits [N,124]; full fine-tuning, drop-path schedule/eval behavior đúng |
-| Sampling/loss/update | Natural epoch đủ samples; unweighted CE; no duplicate/omitted optimizer parameters; accumulation tương đương sample mean, nhất là short tail |
-| Schedule/stopping | Warmup/cosine update counts khớp reviewed 8-epoch horizon; checkpoint F1/tolerance/tie và patience đúng các edge cases; history không bị cắt |
-| Resume | Interrupted/resumed diagnostic tương thích full run về order/jitter/RNG, LR, optimizer counters, best/early-stop state; từ chối wrong identity/pilot checkpoint |
-| Metrics | Supported macro/weighted F1 từ full-split counts, unsupported null, Top-k đủ 124; bucket false positives không bị mất; report từ selected checkpoint |
-| Trial/final separation | Bốn LR trial records, một tuning seed; ba final runs khởi tạo mới, config frozen; không dùng test hoặc cherry-pick seed |
-| Artifacts/failure | Atomic checkpoints, nonfinite/OOM/failure statuses rõ, no overwrite; metadata/provenance trace được từ report tới selected checkpoint |
+| Dataset isolation | Exact fingerprints/counts/label mapping; complete train/validation coverage; test access rejected before file opening |
+| Preprocessing | Both raw layouts produce [3,384,896] with v1 fill/padding/rounding/backend; jitter preserves mask/padding; evaluation is deterministic |
+| Architecture and loading | Mandatory full pretrained digest; mismatch failure; retained pretrained representation/LayerNorm; logits [N,124]; full fine-tuning and correct stochastic-depth/evaluation behavior |
+| Fixed optimizer groups | Conv/Linear weights decay at 0.05; biases, LayerNorm, and **all ConvNeXt layer-scale parameters are no-decay**; every trainable parameter appears exactly once |
+| Sampling, loss, and updates | Complete natural epochs, unweighted CE, exact sample-mean accumulation including short tails, and correct optimizer/scheduler step counts |
+| Full-budget execution | Every successful tuning/final run completes eight epochs and eight validations; worsening or flat validation scores do not terminate training |
+| Scheduler and checkpoint selection | The full reviewed eight-epoch horizon is preserved even when best.pt is earlier; tau=1e-6 and earlier tie-break are tested, and NLL cannot override checkpoint selection |
+| Resume | Interrupted/resumed behavior preserves order/jitter/RNG, LR, optimizer counters, selected-checkpoint state, history, and the original eight-epoch budget; wrong identities/pilot checkpoints are rejected |
+| Seed separation and trial/final isolation | Exactly four distinct official seed IDs; one tuning seed absent from the three final IDs; all four LR trials use that one tuning seed, and final runs initialize independently |
+| Metrics | Supported Macro-F1/Weighted-F1 from full-split counts, unsupported F1=null, Top-k across 124 outputs, retained cross-bucket false positives, and reports from the selected checkpoint |
+| Artifacts and failures | Atomic checkpoints, explicit nonfinite/OOM/interruption outcomes, no overwritten trial histories, and traceability from the report to the selected checkpoint |
 
-Test và smoke ở phase implementation phải kiểm behavior thực, không lấy class names hoặc pilot source layout làm bằng chứng E1 đã được implement. Kiểm correctness dùng synthetic/train-only inputs; không chạy training thật trong task viết spec này.
+Tests and smoke must check behavior rather than treating a class name or pilot file layout as proof of official implementation. Use synthetic/train-only inputs for correctness checks. This document does not run those future implementation checks, train a model, or create an official execution framework.
 
-## 14. Checklist review và handoff
+## 14. Review and Handoff Checklist
 
-- [x] Đã đọc 26 nguồn được yêu cầu; định nghĩa E1 architecture/data/preprocessing/loss/reporting trong bản draft.
-- [x] Tách fixed research decisions, actual pilot records và official fields còn NEEDS REVIEW.
-- [x] Giữ exact split/preprocessing, không thêm experiment/ablation hoặc promote pilot LR/seed.
-- [ ] User review/approve `docs/E1/specs.md` và quyết định các mục R1–R9 theo scope tương ứng.
-- [ ] Complete versioned numeric training recipe được review/freeze, hash và link nguồn chuẩn.
-- [ ] Implementation plan/review và authorization implementation riêng.
-- [ ] E1 implementation, acceptance/smoke, official LR search và final 3 seeds.
-- [ ] Final test evaluation được mở ở phase riêng sau khi checkpoints/protocol khóa.
+- [x] Ground the draft in the 26 requested sources, covering E1 architecture, data, preprocessing, optimization, and reporting.
+- [x] Separate fixed research decisions, recorded pilot behavior, and unresolved official adoption values.
+- [x] Apply the reviewed full eight-epoch budget with early stopping OFF and fixed checkpoint tau=1e-6/earlier throughout the document.
+- [x] Treat ConvNeXt layer-scale parameters as an unconditional no-decay category.
+- [x] Require one tuning seed and three final seeds with all four IDs distinct, while leaving the actual numeric IDs unresolved.
+- [x] Preserve fixed membership/preprocessing and diagnostic-only pilot status without adding experiments or promoting pilot LR/seed values.
+- [ ] Obtain user review/approval of `docs/E1/specs.md` and resolve the applicable open register items; R5 is already fixed.
+- [ ] Review/freeze a complete versioned numeric training recipe with its hash and authoritative references.
+- [ ] Separately review an implementation plan and obtain implementation authorization.
+- [ ] Implement E1, perform acceptance/smoke checks, run official LR tuning, and train the three disjoint final seeds.
+- [ ] Unlock final test evaluation only in its separate phase after protocol/checkpoints are locked.
 
-Việc tạo/commit bản spec này không freeze master spec, không cập nhật checklist official E1 thành complete và không authorize implementation. Bước tiếp theo là **review bản spec và những quyết định còn mở**, không tự chuyển sang viết code hoặc submit job.
+Creating or committing this revision does not freeze the master specification, mark official E1 implementation as complete, or authorize code/job execution. The next step is **reviewing this specification and the remaining open values**, not implementing E1 automatically.
 
-## 15. Source index — 26 file đã đọc
+## 15. Source Index - 26 Files Read
 
-| # | File | Vai trò |
+| # | File | Role |
 |---|---|---|
-| 1 | [docs/master_spec.md](../master_spec.md) | Main design, current status, official freeze boundaries |
-| 2 | [docs/grillme.md](../grillme.md) | Review decisions/history và scope controls |
+| 1 | [docs/master_spec.md](../master_spec.md) | Main design, execution status, and official freeze boundaries; newer E1 decisions take precedence as stated in Section 1 |
+| 2 | [docs/grillme.md](../grillme.md) | Research decisions, historical review, and scope controls |
 | 3 | [docs/preprocessing_v1.md](../preprocessing_v1.md) | Frozen input/UI/resize contract |
-| 4 | [docs/pilot_plan.md](../pilot_plan.md) | Completed gates và pending official recipe |
-| 5 | [docs/pilot_config_review.md](../pilot_config_review.md) | Historical proposals vs post-execution resolution |
-| 6 | [docs/server_pilot_runbook.md](../server_pilot_runbook.md) | Runtime/checkpoint/Slurm reference, chưa official launcher |
-| 7 | [reports/pilot/pilot_results.md](../../reports/pilot/pilot_results.md) | Verified diagnostic results/limits và post-P1 review |
-| 8 | [P1 E1 config_resolved.json](../../reports/pilot/evidence/uit_2026-10-31/p1/e1/config_resolved.json) | Actual bounded pilot recipe |
-| 9 | [P1 E1 run_summary.json](../../reports/pilot/evidence/uit_2026-10-31/p1/e1/run_summary.json) | Completion/identity/best diagnostic checkpoint |
-| 10 | [P1 E1 history.json](../../reports/pilot/evidence/uit_2026-10-31/p1/e1/history.json) | Three epoch curves, counts, 124-class metrics/epoch |
-| 11 | [P1 E1 metrics.csv](../../reports/pilot/evidence/uit_2026-10-31/p1/e1/metrics.csv) | Cross-check scalar metrics/LR/update/timing |
+| 4 | [docs/pilot_plan.md](../pilot_plan.md) | Completed pilot gates and pending official recipe |
+| 5 | [docs/pilot_config_review.md](../pilot_config_review.md) | Historical proposals versus post-execution resolution |
+| 6 | [docs/server_pilot_runbook.md](../server_pilot_runbook.md) | Runtime/checkpoint/Slurm references, not an official launcher |
+| 7 | [reports/pilot/pilot_results.md](../../reports/pilot/pilot_results.md) | Verified diagnostic measurements, limitations, and post-P1 review |
+| 8 | [P1 E1 config_resolved.json](../../reports/pilot/evidence/uit_2026-10-31/p1/e1/config_resolved.json) | Actual bounded pilot configuration |
+| 9 | [P1 E1 run_summary.json](../../reports/pilot/evidence/uit_2026-10-31/p1/e1/run_summary.json) | Completion, identity, and selected diagnostic checkpoint |
+| 10 | [P1 E1 history.json](../../reports/pilot/evidence/uit_2026-10-31/p1/e1/history.json) | Three-epoch curves, counts, and 124-class per-epoch metrics |
+| 11 | [P1 E1 metrics.csv](../../reports/pilot/evidence/uit_2026-10-31/p1/e1/metrics.csv) | Scalar metrics, LR/update counts, and timing cross-checks |
 | 12 | [P0 E1 run_summary.json](../../reports/pilot/evidence/uit_2026-10-31/p0/e1/run_summary.json) | Strict full-epoch feasibility evidence |
 | 13 | [P0 E1 config_resolved.json](../../reports/pilot/evidence/uit_2026-10-31/p0/e1/config_resolved.json) | Declared batch/runtime/criteria/windows |
 | 14 | [configs/preprocessing/geoguessr_v1.json](../../configs/preprocessing/geoguessr_v1.json) | Exact frozen geometry/UI/photometric contract |
-| 15 | [artifacts/baseline124/summary.json](../../artifacts/baseline124/summary.json) | Counts, dedup, SHA-only grouping limitation |
+| 15 | [artifacts/baseline124/summary.json](../../artifacts/baseline124/summary.json) | Counts, deduplication, and SHA-only grouping limitation |
 | 16 | [artifacts/baseline124/labels.json](../../artifacts/baseline124/labels.json) | Exact 124-label index mapping |
-| 17 | [artifacts/baseline124/class_support.csv](../../artifacts/baseline124/class_support.csv) | Train-frequency buckets/evaluation support |
-| 18 | [artifacts/baseline124/provenance.json](../../artifacts/baseline124/provenance.json) | Source commit, artifact hashes/bytes |
-| 19 | [src/pilot/p1_train.py](../../src/pilot/p1_train.py) | Bounded runner: no official search/early stopping |
-| 20 | [src/pilot/engine.py](../../src/pilot/engine.py) | Sample-weighted CE, accumulation, update scheduler/tie behavior |
-| 21 | [src/pilot/models.py](../../src/pilot/models.py) | Backbone/head/load/init/optimizer reference |
-| 22 | [src/pilot/dataset.py](../../src/pilot/dataset.py) | Manifest integrity, isolation, natural sampler, seed/worker behavior |
+| 17 | [artifacts/baseline124/class_support.csv](../../artifacts/baseline124/class_support.csv) | Train-frequency buckets and evaluation support |
+| 18 | [artifacts/baseline124/provenance.json](../../artifacts/baseline124/provenance.json) | Source commit, artifact hashes, and byte counts |
+| 19 | [src/pilot/p1_train.py](../../src/pilot/p1_train.py) | Bounded diagnostic runner; not an official eight-epoch/search implementation |
+| 20 | [src/pilot/engine.py](../../src/pilot/engine.py) | Sample-weighted CE, accumulation, update-based scheduling, and tolerance-comparator reference |
+| 21 | [src/pilot/models.py](../../src/pilot/models.py) | Backbone/head/loading/initialization and optimizer reference |
+| 22 | [src/pilot/dataset.py](../../src/pilot/dataset.py) | Manifest integrity, split isolation, natural sampler, and seed/worker behavior |
 | 23 | [src/pilot/checkpoint.py](../../src/pilot/checkpoint.py) | Atomic full-state epoch-boundary resume reference |
-| 24 | [src/pilot/runtime.py](../../src/pilot/runtime.py) | Runtime/gates/identity/source fingerprints |
-| 25 | [src/pilot/config.py](../../src/pilot/config.py) | Explicit unresolved-value validation; schema chỉ dành pilot |
+| 24 | [src/pilot/runtime.py](../../src/pilot/runtime.py) | Runtime/gates/identity and source fingerprints |
+| 25 | [src/pilot/config.py](../../src/pilot/config.py) | Explicit unresolved-value validation; a pilot-only schema |
 | 26 | [src/preprocessing/geoguessr_v1.py](../../src/preprocessing/geoguessr_v1.py) | Reusable frozen preprocessing implementation |
