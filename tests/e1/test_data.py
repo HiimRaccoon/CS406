@@ -49,6 +49,7 @@ def test_both_layouts_global_only_deterministic_validation_and_path_guard(tmp_pa
         E1Dataset(Mini(), tmp_path, "val", 1001, {"train_enabled": True})
 
 
+@pytest.mark.filterwarnings("ignore:.*pin_memory.*no accelerator.*:UserWarning")
 def test_epoch_order_is_complete_and_jitter_survives_persistent_workers(tmp_path, recipe):
     from src.e1.data import E1Dataset, Record, EpochSampler, make_loaders
     files = []
@@ -76,11 +77,16 @@ def test_epoch_order_is_complete_and_jitter_survives_persistent_workers(tmp_path
     for epoch in (0, 1):
         loaders["train"].sampler.set_epoch(epoch)
         batches = list(loaders["train"])
+        if epoch == 0:
+            boundary_generator = loaders["train"].generator.get_state().clone()
         assert [len(y) for _, y, _ in batches] == [2, 1]
         for xs, ys, paths in batches:
             for x, path in zip(xs, paths):
                 assert torch.equal(x, d[(epoch, int(Path(path).stem))][0])
     # Restarted workers must recover the same sample/epoch values, not worker RNG draws.
     restarted = make_loaders(Mini(), tmp_path, cfg)
+    restarted["train"].generator.set_state(boundary_generator)
+    restarted["train"].prepare_resume(1)
     restarted["train"].sampler.set_epoch(1)
     assert torch.equal(next(iter(restarted["train"]))[0], batches[0][0])
+    assert torch.equal(restarted["train"].generator.get_state(), loaders["train"].generator.get_state())

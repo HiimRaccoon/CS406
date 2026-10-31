@@ -1,10 +1,10 @@
 # E1 Task Ledger
 
-**G1 APPROVED - T01-T09 implementation authorized; target GPU work and official execution remain blocked.**
+**G1 APPROVED - T01-T09 implemented and CPU-verified; target GPU work and official execution remain blocked.**
 
-Date: **2026-10-31**. Authority: [specs.md](specs.md), the [T00 user decision record](t00_review.md), and the complete [E1 numeric contract v1](e1_numeric_contract_v1.json) with its [checksum](e1_numeric_contract_v1.sha256), submitted for G1 review. Execution interfaces and future red/green verification are defined in [plan.md](plan.md), now reconciled to these decisions and T11a/T11b gates. G0 and R1-R4/R6-R9 input decisions are recorded; G1 is PASS; see [g1_approval.json](g1_approval.json) and [implementation evidence](implementation_log.md).
+Updated: **2026-11-01**. Authority: [specs.md](specs.md), the [T00 user decision record](t00_review.md), and the complete [E1 numeric contract v1](e1_numeric_contract_v1.json) with its [checksum](e1_numeric_contract_v1.sha256), explicitly frozen at G1. Technical interfaces remain in [plan.md](plan.md); this ledger owns current gate/completion state. G0 and R1-R4/R6-R9 input decisions are recorded; G1 is PASS; see [g1_approval.json](g1_approval.json), [implementation evidence](implementation_log.md), and [independent review corrections](implementation_review.md).
 
-This T00 revision changes only planning/review documents and the complete contract/checksum. Checked items below evidence G0 and contract preparation only. T00 is not fully complete until G1 review/freeze, explicit implementation authorization, execution-method selection, and the reviewed commit workflow occur. No production modules, tests, scripts, runbooks, or run artifacts are created.
+Checked items now evidence G0/G1, T00 input approval, and the implemented/CPU-verified T01-T09 deliverables with task commits. T10 deployment/target acceptance and official execution have not started. CPU fixtures and fabricated parser envelopes are not UIT measurements or official experiment records. The frozen contract, split/preprocessing bytes, pilot files, reviewed numeric decisions, task order, and later authorization gates remain unchanged.
 
 ## 1. Fixed Protocol Guardrails
 
@@ -27,7 +27,7 @@ This T00 revision changes only planning/review documents and the complete contra
 
 Gate flow: **G0 -> T00 -> G1 -> T01-T09 -> T10 -> G2 -> G3a -> T11a -> STOP for user review -> G3b -> T11b -> separate final-evaluation gate**. T10 target GPU smoke requires its own explicit target-work authorization; implementation approval alone does not authorize GPU jobs. All official GPU work uses the reviewed UIT target environment and Slurm execution path.
 
-## 3. Reviewed T00 Inputs - Contract Freeze Still Requires G1
+## 3. Reviewed T00 Inputs - Frozen at G1
 
 | Spec register | Required resolution | Owner of planned consumption |
 |---|---|---|
@@ -41,7 +41,7 @@ Gate flow: **G0 -> T00 -> G1 -> T01-T09 -> T10 -> G2 -> G3a -> T11a -> STOP for 
 | R8 | Runtime/environment, allocation, and output adoption | T00, T01, T07, T10, T11a, T11b |
 | R9 | Reporting/std convention and final-evaluation handoff | T00, T09, T11b; test access remains a separate gate |
 
-The complete contract records the user's reviewed values for all rows above: grid `[2.5e-5,5e-5,1e-4,2e-4]`; tuning `1001`; finals `[2001,3001,4001]`; effective/microbatch/accumulation `2/2/1`; 139992-update eight-epoch schedule with 1000-update warmup/start 0.1/floor 1e-6; AdamW `[0.9,0.999]`/eps 1e-8, clipping OFF; deterministic initialization/RNG/FP32 target lock; account `uit`/QoS `mig2-35`, 4 CPUs/16 GiB/09:00:00; sample std ddof=1 and ascending-label-ID exact-logit ties. See the contract for complete definitions, provenance, and runtime paths. G1 must review/freeze that complete artifact; input approval alone is not implementation authorization. Synthetic plan oracles remain test-only values.
+The frozen contract records the user's reviewed values for all rows above: grid `[2.5e-5,5e-5,1e-4,2e-4]`; tuning `1001`; finals `[2001,3001,4001]`; effective/microbatch/accumulation `2/2/1`; 139992-update eight-epoch schedule with 1000-update warmup/start 0.1/floor 1e-6; AdamW `[0.9,0.999]`/eps 1e-8, clipping OFF; deterministic initialization/RNG/FP32 target lock; account `uit`/QoS `mig2-35`, 4 CPUs/16 GiB/09:00:00; sample std ddof=1 and ascending-label-ID exact-logit ties. G1 approval binds exact JSON SHA-256 `c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143`. See the contract for complete definitions, provenance, and runtime paths. Synthetic plan oracles remain test-only values.
 
 ## 4. Dependency-Ordered Tasks
 

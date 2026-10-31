@@ -131,6 +131,8 @@ def select_lr(recipe: dict, trial_records: list[dict]) -> dict:
             or len({r["run_dir"] for r in rows}) != 4
             or any(r["summary"]["seed"] != 1001 or r["summary"]["stage"] != "tuning" for r in rows)):
         raise ValueError("Missing/repeated/wrong-identity candidate; stop for user review")
+    if any(r["summary"]["identity"] != rows[0]["summary"]["identity"] for r in rows):
+        raise ValueError("All four tuning trials must share the reviewed source/environment identity")
     maximum = max(r["summary"]["selected"]["macro_f1_supported"] for r in rows)
     if not math.isfinite(maximum):
         raise ValueError("Nonfinite trial metric")

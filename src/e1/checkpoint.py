@@ -119,6 +119,8 @@ def restore_checkpoint(path: Path, *, model, optimizer, scheduler, scaler, confi
         scaler.load_state_dict(state["scaler"])
     for key, loader in loaders.items():
         loader.generator.set_state(state["loader_rng"][key])
+        if hasattr(loader, "prepare_resume"):
+            loader.prepare_resume(state["progress"]["completed_epoch"])
     random.setstate(state["rng"]["python"])
     np.random.set_state(state["rng"]["numpy"])
     torch.set_rng_state(state["rng"]["cpu"])

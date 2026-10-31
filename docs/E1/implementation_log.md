@@ -13,7 +13,7 @@ Ruling: use native Python/PowerShell equivalents of skill ledger helpers on Wind
 
 Preflight interfaces: T01 run/recipe dictionaries feed T02/T03/T07/T08; T02 yields `(tensor,target,path)` for T04/T05/T09; T03 produces model/optimizer for T05/T06; T05 shares metrics/evaluation with T07/T09; T06 restores full progress/loaders for T07; T07 complete summaries/checkpoints feed T08/T09. No interface conflicts found. CPU fixtures replace external setup edges; no production synthetic-evidence switch is permitted.
 
-Tasks T01-T09: pending; evidence appended after each task's red/green check.
+Tasks T01-T09: implemented and CPU-verified in order, with one independent whole-branch review and one correction pass. T10 and later stages remain pending.
 
 T01: complete. RED: new task tests failed before implementation (see local .tools/e1-t01-red.log). GREEN: 15 passed; tests/e1/test_config.py. Task commit follows on e1-implementation; no GPU work.
 
@@ -27,12 +27,35 @@ T05: complete. RED: new task tests failed before implementation (see local .tool
 
 T06: complete. RED: new task tests failed before implementation (see local .tools/e1-t06-red.log). GREEN: 2 passed; tests/e1/test_checkpoint.py; fsync Windows writable-handle correction and valid atomic-failure fixture. Task commit follows on e1-implementation; no GPU work.
 
-Ruling: last.pt carries a CPU snapshot of selected weights; best.pt is reporting-only and rebuilt from that snapshot after resume ? repairs crashes between atomic replacements without rolling back optimizer budget ? cost if wrong: an extra model-weight copy in last.pt; CPU interruption equivalence covers scientific state.
+Ruling: last.pt carries a CPU snapshot of selected weights; best.pt is reporting-only and rebuilt from that snapshot after resume - repairs crashes between atomic replacements without rolling back optimizer budget - cost if wrong: an extra model-weight copy in last.pt; CPU interruption equivalence covers scientific state.
 
-Ruling: private setup edges in CPU integration fixtures provide tiny counts and a synthetic identity, with no production bypass option ? exercises the real eight-epoch runner/checkpoints/engine while campaign validation rejects such evidence ? cost if wrong: target CUDA acceptance remains necessary at T10.
+Ruling: private setup edges in CPU integration fixtures provide tiny counts and a synthetic identity, with no production bypass option - exercises the real eight-epoch runner/checkpoints/engine while campaign validation rejects such evidence - cost if wrong: target CUDA acceptance remains necessary at T10.
 
 T07: complete. RED: new task tests failed before implementation (see local .tools/e1-t07-red.log). GREEN: 38 passed through T07; synthetic eight-epoch/flat/decreasing/replay/lock checks; expected CPU pin-memory warning. Task commit follows on e1-implementation; no GPU work.
 
 T08: complete. RED: new task tests failed before implementation (see local .tools/e1-t08-red.log). GREEN: 8 passed; tests/e1/test_campaign.py; no automatic job launch. Task commit follows on e1-implementation; no GPU work.
 
 T09: complete. RED: new task tests failed before implementation (see local .tools/e1-t09-red.log). GREEN: 3 passed; tests/e1/test_report.py; selected-checkpoint exports and sample-std aggregation. Task commit follows on e1-implementation; no GPU work.
+
+Task commits, in order: T01 `82affd6`, T02 `2d675ac`, T03 `6f54add`, T04 `6ef667a`, T05 `caa1445`, T06 `f2f6740`, T07 `d8d107f`, T08 `fde7db0`, T09 `466d0fe`.
+
+Final independent review: six important findings, no critical/minor findings; author corrections and limits are recorded in [implementation_review.md](implementation_review.md). All nine reproducing cases failed before the corrections (`.tools/e1-review-red.log`), then the corrected regressions plus runner/campaign checks passed 22/22. Three additional parser tests cover actual successful evidence validation/selection and rehashed bad histories/weights; fabricated envelopes remain temporary CPU test inputs.
+
+Final: fixed current-data audit, zero-boundary retry, terminal publication recovery, persistent-loader RNG drift, mixed tuning identities, and lost attempt/replay evidence. Each finding has a named RED-to-GREEN regression in the review record. No second reviewer pass is claimed.
+
+Final author check: a corrupt last.pt could make the failure handler's diagnostic reread mask the original load error and leave status running. `test_corrupt_resume_is_recorded_as_failure_without_masking_load_error` failed, then passed after the diagnostic probe treated unreadable state as unknown and preserved the original failure. This correction is part of the same final fix commit.
+
+Ruling: verify current train/validation bytes once in every production preflight - stale audit records alone cannot prove immutability or path containment before allocation - cost if wrong: additional startup I/O, not extra optimizer work or image decoding.
+
+Ruling: persistent-worker reconstruction reuses the original worker bootstrap state while preserving the committed logical loader generator - matches uninterrupted persistent-worker progression and keeps sample-keyed randomness - cost if wrong: depends on pinned Torch DataLoader lifecycle and still needs target T10 resume acceptance.
+
+Final review limits: CUDA/full-size/real-weight acceptance stays at T10; Slurm deployment and G2/G3 execution are outside this delivery; trusted local artifact records are not cryptographic attestations against mutually fabricated inputs; cross-stack bitwise equivalence is not claimed. These limits preserve the reviewed gates rather than weakening implementation acceptance. Deferred minors: none reported.
+
+Final verification:
+
+- `python -B -m pytest -q -m "not gpu" --basetemp=.tools/pytest-e1-final2`: **171 passed, 1 deselected**, no warnings (62 E1 cases plus 109 existing cases). The opt-in GPU test was deselected, not executed.
+- `python -B -m compileall -q src/e1 tests/e1`: PASS.
+- CPU CLI help for `src.e1.train`, `src.e1.campaign`, `src.e1.report`: PASS; no model/job allocation.
+- Frozen numeric contract/sidecar, four fixed split artifacts, preprocessing module/config, and referenced pilot source hashes: unchanged and verified. No raw test images opened, pretrained weights downloaded, Slurm/GPU jobs launched, tuning trials/final seeds trained, or test evaluation performed.
+
+Next required stage: T10 deployment/acceptance under its own target-work authorization. G2, G3a, G3b and final test evaluation remain open. This implementation is not evidence that the required target checks have passed.

@@ -177,6 +177,35 @@ def seed_worker(_):
     np.random.seed(seed)
 
 
+class E1Loader(DataLoader):
+    """Separate restarted worker bootstrap from committed loader RNG progression."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.generator is None:
+            raise ValueError("E1 loaders require an explicit independent generator")
+        self._worker_bootstrap_state = self.generator.get_state().clone()
+        self._resume_bootstrap = False
+
+    def prepare_resume(self, completed_epoch):
+        if self._iterator is not None:
+            raise ValueError("Restore into fresh loaders, not live persistent workers")
+        self._resume_bootstrap = bool(completed_epoch and self.persistent_workers and self.num_workers)
+
+    def __iter__(self):
+        if not self._resume_bootstrap:
+            return super().__iter__()
+        committed = self.generator.get_state()
+        # Recreate the original worker base seeds without adding a logical loader draw.
+        # All sample order/jitter remains independently keyed by run/epoch/path.
+        self.generator.set_state(self._worker_bootstrap_state)
+        try:
+            iterator = super().__iter__()
+        finally:
+            self.generator.set_state(committed)
+        self._resume_bootstrap = False
+        return iterator
+
+
 def make_loaders(manifest, data_root: Path, config: dict) -> dict:
     recipe, seed = config["recipe"], config["seed"]
     runtime, batch = recipe["runtime"], recipe["batch"]
@@ -190,5 +219,5 @@ def make_loaders(manifest, data_root: Path, config: dict) -> dict:
                       drop_last=False, generator=generator, worker_init_fn=seed_worker, shuffle=False)
         if runtime["num_workers"]:
             kwargs["prefetch_factor"] = runtime["prefetch_factor"]
-        result[split] = DataLoader(dataset, sampler=EpochSampler(dataset, seed) if split == "train" else None, **kwargs)
+        result[split] = E1Loader(dataset, sampler=EpochSampler(dataset, seed) if split == "train" else None, **kwargs)
     return result

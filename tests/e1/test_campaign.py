@@ -17,7 +17,7 @@ def install_trial_edge(monkeypatch, recipe, tmp_path, scores=None):
         folder = tmp_path / cfg["run_id"]
         folder.mkdir()
         atomic_json(folder / "run_summary.json", {"lr": lr, "score": score})
-        mapped[str(folder.resolve())] = {"config": cfg, "summary": {"lr": lr, "seed": 1001, "stage": "tuning", "selected": {"epoch": 1, "macro_f1_supported": score}},
+        mapped[str(folder.resolve())] = {"config": cfg, "summary": {"lr": lr, "seed": 1001, "stage": "tuning", "identity": {"source_sha256": "a"*64}, "selected": {"epoch": 1, "macro_f1_supported": score}},
                                        "run_dir": str(folder.resolve()), "summary_sha256": sha256_file(folder / "run_summary.json"),
                                        "best_sha256": str(len(records))*64, "events_sha256": "e"*64}
         records.append({"run_dir": str(folder)})

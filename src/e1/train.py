@@ -8,6 +8,7 @@ import csv
 import datetime as dt
 import importlib.metadata
 import io
+import json
 import math
 import os
 import platform
@@ -112,6 +113,9 @@ def preflight(config: dict) -> dict:
               "gpu_class": recipe["deployment"]["expected_gpu_class"]}
     if acceptance.get("identity") != common:
         raise ValueError("Actual source/data/environment differs from reviewed G2 acceptance")
+    # A historical audit does not prove that files or symlink targets stayed immutable.
+    # Recheck train/val bytes and containment once before allocation, never every epoch.
+    manifest.verify_images(Path(paths["data_root"]))
     return {**common, "contract_sha256": CONTRACT_SHA256, "evidence_kind": "official_uit_slurm",
             "accepted_device": acceptance["device"], "acceptance_sha256": sha256_file(Path(paths["acceptance_record"]))}
 
@@ -209,21 +213,77 @@ def _checkpoint_args(context):
     return {k: context[k] for k in ("model", "optimizer", "scheduler", "scaler", "config", "identity", "loaders")}
 
 
+def _attempt_snapshot(path, value):
+    text = json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False) + "\n"
+    with Path(path).open("x", encoding="utf-8", newline="\n") as stream:
+        stream.write(text)
+        stream.flush()
+        os.fsync(stream.fileno())
+
+
+def _begin_attempt(folder, config, operation):
+    root = folder / "attempts"
+    root.mkdir(exist_ok=True)
+    previous = sorted(p for p in root.iterdir() if p.is_dir() and p.name.isdigit())
+    for old in previous:
+        if not (old / "outcome.json").exists() and not (old / "abandoned.json").exists():
+            observation = {"status": "terminated_without_outcome", "uncommitted_work": "unknown after abrupt termination",
+                           "observed_utc": dt.datetime.now(dt.timezone.utc).isoformat()}
+            _attempt_snapshot(old / "abandoned.json", observation)
+            _event(folder, "attempt_abandoned", attempt_id=old.name, **observation)
+    number = max((int(p.name) for p in previous), default=0) + 1
+    attempt = root / f"{number:06d}"
+    attempt.mkdir()
+    _attempt_snapshot(attempt / "request.json", {"run_id": config["run_id"], "config_sha256": config["config_sha256"],
+                      "contract_sha256": CONTRACT_SHA256, "operation": operation,
+                      "started_utc": dt.datetime.now(dt.timezone.utc).isoformat()})
+    return attempt
+
+
+def _last_boundary(folder, context):
+    if not (folder / "last.pt").exists():
+        return {"completed_epoch": 0, "updates": 0}
+    if context is not None:
+        try:
+            state = read_checkpoint(folder / "last.pt", config=context["config"], identity=context["identity"])
+            return {k: state["progress"][k] for k in ("completed_epoch", "updates")}
+        except Exception:
+            # This is only a diagnostic probe in the failure handler. Preserve the
+            # original load/validation error rather than failing a second time here.
+            pass
+    return {"completed_epoch": None, "updates": None, "state": "unverified_before_preflight_or_unreadable"}
+
+
 def run(config: dict, run_dir: Path, *, resume: Path | None = None, stop_requested=lambda: False) -> dict:
     config = validate_run(config)
     folder = Path(run_dir).resolve()
     if folder != (Path(config["paths"]["runs_dir"]) / config["run_id"]).resolve():
         raise ValueError("Run directory must match its immutable declaration")
+    recovering_initialization = False
     if resume is None:
-        folder.mkdir(parents=True, exist_ok=False)
-        atomic_json(folder / "config_resolved.json", config)
+        if folder.exists():
+            if ((folder / "last.pt").exists() or not (folder / "config_resolved.json").is_file()
+                    or read_json(folder / "config_resolved.json") != config):
+                raise FileExistsError("Existing run requires unchanged declaration and explicit last.pt resume")
+            recovering_initialization = True
+        else:
+            folder.mkdir(parents=True, exist_ok=False)
+            atomic_json(folder / "config_resolved.json", config)
     elif (Path(resume).resolve() != folder / "last.pt" or not Path(resume).is_file()
           or read_json(folder / "config_resolved.json") != config):
         raise ValueError("Resume requires the same declared run and last.pt")
     with run_lock(folder):
+        if resume is None and (folder / "last.pt").exists():
+            raise FileExistsError("Run already initialized; use explicit last.pt resume")
         if resume and (folder / "run_summary.json").exists() and read_json(folder / "run_summary.json").get("status") == "complete":
             raise ValueError("Completed run cannot be extended or rerun")
-        _event(folder, "resume" if resume else "created", replay_policy="last committed epoch boundary; original budget")
+        operation = "resume" if resume else "recover_initialization" if recovering_initialization else "created"
+        attempt = _begin_attempt(folder, config, operation)
+        attempt_started = time.perf_counter()
+        context = None
+        training = None
+        in_flight_epoch = None
+        _event(folder, operation, attempt_id=attempt.name, replay_policy="last committed epoch boundary; original budget")
         atomic_json(folder / "run_summary.json", {"status": "running", "run_id": config["run_id"], "contract_sha256": CONTRACT_SHA256})
         try:
             checked = preflight(config)
@@ -231,6 +291,10 @@ def run(config: dict, run_dir: Path, *, resume: Path | None = None, stop_request
             cfg = context["config"]
             recipe = cfg["recipe"]
             args = _checkpoint_args(context)
+            _attempt_snapshot(attempt / "environment.json", context["environment"])
+            _event(folder, "attempt_environment", attempt_id=attempt.name, environment_path=f"attempts/{attempt.name}/environment.json",
+                   environment_sha256=sha256_file(attempt / "environment.json"))
+            # The root file is a latest-attempt convenience alias; immutable snapshots retain every allocation.
             atomic_json(folder / "environment.json", context["environment"])
             atomic_json(folder / "model_metadata.json", context["model_metadata"])
             progress = {"completed_epoch": 0, "updates": 0, "history": [], "selected": None, "selected_weights": None}
@@ -238,6 +302,10 @@ def run(config: dict, run_dir: Path, *, resume: Path | None = None, stop_request
                 progress = restore_checkpoint(resume, **args)
             else:
                 save_checkpoint(folder / "last.pt", progress=progress, **args)
+            boundary = {k: progress[k] for k in ("completed_epoch", "updates")}
+            _attempt_snapshot(attempt / "start_boundary.json", boundary)
+            _event(folder, "attempt_boundary", attempt_id=attempt.name, **boundary,
+                   replay_policy="Any work after this boundary in a prior attempt is replayed; unknown work remains explicitly unknown")
             # last.pt is authoritative: repair derived files after a crash between atomic replacements.
             if progress["selected"] is not None:
                 save_checkpoint(folder / "best.pt", progress=progress, **args)
@@ -245,12 +313,18 @@ def run(config: dict, run_dir: Path, *, resume: Path | None = None, stop_request
             for epoch in range(progress["completed_epoch"], 8):
                 if stop_requested():
                     break
+                training = None
+                in_flight_epoch = epoch + 1
+                _event(folder, "epoch_started", attempt_id=attempt.name, epoch=epoch + 1,
+                       committed_epoch=progress["completed_epoch"], committed_updates=progress["updates"])
                 sampler = context["loaders"]["train"].sampler
                 if hasattr(sampler, "set_epoch"):
                     sampler.set_epoch(epoch)
                 started = time.perf_counter()
                 train = train_epoch(context["model"], context["loaders"]["train"], context["optimizer"], context["scheduler"], context["scaler"],
                                     device=context["device"], runtime=recipe["runtime"], accumulation=recipe["batch"]["gradient_accumulation"], clipping=recipe["optimizer"]["gradient_clipping"])
+                training = train
+                _event(folder, "training_observed", attempt_id=attempt.name, epoch=epoch + 1, train=train)
                 metrics = evaluate(context["model"], context["loaders"]["val"], device=context["device"], runtime=recipe["runtime"], n_train=context["n_train"], labels=context["labels"])
                 if (train["samples"] != context["train_samples"] or metrics["samples"] != context["val_samples"]
                         or train["optimizer_updates"] != recipe["batch"]["updates_per_epoch"]):
@@ -266,7 +340,8 @@ def run(config: dict, run_dir: Path, *, resume: Path | None = None, stop_request
                 save_checkpoint(folder / "last.pt", progress=progress, **args)
                 save_checkpoint(folder / "best.pt", progress=progress, **args)
                 write_history(folder, progress["history"])
-                _event(folder, "epoch_committed", epoch=epoch + 1, updates=progress["updates"])
+                _event(folder, "epoch_committed", attempt_id=attempt.name, epoch=epoch + 1, updates=progress["updates"])
+                in_flight_epoch = None
                 if stop_requested():
                     break
             complete = progress["completed_epoch"] == 8
@@ -279,11 +354,22 @@ def run(config: dict, run_dir: Path, *, resume: Path | None = None, stop_request
                        "selected": progress["selected"], "termination_reason": "eight_epoch_budget_complete" if complete else "operational_boundary_stop",
                        "checkpoint_sha256": {p.name: sha256_file(p) for p in (folder / "best.pt", folder / "last.pt") if p.exists()},
                        "history_sha256": sha256_file(folder / "history.json"), "test_images_opened": 0}
+            # Publish the complete summary last. A killed publication can resume the authoritative
+            # boundary (including boundary eight) without executing another optimizer update.
+            _event(folder, summary["status"], attempt_id=attempt.name, completed_epochs=progress["completed_epoch"])
+            _attempt_snapshot(attempt / "outcome.json", {"status": summary["status"], "last_committed_epoch": progress["completed_epoch"],
+                              "last_committed_updates": progress["updates"], "elapsed_seconds": time.perf_counter() - attempt_started})
             atomic_json(folder / "run_summary.json", summary)
-            _event(folder, summary["status"], completed_epochs=progress["completed_epoch"])
             return summary
         except Exception as exc:
-            _event(folder, "failure", error_type=type(exc).__name__, error=str(exc))
+            boundary = _last_boundary(folder, context)
+            failure = {"status": "failed", "error_type": type(exc).__name__, "error": str(exc),
+                       "last_committed_epoch": boundary["completed_epoch"], "last_committed_updates": boundary["updates"],
+                       "in_flight_epoch": in_flight_epoch, "observed_training": training,
+                       "partial_work": "unknown" if in_flight_epoch is not None and training is None else "available measurements recorded; only committed boundaries count toward budget",
+                       "elapsed_seconds": time.perf_counter() - attempt_started}
+            _attempt_snapshot(attempt / ("failure.json" if (attempt / "outcome.json").exists() else "outcome.json"), failure)
+            _event(folder, "failure", attempt_id=attempt.name, **failure)
             atomic_json(folder / "run_summary.json", {"status": "failed", "run_id": config["run_id"], "error_type": type(exc).__name__,
                         "error": str(exc), "resume_from_last_committed_boundary_only": True, "test_images_opened": 0})
             raise

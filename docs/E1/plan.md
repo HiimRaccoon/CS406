@@ -1,5 +1,7 @@
 # E1 Implementation Plan
 
+**Execution update (2026-11-01):** G1 explicitly approved the exact contract digest in [g1_approval.json](g1_approval.json). T01-T09 implementation and CPU verification are complete; see the [current ledger](tasks.md), [evidence](implementation_log.md), and [independent review corrections](implementation_review.md). Preparation-status wording and checklist steps below preserve the reviewed planning snapshot; the external approval record and task ledger supply current execution state. T10 target GPU work and official execution remain blocked. No technical interface, numeric decision, task order, or authorization gate is changed by this status note.
+
 > **For agentic workers:** REQUIRED SUB-SKILL for future authorized execution: use `executing-plans` for native execution, or `subagent-driven-development` if that method is explicitly selected. Execute one reviewed task at a time; checkbox steps track completion. This document does not select an execution method or authorize implementation.
 
 **Goal:** Build the official E1 full-image baseline with reproducible four-LR tuning and three disjoint final seeds, following the reviewed eight-epoch protocol.
