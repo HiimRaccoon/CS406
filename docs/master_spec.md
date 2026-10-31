@@ -2,7 +2,7 @@
 
 **DRAFT FOR USER REVIEW — chưa frozen, chưa authorize implementation**
 
-Tài liệu trung tâm để review thiết kế E1 → E1-HR → E2 → E3. Task hiện tại chỉ viết tài liệu; pilot vẫn deferred. Không tạo experiment-specific specs, training code hoặc chạy model khi chưa có yêu cầu tiếp theo.
+Tài liệu trung tâm để review thiết kế E1 → E1-HR → E2 → E3. **Status update 2026-10-31:** UIT conformance, strict P0 và bounded P1 đã hoàn tất; xem [pilot results](../reports/pilot/pilot_results.md). Official specification/implementation là phase tiếp theo, **chưa bắt đầu**; task hiện tại chỉ cập nhật status/report, không tạo training code hoặc official configs.
 
 Nguồn quyết định research/training là [Grillme đã review](grillme.md); nếu khác master spec cũ, Grillme mới hơn được ưu tiên. Nguồn chuẩn về split/preprocessing/geometry là [fixed artifacts](../artifacts/baseline124/README.md), [provenance](../artifacts/baseline124/provenance.json) và [preprocessing v1 config](../configs/preprocessing/geoguessr_v1.json). Freeze các nguồn này không đồng nghĩa master spec đã frozen.
 
@@ -71,7 +71,7 @@ Same ConvNeXt-Tiny representation
 768-d feature -> Linear classifier -> 124 classes
 ~~~
 
-**Final resolution pending pilot. Không compute-match với E2.** Chọn hợp lý theo kích thước ảnh gốc, aspect ratio và khả năng GPU UIT; không dùng test performance.
+**1344×576 đã accepted sau strict UIT P0** theo first-candidate feasibility rule; xem [pilot results](../reports/pilot/pilot_results.md). Không compute-match với E2, không chọn bằng validation/test classification score.
 
 Mục tiêu: kiểm tra việc **chỉ tăng full-image resolution** có cải thiện classification score không. Loss và sampling giống E1. FLOPs/latency/VRAM là thông tin efficiency bổ sung, không phải ràng buộc chọn resolution.
 
@@ -171,7 +171,7 @@ Head LR/budget/initialization được chốt qua **small head pilot**, không m
 | ID | Representation | Resolution/views | Sampling | Trainable |
 |---|---|---|---|---|
 | E1 | Full image | 896×384 | Natural | Full model |
-| E1-HR | Full image | Pending high-res | Natural | Full model |
+| E1-HR | Full image | 1344×576, accepted sau P0 | Natural | Full model |
 | E2 | Global + 4 local | 896×384 + 4×320×320 | Natural | Shared full model |
 | E3-E1-N | E1 frozen feature | Cached, 768-d | Natural | Head only |
 | E3-E1-cRT | E1 frozen feature | Cached, 768-d | Class-uniform | Head only |
@@ -192,7 +192,7 @@ Các controls và recipe choices dưới đây không tự động trở thành 
 | Starting point | E1/E1-HR/E2 khởi tạo độc lập từ cùng file; không kế thừa E1 checkpoint/optimizer/scheduler |
 | Fine-tuning | Full model từ epoch 1, có LR warmup; không classifier-only phase |
 | Optimizer | AdamW |
-| Scheduler | LR warmup, sau đó cosine LR decay; warmup duration, cosine parameters, max epochs và minimum/final LR nếu protocol cần vẫn PENDING, không tự điền numeric values |
+| Scheduler | LR warmup, sau đó cosine LR decay; official max_epochs=8 đã được user review sau pilot. Official warmup duration, cosine parameters và minimum/final LR nếu protocol cần vẫn NEEDS REVIEW |
 | Layer learning rates | Không LLRD; LR_head = LR_backbone |
 | Weight decay | 0.05 cho trainable Conv/Linear weights; không decay bias và LayerNorm parameters; explicit parameter groups |
 | Stochastic depth | **max_drop_path_rate = 0.1** đã chốt; E1/E1-HR/E2 dùng cùng explicit depth schedule, không tuning riêng. Linear 0 → 0.1 theo block depth là schedule của implementation TorchVision ConvNeXt-Tiny được chọn ([nguồn](https://github.com/pytorch/vision/blob/main/torchvision/models/convnext.py)), không phải một schedule/hyperparameter đã được separately optimized bằng thí nghiệm |
@@ -237,27 +237,27 @@ Report **mean ± std**, không cherry-pick seed có test score cao nhất. Train
 
 Effective batch size tính theo **original images**; năm E2 views vẫn là một mẫu. Microbatch/accumulation có thể khác để giữ cùng effective batch. Không tự cắt epochs/trials riêng cho architecture chậm; nếu compute buộc thay đổi, điều chỉnh common protocol trước official search. Slurm resume không cấp thêm training budget.
 
-## F. PENDING PILOT — không tự điền numeric values
+## F. Pilot completed — official numeric contract còn NEEDS REVIEW
 
-**Pilot hiện deferred.** Chưa có GPU timing/VRAM/training results trong repo. Các trường sau cần pilot hoặc review tiếp theo trước khi freeze numeric training recipe:
+**UIT pilot completed:** target conformance PASS, strict full-epoch P0 PASS và bounded P1 COMPLETE (3/3 epochs) cho cả E1/E1-HR/E2. [Pilot results](../reports/pilot/pilot_results.md) lưu actual numeric pilot records, identity, curves và evidence links. User đã review đủ để đi tiếp, không cần P1-v2; official **max_epochs=8** frozen sau P1. Official recipe **chưa fully frozen**, không coi diagnostic scores là official results hoặc tự promote pilot LR/seed.
 
-| Nhóm | Còn pending |
+| Nhóm | Trạng thái sau pilot / phần còn review |
 |---|---|
-| Resolution | Final E1-HR full-image resolution; không compute-match E2 |
-| Batch | Microbatch từng architecture, gradient accumulation, common effective batch size |
-| LR | Exact four LR values |
+| Resolution | Resolved: E1-HR 1344×576 accepted theo strict P0, không compute-match E2 |
+| Batch | Pilot common batch đã freeze và khả thi; official batch/accumulation adoption/contract còn cần review |
+| LR | **NEEDS REVIEW: exact four LR values**; không tự dùng diagnostic LR 1e-4 |
 | Training seeds | Exact numeric ID của 1 tuning seed và 3 final training seeds; cần freeze trước official LR search/final runs. Split seed vẫn là 406, không thay đổi membership |
-| Horizon/selection | Max epochs, warmup duration, early-stopping patience, tolerance và tie-break |
-| Optimizer/scheduler | AdamW numeric details còn thiếu; cosine schedule parameters và minimum/final LR nếu protocol cần |
-| Numerics | AMP details, gradient clipping nếu có |
-| Augmentation | Brightness/contrast amplitudes |
-| Head | Exact initialization; E3 head optimizer/LR/budget và sampling mechanics |
-| Environment | Package/environment lock trên UIT |
-| Pretrained integrity | Full SHA-256 sau khi tải thật weight file |
+| Horizon/selection | Max epochs=8 đã review/freeze; official warmup, patience, tolerance/tie-break còn NEEDS REVIEW |
+| Optimizer/scheduler | Pilot exact values đã ghi; official AdamW adoption, cosine schedule/floor/horizon cho 8 epochs còn NEEDS REVIEW |
+| Numerics | Pilot runtime policy đã đo; official AMP/clipping/runtime adoption còn cần review |
+| Augmentation | Resolved: brightness/contrast 0.10/0.10 accepted từ train-only preview; P1 đã dùng |
+| Head | Pilot deterministic init đã ghi; official adoption/seed binding và E3 head protocol còn pending |
+| Environment | Actual UIT versions/runtime đã ghi; official environment/RNG/resume contract cần xác nhận |
+| Pretrained integrity | Resolved: full SHA-256 đã pin và ghi trong cả sáu runs; xem report |
 
-Main UIT pilot sẽ đo cả E1/E1-HR/E2 để chốt common budget trước official LR search. Môi trường dự kiến: single GPU, Slurm partition normal, GRES gpu:2g.35gb:1, khoảng 35 GB VRAM; dữ liệu/checkpoints/logs dưới `/datastore/binhvp/<my-folder>/`. Đây là context cho bước sau, không phải lệnh chạy.
+Pilot đã đo cả ba profiles trên UIT H200 MIG 2g.35gb, common pilot effective batch theo ảnh gốc; full environment/measurement details nằm trong report. Numeric pilot values không tự trở thành official configuration.
 
-Không suy ra “đã hội tụ” chỉ từ benchmark throughput ngắn. [Pilot plan](pilot_plan.md) vẫn là ghi chú draft/deferred; chưa được phép triển khai.
+Không suy ra “đã hội tụ” từ throughput hoặc bounded 3-epoch curves. [Pilot plan](pilot_plan.md) nay ghi completed gates và các official-only fields còn mở. Chưa tạo `training_recipe_v1`; master sẽ reference recipe sau review thay vì duplicate toàn bộ numeric contract.
 
 ## G. Frozen preprocessing và fixed split
 
@@ -281,7 +281,7 @@ Quy trình chung: decoded raw RGB → UI preprocessing → view construction →
 
 Nguồn chuẩn là [preprocessing v1](preprocessing_v1.md), [config](../configs/preprocessing/geoguessr_v1.json) và [checksum](../configs/preprocessing/geoguessr_v1.sha256); không duplicate các UI mask coordinates vào master spec.
 
-[Train-only UI QA](../reports/preprocessing_qa_v1/qa_review_vi.md) đã hoàn thành với 297 ảnh thuộc 124 labels, không dùng validation/test hoặc classification score và không tune geometry. **TorchVision numerical conformance trên target environment chưa được xác minh**; UI QA không thay thế gate này.
+[Train-only UI QA](../reports/preprocessing_qa_v1/qa_review_vi.md) đã hoàn thành với 297 ảnh thuộc 124 labels, không dùng validation/test hoặc classification score và không tune geometry. **TorchVision preprocessing conformance trên target UIT đã PASS**; [target report](../reports/pilot/evidence/uit_2026-10-31/conformance/conformance_report.json) và [pilot results](../reports/pilot/pilot_results.md) ghi audit/train-only checks riêng, không đánh đồng với UI QA.
 
 ## H. Metrics và analysis
 
@@ -315,7 +315,7 @@ E3 cache gắn với source checkpoint/seed, feature definition, split/label/pre
 
 ## I. Main execution workflow
 
-**Hiện dừng tại draft chờ user review.** Workflow dưới đây là thứ tự dự kiến, không authorize bất kỳ stage nào:
+**Master vẫn draft chờ user review; official implementation chưa bắt đầu.** UIT pilot trong workflow dưới đây đã hoàn tất và không cần P1-v2; numeric recipe/official spec là bước tiếp theo. Giữ sơ đồ làm trình tự tham chiếu, không authorize chạy thêm stage hoặc imply các official stages đã hoàn thành:
 
 ~~~text
 Frozen dataset/split
@@ -364,7 +364,7 @@ Comparison + report
 
 # Project checklist
 
-Các ô [x] chỉ xác nhận deliverable/định nghĩa đã được ghi nhận trong repo, không xác nhận model đã implement hoặc master đã frozen. Research-design items có bằng chứng trong [Grillme](grillme.md) và bản draft này; numeric values, conformance và kết quả chưa có giữ [ ].
+Các ô [x] xác nhận deliverable/định nghĩa hoặc completed pilot gate đã có evidence, không xác nhận official model đã implement hoặc master đã frozen. Research-design items có bằng chứng trong [Grillme](grillme.md); completed pilot items có [report/evidence](../reports/pilot/pilot_results.md). Các official stages và numeric decisions chưa review giữ [ ].
 
 ### Dataset & preprocessing
 
@@ -376,7 +376,7 @@ Các ô [x] chỉ xác nhận deliverable/định nghĩa đã được ghi nhậ
 - [x] Navigation-arrow policy frozen
 - [x] E2 crop geometry frozen
 - [x] Train-only UI QA completed
-- [ ] TorchVision numerical preprocessing conformance verified on target environment
+- [x] TorchVision numerical preprocessing conformance verified on target environment
 
 ### Research design
 
@@ -392,15 +392,21 @@ Các ô [x] chỉ xác nhận deliverable/định nghĩa đã được ghi nhậ
 
 ### Pilot
 
-- [ ] UIT environment lock recorded
-- [ ] Exact pretrained weight SHA-256 recorded
-- [ ] E1 timing/VRAM pilot
-- [ ] E1-HR timing/VRAM pilot
-- [ ] E2 timing/VRAM pilot
-- [ ] Final E1-HR resolution frozen
-- [ ] Effective batch size frozen
-- [ ] Epoch/warmup/patience frozen
+- [x] Actual UIT pilot environment/package/runtime record captured (official adoption còn review)
+- [x] Exact pretrained weight SHA-256 recorded
+- [x] E1 strict full-epoch timing/VRAM P0 PASS
+- [x] E1-HR strict full-epoch timing/VRAM P0 PASS
+- [x] E2 strict full-epoch timing/VRAM P0 PASS
+- [x] E1 bounded P1 COMPLETE, 3/3 epochs (diagnostic only)
+- [x] E1-HR bounded P1 COMPLETE, 3/3 epochs (diagnostic only)
+- [x] E2 bounded P1 COMPLETE, 3/3 epochs (diagnostic only)
+- [x] Final E1-HR resolution accepted by strict P0
+- [x] Common effective pilot batch frozen (official adoption còn review)
+- [x] Brightness/contrast amplitudes accepted via train-only review
+- [x] Official max epochs=8 reviewed/frozen after pilot
+- [ ] Official warmup/patience/tolerance/scheduler numeric contract frozen
 - [ ] LR candidate grid frozen
+- [ ] Exact official tuning/final training seed IDs frozen
 - [ ] Remaining numeric training recipe frozen
 
 ### E1

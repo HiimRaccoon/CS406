@@ -1,0 +1,56 @@
+[
+  {
+    "epoch": 1,
+    "train": {
+      "loss": 1.9628814455281505,
+      "samples": 34997,
+      "optimizer_updates": 17499,
+      "microbatches": 17499,
+      "seconds": 4485.089442930883,
+      "images_per_second": 7.802965904093637,
+      "mean_microbatch_seconds": 0.2563054713372697,
+      "mean_update_seconds": 0.2563054713372697,
+      "data_wait_seconds": 2.402086348971352,
+      "data_wait_fraction": 0.0005355715598397642,
+      "lr_first": 1e-05,
+      "lr_last": 7.697424938715421e-05
+    },
+    "epoch_seconds": 4695.186531051993
+  },
+  {
+    "epoch": 2,
+    "train": {
+      "loss": 1.0008699085883483,
+      "samples": 34997,
+      "optimizer_updates": 17499,
+      "microbatches": 17499,
+      "seconds": 4483.50115799997,
+      "images_per_second": 7.805730112850399,
+      "mean_microbatch_seconds": 0.2562147070118275,
+      "mean_update_seconds": 0.2562147070118275,
+      "data_wait_seconds": 2.3953765525948256,
+      "data_wait_fraction": 0.0005342647337830445,
+      "lr_first": 7.69716977150326e-05,
+      "lr_last": 2.662768700632605e-05
+    },
+    "epoch_seconds": 4693.038463911973
+  },
+  {
+    "epoch": 3,
+    "train": {
+      "loss": 0.4190605905016501,
+      "samples": 34997,
+      "optimizer_updates": 17499,
+      "microbatches": 17499,
+      "seconds": 4485.027526826831,
+      "images_per_second": 7.803073624558214,
+      "mean_microbatch_seconds": 0.25630193307199445,
+      "mean_update_seconds": 0.25630193307199445,
+      "data_wait_seconds": 2.3314930095802993,
+      "data_wait_fraction": 0.0005198391750406573,
+      "lr_first": 2.6625041615190626e-05,
+      "lr_last": 1e-06
+    },
+    "epoch_seconds": 4686.211514659924
+  }
+]

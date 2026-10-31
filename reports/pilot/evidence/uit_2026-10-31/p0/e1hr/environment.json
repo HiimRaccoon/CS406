@@ -1,0 +1,70 @@
+{
+  "python": "3.11.17",
+  "platform": "Linux-6.8.0-106-generic-x86_64-with-glibc2.39",
+  "packages": {
+    "torch": "2.8.0+cu128",
+    "torchvision": "0.23.0+cu128",
+    "Pillow": "11.3.0",
+    "numpy": "2.1.3",
+    "pandas": "2.2.3",
+    "scikit-learn": "1.6.1"
+  },
+  "git_commit": "b2ac6eebac8a29aa7ad548b810a6d2540f2a258f",
+  "git_dirty": false,
+  "cuda": "12.8",
+  "cudnn": 91002,
+  "gpu_name": "NVIDIA H200 MIG 2g.35gb",
+  "cuda_visible_devices": "MIG-ff481982-ce0f-5dc9-9561-6cb2a43f249e",
+  "slurm_job_id": "7761",
+  "allocation": {
+    "SLURM_CPUS_PER_TASK": "4",
+    "SLURM_MEM_PER_NODE": "16384",
+    "SLURM_MEM_PER_CPU": null,
+    "SLURM_TIMELIMIT": null
+  },
+  "runtime_environment": {
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "NVIDIA_TF32_OVERRIDE": null,
+    "OMP_NUM_THREADS": "2",
+    "MKL_NUM_THREADS": "2",
+    "PYTHONHASHSEED": "3406"
+  },
+  "actual_torch_settings": {
+    "cpu_threads": 2,
+    "matmul_precision": "highest",
+    "tf32_matmul": false,
+    "tf32_cudnn": false,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "deterministic_algorithms": true
+  },
+  "runtime_policy": {
+    "device": "cuda",
+    "num_workers": 2,
+    "pin_memory": true,
+    "persistent_workers": true,
+    "prefetch_factor": 2,
+    "cpu_threads": 2,
+    "amp": {
+      "enabled": false,
+      "dtype": "float32"
+    },
+    "scaler": {
+      "enabled": false,
+      "init_scale": null,
+      "growth_factor": null,
+      "backoff_factor": null,
+      "growth_interval": null
+    },
+    "tf32_matmul": false,
+    "tf32_cudnn": false,
+    "matmul_precision": "highest",
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": false,
+    "torch_compile": false
+  },
+  "gpu_total_bytes": 34896609280,
+  "driver": "580.126.20"
+}

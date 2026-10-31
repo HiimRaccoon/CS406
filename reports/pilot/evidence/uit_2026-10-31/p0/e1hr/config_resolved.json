@@ -1,0 +1,107 @@
+{
+  "purpose": "pilot",
+  "stage": "p0",
+  "protocol_id": "cs406-p0-strict-fp32-v1",
+  "experiment": "e1hr",
+  "seed": 3406,
+  "preprocessing_config": "/datastore/binhvp/BuiTrongTan/CS406/repo/configs/preprocessing/geoguessr_v1.json",
+  "artifacts_dir": "/datastore/binhvp/BuiTrongTan/CS406/repo/artifacts/baseline124",
+  "paths": {
+    "data_root": "/datastore/binhvp/BuiTrongTan/CS406/data/geoguessr",
+    "weights": "/datastore/binhvp/BuiTrongTan/CS406/pretrained/convnext_tiny-983f1562.pth",
+    "runs_dir": "/datastore/binhvp/BuiTrongTan/CS406/repo/runs/pilot"
+  },
+  "expected_weight_sha256": "983f1562536e84ff750a1576fb08e54de751dbf2e17c0d8a4a13704341fdcd3d",
+  "global_wh": [
+    1344,
+    576
+  ],
+  "batch": {
+    "microbatch": 2,
+    "accumulation": 1
+  },
+  "initialization": {
+    "method": "linear_default",
+    "seed": 3406,
+    "std": null,
+    "bias": null
+  },
+  "optimizer": {
+    "lr": 0.0001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0.05
+  },
+  "augmentation": {
+    "enabled": false,
+    "brightness": 0.0,
+    "contrast": 0.0
+  },
+  "clipping": {
+    "enabled": false,
+    "max_norm": null
+  },
+  "runtime": {
+    "device": "cuda",
+    "num_workers": 2,
+    "pin_memory": true,
+    "persistent_workers": true,
+    "prefetch_factor": 2,
+    "cpu_threads": 2,
+    "amp": {
+      "enabled": false,
+      "dtype": "float32"
+    },
+    "scaler": {
+      "enabled": false,
+      "init_scale": null,
+      "growth_factor": null,
+      "backoff_factor": null,
+      "growth_interval": null
+    },
+    "tf32_matmul": false,
+    "tf32_cudnn": false,
+    "matmul_precision": "highest",
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": false,
+    "torch_compile": false
+  },
+  "gates": {
+    "conformance_report": "/datastore/binhvp/BuiTrongTan/CS406/repo/reports/pilot/conformance/uit-conformance-v1/conformance_report.json"
+  },
+  "resolution_policy": {
+    "ordered_candidates": [
+      [
+        1344,
+        576
+      ]
+    ],
+    "criteria_id": "cs406-prep0-hr-v1-exploratory-a",
+    "prior_failure_reports": [],
+    "batch_policy": {
+      "effective_batch": 2,
+      "candidate_batches": [
+        {
+          "microbatch": 2,
+          "accumulation": 1
+        }
+      ]
+    }
+  },
+  "budget": {
+    "warmup_updates": 10,
+    "measure_updates": 100,
+    "full_epoch": true
+  },
+  "feasibility": {
+    "mode": "criteria",
+    "max_peak_reserved_gib": 8.0,
+    "min_images_per_second": 6.0,
+    "max_epoch_seconds": 6000
+  }
+}

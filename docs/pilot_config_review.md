@@ -1,5 +1,31 @@
 # Pre-P0 pilot configuration review
 
+## POST-EXECUTION STATUS — 2026-10-31
+
+**Historical review:** toàn bộ nội dung pre-P0 bên dưới được giữ theo thời điểm chuẩn bị, không sửa bảng pending thành những giá trị giả như đã biết trước khi đo. Trạng thái mới nhất nằm ở mục này, [pilot plan](pilot_plan.md) và [pilot results](../reports/pilot/pilot_results.md).
+
+Target UIT conformance **PASS**, audit đủ 34.997 train + 7.497 validation hashes; fixed counts 34.997/7.497/7.502 không đổi. Ba fresh strict P0 (`p0-strict-e1-v1`, `p0-strict-e1hr-v1`, `p0-strict-e2-v1`) **PASS**, assessed, full epoch; ba P1 (`p1-e1-v1`, `p1-e1hr-v1`, `p1-e2-v1`) **COMPLETE**, mỗi run 3/3 epochs. Các summary ghi zero test-image access. [Evidence nguyên byte](../reports/pilot/evidence/uit_2026-10-31/SHA256SUMS.txt) lưu cả config/runtime/history, không sửa status để promote measurement-only runs.
+
+| Trường từng pending | Đã được resolved bằng execution/review |
+|---|---|
+| Dataset/environment/paths và full weight hash | Target root/environment đã ghi trong evidence; cùng full pretrained SHA-256 đã pin và dùng ở cả sáu runs; xem report |
+| Target conformance | PASS trên UIT; cả hai raw layouts, train/validation hash audit, test_images_opened=0 |
+| Batch cho comparable pilot | Common effective batch **2**, microbatch **2**, accumulation **1**, cả ba profiles |
+| Strict P0 windows/criteria | Warmup **10** updates, measured **100**, full epoch; max reserved **8 GiB**, min steady-state **6 img/s**, max train epoch **6000 s** trong actual configs; cả ba pass |
+| E1-HR candidate | **1344×576 accepted**, first candidate pass; không cần fallback, không chọn bằng classification score |
+| Pilot seed/LR/optimizer | **3406**, diagnostic **1e-4**, AdamW betas **[0.9,0.999]**, eps **1e-8**, weight decay **0.05** |
+| Bounded P1 | **3 epochs / 52.497 updates** mỗi profile, warmup **1000**, start factor **0.1**, cosine floor **1e-6**; complete, không auto-extend |
+| Augmentation | Train-only preview đã review, brightness **0.10**, contrast **0.10** accepted; P1 dùng đúng các biên độ này |
+| Runtime/init/checkpoint pilot | FP32 deterministic; exact loader/numerics/init trong evidence; checkpoint tolerance **1e-6**, tie-break **earlier** |
+
+**Pilot-frozen không đồng nghĩa official-training-frozen.** Sau P1, user đã review đủ để đi tiếp, **không yêu cầu P1-v2** và chốt official **max_epochs=8**. Đây là quyết định post-pilot, không phải run 8 epochs đã thực hiện hoặc bằng chứng hội tụ hoàn toàn. **Exact four-LR values và exact official tuning/final seed IDs vẫn NEEDS REVIEW**; không promote `1e-4`/`3406`. Official warmup/cosine horizon/floor, patience/tolerance/tie-break, batch/runtime/optimizer/init adoption và RNG/resume contract còn phải được xác nhận trong official spec; không tự kế thừa chỉ vì có trong pilot config.
+
+Official implementation/search/final seeds/test evaluation **chưa bắt đầu**. Chưa tạo `training_recipe_v1`; report chỉ ghi evidence và các quyết định đã review. Bản gốc checksum có một self-entry không khớp chính file `SHA256SUMS.txt`; 47 payload files đều khớp, giới hạn được ghi rõ trong report.
+
+---
+
+## Historical pre-P0 review (giữ nguyên nội dung tại thời điểm chuẩn bị)
+
 Base preparation đã được review ở commit `82a9614`; task tiếp theo chỉ thêm minimal P0 measurement-only mode và strict evidence guards. Không chạy GPU/Slurm, không official experiment, không thay architecture/preprocessing/split. Master spec vẫn draft. File này không phải `training_recipe_v1`.
 
 **Cập nhật:** minimal `measurement_only` đã implement để first diagnostics không cần fake thresholds. Vẫn cần data root, offline pretrained path/full reviewed SHA và target conformance thật; chưa có GPU run. `criteria` vẫn cần legitimate constraints trước strict acceptance; không promote measurement reports thành pass.

@@ -1,0 +1,304 @@
+{
+  "purpose": "pilot",
+  "stage": "p0",
+  "experiment": "e1hr",
+  "protocol_id": "cs406-p0-strict-fp32-v1",
+  "feasibility_context": {
+    "version": 2,
+    "feasibility_mode": "criteria",
+    "protocol_id": "cs406-p0-strict-fp32-v1",
+    "ordered_candidates": [
+      [
+        1344,
+        576
+      ]
+    ],
+    "criteria_id": "cs406-prep0-hr-v1-exploratory-a",
+    "feasibility": {
+      "mode": "criteria",
+      "max_peak_reserved_gib": 8.0,
+      "min_images_per_second": 6.0,
+      "max_epoch_seconds": 6000
+    },
+    "seed": 3406,
+    "runtime": {
+      "device": "cuda",
+      "num_workers": 2,
+      "pin_memory": true,
+      "persistent_workers": true,
+      "prefetch_factor": 2,
+      "cpu_threads": 2,
+      "amp": {
+        "enabled": false,
+        "dtype": "float32"
+      },
+      "scaler": {
+        "enabled": false,
+        "init_scale": null,
+        "growth_factor": null,
+        "backoff_factor": null,
+        "growth_interval": null
+      },
+      "tf32_matmul": false,
+      "tf32_cudnn": false,
+      "matmul_precision": "highest",
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "deterministic_algorithms": true,
+      "deterministic_warn_only": false,
+      "torch_compile": false
+    },
+    "initialization": {
+      "method": "linear_default",
+      "seed": 3406,
+      "std": null,
+      "bias": null
+    },
+    "batch_policy": {
+      "effective_batch": 2,
+      "candidate_batches": [
+        {
+          "microbatch": 2,
+          "accumulation": 1
+        }
+      ]
+    },
+    "dataset_root": "/datastore/binhvp/BuiTrongTan/CS406/data/geoguessr",
+    "fingerprints": {
+      "manifest.csv": "9cbd8b70e8522b5aa4a20fba4fa7b2ecea855cf377f98e41ebb162a07f8a8040",
+      "summary.json": "cf3dcf909aefd17c531cd115d6c30e54bbeb3dbd13962f974317ccde8a2f3e4b",
+      "labels.json": "5f7e8f5810e9ac8c43c1c22b2e4febe2e7a6174629b9031d3e943fce511832aa",
+      "class_support.csv": "ff46f4074464644f573b4ca64eb61320a61a8cc3daed3a3886a350cbc3c6fb75"
+    },
+    "preprocessing_sha256": "4f49dd41738168cfc65d4322fbe1b659ef5595229bb487ad86dd671a26a8903f",
+    "pretrained_sha256": "983f1562536e84ff750a1576fb08e54de751dbf2e17c0d8a4a13704341fdcd3d",
+    "identity": {
+      "fingerprints": {
+        "manifest.csv": "9cbd8b70e8522b5aa4a20fba4fa7b2ecea855cf377f98e41ebb162a07f8a8040",
+        "summary.json": "cf3dcf909aefd17c531cd115d6c30e54bbeb3dbd13962f974317ccde8a2f3e4b",
+        "labels.json": "5f7e8f5810e9ac8c43c1c22b2e4febe2e7a6174629b9031d3e943fce511832aa",
+        "class_support.csv": "ff46f4074464644f573b4ca64eb61320a61a8cc3daed3a3886a350cbc3c6fb75"
+      },
+      "preprocessing_sha256": "4f49dd41738168cfc65d4322fbe1b659ef5595229bb487ad86dd671a26a8903f",
+      "pretrained_sha256": "983f1562536e84ff750a1576fb08e54de751dbf2e17c0d8a4a13704341fdcd3d",
+      "packages": {
+        "torch": "2.8.0+cu128",
+        "torchvision": "0.23.0+cu128",
+        "Pillow": "11.3.0",
+        "numpy": "2.1.3",
+        "pandas": "2.2.3",
+        "scikit-learn": "1.6.1"
+      },
+      "cuda": "12.8",
+      "cudnn": 91002,
+      "gpu_name": "NVIDIA H200 MIG 2g.35gb",
+      "git_commit": "b2ac6eebac8a29aa7ad548b810a6d2540f2a258f",
+      "git_dirty": false,
+      "runtime_environment": {
+        "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+        "NVIDIA_TF32_OVERRIDE": null,
+        "OMP_NUM_THREADS": "2",
+        "MKL_NUM_THREADS": "2",
+        "PYTHONHASHSEED": "3406"
+      },
+      "source_sha256": "ed27cca10c183cdacedb04ab66558f91c68d41c00d9f67d72e86a85fc2990553"
+    },
+    "gpu_total_bytes": 34896609280,
+    "driver": "580.126.20",
+    "budget": {
+      "warmup_updates": 10,
+      "measure_updates": 100,
+      "full_epoch": true
+    },
+    "optimizer": {
+      "lr": 0.0001,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0.05
+    },
+    "augmentation": {
+      "enabled": false,
+      "brightness": 0.0,
+      "contrast": 0.0
+    },
+    "clipping": {
+      "enabled": false,
+      "max_norm": null
+    }
+  },
+  "feasibility_fingerprint": "1ac87f335a3fc0642839461dd6b637b076f201bc04fe363ee80d470f61d67826",
+  "status": "pass",
+  "failures": [],
+  "assessment": "assessed",
+  "fallback_eligible": false,
+  "feasibility": {
+    "mode": "criteria",
+    "max_peak_reserved_gib": 8.0,
+    "min_images_per_second": 6.0,
+    "max_epoch_seconds": 6000
+  },
+  "failure_kind": null,
+  "seed": 3406,
+  "global_wh": [
+    1344,
+    576
+  ],
+  "batch": {
+    "microbatch": 2,
+    "accumulation": 1
+  },
+  "effective_batch": 2,
+  "runtime_policy": {
+    "device": "cuda",
+    "num_workers": 2,
+    "pin_memory": true,
+    "persistent_workers": true,
+    "prefetch_factor": 2,
+    "cpu_threads": 2,
+    "amp": {
+      "enabled": false,
+      "dtype": "float32"
+    },
+    "scaler": {
+      "enabled": false,
+      "init_scale": null,
+      "growth_factor": null,
+      "backoff_factor": null,
+      "growth_interval": null
+    },
+    "tf32_matmul": false,
+    "tf32_cudnn": false,
+    "matmul_precision": "highest",
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": false,
+    "torch_compile": false
+  },
+  "full_epoch_measured": true,
+  "initialization_policy": {
+    "method": "linear_default",
+    "seed": 3406,
+    "std": null,
+    "bias": null
+  },
+  "resolution_policy": {
+    "ordered_candidates": [
+      [
+        1344,
+        576
+      ]
+    ],
+    "criteria_id": "cs406-prep0-hr-v1-exploratory-a",
+    "prior_failure_reports": [],
+    "batch_policy": {
+      "effective_batch": 2,
+      "candidate_batches": [
+        {
+          "microbatch": 2,
+          "accumulation": 1
+        }
+      ]
+    }
+  },
+  "fingerprints": {
+    "manifest.csv": "9cbd8b70e8522b5aa4a20fba4fa7b2ecea855cf377f98e41ebb162a07f8a8040",
+    "summary.json": "cf3dcf909aefd17c531cd115d6c30e54bbeb3dbd13962f974317ccde8a2f3e4b",
+    "labels.json": "5f7e8f5810e9ac8c43c1c22b2e4febe2e7a6174629b9031d3e943fce511832aa",
+    "class_support.csv": "ff46f4074464644f573b4ca64eb61320a61a8cc3daed3a3886a350cbc3c6fb75"
+  },
+  "preprocessing_sha256": "4f49dd41738168cfc65d4322fbe1b659ef5595229bb487ad86dd671a26a8903f",
+  "identity": {
+    "fingerprints": {
+      "manifest.csv": "9cbd8b70e8522b5aa4a20fba4fa7b2ecea855cf377f98e41ebb162a07f8a8040",
+      "summary.json": "cf3dcf909aefd17c531cd115d6c30e54bbeb3dbd13962f974317ccde8a2f3e4b",
+      "labels.json": "5f7e8f5810e9ac8c43c1c22b2e4febe2e7a6174629b9031d3e943fce511832aa",
+      "class_support.csv": "ff46f4074464644f573b4ca64eb61320a61a8cc3daed3a3886a350cbc3c6fb75"
+    },
+    "preprocessing_sha256": "4f49dd41738168cfc65d4322fbe1b659ef5595229bb487ad86dd671a26a8903f",
+    "pretrained_sha256": "983f1562536e84ff750a1576fb08e54de751dbf2e17c0d8a4a13704341fdcd3d",
+    "packages": {
+      "torch": "2.8.0+cu128",
+      "torchvision": "0.23.0+cu128",
+      "Pillow": "11.3.0",
+      "numpy": "2.1.3",
+      "pandas": "2.2.3",
+      "scikit-learn": "1.6.1"
+    },
+    "cuda": "12.8",
+    "cudnn": 91002,
+    "gpu_name": "NVIDIA H200 MIG 2g.35gb",
+    "git_commit": "b2ac6eebac8a29aa7ad548b810a6d2540f2a258f",
+    "git_dirty": false,
+    "runtime_environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "NVIDIA_TF32_OVERRIDE": null,
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "PYTHONHASHSEED": "3406"
+    },
+    "source_sha256": "ed27cca10c183cdacedb04ab66558f91c68d41c00d9f67d72e86a85fc2990553"
+  },
+  "timing": {
+    "benchmark_warmup": {
+      "loss": 4.6070843696594235,
+      "samples": 20,
+      "optimizer_updates": 10,
+      "microbatches": 10,
+      "seconds": 6.835271710064262,
+      "images_per_second": 2.9259992650404776,
+      "mean_microbatch_seconds": 0.6835271710064262,
+      "mean_update_seconds": 0.6835271710064262,
+      "data_wait_seconds": 0.23002154915593565,
+      "data_wait_fraction": 0.03365214418868699,
+      "lr_first": 0.0001,
+      "lr_last": 0.0001
+    },
+    "steady_state": {
+      "loss": 3.745239635705948,
+      "samples": 200,
+      "optimizer_updates": 100,
+      "microbatches": 100,
+      "seconds": 25.455721540842205,
+      "images_per_second": 7.856779847277626,
+      "mean_microbatch_seconds": 0.2545572154084221,
+      "mean_update_seconds": 0.2545572154084221,
+      "data_wait_seconds": 0.010859258472919464,
+      "data_wait_fraction": 0.0004265940156320623,
+      "lr_first": 0.0001,
+      "lr_last": 0.0001
+    },
+    "full_epoch": {
+      "loss": 2.0267149231119297,
+      "samples": 34997,
+      "optimizer_updates": 17499,
+      "microbatches": 17499,
+      "seconds": 4473.220111989183,
+      "images_per_second": 7.823670448543451,
+      "mean_microbatch_seconds": 0.25562718509567306,
+      "mean_update_seconds": 0.25562718509567306,
+      "data_wait_seconds": 19.462850285461172,
+      "data_wait_fraction": 0.0043509708438662755,
+      "lr_first": 0.0001,
+      "lr_last": 0.0001
+    },
+    "scope": "end-to-end train batches including loader/transfer/numerical checks; excludes validation/checkpoint I/O"
+  },
+  "memory": {
+    "measured_peak_allocated_bytes": 3843123200,
+    "measured_peak_reserved_bytes": 4173332480,
+    "epoch_peak_allocated_bytes": 3843123200,
+    "epoch_peak_reserved_bytes": 4173332480
+  },
+  "criteria": {
+    "mode": "criteria",
+    "max_peak_reserved_gib": 8.0,
+    "min_images_per_second": 6.0,
+    "max_epoch_seconds": 6000
+  },
+  "model_quality_or_convergence_claim": false,
+  "test_images_opened": 0
+}

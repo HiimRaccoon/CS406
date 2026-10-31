@@ -1,15 +1,19 @@
-# UIT pilot và các training parameters còn cần freeze (DRAFT / DEFERRED)
+# UIT pilot — execution completed; official recipe còn cần review
 
-**Trạng thái kế hoạch: DRAFT; pilot execution / P0 / P1: DEFERRED — chưa chạy.**
+**Trạng thái execution (2026-10-31): UIT conformance PASS; strict P0 PASS; bounded P1 COMPLETE cho E1/E1-HR/E2.**
 
 - **Pilot harness implementation: implemented**, self-contained trong `src/pilot/`; preprocessing reusable trong `src/preprocessing/`.
-- **Pilot execution / P0 / P1: DEFERRED — chưa chạy**; chưa có GPU benchmark hoặc Slurm job.
+- **Pilot execution: completed trên UIT**; archived evidence từ commit `b2ac6eebac8a29aa7ad548b810a6d2540f2a258f` đã được đối chiếu với config, summary, history, CSV, timing và memory.
 - **Official E1/E1-HR/E2 implementation: chưa bắt đầu**; pilot code không phải official framework.
 - **Master spec vẫn draft, chưa authorize official experiments**. Các gate bên dưới không tự cấp phép chạy pilot/experiment.
 
-Task hiện tại chỉ patch harness/tests/tài liệu trước deployment; không chạy GPU/Slurm hoặc sửa frozen preprocessing. Các giá trị chưa được review vẫn pending; không tự chọn numeric values, fallback resolutions, full pretrained hash hoặc seed IDs.
+User đã review pilot đủ để chuyển sang official specification/implementation; **không cần P1-v2**. Official **max_epochs=8** đã được review/freeze sau P1; **exact four-LR grid và official tuning/final seed IDs vẫn NEEDS REVIEW**. Diagnostic LR `1e-4` và pilot seed `3406` không tự thành official values. Chưa fully freeze official recipe.
+
+Task cập nhật này chỉ ghi status/report, không chạy lại GPU/Slurm hoặc sửa source/frozen preprocessing. Xem [pilot results](../reports/pilot/pilot_results.md) và [evidence snapshot](../reports/pilot/evidence/uit_2026-10-31/SHA256SUMS.txt). Các nguyên tắc bên dưới vẫn là protocol; những yêu cầu pre-run đã được đáp ứng có ghi trạng thái, không viết lại review lịch sử như thể số đo đã có từ trước.
 
 ## Gate 1: dataset và environment
+
+**PASS cho actual UIT pilot.** Root `/datastore/binhvp/BuiTrongTan/CS406/data/geoguessr`; fingerprints bốn fixed artifacts khớp repo, counts **34997/7497/7502** không đổi; target report ghi hash audit đủ train+val và zero test images. Python **3.11.17**, torch **2.8.0+cu128**, torchvision **0.23.0+cu128**, CUDA **12.8**, cuDNN **91002**, H200 MIG **2g.35gb**, driver **580.126.20**, package/runtime records đã lưu. Full pretrained SHA-256 đã pin trong cả sáu configs và model metadata: `983f1562536e84ff750a1576fb08e54de751dbf2e17c0d8a4a13704341fdcd3d`.
 
 1. Chọn runtime root `/datastore/binhvp/<my-folder>/`, giữ đường dẫn trong run/Slurm config; không sửa các relative paths của manifest.
 2. Xác minh SHA-256 của bốn artifact theo `provenance.json`, original summary fingerprints, label IDs, split counts và class support. Trước pilot đầu tiên trên một bản dataset mới, kiểm tra file tồn tại và SHA-256 ảnh theo manifest; lưu audit gắn với dataset root/fingerprint, không hash lại toàn bộ mỗi epoch.
@@ -17,6 +21,8 @@ Task hiện tại chỉ patch harness/tests/tài liệu trước deployment; kh�
 4. Tải đúng pretrained file `convnext_tiny-983f1562.pth`, tính/review full SHA-256 và **bắt buộc pin `expected_weight_sha256` trước P0/P1**; dùng cùng file cho cả ba architecture. Config check từ chối null/invalid full hash; model chỉ load khi actual full digest khớp chính xác expected digest. Conformance không cần weight. Không dùng default alias hoặc chỉ SHA prefix làm integrity gate.
 
 ## Gate 2: conformance với preprocessing v1
+
+**PASS trên target UIT environment/root.** [Report](../reports/pilot/evidence/uit_2026-10-31/conformance/conformance_report.json) xác nhận cả hai train layouts, tensor/fill/padding/raw-local/determinism checks; audit **34997 train + 7497 val** hashes; `test_images_opened=0`. Frozen preprocessing v1 không thay đổi.
 
 Đọc config và checksum từ `configs/preprocessing/`. Dùng chính thức tensor backend đã khai báo, không dùng ảnh PNG preview làm model input. Chỉ dùng train samples cố định của hai layout cho các kiểm tra này; không dùng score để sửa geometry.
 
@@ -28,13 +34,15 @@ Task hiện tại chỉ patch harness/tests/tài liệu trước deployment; kh�
 - Repeated deterministic evaluation preprocessing của cùng ảnh trong cùng environment phải khớp. Train jitter dùng cùng một draw cho mọi view và giữ fill/padding; val/test/E3 cache tắt jitter.
 - Nếu backend/library update làm khác numerical outputs, ghi nhận và xử lý versioning, không đổi v1 âm thầm. Numerical tolerance trong cùng runtime phải chặt; không tuyên bố bitwise equality giữa GPU/CPU hoặc giữa các decoder khác nhau khi chưa kiểm tra.
 
-Gate này kiểm chứng implementation của specification đã freeze; không phải geometry search. Local CPU TorchVision conformance và train/validation hash audit đã pass trong bước implement harness; target UIT environment/root vẫn phải chạy lại gate trước pilot. Đây không phải P0/P1 execution hoặc GPU benchmark.
+Gate này kiểm chứng implementation của specification đã freeze; không phải geometry search. Local CPU gate đã có từ bước implement harness; target UIT gate nay cũng đã pass trước pilot. Conformance tự nó không phải P0/P1 hoặc GPU timing benchmark.
 
 ## Gate 3: hai stage pilot và các pre-run rules
 
-E1 global 896×384; E2 giữ đúng global + bốn local của preprocessing v1. Dùng một predetermined training seed chung cho pilot E1/E1-HR/E2; exact numeric ID phải được review/freeze trước khi chạy, không tự lấy split seed 406 làm training seed. **Không dùng test trong P0 hoặc P1.**
+**Gate 3 P0 PASS; bounded P1 PASS/COMPLETE cả ba profiles.** E1 global 896×384; E2 giữ đúng global + bốn local của preprocessing v1. Actual common pilot seed **3406**, khác split seed **406**; common pilot effective batch **2** (microbatch **2**, accumulation **1**). **Không dùng test trong P0 hoặc P1**; cả sáu summaries ghi `test_images_opened=0`.
 
 ### P0 — feasibility/timing pilot
+
+**Completed:** `p0-strict-e1-v1`, `p0-strict-e1hr-v1`, `p0-strict-e2-v1` đều `pass`, `assessed`, `criteria`, `full_epoch_measured=true`. Actual windows **10 warmup + 100 measured updates**, rồi full train epoch; common criteria **max reserved 8 GiB / min steady-state 6 img/s / max train epoch 6000 s**. Full-epoch seconds lần lượt **2080.53 / 4473.22 / 4321.36**, full-epoch img/s **16.82 / 7.82 / 8.10**. [Report](../reports/pilot/pilot_results.md) phân biệt measured-window và full-epoch peaks, steady-state/full-epoch throughput; không suy diễn rằng các ngưỡng đã được tối ưu.
 
 P0 chỉ xác minh:
 
@@ -50,23 +58,27 @@ Tìm microbatch khả thi rồi chọn common effective batch size tính theo �
 
 ### P1 — bounded training/convergence pilot
 
+**Completed:** `p1-e1-v1`, `p1-e1hr-v1`, `p1-e2-v1` đều COMPLETE **3/3 epochs**, **17499 updates/epoch**, tổng **52497**. Diagnostic LR **1e-4**, AdamW, FP32 deterministic, brightness/contrast **0.10/0.10**; scheduler warmup **1000** updates, start factor **0.1**, cosine floor **1e-6**; checkpoint tolerance **1e-6**, tie-break **earlier**. Bounded horizon không được gia hạn.
+
+Validation Macro-F1 supported qua ba epochs: E1 **0.1914 → 0.3479 → 0.3954**, E1-HR **0.1964 → 0.3592 → 0.4195**, E2 **0.2126 → 0.3821 → 0.4491**; cả ba best diagnostic epoch **3**. LR trajectory khớp giữa profiles, reserved peak ổn định, không reported NaN/divergence/OOM trong các runs complete. **Score chỉ diagnostic, không phải official result hoặc bằng chứng đã hội tụ.** User đã review đủ để đi tiếp, không yêu cầu thêm P1-v2.
+
 P1 xem learning/validation curves và optimization stability để hỗ trợ freeze **common max epochs, LR warmup, early-stopping patience/tolerance và scheduler horizon**. Không suy ra các giá trị này chỉ từ throughput của P0.
 
-**Bounded P1 budget phải được định nghĩa và review trước khi chạy:** giới hạn epochs/optimizer steps, điều kiện dừng và số diagnostic attempts được phép phải explicit, hữu hạn. Các giới hạn numeric hiện pending, không được tự điền trong task này. Không train open-ended hoặc tự tăng budget cho đến khi thấy kết quả mong muốn.
+**Bounded P1 budget phải được định nghĩa và review trước khi chạy:** giới hạn epochs/optimizer steps, điều kiện dừng và số diagnostic attempts được phép phải explicit, hữu hạn. Actual archived budget là **3 epochs/profile**, một completed v1 run mỗi profile trong bundle; không suy diễn những attempts ngoài evidence. Không train open-ended hoặc tự tăng budget cho đến khi thấy kết quả mong muốn.
 
 Hết budget mà chưa đủ cơ sở kết luận thì report giới hạn/bất ổn để người dùng review, không tự gia hạn hoặc lặp trial theo validation score. Không tự giảm training horizon riêng cho architecture chậm hơn. Nếu phải giảm compute, điều chỉnh common protocol trước official search.
 
 ### Deterministic E1-HR resolution selection
 
-**1344×576 chỉ là first candidate**, không phải final resolution. Trước P0 phải review/freeze:
+**1344×576 đã accepted sau strict P0**: first candidate pass nên dừng, không dùng validation classification score. Actual ordered list chỉ `[[1344,576]]`, không fallback hoặc resolution search; batch policy 2/1 khớp run. Đây là kết quả sau khi đo, không sửa lịch sử first-candidate proposal trong pre-P0 review. Các yêu cầu trước một selection protocol vẫn là:
 
-- Ordered candidate/fallback list, bắt đầu bằng first candidate trên; các fallback numeric values hiện chưa được chọn/review.
+- Ordered candidate/fallback list, bắt đầu bằng first candidate trên; không tự thêm fallback chưa review.
 - Feasibility criteria về raw-image/aspect-ratio suitability, memory và runtime/walltime, kèm batch/accumulation policy được phép và các threshold cần thiết.
 - Rule chọn candidate, stop/fail rule và cách record kết quả.
 
 Xét theo đúng thứ tự đã freeze: **candidate đầu pass rule thì chọn/freeze ngay; chỉ thử fallback nếu candidate trước fail rule**. Không thử tiếp để tìm resolution có score cao hơn; không dùng validation classification score hoặc test score để chọn. Không compute-match E2.
 
-Nếu hết approved list mà không candidate nào pass thì report lại; không tự thêm fallback. Đây là feasibility selection theo rule, không phải resolution search. Task hiện tại không cung cấp thêm fallback sizes hoặc feasibility threshold numeric.
+Nếu hết approved list mà không candidate nào pass thì report lại; không tự thêm fallback. Đây là feasibility selection theo rule, không phải resolution search. Actual first candidate đã pass; không cần fallback mới.
 
 ### LR scale sanity-check và bốn official candidates
 
@@ -93,20 +105,20 @@ Các runtime settings là **protocol, không phải ablation**. Dùng cùng poli
 
 Measurement protocol phải khai báo trước:
 
-- GPU benchmark warmup và measured window/repetitions; numeric lengths hiện pending.
+- GPU benchmark warmup và measured window/repetitions; actual strict P0 dùng **10/100 optimizer updates**, sau đó full epoch.
 - CUDA synchronization quanh thời điểm bắt đầu/kết thúc timing để hoàn tất GPU work trong window.
 - Reset peak-memory statistics sau warmup, trước measured workload; record cả **peak allocated và peak reserved VRAM** trong workload đó.
 - Steady-state samples/sec theo **original images**, không theo số global/local views; ghi rõ measured window có bao gồm data loading/transfer hay không, nhất quán giữa các architecture.
 - Full-epoch walltime riêng, gồm I/O, tail batches và accumulation cuối epoch; ghi rõ validation/checkpoint overhead có nằm trong timing hay được tách riêng.
 - Microbatch, accumulation, effective batch, DataLoader/CPU bottleneck, OOM và numerical failures kèm môi trường cụ thể.
 
-Không chọn numeric runtime settings trong task patch tài liệu này.
+Runtime đã dùng: DataLoader **2** workers, pin/persistent **true**, prefetch **2**, CPU threads **2**; FP32, autocast/scaler/TF32/compile off, matmul **highest**, cuDNN benchmark **false**, cuDNN deterministic và deterministic_algorithms **true** (warn_only **false**). Environment: `CUBLAS_WORKSPACE_CONFIG=:4096:8`, `OMP_NUM_THREADS=2`, `MKL_NUM_THREADS=2`, `PYTHONHASHSEED=3406`. Đây là actual pilot policy; không tự promote thành official contract. Giữ timing scope và data-wait observations trong [report](../reports/pilot/pilot_results.md).
 
 ## New-classifier initialization
 
 Trước pilot phải freeze **một explicit deterministic initialization rule cho new 124-class classifier của E1, E1-HR và E2**, không chỉ cho E3. Record rule cho weights/bias, parameters của rule, exact framework/version và seed/RNG behavior. Mỗi run khởi tạo độc lập, dùng cùng rule; các head khác feature dimension không bắt buộc có cùng shape/weights.
 
-Có thể dùng framework/default initialization nếu đó là lựa chọn cuối được review, nhưng phải ghi rõ exact rule/version, thời điểm và cách seed/RNG được dùng; không chỉ ghi “default”. Exact rule và numeric seed IDs hiện pending, không tự chọn distribution, scale hoặc seed ở đây.
+Actual pilot dùng `linear_default` theo PyTorch **2.8.0+cu128**: weight `kaiming_uniform_(a=sqrt(5))`, bias uniform `[-1/sqrt(fan_in),+1/sqrt(fan_in)]`, isolated CPU RNG seed **3406** ngay trước init rồi restore outer RNG. E1/E1-HR fan-in **768**, E2 **1536**. Exact rule/seed behavior đã được ghi trong model metadata, không tune initialization. Official seed IDs/adoption vẫn cần review; không copy pilot seed.
 
 Với E3, natural/cRT của cùng source seed phải bắt đầu từ **identical head weights**, không chỉ cùng tên initialization hoặc seed rule. Rule này cũng thuộc common E3 head protocol được freeze trước official head runs.
 
@@ -114,26 +126,26 @@ Với E3, natural/cRT của cùng source seed phải bắt đầu từ **identic
 
 | Trường | Trạng thái/quy tắc |
 |---|---|
-| E1-HR full-image WH | Pending deterministic feasibility rule; ordered list/criteria freeze trước P0, không validation-score selection |
-| P1 pilot budget | Review/freeze finite epochs/steps, stop rules và diagnostic-attempt limit trước P1; không open-ended |
-| Common effective batch size | Pending; tính theo ảnh gốc |
-| Microbatch/accumulation từng architecture | Pending memory/timing; cùng effective batch |
-| Bốn base LR candidates | Freeze đúng 4 values sau bounded stability sanity-check, trước official search; không refine theo validation Macro-F1 |
-| AdamW betas/eps | Pending numerical recipe; explicit chung |
-| Max epochs | Pending đủ pilot curves; chung ba architecture |
-| LR warmup length/start factor | Pending; cùng policy |
-| Cosine final LR/floor và update horizon | Pending; chung policy, scheduler theo optimizer updates |
-| Early-stopping patience/min-delta/tolerance | Pending; cùng rule, dựa supported Macro-F1 |
-| Tie-break checkpoint | Freeze trước search: ưu tiên checkpoint sớm hơn trong tolerance hoặc một rule explicit đã thống nhất; không chọn tùy ý |
-| AMP dtype/GradScaler | Pending UIT runtime; explicit và giống nhau |
-| Runtime/timing policy | DataLoader, TF32, cuDNN, compile, matmul/determinism và measurement protocol freeze trước comparable timing |
-| Gradient clipping | Pending stability; explicit norm/threshold hoặc tắt, không bật riêng một architecture sau khi thấy kết quả |
-| Brightness/contrast amplitudes | Pending mild-range preview/pilot; freeze chung, không mở augmentation search branch |
-| Training/tuning seeds và DataLoader RNG policy | Exact seed IDs, batch-order/augmentation generators và resume policy phải được freeze; không đổi fixed split |
-| New-head initialization | Freeze deterministic rule/version/seed behavior cho E1/E1-HR/E2; E3 natural/cRT cùng initial weights theo source seed |
-| Validation cadence | Full validation mỗi epoch; lưu toàn bộ history |
+| E1-HR full-image WH | **Resolved: 1344×576 accepted**, first candidate strict pass, không score selection |
+| P1 pilot budget | **Complete: 3 epochs / 52497 updates/profile**, không cần P1-v2; không phải official horizon |
+| Common effective batch size | **Pilot frozen: 2 original images**; official adoption/contract **NEEDS REVIEW** |
+| Microbatch/accumulation từng architecture | **Pilot: 2/1 cho cả ba**; official adoption **NEEDS REVIEW** |
+| Bốn base LR candidates | **NEEDS REVIEW: exact 4 values chưa chọn**; diagnostic 1e-4 không tự thành grid |
+| AdamW betas/eps | Pilot **[0.9,0.999] / 1e-8**, decay 0.05; official numeric adoption **NEEDS REVIEW** |
+| Official max epochs | **FROZEN AFTER USER REVIEW: 8**, common E1/E1-HR/E2; chưa có official run |
+| LR warmup length/start factor | Pilot **1000 / 0.1**; official warmup **NEEDS REVIEW** |
+| Cosine final LR/floor và update horizon | Pilot **1e-6 / 52497 updates**; official 8-epoch schedule **NEEDS REVIEW**, không kế thừa horizon 3 epochs |
+| Early-stopping patience/min-delta/tolerance | **NEEDS REVIEW** cho official; bounded P1 không chứng minh patience phù hợp; pilot checkpoint tolerance 1e-6 |
+| Tie-break checkpoint | Pilot **earlier**, tolerance 1e-6; official explicit rule/adoption **NEEDS REVIEW** |
+| AMP dtype/GradScaler | **Pilot: FP32, scaler off** đã đo; official adoption **NEEDS REVIEW** |
+| Runtime/timing policy | Actual loader/numerics/environment đã lưu; official lock/adoption **NEEDS REVIEW**, không mở runtime ablation |
+| Gradient clipping | **Pilot: off**, không reported instability; official adoption **NEEDS REVIEW** |
+| Brightness/contrast amplitudes | **REVIEWED/ACCEPTED: 0.10 / 0.10** từ train-only preview; P1 đã dùng đúng |
+| Training/tuning seeds và DataLoader RNG policy | **NEEDS REVIEW: exact 1 tuning + 3 final seed IDs**, RNG/worker/resume contract; không promote pilot **3406**, split vẫn **406** |
+| New-head initialization | Pilot exact linear_default rule/version/seed behavior đã ghi; official rule/adoption/seed binding **NEEDS REVIEW**; E3 protocol deferred |
+| Validation cadence | Pilot full validation mỗi epoch, history đầy đủ; giữ yêu cầu cùng protocol/checkpoint metrics ở official spec |
 
-Không điền các con số này bằng suy đoán rồi mô tả là kết quả UIT pilot. Khi đã freeze, lưu một versioned training recipe và hash riêng, giữ preprocessing v1 không đổi.
+Không điền các số còn mở bằng suy đoán hoặc coi mọi pilot setting đã được user freeze cho official training. Sau official-spec review mới tạo versioned training recipe và hash riêng; giữ preprocessing v1 không đổi.
 
 ## Official search và final runs
 
@@ -149,14 +161,14 @@ Trong mỗi cặp natural/cRT cùng representation/source seed, source checkpoin
 
 Sau small pilot, freeze recipe trước khi chạy các nhánh head của ba source seeds. Ghi cache identity bằng source checkpoint SHA-256, preprocessing hash, split/label hashes và feature definition; không trộn cache giữa source seeds. Việc mô tả bước sau không authorize chạy ở hiện tại.
 
-## Pilot outputs — chỉ tạo sau khi được authorize và hoàn tất
+## Pilot outputs — report đã tạo, official recipe chưa tạo
 
-Pilot sau này phải tạo hai loại artifact:
+Các deliverables được phân biệt rõ:
 
-1. **`reports/pilot/pilot_results.md`**: environment/versions, seed và runtime policy, predeclared P0/P1/head-pilot budgets, measurements, pass/fail, failed attempts và rationale cho từng numeric value được freeze. Ghi log ordered E1-HR candidate decisions và LR sanity-checks để phân biệt với official score-based tuning.
-2. **Một versioned frozen training recipe dưới `configs/training/`**, ví dụ đường dẫn dạng `<recipe_id>.json` kèm `<recipe_id>.sha256`: exact numeric values, seeds, runtime policy, optimizer/scheduler, batch/accumulation, augmentation amplitudes, initialization, E1-HR resolution, checkpoint rules và E3 common head protocol; kèm dataset/preprocessing references và checksum/hash.
+1. **[reports/pilot/pilot_results.md](../reports/pilot/pilot_results.md) — hoàn tất**: actual environment/identity, conformance, strict P0 measurements, P1 curves/runtime, augmentation review, PASS conclusions, no-test records, reviewed decisions và giới hạn evidence. Snapshot nguyên byte ở `reports/pilot/evidence/uit_2026-10-31/`; 47 payload checksums pass, original manifest self-entry không khớp và được ghi rõ. Không tạo exploratory/head-pilot results khi bundle không có evidence đó.
+2. **Versioned frozen official training recipe dưới `configs/training/` — CHƯA TẠO**: exact LR grid/seeds và official-only numeric contract còn cần review. Không dùng collector để auto-derive hoặc xuất partial recipe. Sau khi review/freeze, recipe/hash mới là numeric source cho master spec; E3 common head protocol được review riêng ở phase sau.
 
-Các tên placeholder không phải recipe đã freeze. **Không tạo results hoặc frozen training recipe trong task patch này.** Khi có recipe được review/freeze, `master_spec.md` chỉ reference nguồn đó, không duplicate toàn bộ numeric contract. Không sửa master spec trong task hiện tại.
+Master spec chỉ cập nhật checklist/status được evidence hỗ trợ và reference report; không rewrite architecture, duplicate toàn bộ numeric contract hoặc authorize official implementation trong task này.
 
 ## Resume và acceptance
 

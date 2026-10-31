@@ -1,0 +1,49 @@
+{
+  "purpose": "pilot",
+  "stage": "p1",
+  "experiment": "e2",
+  "status": "complete",
+  "planned_epochs": 3,
+  "completed_epochs": 3,
+  "optimizer_updates": 52497,
+  "planned_optimizer_updates": 52497,
+  "seed": 3406,
+  "best_diagnostic_checkpoint": {
+    "epoch": 3,
+    "macro_f1_supported": 0.44913387611195293,
+    "nll": 0.8029006892757374
+  },
+  "identity": {
+    "fingerprints": {
+      "manifest.csv": "9cbd8b70e8522b5aa4a20fba4fa7b2ecea855cf377f98e41ebb162a07f8a8040",
+      "summary.json": "cf3dcf909aefd17c531cd115d6c30e54bbeb3dbd13962f974317ccde8a2f3e4b",
+      "labels.json": "5f7e8f5810e9ac8c43c1c22b2e4febe2e7a6174629b9031d3e943fce511832aa",
+      "class_support.csv": "ff46f4074464644f573b4ca64eb61320a61a8cc3daed3a3886a350cbc3c6fb75"
+    },
+    "preprocessing_sha256": "4f49dd41738168cfc65d4322fbe1b659ef5595229bb487ad86dd671a26a8903f",
+    "pretrained_sha256": "983f1562536e84ff750a1576fb08e54de751dbf2e17c0d8a4a13704341fdcd3d",
+    "packages": {
+      "torch": "2.8.0+cu128",
+      "torchvision": "0.23.0+cu128",
+      "Pillow": "11.3.0",
+      "numpy": "2.1.3",
+      "pandas": "2.2.3",
+      "scikit-learn": "1.6.1"
+    },
+    "cuda": "12.8",
+    "cudnn": 91002,
+    "gpu_name": "NVIDIA H200 MIG 2g.35gb",
+    "git_commit": "b2ac6eebac8a29aa7ad548b810a6d2540f2a258f",
+    "git_dirty": false,
+    "runtime_environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "NVIDIA_TF32_OVERRIDE": null,
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "PYTHONHASHSEED": "3406"
+    },
+    "source_sha256": "ed27cca10c183cdacedb04ab66558f91c68d41c00d9f67d72e86a85fc2990553"
+  },
+  "test_images_opened": 0,
+  "official_experiment": false
+}

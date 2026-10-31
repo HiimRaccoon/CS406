@@ -1,0 +1,45 @@
+{
+  "benchmark_warmup": {
+    "loss": 4.6070843696594235,
+    "samples": 20,
+    "optimizer_updates": 10,
+    "microbatches": 10,
+    "seconds": 6.835271710064262,
+    "images_per_second": 2.9259992650404776,
+    "mean_microbatch_seconds": 0.6835271710064262,
+    "mean_update_seconds": 0.6835271710064262,
+    "data_wait_seconds": 0.23002154915593565,
+    "data_wait_fraction": 0.03365214418868699,
+    "lr_first": 0.0001,
+    "lr_last": 0.0001
+  },
+  "steady_state": {
+    "loss": 3.745239635705948,
+    "samples": 200,
+    "optimizer_updates": 100,
+    "microbatches": 100,
+    "seconds": 25.455721540842205,
+    "images_per_second": 7.856779847277626,
+    "mean_microbatch_seconds": 0.2545572154084221,
+    "mean_update_seconds": 0.2545572154084221,
+    "data_wait_seconds": 0.010859258472919464,
+    "data_wait_fraction": 0.0004265940156320623,
+    "lr_first": 0.0001,
+    "lr_last": 0.0001
+  },
+  "full_epoch": {
+    "loss": 2.0267149231119297,
+    "samples": 34997,
+    "optimizer_updates": 17499,
+    "microbatches": 17499,
+    "seconds": 4473.220111989183,
+    "images_per_second": 7.823670448543451,
+    "mean_microbatch_seconds": 0.25562718509567306,
+    "mean_update_seconds": 0.25562718509567306,
+    "data_wait_seconds": 19.462850285461172,
+    "data_wait_fraction": 0.0043509708438662755,
+    "lr_first": 0.0001,
+    "lr_last": 0.0001
+  },
+  "scope": "end-to-end train batches including loader/transfer/numerical checks; excludes validation/checkpoint I/O"
+}

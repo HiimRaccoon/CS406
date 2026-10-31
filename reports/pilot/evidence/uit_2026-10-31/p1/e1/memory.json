@@ -1,0 +1,17 @@
+[
+  {
+    "epoch": 1,
+    "peak_allocated_bytes": 1948747264,
+    "peak_reserved_bytes": 2141192192
+  },
+  {
+    "epoch": 2,
+    "peak_allocated_bytes": 1948747264,
+    "peak_reserved_bytes": 2141192192
+  },
+  {
+    "epoch": 3,
+    "peak_allocated_bytes": 1948747264,
+    "peak_reserved_bytes": 2141192192
+  }
+]

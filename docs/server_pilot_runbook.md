@@ -1,6 +1,16 @@
 # UIT pilot harness — server runbook
 
-Code chỉ phục vụ preprocessing conformance, P0 feasibility/timing và bounded P1. **Không phải official E1 implementation**; không có E3, LR-search launcher, final experiment hay test evaluator. Master spec giữ trạng thái **DRAFT FOR USER REVIEW — chưa frozen, chưa authorize implementation** đối với official experiments. Yêu cầu implementation pilot mới nhất chỉ cho phép chuẩn bị harness; numeric choices và việc submit job cần được người dùng review trước.
+Code chỉ phục vụ preprocessing conformance, P0 feasibility/timing và bounded P1. **Không phải official E1 implementation**; không có E3, LR-search launcher, final experiment hay test evaluator. Master spec giữ trạng thái **DRAFT FOR USER REVIEW — chưa frozen, chưa authorize implementation** đối với official experiments.
+
+## UIT execution status — 2026-10-31
+
+**Đã thực thi và hoàn tất:** target UIT conformance PASS; strict full-epoch P0 E1/E1-HR/E2 đều PASS (`criteria`, `assessed`); bounded P1 cả ba đều COMPLETE, 3/3 epochs. Evidence chạy từ commit `b2ac6eebac8a29aa7ad548b810a6d2540f2a258f`, không thay frozen split/preprocessing; mọi summary ghi `test_images_opened=0`.
+
+Common pilot batch = 2 original images (microbatch 2, accumulation 1); E1-HR 1344×576 đã pass first-candidate rule. P1 dùng seed **3406**, diagnostic LR **1e-4**, jitter brightness/contrast **0.10/0.10**, FP32 deterministic policy. Các score là **pilot diagnostics, không phải official experiment results**.
+
+User đã review pilot đủ để chuyển sang official specification/implementation; không cần P1-v2. Official `max_epochs=8` đã được review/freeze, nhưng **four-LR numeric grid, official tuning/final seed IDs và các official-only parameters còn mở phải review trước khi chạy**. Pilot LR/seed không tự thành official values; official implementation/search chưa bắt đầu, chưa tạo frozen training recipe.
+
+Xem [pilot results và integrity notes](../reports/pilot/pilot_results.md), [evidence snapshot](../reports/pilot/evidence/uit_2026-10-31/SHA256SUMS.txt) và [trạng thái các trường còn mở](pilot_plan.md). Các lệnh/hướng dẫn bên dưới được giữ làm **reproducibility record của quá trình chuẩn bị**, gồm cả những trường từng pending trước execution; chúng không mô tả trạng thái hiện tại và không tự authorize chạy lại job.
 
 ## 1. Source và server layout
 
