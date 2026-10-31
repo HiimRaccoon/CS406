@@ -18,3 +18,5 @@ Tasks T01-T09: pending; evidence appended after each task's red/green check.
 T01: complete. RED: new task tests failed before implementation (see local .tools/e1-t01-red.log). GREEN: 15 passed; tests/e1/test_config.py. Task commit follows on e1-implementation; no GPU work.
 
 T02: complete. RED: new task tests failed before implementation (see local .tools/e1-t02-red.log). GREEN: 8 passed (E1 data + preprocessing); expected CPU pin-memory warning. Task commit follows on e1-implementation; no GPU work.
+
+T03: complete. RED: new task tests failed before implementation (see local .tools/e1-t03-red.log). GREEN: 4 passed; tests/e1/test_model.py. Task commit follows on e1-implementation; no GPU work.

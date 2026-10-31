@@ -83,9 +83,9 @@ Dependencies define execution order; they do not request parallel agents or auth
 
 ### T03 - Model and Optimizer
 
-- [ ] Write failing `tests/e1/test_model.py` tests, including mandatory full weight digest and no-decay layer-scale parameters.
-- [ ] Implement `src/e1/model.py` for E1 only; pass the T03 tests with synthetic CPU mechanics.
-- [ ] Record group/init/depth metadata expectations and commit; real target execution stays in T10.
+- [x] Write failing `tests/e1/test_model.py` tests, including mandatory full weight digest and no-decay layer-scale parameters.
+- [x] Implement `src/e1/model.py` for E1 only; pass the T03 tests with synthetic CPU mechanics.
+- [x] Record group/init/depth metadata expectations and commit; real target execution stays in T10.
 
 ### T04 - Metrics
 
