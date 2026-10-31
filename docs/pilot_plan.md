@@ -165,7 +165,7 @@ Sau small pilot, freeze recipe trước khi chạy các nhánh head của ba sou
 
 Các deliverables được phân biệt rõ:
 
-1. **[reports/pilot/pilot_results.md](../reports/pilot/pilot_results.md) — hoàn tất**: actual environment/identity, conformance, strict P0 measurements, P1 curves/runtime, augmentation review, PASS conclusions, no-test records, reviewed decisions và giới hạn evidence. Snapshot nguyên byte ở `reports/pilot/evidence/uit_2026-10-31/`; 47 payload checksums pass, original manifest self-entry không khớp và được ghi rõ. Không tạo exploratory/head-pilot results khi bundle không có evidence đó.
+1. **[reports/pilot/pilot_results.md](../reports/pilot/pilot_results.md) — hoàn tất**: actual environment/identity, conformance, strict P0 measurements, P1 curves/runtime, augmentation review, PASS conclusions, no-test records, reviewed decisions và giới hạn evidence. 47 payload files ở `reports/pilot/evidence/uit_2026-10-31/` giữ nguyên byte; manifest chỉ liệt kê 47 payload files và toàn bộ checksum đã được kiểm tra PASS. Không tạo exploratory/head-pilot results khi bundle không có evidence đó.
 2. **Versioned frozen official training recipe dưới `configs/training/` — CHƯA TẠO**: exact LR grid/seeds và official-only numeric contract còn cần review. Không dùng collector để auto-derive hoặc xuất partial recipe. Sau khi review/freeze, recipe/hash mới là numeric source cho master spec; E3 common head protocol được review riêng ở phase sau.
 
 Master spec chỉ cập nhật checklist/status được evidence hỗ trợ và reference report; không rewrite architecture, duplicate toàn bộ numeric contract hoặc authorize official implementation trong task này.

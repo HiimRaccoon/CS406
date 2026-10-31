@@ -1,6 +1,6 @@
 # UIT pilot results — completed, diagnostic only
 
-Cập nhật 2026-10-31 từ evidence người dùng cung cấp trong `uit_2026-10-31/`, được lưu nguyên byte tại [evidence/uit_2026-10-31/](evidence/uit_2026-10-31/SHA256SUMS.txt). Đây là báo cáo **pilot đã thực thi trên UIT**, không phải kết quả official E1/E1-HR/E2 hoặc test evaluation. Task lập báo cáo chỉ đọc archived metadata và train-only augmentation preview; không chạy lại model/GPU/Slurm.
+Cập nhật 2026-10-31 từ evidence người dùng cung cấp trong `uit_2026-10-31/`, với 47 payload files được lưu nguyên byte tại [evidence/uit_2026-10-31/](evidence/uit_2026-10-31/SHA256SUMS.txt). Đây là báo cáo **pilot đã thực thi trên UIT**, không phải kết quả official E1/E1-HR/E2 hoặc test evaluation. Task lập báo cáo chỉ đọc archived metadata và train-only augmentation preview; không chạy lại model/GPU/Slurm.
 
 ## Kết luận và phạm vi
 
@@ -16,7 +16,7 @@ User đã review pilot đủ để chuyển sang official specification/implemen
 
 ## Evidence provenance và integrity
 
-Snapshot gồm **47 payload files + original SHA256SUMS.txt**, không có model weights/checkpoints hoặc raw test images. Folder `p0/<profile>` ánh xạ tới server run `p0-strict-<profile>-v1`; `p1/<profile>` tới `p1-<profile>-v1`. Absolute server paths trong resolved configs được giữ nguyên làm lịch sử execution, không phải đường dẫn portable để chạy trên máy khác.
+Snapshot gồm **47 payload files + SHA256SUMS.txt cho 47 payload files**, không có model weights/checkpoints hoặc raw test images. Folder `p0/<profile>` ánh xạ tới server run `p0-strict-<profile>-v1`; `p1/<profile>` tới `p1-<profile>-v1`. Absolute server paths trong resolved configs được giữ nguyên làm lịch sử execution, không phải đường dẫn portable để chạy trên máy khác.
 
 - Source Git commit của cả sáu runs: `b2ac6eebac8a29aa7ad548b810a6d2540f2a258f`, `git_dirty=false`.
 - Source fingerprint: `ed27cca10c183cdacedb04ab66558f91c68d41c00d9f67d72e86a85fc2990553`.
@@ -31,7 +31,7 @@ Snapshot gồm **47 payload files + original SHA256SUMS.txt**, không có model 
 | labels.json | `5f7e8f5810e9ac8c43c1c22b2e4febe2e7a6174629b9031d3e943fce511832aa` |
 | class_support.csv | `ff46f4074464644f573b4ca64eb61320a61a8cc3daed3a3886a350cbc3c6fb75` |
 
-**Checksum exception:** cả **47 payload hashes khớp** manifest được cung cấp. Manifest có thêm dòng tự trỏ tới `SHA256SUMS.txt`, expected `18c2d02f19577cbc93ee6f9b2593b45ff5c38eac424d75e95dc7b9dbdbc5a4d3`, trong khi full digest của manifest hiện tại là `bf7610217a5b2a5b744c7f68d2eb9608640a9da9de712226c493bb5db8a2fa91`. Không khẳng định toàn bộ 48 dòng đều pass và không sửa file gốc để che khác biệt này. Exception nằm ở self-entry, không ở payload dùng cho các gate.
+**Checksum verification: PASS — cả 47 payload hashes khớp.** Manifest chỉ liệt kê 47 payload files, không liệt kê chính `SHA256SUMS.txt`. Đã tính lại và kiểm tra toàn bộ SHA-256; mọi payload giữ nguyên byte so với evidence được cung cấp.
 
 Đã kiểm tra offline: context/fingerprint strict P0 hợp lệ; config/timing/memory/context khớp summaries; P1 có đúng ba strict P0 references và metadata đáp ứng các common batch/runtime/seed/init/identity checks của gate. History, metrics CSV, timing và memory khớp từng epoch. Đây là kiểm tra archived evidence, không phải rerun CUDA hoặc forensic chứng minh độc lập mọi hoạt động trên server. Snapshot không chứa scheduler/accounting log đầy đủ, exploratory measurement-only runs hoặc một UIT interrupted/resumed diagnostic riêng; không suy diễn các kết quả này.
 

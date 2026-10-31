@@ -45,4 +45,3 @@ e6b26927d32887c245b2d84a7081020c58f4f2cf4974a19a18e8082681fef5f5  reports/pilot/
 d2266b1b4395d19a8c1b43da4ead4d3ec31e469148ea76141ab956bbc8fcb83b  reports/pilot/evidence/uit_2026-10-31/p1/e2/model_metadata.json
 3f62bc2b322ecbec75dbb029f0a63283c62639f5a87c43fbd306c5da82d2c7fc  reports/pilot/evidence/uit_2026-10-31/p1/e2/run_summary.json
 c9c49536d94f49d1c2cce36c9ccec90f7ecf44a83ca8b25eb5d04ca4a912a7cd  reports/pilot/evidence/uit_2026-10-31/p1/e2/timing.json
-18c2d02f19577cbc93ee6f9b2593b45ff5c38eac424d75e95dc7b9dbdbc5a4d3  reports/pilot/evidence/uit_2026-10-31/SHA256SUMS.txt

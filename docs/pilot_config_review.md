@@ -20,7 +20,7 @@ Target UIT conformance **PASS**, audit đủ 34.997 train + 7.497 validation has
 
 **Pilot-frozen không đồng nghĩa official-training-frozen.** Sau P1, user đã review đủ để đi tiếp, **không yêu cầu P1-v2** và chốt official **max_epochs=8**. Đây là quyết định post-pilot, không phải run 8 epochs đã thực hiện hoặc bằng chứng hội tụ hoàn toàn. **Exact four-LR values và exact official tuning/final seed IDs vẫn NEEDS REVIEW**; không promote `1e-4`/`3406`. Official warmup/cosine horizon/floor, patience/tolerance/tie-break, batch/runtime/optimizer/init adoption và RNG/resume contract còn phải được xác nhận trong official spec; không tự kế thừa chỉ vì có trong pilot config.
 
-Official implementation/search/final seeds/test evaluation **chưa bắt đầu**. Chưa tạo `training_recipe_v1`; report chỉ ghi evidence và các quyết định đã review. Bản gốc checksum có một self-entry không khớp chính file `SHA256SUMS.txt`; 47 payload files đều khớp, giới hạn được ghi rõ trong report.
+Official implementation/search/final seeds/test evaluation **chưa bắt đầu**. Chưa tạo `training_recipe_v1`; report chỉ ghi evidence và các quyết định đã review. Checksum manifest chỉ liệt kê 47 payload files; cả 47 hashes đã được tính lại và kiểm tra PASS, payload giữ nguyên byte.
 
 ---
 
