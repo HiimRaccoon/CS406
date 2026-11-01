@@ -1,8 +1,13 @@
 # E1 UIT deployment and T10 acceptance
 
-Status: T10 delivery prepared; final target resume evidence and user readiness
-review remain pending. G2, G3a and G3b are open. This runbook grants no gate
-approval. The frozen [numeric contract](e1_numeric_contract_v1.json) and
+Current status (2026-11-01): **G2 PASS, G3a PASS, T11a COMPLETE**, as confirmed
+by the user. All four seed-1001 tuning trials completed eight epochs. Selected
+LR is **1e-4**, selected epoch **7**, supported validation Macro-F1
+**0.45248836792097563**, following the frozen rule; see
+[t11a_handoff.md](t11a_handoff.md). **STOP for explicit G3b review**. G3b is
+**OPEN / NOT APPROVED**; final seeds **2001/3001/4001 NOT STARTED**; test
+access remains **LOCKED**. This runbook grants no new execution permission.
+The frozen [numeric contract](e1_numeric_contract_v1.json) and
 [sidecar](e1_numeric_contract_v1.sha256) bind SHA-256
 `c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143`.
 
@@ -12,9 +17,18 @@ passed; CUDA available on NVIDIA H200 MIG 2g.35gb (32.5 GiB); Torch
 forward/backward at batch 2, input `[2,3,384,896]`, logits `[2,124]`, finite
 gradients and approximately 1.754 GiB peak reserved; 27,915,484 parameters.
 These are accepted as user attestations, without agent reruns. See
-[t10_acceptance.json](t10_acceptance.json) for provenance and remaining evidence.
+[t10_acceptance.json](t10_acceptance.json) for historical T10 preparation
+provenance; that snapshot is unchanged. Current gate status is in the handoff
+and task ledger.
 
-## Next action: final T10 GPU/resume smoke
+## Current next action: G3b review only
+
+Review the completed [tuning handoff](t11a_handoff.md) and selected LR. No final
+seed may launch without separate explicit G3b authorization. Do not rerun the
+completed tuning trials. The commands below are retained deployment reference,
+not the next action or a fresh authorization.
+
+## Historical T10 GPU/resume smoke instructions
 
 Use the clean `e1-implementation` checkout at
 `/datastore/binhvp/BuiTrongTan/CS406/repo`. Update it to the delivered commit
@@ -92,14 +106,17 @@ A successful attempt leaves:
 
 On failure, `evidence.json` records the failure and no G2 candidate is emitted.
 Return the evidence JSON, candidate JSON and pytest output for review. Keep
-large checkpoints on UIT. G2 still requires user review of the actual evidence,
-implementation readiness and concrete four tuning declarations. Passing the
-test does not create an approval or submit a job.
+large checkpoints on UIT. At the T10 preparation stage, G2 still required
+user review of the actual evidence, implementation readiness and concrete
+tuning declarations. The user has now confirmed G2/G3a PASS and completed
+tuning; current next action is G3b review. An automatic smoke pass never
+creates approval or submits a job.
 
 ## One declared official run per Slurm job (later gates only)
 
-Do not execute this section until G2 and the relevant G3a/G3b authorization
-exist. Declarations and their accepted-source identity must match the reviewed
+Reference only: the authorized tuning stage is complete; do not submit it
+again. Final execution requires G3b, which is NOT APPROVED. Declarations and
+their accepted-source identity must match the reviewed
 commit. No wrapper option can bypass preflight. G3a covers exactly the four
 reviewed tuning trials; after selection, stop for the separate G3b review.
 

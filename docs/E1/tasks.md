@@ -1,10 +1,10 @@
 # E1 Task Ledger
 
-**G1 APPROVED - T01-T09 implemented; T10 deployment prepared, final target resume smoke pending. G2/G3a/G3b remain open.**
+**G2 PASS / G3a PASS - T11a COMPLETE. Selected LR: 1e-4. STOP for explicit G3b review; final seeds NOT STARTED; test access LOCKED.**
 
 Updated: **2026-11-01**. Authority: [specs.md](specs.md), the [T00 user decision record](t00_review.md), and the complete [E1 numeric contract v1](e1_numeric_contract_v1.json) with its [checksum](e1_numeric_contract_v1.sha256), explicitly frozen at G1. Technical interfaces remain in [plan.md](plan.md); this ledger owns current gate/completion state. G0 and R1-R4/R6-R9 input decisions are recorded; G1 is PASS; see [g1_approval.json](g1_approval.json), [implementation evidence](implementation_log.md), and [independent review corrections](implementation_review.md).
 
-Checked items evidence G0/G1, T00 input approval, and the implemented/CPU-verified T01-T09 deliverables with task commits. T10 deployment deliverables and the user's manually passed UIT checks are recorded in [t10_acceptance.json](t10_acceptance.json). Final target resume evidence and readiness review are pending; T10 is not complete. CPU fixtures and fabricated parser envelopes are not UIT measurements or official experiment records. The frozen contract, split/preprocessing bytes, pilot files, reviewed numeric decisions, task order, and later authorization gates remain unchanged.
+Current official-stage status is recorded in [t11a_handoff.md](t11a_handoff.md): the user confirms G2 PASS, G3a PASS and T11a complete; the supplied tuning CSV contains four eight-epoch trials with seed 1001. Selected LR is `1e-4`, selected epoch 7, supported validation Macro-F1 `0.45248836792097563`, following the frozen rule. G3b is OPEN / NOT APPROVED; final seeds 2001/3001/4001 have NOT started; test access remains LOCKED. Earlier T10 preparation evidence remains historical. The frozen contract, scientific code, split/preprocessing bytes, pilot files, reviewed numeric decisions, task order and gate dependencies remain unchanged.
 
 ## 1. Fixed Protocol Guardrails
 
@@ -20,8 +20,8 @@ Checked items evidence G0/G1, T00 input approval, and the implemented/CPU-verifi
 
 - [x] **G0 - design and planning approval:** User explicitly approved the E1 spec, implementation plan, and task ledger for T00 only on 2026-10-31; see [verbatim decision record](t00_review.md). This does not authorize implementation.
 - [x] **G1 - numeric-contract freeze and implementation authorization:** After T00 prepares the complete versioned official numeric contract, source evidence/checksum, and reconciled dependent plan/test-oracle changes, the user reviews/freezes that contract and explicitly authorizes implementation to begin. No production E1 implementation task T01+ may start before G1 PASS. R5 and the fixed protocol guardrails are not reopened.
-- [ ] **G2 - implementation acceptance:** Required local/CPU and authorized UIT target acceptance is evidenced through T10; the user reviews readiness and concrete tuning declarations. G2 does not authorize official tuning or final training.
-- [ ] **G3a - official LR tuning authorization:** User reviews G2 readiness, concrete tuning declarations, and the reviewed UIT target environment/runtime identity, then explicitly authorizes only official LR tuning through T11a. Final training remains unauthorized.
+- [x] **G2 - implementation acceptance: PASS.** Recorded on 2026-11-01 from the user's explicit completed-stage confirmation; see [t11a_handoff.md](t11a_handoff.md). No new target measurements are inferred from this documentation update. G2 alone does not authorize official training.
+- [x] **G3a - official LR tuning authorization: PASS.** Recorded from the user's confirmation for the completed four-trial T11a stage. This covers tuning only; final training remains unauthorized.
 - [ ] **G3b - final-training authorization:** After T11a stops and hands off its completed tuning ledger and selected-LR evidence, the user explicitly reviews them and authorizes the selected configuration for the three official final seeds through T11b. G3a or automatic LR selection cannot satisfy G3b.
 - [ ] **Later final-evaluation gate:** Separate authorization after locked protocol/checkpoints; no task here unlocks test access.
 
@@ -125,22 +125,28 @@ Dependencies define execution order; they do not request parallel agents or auth
 
 ### T10 - UIT Deployment and Acceptance
 
+Current gate disposition: **G2 PASS**, explicitly confirmed by the user with the completed official tuning handoff. The earlier detailed smoke/archive checkboxes below retain their evidence-specific status: the supplied tuning CSV does not include new target smoke/resume logs. This status update does not invent those measurements or alter the historical `t10_acceptance.json` preparation record.
+
 - [x] Write E1 entrypoint CPU tests and the opt-in target smoke test in `tests/e1/test_entrypoints.py` and `tests/e1/test_gpu_smoke.py`; CPU checks pass, GPU smoke remains unexecuted by the agent.
 - [x] Prepare `scripts/slurm/e1_train.sbatch` and [runbook.md](runbook.md); run local CPU regression, compilation, and shell syntax checks. Exact allocation and seed/declaration/last.pt guards are tested without job submission; see [implementation_log.md](implementation_log.md).
 - [x] Record the user's current manually passed UIT CPU regression, H200 MIG environment, real-weight synthetic full-size forward/backward, and real train/frozen-preprocessing forward/backward as user attestations. The agent does not rerun or independently re-verify those checks; no unreported observations are inferred.
 - [ ] User runs the final opt-in UIT GPU smoke from the runbook and returns actual current source/runtime/integrity identity plus interrupted-boundary/last.pt resume equivalence evidence. The bounded checkpoint fixture is not an official completed epoch or tuning outcome.
 - [ ] Only after explicit target-work authorization, execute and record actual UIT environment/integrity and real-weight/full-size forward-backward/resume GPU smoke evidence through the reviewed Slurm path. This is implementation acceptance, not a tuning trial, P1-v2, or extra optimization experiment.
-- [ ] Review G2 readiness, concrete tuning declarations, and target environment/runtime identity with the user; commit the scoped deliverables. Obtain G3a separately before any official tuning job. G2/target-smoke approval grants neither tuning nor final-training authorization.
+- [x] Record the user's G2 PASS and separate G3a PASS confirmation with the completed T11a handoff; deployment deliverables were committed previously. Neither gate authorizes final training; G3b remains OPEN / NOT APPROVED.
 
 ### T11a - Official UIT LR Tuning, Only After G3a
 
-- [ ] Record G3a authorization after the user's review of G2 readiness, the concrete tuning declarations, and the reviewed UIT environment/runtime identity.
-- [ ] Execute exactly four reviewed LR candidates with the one official tuning seed on UIT GPU/Slurm; every successful trial completes all eight training epochs and eight full validations. Keep early stopping OFF and the full eight-epoch scheduler horizon.
-- [ ] Preserve failures, operational interruptions, and retries in the tuning ledger; do not substitute short/failed trials for completed evidence or add LR candidates.
-- [ ] Select/lock the LR using supported validation Macro-F1 from each selected checkpoint (tau=1e-6, earlier checkpoint ties) and the frozen reviewed LR-trial tie rule. Generate the complete tuning ledger and selected-LR evidence with identities/checkpoints.
-- [ ] **STOP after LR selection and hand off the tuning ledger/selected-LR evidence to the user. Do not launch final seeds automatically.** Wait for the user's explicit G3b review and final-training authorization; G3a covers only tuning. Keep test images locked and do not start E1-HR/E2/E3.
+**COMPLETE**, as confirmed by the user and summarized in [t11a_handoff.md](t11a_handoff.md).
+
+- [x] Record the user's G2 PASS and G3a PASS confirmation for completed official tuning.
+- [x] Record all four frozen LR candidates `[2.5e-5, 5e-5, 1e-4, 2e-4]`, seed 1001, each with eight completed epochs/eight validation records and 139992 optimizer updates. No successful shortened trial is substituted.
+- [x] Preserve existing run evidence, failures/retries and selection artifacts without modification. The supplied CSV contains completed trial histories; it does not enumerate failures/retries or checkpoint lineage, which this documentation update does not reconstruct.
+- [x] Record selected LR **`1e-4`**, selected epoch **7**, supported validation Macro-F1 **`0.45248836792097563`**. Recalculation follows tau=1e-6/earlier checkpoint ties and the global-maximum-anchored/lower-LR trial rule; see the handoff table. The existing selection artifact is unchanged.
+- [x] **STOP and hand off completed tuning for explicit G3b review. No final seeds launched.** G3b is **OPEN / NOT APPROVED**; seeds **2001/3001/4001 NOT STARTED**. Test images remain **LOCKED**; no E1-HR/E2/E3 work is started.
 
 ### T11b - Official UIT Final Training, Only After G3b
+
+**NOT STARTED. G3b OPEN / NOT APPROVED. Final seeds 2001/3001/4001 have not started. Test access LOCKED.**
 
 - [ ] Record the user's explicit G3b review of the completed T11a tuning ledger and selected LR, and authorization of that selected configuration for the three official final seeds. No final seed may run before G3b PASS.
 - [ ] Execute selected LR x three distinct official final seeds on the reviewed UIT GPU/Slurm environment, all disjoint from the tuning seed. Start each run freshly from the pinned ImageNet checkpoint; do not warm-start from a tuning checkpoint.
@@ -154,4 +160,4 @@ For future authorized implementation, follow each task's technical red/green/che
 
 Test fixtures may exercise eight epochs with tiny CPU models; they are not UIT measurements or official experiment records. Runtime policy, source identity, and artifact validation must prevent synthetic evidence from becoming official campaign evidence.
 
-G1 was explicitly approved on 2026-11-01 for the exact contract SHA-256 in [g1_approval.json](g1_approval.json). T00 and T01-T09 are complete with recorded verification and commits. T10 deployment is prepared and user-reported target checks are accepted as stated; the final GPU/resume smoke is handed to the user, not executed by the agent. G2, G3a, G3b, tuning/final training and test access remain blocked. See [implementation_log.md](implementation_log.md) and [runbook.md](runbook.md). The immutable contract's preparation snapshot and earlier review documents remain historical records; their open-G1 wording is not current authorization state. No gate or training decision is changed by T10.
+G1 remains bound to the exact frozen contract SHA-256 in [g1_approval.json](g1_approval.json). G2 and G3a are PASS and T11a is COMPLETE per the user's current instruction and the supplied four-trial tuning CSV. See [t11a_handoff.md](t11a_handoff.md) for provenance and the unchanged selection rule. **STOP for explicit G3b review**: G3b is OPEN / NOT APPROVED, T11b/final seeds 2001/3001/4001 are NOT STARTED, and test access is LOCKED. Earlier preparation/implementation records retain their historical meaning. This documentation-only update changes no scientific code, numeric contract, selection artifact, run evidence or gate dependency.

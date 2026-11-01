@@ -1,6 +1,6 @@
 # E1 Implementation Plan
 
-**Execution update (2026-11-01):** G1 explicitly approved the exact contract digest in [g1_approval.json](g1_approval.json). T01-T09 implementation and CPU verification are complete; see the [current ledger](tasks.md), [evidence](implementation_log.md), and [independent review corrections](implementation_review.md). Preparation-status wording and checklist steps below preserve the reviewed planning snapshot; the external approval record and task ledger supply current execution state. T10 target GPU work and official execution remain blocked. No technical interface, numeric decision, task order, or authorization gate is changed by this status note.
+**Execution update (2026-11-01):** G1 remains bound to the frozen contract digest in [g1_approval.json](g1_approval.json). The user confirms **G2 PASS, G3a PASS and T11a COMPLETE**. Four seed-1001 LR trials each completed eight epochs; selected LR is **1e-4**, selected epoch **7**, supported validation Macro-F1 **0.45248836792097563**, following the frozen rule. See [tasks.md](tasks.md), [t11a_handoff.md](t11a_handoff.md) and [implementation_log.md](implementation_log.md). **STOP for explicit G3b review**: G3b is OPEN / NOT APPROVED, final seeds 2001/3001/4001 are NOT STARTED and test access is LOCKED. Earlier planning checklists remain historical; this status note changes no technical interface, numeric decision, task order or gate dependency.
 
 > **For agentic workers:** REQUIRED SUB-SKILL for future authorized execution: use `executing-plans` for native execution, or `subagent-driven-development` if that method is explicitly selected. Execute one reviewed task at a time; checkbox steps track completion. This document does not select an execution method or authorize implementation.
 
@@ -46,11 +46,11 @@ These failure modes need observable tests at the interfaces named below:
 | Gate | Required before proceeding | Current state |
 |---|---|---|
 | G0 - design/plan approval | User approves the specification, this plan, and task ledger as the planning basis for T00 only | PASS; explicit user approval recorded in t00_review.md |
-| G1 - contract freeze and implementation authorization | User reviews/freezes the complete versioned numeric contract/checksum and reconciled plan, explicitly authorizes T01+, and selects the execution method | NOT approved; complete contract submitted for review |
-| G2 - implementation acceptance | T01-T10 pass their relevant CPU/target checks; user reviews readiness and concrete run declarations | Not started |
-| G3a - official tuning | Explicit authorization after G2 for only the four declared UIT/Slurm tuning trials through T11a | Not granted; stop and hand off after LR selection |
-| G3b - final training | Separate explicit review of completed T11a ledger/selected LR and authorization for three final seeds through T11b | Not granted; G3a cannot authorize final seeds |
-| Final test access | Separate final-evaluation specification/authorization after locked checkpoints/protocol | Outside scope |
+| G1 - contract freeze and implementation authorization | User reviews/freezes the complete versioned numeric contract/checksum and reconciled plan, explicitly authorizes T01+, and selects the execution method | PASS; g1_approval.json |
+| G2 - implementation acceptance | T01-T10 pass their relevant CPU/target checks; user reviews readiness and concrete run declarations | PASS; user confirmation recorded in t11a_handoff.md |
+| G3a - official tuning | Explicit authorization after G2 for only the four declared UIT/Slurm tuning trials through T11a | PASS; T11a complete, selected LR 1e-4; STOP for G3b review |
+| G3b - final training | Separate explicit review of completed T11a ledger/selected LR and authorization for three final seeds through T11b | OPEN / NOT APPROVED; final seeds 2001/3001/4001 NOT STARTED |
+| Final test access | Separate final-evaluation specification/authorization after locked checkpoints/protocol | LOCKED; outside current authorization |
 
 Target GPU smoke in T10 also requires its own explicit target-work authorization. G1 permits implementation only; G2 does not authorize tuning or final training.
 
