@@ -1,10 +1,10 @@
 # E1 Task Ledger
 
-**G1 APPROVED - T01-T09 implemented and CPU-verified; target GPU work and official execution remain blocked.**
+**G1 APPROVED - T01-T09 implemented; T10 deployment prepared, final target resume smoke pending. G2/G3a/G3b remain open.**
 
 Updated: **2026-11-01**. Authority: [specs.md](specs.md), the [T00 user decision record](t00_review.md), and the complete [E1 numeric contract v1](e1_numeric_contract_v1.json) with its [checksum](e1_numeric_contract_v1.sha256), explicitly frozen at G1. Technical interfaces remain in [plan.md](plan.md); this ledger owns current gate/completion state. G0 and R1-R4/R6-R9 input decisions are recorded; G1 is PASS; see [g1_approval.json](g1_approval.json), [implementation evidence](implementation_log.md), and [independent review corrections](implementation_review.md).
 
-Checked items now evidence G0/G1, T00 input approval, and the implemented/CPU-verified T01-T09 deliverables with task commits. T10 deployment/target acceptance and official execution have not started. CPU fixtures and fabricated parser envelopes are not UIT measurements or official experiment records. The frozen contract, split/preprocessing bytes, pilot files, reviewed numeric decisions, task order, and later authorization gates remain unchanged.
+Checked items evidence G0/G1, T00 input approval, and the implemented/CPU-verified T01-T09 deliverables with task commits. T10 deployment deliverables and the user's manually passed UIT checks are recorded in [t10_acceptance.json](t10_acceptance.json). Final target resume evidence and readiness review are pending; T10 is not complete. CPU fixtures and fabricated parser envelopes are not UIT measurements or official experiment records. The frozen contract, split/preprocessing bytes, pilot files, reviewed numeric decisions, task order, and later authorization gates remain unchanged.
 
 ## 1. Fixed Protocol Guardrails
 
@@ -125,8 +125,10 @@ Dependencies define execution order; they do not request parallel agents or auth
 
 ### T10 - UIT Deployment and Acceptance
 
-- [ ] Write/pass E1 entrypoint CPU tests and opt-in target smoke tests as specified in the plan.
-- [ ] Prepare the reviewed one-run Slurm wrapper and E1 runbook for deployment to the reviewed UIT server/GPU environment; run CPU regression, compilation, and shell syntax checks.
+- [x] Write E1 entrypoint CPU tests and the opt-in target smoke test in `tests/e1/test_entrypoints.py` and `tests/e1/test_gpu_smoke.py`; CPU checks pass, GPU smoke remains unexecuted by the agent.
+- [x] Prepare `scripts/slurm/e1_train.sbatch` and [runbook.md](runbook.md); run local CPU regression, compilation, and shell syntax checks. Exact allocation and seed/declaration/last.pt guards are tested without job submission; see [implementation_log.md](implementation_log.md).
+- [x] Record the user's current manually passed UIT CPU regression, H200 MIG environment, real-weight synthetic full-size forward/backward, and real train/frozen-preprocessing forward/backward as user attestations. The agent does not rerun or independently re-verify those checks; no unreported observations are inferred.
+- [ ] User runs the final opt-in UIT GPU smoke from the runbook and returns actual current source/runtime/integrity identity plus interrupted-boundary/last.pt resume equivalence evidence. The bounded checkpoint fixture is not an official completed epoch or tuning outcome.
 - [ ] Only after explicit target-work authorization, execute and record actual UIT environment/integrity and real-weight/full-size forward-backward/resume GPU smoke evidence through the reviewed Slurm path. This is implementation acceptance, not a tuning trial, P1-v2, or extra optimization experiment.
 - [ ] Review G2 readiness, concrete tuning declarations, and target environment/runtime identity with the user; commit the scoped deliverables. Obtain G3a separately before any official tuning job. G2/target-smoke approval grants neither tuning nor final-training authorization.
 
@@ -152,4 +154,4 @@ For future authorized implementation, follow each task's technical red/green/che
 
 Test fixtures may exercise eight epochs with tiny CPU models; they are not UIT measurements or official experiment records. Runtime policy, source identity, and artifact validation must prevent synthetic evidence from becoming official campaign evidence.
 
-G1 was explicitly approved on 2026-11-01 for the exact contract SHA-256 in [g1_approval.json](g1_approval.json). T00 is complete with approval/commit evidence. T01-T09 are authorized in order; individual task checkboxes require their actual verification and commits. See [implementation_log.md](implementation_log.md). The immutable contract's preparation snapshot and earlier review documents remain historical records; their open-G1 wording is not current authorization state. T10 target GPU work, G2, G3a, G3b, tuning/final training and test access remain blocked. No gate or training decision is changed by implementation.
+G1 was explicitly approved on 2026-11-01 for the exact contract SHA-256 in [g1_approval.json](g1_approval.json). T00 and T01-T09 are complete with recorded verification and commits. T10 deployment is prepared and user-reported target checks are accepted as stated; the final GPU/resume smoke is handed to the user, not executed by the agent. G2, G3a, G3b, tuning/final training and test access remain blocked. See [implementation_log.md](implementation_log.md) and [runbook.md](runbook.md). The immutable contract's preparation snapshot and earlier review documents remain historical records; their open-G1 wording is not current authorization state. No gate or training decision is changed by T10.

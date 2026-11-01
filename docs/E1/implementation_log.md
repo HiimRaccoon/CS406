@@ -59,3 +59,33 @@ Final verification:
 - Frozen numeric contract/sidecar, four fixed split artifacts, preprocessing module/config, and referenced pilot source hashes: unchanged and verified. No raw test images opened, pretrained weights downloaded, Slurm/GPU jobs launched, tuning trials/final seeds trained, or test evaluation performed.
 
 Next required stage: T10 deployment/acceptance under its own target-work authorization. G2, G3a, G3b and final test evaluation remain open. This implementation is not evidence that the required target checks have passed.
+
+## T10 deployment delivery (2026-11-01)
+
+Scope: T10 only, starting from `b55d0139bb15192ffce0cc7844b51809c211e7cf` on `e1-implementation`. User explicitly requests commit/push to this branch. T01-T09 scientific modules, numeric contract/sidecar, preprocessing, split artifacts and pilot files are preserved byte-for-byte. No official declaration, stage approval or GPU job is created by this delivery.
+
+Delivered: one-run `scripts/slurm/e1_train.sbatch`, `docs/E1/runbook.md`, CPU entrypoint/wrapper tests, opt-in E1 GPU/resume test, and `docs/E1/t10_acceptance.json`. The allocation is normal/uit/mig2-35/gpu:2g.35gb:1, one task, 4 CPUs, 16384 MiB, 09:00:00. The wrapper exports the official seed and reviewed thread/CUBLAS variables before the first Python process; it accepts only one declaration and optionally that run's existing last.pt. Production preflight still enforces actual allocation and G2/stage approval.
+
+Evidence provenance: the user's current 62-pass UIT CPU suite, H200 MIG environment, pinned-weight synthetic and real-train/frozen-preprocessing forward/backward results are accepted exactly as supplied, without agent rerun. Unreported driver, source commit, full package inventory and resume results remain unreported. The acceptance record distinguishes those attestations from future machine-captured identity. G2/G3a/G3b remain unapproved; final T10 target resume acceptance and readiness/declaration review are pending.
+
+Ruling: use existing `_setup`, `train_epoch`, `E1Loader` and checkpoint APIs in an opt-in test, with a minimal test-only checkpoint configuration mapping one two-image segment to a mechanics boundary - exercises real model/optimizer/full scheduler/RNG/persistent-worker reconstruction without a shortened official run or production bypass - cost if wrong: bounded state reconstruction does not prove a full natural GPU epoch, Slurm termination delivery, or cross-stack bitwise equivalence; existing CPU runner tests cover interruption control flow and actual official runs must still pass preflight/full budget.
+
+The final target smoke imports passing historical preprocessing conformance, refreshes current train/validation hash/containment integrity before GPU model allocation, decodes only two train members through frozen preprocessing, saves a committed last.pt, discards subsequent uncommitted work, reconstructs state/workers and requires bitwise model/optimizer/scheduler/RNG/loader equality after replay. Full 139992-update scheduler parameters, batch 2 and all canonical training decisions stay unchanged. Its checkpoint/configuration cannot be validated as an official declaration. It writes only an unapproved G2 candidate, never stage authorization.
+
+RED: initial new CPU deployment tests failed because wrapper and smoke helpers did not exist (`.tools/t10-red.log`: 3 failed, 8 passed). An earlier invocation used inaccessible system pytest temp and was rerun with workspace basetemp. GREEN: initial entrypoint checks 11 passed; initial E1 regression 73 passed, 1 GPU deselected. The wrapper test exposed an apostrophe inside Bash parameter-expansion error text; removing that apostrophe fixed the syntax, verified by actual Bash execution and `bash -n`. Two additional CPU checks verify configuration-only dispatch and missing-field rejection. No GPU test was executed by the agent.
+
+Local validation and independent review results follow below. T10 remains partially complete until the user-executed final target smoke and readiness review exist. The exact next UIT command and evidence paths are in [runbook.md](runbook.md).
+
+T10 independent review: a fresh read-only reviewer inspected the scoped wrapper/tests/runbook/acceptance/ledger diff against the frozen contract and existing E1 APIs. Blockers: none; important findings: none; minors: none. The reviewer did not execute tests, target work or jobs. No review fix pass was necessary.
+
+Final: Ruling: reviewer set aside user-attested UIT results - accept the user's explicit confirmation without agent re-verification - cost if wrong: supplied attestations lack machine-captured raw logs; final smoke captures current identity separately.
+
+Final: Ruling: reviewer set aside actual target smoke outcome - leave it pending for the user's next authorized UIT execution - cost if wrong: target acceptance cannot be claimed from local CPU success.
+
+Final: Ruling: reviewer set aside OS termination and full-epoch GPU resume - retain the documented bounded state-discard/reconstruction probe and existing CPU interruption tests - cost if wrong: no actual Slurm-kill/full-natural-epoch GPU equivalence is established by this delivery.
+
+Final: Ruling: reviewer set aside unchanged T01-T09 behavior beyond consumed APIs - preserve all scientific source bytes and rely on existing regression evidence - cost if wrong: pre-existing defects outside this T10 diff are not independently re-reviewed here.
+
+Final local validation: full CPU regression `python -m pytest -q -m "not gpu"` (workspace basetemp) passed **184 tests, 2 deselected**. `python -m compileall -q src/e1 tests/e1` and `bash -n scripts/slurm/e1_train.sbatch` passed. The 34 protected scientific/input files match their pre-T10 SHA-256 values; frozen contract remains `c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143`. The GPU/resume test remains unexecuted by the agent. G2/G3a/G3b remain open; no tuning/final jobs or test-image access occurred. Exact scoped E1 final count is recorded with delivery below.
+
+Final required E1 command: `python -m pytest tests/e1 -q -m "not gpu"` (workspace basetemp) passed **75 tests, 1 deselected** in 48.21 seconds. Full CPU regression passed **184 tests, 2 deselected** in 52.81 seconds. Both are local CPU results, separate from the user's manually reported UIT 62-pass result. No deferred minor findings. Delivery commit contains only the seven T10 files listed above, including this log and the updated ledger; push is explicitly requested by the user.
