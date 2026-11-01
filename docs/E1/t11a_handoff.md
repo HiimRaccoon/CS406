@@ -8,6 +8,7 @@ status record, not a new selection artifact or runtime authorization receipt.
 | Gate / stage | Current status |
 |---|---|
 | G1 | PASS; frozen contract unchanged |
+| T10 | **COMPLETE**; user-executed UIT GPU/resume smoke, job 8198, pytest 1 passed, evidence.json PASS |
 | G2 | **PASS**, as explicitly confirmed by the user |
 | G3a | **PASS**, for the completed official tuning stage |
 | T11a | **COMPLETE**; all four reviewed LR trials completed eight epochs with seed 1001 |
@@ -54,9 +55,15 @@ The input CSV was read from the user's workspace without modification:
 
 G2/G3a PASS and stage completion are recorded from the user's confirmation;
 the CSV independently supports epoch/update coverage and the selection
-calculation. It does not contain target smoke logs, allocation/source identity,
-checkpoint hashes or a failure/retry inventory. Those are not fabricated or
-reconstructed here. Existing selection/run evidence is left unchanged; the
+calculation. The user additionally confirms completed T10 smoke job 8198
+(recorded 2026-11-02): pytest 1 passed, evidence.json PASS, current train/val
+hash audit passed, real H200 MIG environment verified, finite forward/backward,
+bitwise-equal resume replay model/optimizer/scheduler/RNG/loader state and zero
+test images opened. The agent did not execute or rerun this smoke. See the
+runbook's completed user-executed T10 smoke record. The CSV itself does not
+contain those smoke logs, allocation/source identity, checkpoint hashes or a
+failure/retry inventory; none is fabricated or reconstructed here.
+Existing selection/run evidence is left unchanged; the
 workspace CSV is not added to Git by this documentation-only update.
 `t10_acceptance.json` remains the historical preparation snapshot, not the
 current gate status. This handoff and `tasks.md` supply the current status.

@@ -1,6 +1,6 @@
 # E1 UIT deployment and T10 acceptance
 
-Current status (2026-11-01): **G2 PASS, G3a PASS, T11a COMPLETE**, as confirmed
+Current status (2026-11-02): **T10 COMPLETE, G2 PASS, G3a PASS, T11a COMPLETE**, as confirmed
 by the user. All four seed-1001 tuning trials completed eight epochs. Selected
 LR is **1e-4**, selected epoch **7**, supported validation Macro-F1
 **0.45248836792097563**, following the frozen rule; see
@@ -28,12 +28,34 @@ seed may launch without separate explicit G3b authorization. Do not rerun the
 completed tuning trials. The commands below are retained deployment reference,
 not the next action or a fresh authorization.
 
+## Completed user-executed T10 smoke
+
+The user confirms the following completed UIT acceptance evidence, recorded
+on 2026-11-02. The agent did not execute or rerun the smoke; existing run
+evidence and the historical preparation record remain unchanged.
+
+| Check | User-executed result |
+|---|---|
+| Slurm job | **8198** |
+| Pytest | **1 passed** |
+| `evidence.json` | **PASS** |
+| Current train/val hash audit | **Passed** |
+| Real H200 MIG environment | **Verified** |
+| Forward/backward | **Finite** |
+| Resume replay model/optimizer/scheduler/RNG/loader state | **Bitwise equal** |
+| Test images opened | **0** |
+
+T10 is complete. G2 PASS, G3a PASS and T11a COMPLETE are unchanged; G3b
+remains OPEN / NOT APPROVED, final seeds remain NOT STARTED and test access
+remains LOCKED. Retained commands below are reference instructions, not a
+request to repeat job 8198 or authorize any final seed.
+
 ## Historical T10 GPU/resume smoke instructions
 
 Use the clean `e1-implementation` checkout at
 `/datastore/binhvp/BuiTrongTan/CS406/repo`. Update it to the delivered commit
 with a fast-forward pull before running. The reviewed Python executable is
-`/datastore/binhvp/BuiTrongTan/CS406/env/bin/python`; it must already contain
+`/datastore/binhvp/BuiTrongTan/CS406/envs/cs406/bin/python`; it must already contain
 pytest and the exact contract software versions. No installation or package
 upgrade is performed by the wrapper or smoke. If the checkout/environment is
 elsewhere, use its actual reviewed path consistently.
@@ -52,7 +74,7 @@ export MKL_NUM_THREADS=2
 export CUBLAS_WORKSPACE_CONFIG=:4096:8
 srun --partition=normal --account=uit --qos=mig2-35 --gres=gpu:2g.35gb:1 \
   --ntasks=1 --cpus-per-task=4 --mem=16384M --time=09:00:00 --export=ALL \
-  /datastore/binhvp/BuiTrongTan/CS406/env/bin/python \
+  /datastore/binhvp/BuiTrongTan/CS406/envs/cs406/bin/python \
   -m pytest tests/e1/test_gpu_smoke.py -q -m gpu
 ```
 
@@ -127,7 +149,7 @@ variables select one persisted declaration, without a loop:
 
 ```bash
 export CS406_REPO=/datastore/binhvp/BuiTrongTan/CS406/repo
-export CS406_PYTHON=/datastore/binhvp/BuiTrongTan/CS406/env/bin/python
+export CS406_PYTHON=/datastore/binhvp/BuiTrongTan/CS406/envs/cs406/bin/python
 export CS406_CONFIG=/absolute/path/to/one/reviewed/run.json
 export CS406_E1_SEED=1001   # Must equal this declaration; finals require G3b.
 cd "$CS406_REPO"
