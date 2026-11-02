@@ -1,12 +1,13 @@
 # E1 UIT deployment and T10 acceptance
 
-Current status (2026-11-02): **T10 COMPLETE, G2 PASS, G3a PASS, T11a COMPLETE**, as confirmed
-by the user. All four seed-1001 tuning trials completed eight epochs. Selected
-LR is **1e-4**, selected epoch **7**, supported validation Macro-F1
-**0.45248836792097563**, following the frozen rule; see
-[t11a_handoff.md](t11a_handoff.md). **STOP for explicit G3b review**. G3b is
-**OPEN / NOT APPROVED**; final seeds **2001/3001/4001 NOT STARTED**; test
-access remains **LOCKED**. This runbook grants no new execution permission.
+Current status (2026-11-02): **T10 COMPLETE, G2/G3a/G3b PASS, T11a COMPLETE**.
+Final LR **1e-4**, seeds **2001/3001/4001** completed eight epochs each;
+selected epochs are **8/7/8**. The selected-row summary is Macro-F1
+**44.2748 ± 0.5174%** (sample std ddof=1); all five metrics and provenance
+are in [t11b_training_status.md](t11b_training_status.md).
+**T11b/E1 closeout remains INCOMPLETE pending official report/checkpoint-lineage
+verification. Test access remains LOCKED.** This runbook authorizes no new
+training, replay or test evaluation.
 The frozen [numeric contract](e1_numeric_contract_v1.json) and
 [sidecar](e1_numeric_contract_v1.sha256) bind SHA-256
 `c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143`.
@@ -21,12 +22,15 @@ These are accepted as user attestations, without agent reruns. See
 provenance; that snapshot is unchanged. Current gate status is in the handoff
 and task ledger.
 
-## Current next action: G3b review only
+## Current next action: official report and checkpoint-lineage verification
 
-Review the completed [tuning handoff](t11a_handoff.md) and selected LR. No final
-seed may launch without separate explicit G3b authorization. Do not rerun the
-completed tuning trials. The commands below are retained deployment reference,
-not the next action or a fresh authorization.
+Review the remaining artifact checks in [t11b_training_status.md](t11b_training_status.md).
+Verify all three official run declarations/histories/checkpoints and their
+locked-selection lineage, selected-checkpoint validation exports, official
+three-seed report and archived failure/retry inventory before closeout.
+Completed tuning/final runs must not be resubmitted. Commands below are
+retained deployment reference, not the next action or a fresh authorization.
+Test access remains **LOCKED** under a separate later gate.
 
 ## Completed user-executed T10 smoke
 
@@ -45,10 +49,11 @@ evidence and the historical preparation record remain unchanged.
 | Resume replay model/optimizer/scheduler/RNG/loader state | **Bitwise equal** |
 | Test images opened | **0** |
 
-T10 is complete. G2 PASS, G3a PASS and T11a COMPLETE are unchanged; G3b
-remains OPEN / NOT APPROVED, final seeds remain NOT STARTED and test access
-remains LOCKED. Retained commands below are reference instructions, not a
-request to repeat job 8198 or authorize any final seed.
+T10 is complete. G2/G3a remain PASS and T11a COMPLETE; G3b is now separately
+PASS and the final CSV records all three eight-epoch runs. T11b/E1 closeout
+still requires official report/checkpoint-lineage verification. Test access
+remains LOCKED. Retained commands do not request repeating job 8198 or
+resubmitting any completed run.
 
 ## Historical T10 GPU/resume smoke instructions
 
@@ -131,14 +136,15 @@ Return the evidence JSON, candidate JSON and pytest output for review. Keep
 large checkpoints on UIT. At the T10 preparation stage, G2 still required
 user review of the actual evidence, implementation readiness and concrete
 tuning declarations. The user has now confirmed G2/G3a PASS and completed
-tuning; current next action is G3b review. An automatic smoke pass never
+tuning; the later final CSV now records completed final training. Current next
+action is official report/checkpoint-lineage verification. An automatic smoke pass never
 creates approval or submits a job.
 
 ## One declared official run per Slurm job (later gates only)
 
-Reference only: the authorized tuning stage is complete; do not submit it
-again. Final execution requires G3b, which is NOT APPROVED. Declarations and
-their accepted-source identity must match the reviewed
+Reference only: tuning and all three final training histories are complete;
+do not submit them again. G3b is PASS; reporting/checkpoint-lineage closeout
+is pending. Declarations and accepted-source identity must match the reviewed
 commit. No wrapper option can bypass preflight. G3a covers exactly the four
 reviewed tuning trials; after selection, stop for the separate G3b review.
 

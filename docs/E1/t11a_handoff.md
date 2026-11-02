@@ -12,8 +12,8 @@ status record, not a new selection artifact or runtime authorization receipt.
 | G2 | **PASS**, as explicitly confirmed by the user |
 | G3a | **PASS**, for the completed official tuning stage |
 | T11a | **COMPLETE**; all four reviewed LR trials completed eight epochs with seed 1001 |
-| G3b | **OPEN / NOT APPROVED**; explicit review of this handoff is required |
-| T11b | **NOT STARTED**; final seeds 2001, 3001 and 4001 have not started |
+| G3b | **PASS**, per subsequent user confirmation; see t11b_training_status.md |
+| T11b | **Training execution complete**, seeds 2001/3001/4001 at 1e-4 for eight epochs each; **closeout INCOMPLETE** pending official report/checkpoint-lineage verification |
 | Final test access | **LOCKED**; separate later authorization required |
 
 ## Completed tuning evidence
@@ -68,10 +68,12 @@ workspace CSV is not added to Git by this documentation-only update.
 `t10_acceptance.json` remains the historical preparation snapshot, not the
 current gate status. This handoff and `tasks.md` supply the current status.
 
-## Mandatory stop
+## Post-tuning gate disposition
 
-**STOP for explicit G3b review.** The user must separately review the completed
-tuning handoff and selected LR before authorizing the selected configuration
-for final seeds **2001 / 3001 / 4001**. None has started. No final declaration,
-job or launch is authorized by this update. Test images remain locked, and
-no E1-HR/E2/E3 stage starts automatically.
+T11a stopped at its mandatory handoff for separate G3b review. The user has
+subsequently confirmed **G3b PASS** and supplied completed final-training
+histories for seeds 2001/3001/4001. Final LR is **1e-4**, eight epochs each,
+selected epochs **8/7/8**. See [t11b_training_status.md](t11b_training_status.md)
+for the selected-row aggregates and remaining official report/checkpoint-lineage
+checks. **T11b/E1 closeout is not complete. Test access remains LOCKED.**
+No E1-HR/E2/E3 work or further execution is authorized by this status update.

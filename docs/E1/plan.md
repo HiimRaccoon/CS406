@@ -1,6 +1,6 @@
 # E1 Implementation Plan
 
-**Execution update (2026-11-02):** G1 remains bound to the frozen contract digest in [g1_approval.json](g1_approval.json). The user confirms **G2 PASS, G3a PASS and T11a COMPLETE**. Four seed-1001 LR trials each completed eight epochs; selected LR is **1e-4**, selected epoch **7**, supported validation Macro-F1 **0.45248836792097563**, following the frozen rule. See [tasks.md](tasks.md), [t11a_handoff.md](t11a_handoff.md) and [implementation_log.md](implementation_log.md). **STOP for explicit G3b review**: G3b is OPEN / NOT APPROVED, final seeds 2001/3001/4001 are NOT STARTED and test access is LOCKED. Earlier planning checklists remain historical; this status note changes no technical interface, numeric decision, task order or gate dependency.
+**Execution update (2026-11-02):** G1 remains bound to the frozen contract. G2/G3a/G3b are PASS; T10 and T11a are COMPLETE. The final CSV records LR **1e-4**, seeds **2001/3001/4001**, eight epochs each and selected epochs **8/7/8**. Selected-row Macro-F1 is **44.2748 ± 0.5174%** (sample std ddof=1); see [t11b_training_status.md](t11b_training_status.md) for all metrics and evidence boundaries. **T11b/E1 closeout remains INCOMPLETE pending official report/checkpoint-lineage verification; test access LOCKED.** Current task state is in [tasks.md](tasks.md). No scientific interface, frozen value or gate dependency is changed.
 
 > **For agentic workers:** REQUIRED SUB-SKILL for future authorized execution: use `executing-plans` for native execution, or `subagent-driven-development` if that method is explicitly selected. Execute one reviewed task at a time; checkbox steps track completion. This document does not select an execution method or authorize implementation.
 
@@ -48,8 +48,8 @@ These failure modes need observable tests at the interfaces named below:
 | G0 - design/plan approval | User approves the specification, this plan, and task ledger as the planning basis for T00 only | PASS; explicit user approval recorded in t00_review.md |
 | G1 - contract freeze and implementation authorization | User reviews/freezes the complete versioned numeric contract/checksum and reconciled plan, explicitly authorizes T01+, and selects the execution method | PASS; g1_approval.json |
 | G2 - implementation acceptance | T01-T10 pass their relevant CPU/target checks; user reviews readiness and concrete run declarations | PASS; user confirmation recorded in t11a_handoff.md |
-| G3a - official tuning | Explicit authorization after G2 for only the four declared UIT/Slurm tuning trials through T11a | PASS; T11a complete, selected LR 1e-4; STOP for G3b review |
-| G3b - final training | Separate explicit review of completed T11a ledger/selected LR and authorization for three final seeds through T11b | OPEN / NOT APPROVED; final seeds 2001/3001/4001 NOT STARTED |
+| G3a - official tuning | Explicit authorization after G2 for only the four declared UIT/Slurm tuning trials through T11a | PASS; T11a complete, selected LR 1e-4; separate G3b now PASS |
+| G3b - final training | Separate explicit review of completed T11a ledger/selected LR and authorization for three final seeds through T11b | PASS per user confirmation; all three final training histories complete; T11b closeout pending |
 | Final test access | Separate final-evaluation specification/authorization after locked checkpoints/protocol | LOCKED; outside current authorization |
 
 Target GPU smoke in T10 also requires its own explicit target-work authorization. G1 permits implementation only; G2 does not authorize tuning or final training.
@@ -263,7 +263,7 @@ def test_checkpoint_tie_does_not_use_nll():
 - [x] After target authorization, verify actual environment/weight/dataset/conformance identity and run a bounded synthetic/train-only smoke for real model loading, full-size forward/backward, finite gradients, memory, and interrupted/resumed behavior. Record the observed results as smoke/acceptance evidence, not an official trial or a P1-v2 study.
 - [x] Review readiness and concrete run declarations with the user; commit the implementation/runbook and acceptance record through the approved publishing workflow. G2 is PASS per the user-confirmed target evidence and readiness review recorded below.
 
-**Completion record (2026-11-02): T10 COMPLETE.** User-executed UIT Slurm job **8198**, pytest **1 passed**, `evidence.json` **PASS**; current train/val hash audit passed; real H200 MIG environment verified; forward/backward finite; resume replay model/optimizer/scheduler/RNG/loader state **bitwise equal**; **no test images opened**. The agent did not execute or rerun this smoke. G2 PASS, G3a PASS and T11a COMPLETE remain unchanged. **G3b OPEN / NOT APPROVED; final seeds NOT STARTED; test access LOCKED.** Run evidence and the frozen contract are unchanged. See [runbook.md](runbook.md) for the user-executed evidence record.
+**Completion record (2026-11-02): T10 COMPLETE.** User-executed UIT Slurm job **8198**, pytest **1 passed**, `evidence.json` **PASS**; current train/val hash audit passed; real H200 MIG environment verified; forward/backward finite; resume replay model/optimizer/scheduler/RNG/loader state **bitwise equal**; **no test images opened**. The agent did not execute or rerun this smoke. G2 PASS, G3a PASS and T11a COMPLETE remain unchanged. **G3b is now separately PASS; three final training histories complete; T11b/E1 closeout pending; test access LOCKED.** Run evidence and the frozen contract are unchanged. See [runbook.md](runbook.md) for the user-executed evidence record.
 
 ## Task T11a: Official LR Tuning and Mandatory User Handoff
 
@@ -277,9 +277,11 @@ def test_checkpoint_tie_does_not_use_nll():
 
 **Dependencies:** completed T11a handoff, G1 PASS, G2 PASS, and explicit G3b authorization. **Files:** final-seed artifacts and E1 validation report under the reviewed output root.
 
-- [ ] Review and execute the three final declarations under their distinct, disjoint final seeds. Require eight training epochs/eight validations per successful run and unchanged full scheduler horizons on resume.
-- [ ] Generate selected-checkpoint validation analysis and mean/std reports using T09. Preserve per-seed checkpoints and lineage for possible later E3 work; do not create feature caches.
+- [x] Record G3b PASS and CSV-supported training execution at LR 1e-4 for seeds 2001/3001/4001: eight epochs/eight validation records and 139992 updates per seed; selected epochs 8/7/8. This does not independently verify original declarations, full validation sample coverage or resume lineage.
+- [ ] Verify official declarations/run identity, fresh pinned initialization, selected checkpoints and history/locked-selection lineage, then verify selected-checkpoint validation analysis and official mean/std reports using T09. Preserve per-seed checkpoints; do not create feature caches. The CSV-derived aggregate is not a replacement for these artifacts.
 - [ ] Review results/limitations and archive the artifact inventory. Test remains locked: final test evaluation requires its own later authorization, not automatic continuation of this task.
+
+**Current disposition: training execution complete; T11b/E1 closeout INCOMPLETE.** CSV arithmetic matches all five requested mean/sample-std values; official report and checkpoint-lineage artifacts were not available for verification in the workspace. See [t11b_training_status.md](t11b_training_status.md). Test access remains **LOCKED**.
 
 ## Validation and Handoff Rules
 

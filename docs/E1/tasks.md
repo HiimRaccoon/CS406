@@ -1,10 +1,10 @@
 # E1 Task Ledger
 
-**G2 PASS / G3a PASS - T11a COMPLETE. Selected LR: 1e-4. STOP for explicit G3b review; final seeds NOT STARTED; test access LOCKED.**
+**G2/G3a/G3b PASS - T11a COMPLETE. Final LR: 1e-4; three final seeds completed eight epochs each. T11b/E1 closeout INCOMPLETE pending official report/checkpoint-lineage verification. Test access LOCKED.**
 
 Updated: **2026-11-02**. Authority: [specs.md](specs.md), the [T00 user decision record](t00_review.md), and the complete [E1 numeric contract v1](e1_numeric_contract_v1.json) with its [checksum](e1_numeric_contract_v1.sha256), explicitly frozen at G1. Technical interfaces remain in [plan.md](plan.md); this ledger owns current gate/completion state. G0 and R1-R4/R6-R9 input decisions are recorded; G1 is PASS; see [g1_approval.json](g1_approval.json), [implementation evidence](implementation_log.md), and [independent review corrections](implementation_review.md).
 
-Current official-stage status is recorded in [t11a_handoff.md](t11a_handoff.md): the user confirms G2 PASS, G3a PASS and T11a complete; the supplied tuning CSV contains four eight-epoch trials with seed 1001. Selected LR is `1e-4`, selected epoch 7, supported validation Macro-F1 `0.45248836792097563`, following the frozen rule. G3b is OPEN / NOT APPROVED; final seeds 2001/3001/4001 have NOT started; test access remains LOCKED. Earlier T10 preparation evidence remains historical. The frozen contract, scientific code, split/preprocessing bytes, pilot files, reviewed numeric decisions, task order and gate dependencies remain unchanged.
+Current final-training status is recorded in [t11b_training_status.md](t11b_training_status.md). The user confirms G3b PASS; the supplied final CSV records seeds 2001/3001/4001 at LR `1e-4`, eight epochs each, selected epochs 8/7/8. Selected-checkpoint Macro-F1 is **44.2748 ± 0.5174%** (sample std, ddof=1); all five aggregate metrics are in the status summary. G2/G3a remain PASS and T11a COMPLETE; its tuning handoff remains in [t11a_handoff.md](t11a_handoff.md). **T11b/E1 closeout is INCOMPLETE** until official report and checkpoint lineage are verified. Test access remains **LOCKED**. Scientific code, frozen protocol and existing run/selection evidence remain unchanged.
 
 ## 1. Fixed Protocol Guardrails
 
@@ -21,8 +21,8 @@ Current official-stage status is recorded in [t11a_handoff.md](t11a_handoff.md):
 - [x] **G0 - design and planning approval:** User explicitly approved the E1 spec, implementation plan, and task ledger for T00 only on 2026-10-31; see [verbatim decision record](t00_review.md). This does not authorize implementation.
 - [x] **G1 - numeric-contract freeze and implementation authorization:** After T00 prepares the complete versioned official numeric contract, source evidence/checksum, and reconciled dependent plan/test-oracle changes, the user reviews/freezes that contract and explicitly authorizes implementation to begin. No production E1 implementation task T01+ may start before G1 PASS. R5 and the fixed protocol guardrails are not reopened.
 - [x] **G2 - implementation acceptance: PASS.** Recorded on 2026-11-01 from the user's explicit completed-stage confirmation; see [t11a_handoff.md](t11a_handoff.md). No new target measurements are inferred from this documentation update. G2 alone does not authorize official training.
-- [x] **G3a - official LR tuning authorization: PASS.** Recorded from the user's confirmation for the completed four-trial T11a stage. This covers tuning only; final training remains unauthorized.
-- [ ] **G3b - final-training authorization:** After T11a stops and hands off its completed tuning ledger and selected-LR evidence, the user explicitly reviews them and authorizes the selected configuration for the three official final seeds through T11b. G3a or automatic LR selection cannot satisfy G3b.
+- [x] **G3a - official LR tuning authorization: PASS.** Recorded from the user's confirmation for the completed four-trial T11a stage. This gate covers tuning only; final-stage approval is recorded separately at G3b.
+- [x] **G3b - final-training authorization: PASS.** Recorded on 2026-11-02 from the user's explicit instruction for final LR `1e-4`, seeds 2001/3001/4001. The CSV confirms their eight-epoch histories; original approval-receipt timing/checkpoint lineage is not inferred from scalar metrics. G3b does not authorize test access or mark T11b/E1 closeout complete.
 - [ ] **Later final-evaluation gate:** Separate authorization after locked protocol/checkpoints; no task here unlocks test access.
 
 Gate flow: **G0 -> T00 -> G1 -> T01-T09 -> T10 -> G2 -> G3a -> T11a -> STOP for user review -> G3b -> T11b -> separate final-evaluation gate**. T10 target GPU smoke requires its own explicit target-work authorization; implementation approval alone does not authorize GPU jobs. All official GPU work uses the reviewed UIT target environment and Slurm execution path.
@@ -132,7 +132,7 @@ Dependencies define execution order; they do not request parallel agents or auth
 - [x] Record the user's current manually passed UIT CPU regression, H200 MIG environment, real-weight synthetic full-size forward/backward, and real train/frozen-preprocessing forward/backward as user attestations. The agent does not rerun or independently re-verify those checks; no unreported observations are inferred.
 - [x] Record the completed user-executed final opt-in UIT GPU/resume smoke: job 8198, pytest 1 passed, evidence.json PASS, current train/val hash audit passed and real H200 MIG environment verified. The bounded checkpoint fixture is not an official completed epoch or tuning outcome.
 - [x] Record the user's UIT full-size forward/backward and last.pt resume acceptance: finite forward/backward and bitwise-equal replay model/optimizer/scheduler/RNG/loader state; no test images opened. The user executed the smoke through Slurm; the agent did not execute or rerun it. This is implementation acceptance, not a tuning trial, P1-v2 or extra optimization experiment.
-- [x] Record the user's G2 PASS and separate G3a PASS confirmation with the completed T11a handoff; deployment deliverables were committed previously. Neither gate authorizes final training; G3b remains OPEN / NOT APPROVED.
+- [x] Record the user's G2 PASS and separate G3a PASS confirmation with the completed T11a handoff; deployment deliverables were committed previously. Neither gate substitutes for G3b, now separately recorded PASS with the final-training status.
 
 ### T11a - Official UIT LR Tuning, Only After G3a
 
@@ -142,17 +142,18 @@ Dependencies define execution order; they do not request parallel agents or auth
 - [x] Record all four frozen LR candidates `[2.5e-5, 5e-5, 1e-4, 2e-4]`, seed 1001, each with eight completed epochs/eight validation records and 139992 optimizer updates. No successful shortened trial is substituted.
 - [x] Preserve existing run evidence, failures/retries and selection artifacts without modification. The supplied CSV contains completed trial histories; it does not enumerate failures/retries or checkpoint lineage, which this documentation update does not reconstruct.
 - [x] Record selected LR **`1e-4`**, selected epoch **7**, supported validation Macro-F1 **`0.45248836792097563`**. Recalculation follows tau=1e-6/earlier checkpoint ties and the global-maximum-anchored/lower-LR trial rule; see the handoff table. The existing selection artifact is unchanged.
-- [x] **STOP and hand off completed tuning for explicit G3b review. No final seeds launched.** G3b is **OPEN / NOT APPROVED**; seeds **2001/3001/4001 NOT STARTED**. Test images remain **LOCKED**; no E1-HR/E2/E3 work is started.
+- [x] Record the mandatory T11a stop/handoff for separate G3b review. G3b is now separately PASS per the user's confirmation; final-seed execution is recorded below, without reopening tuning. Test images remain **LOCKED**; no E1-HR/E2/E3 work is started.
 
 ### T11b - Official UIT Final Training, Only After G3b
 
-**NOT STARTED. G3b OPEN / NOT APPROVED. Final seeds 2001/3001/4001 have not started. Test access LOCKED.**
+**Training execution COMPLETE for seeds 2001/3001/4001; G3b PASS. T11b/E1 closeout INCOMPLETE pending official report/checkpoint-lineage verification. Test access LOCKED.**
 
-- [ ] Record the user's explicit G3b review of the completed T11a tuning ledger and selected LR, and authorization of that selected configuration for the three official final seeds. No final seed may run before G3b PASS.
-- [ ] Execute selected LR x three distinct official final seeds on the reviewed UIT GPU/Slurm environment, all disjoint from the tuning seed. Start each run freshly from the pinned ImageNet checkpoint; do not warm-start from a tuning checkpoint.
-- [ ] Ensure every successful final run completes all eight training epochs and eight full validations, with early stopping OFF and the original scheduler/resume budget unchanged.
-- [ ] Generate selected-checkpoint per-seed validation analysis and mean/std reports using the reviewed reporting convention; archive identities/checkpoints, retain failures/retries, and review limitations. Do not open test images.
-- [ ] Hand off for separately authorized final evaluation. Keep test images locked and do not start E1-HR/E2/E3 automatically.
+- [x] Record the user's G3b PASS instruction for the selected LR `1e-4` and three final seeds. This status record does not recreate the original runtime approval receipt.
+- [x] Record CSV-supported execution at `1e-4` for distinct seeds 2001/3001/4001, disjoint from tuning seed 1001; each completed epochs 1-8.
+- [x] Verify eight validation-metric records and 17499 updates per epoch/139992 total per seed, final LR 1e-6, and selected epochs **2001→8, 3001→7, 4001→8**. Aggregate all metrics from these same selected rows with sample std ddof=1: Macro-F1 **44.2748 ± 0.5174%**, Weighted-F1 **74.2949 ± 0.1534%**, Top-1 **75.5058 ± 0.0505%**, Top-3 **89.0000 ± 0.1426%**, Top-5 **92.6104 ± 0.1286%**. This scalar summary is not an official checkpoint-backed report.
+- [ ] Verify official declarations/accepted identity, full split/sample coverage, fresh pinned ImageNet initialization (no tuning warm-start), immutable resume budget and selected best.pt/last.pt lineage against complete histories/run summaries and the locked selection. The CSV alone does not prove these details.
+- [ ] Verify selected-checkpoint per-seed validation analysis and the official T09 mean/std report, archive checkpoints/identities/failures/retries, and review limitations. The CSV-derived summary does not satisfy this closeout requirement; see [t11b_training_status.md](t11b_training_status.md).
+- [ ] Complete the closeout review and handoff for separately authorized final evaluation. Keep test images **LOCKED** and do not start E1-HR/E2/E3 automatically.
 
 ## 5. Completion and Evidence Rules
 
@@ -160,4 +161,4 @@ For future authorized implementation, follow each task's technical red/green/che
 
 Test fixtures may exercise eight epochs with tiny CPU models; they are not UIT measurements or official experiment records. Runtime policy, source identity, and artifact validation must prevent synthetic evidence from becoming official campaign evidence.
 
-G1 remains bound to the exact frozen contract SHA-256 in [g1_approval.json](g1_approval.json). G2 and G3a are PASS and T11a is COMPLETE per the user's current instruction and the supplied four-trial tuning CSV. See [t11a_handoff.md](t11a_handoff.md) for provenance and the unchanged selection rule. **STOP for explicit G3b review**: G3b is OPEN / NOT APPROVED, T11b/final seeds 2001/3001/4001 are NOT STARTED, and test access is LOCKED. Earlier preparation/implementation records retain their historical meaning. This documentation-only update changes no scientific code, numeric contract, selection artifact, run evidence or gate dependency.
+G1 remains bound to the exact frozen contract SHA-256 in [g1_approval.json](g1_approval.json). G2/G3a/G3b are PASS; T11a is COMPLETE and the final CSV supports completed eight-epoch training at LR 1e-4 for seeds 2001/3001/4001. **T11b/E1 closeout remains INCOMPLETE** pending official report/checkpoint-lineage verification, as itemized in [t11b_training_status.md](t11b_training_status.md). Test access remains **LOCKED** under a separate later gate. Earlier records retain their historical meaning. This documentation-only update changes no scientific code, numeric contract, selection artifact, run evidence or gate dependency.
