@@ -193,10 +193,10 @@ Each implementation task below begins only after HR-G1 and its dependencies. Wri
 
 **Depends:** HR-T01/T07. **Files:** HR campaign/test_campaign/test_artifacts. **Interfaces:** campaign APIs above.
 
-- [ ] Test exactly four declarations/one tuning seed and separate fresh final declarations with three distinct seeds. Neither operation submits jobs. Exclusive creation prevents overwriting declarations/ledger/selection.
-- [ ] Pin global-maximum oracle: scores `[.5000000,.5000006,.5000012,.4900000]` in grid order select `5e-5`, unchanged under any record order. Reject missing/duplicate/extra/failed/short candidates and caller-supplied scores, mixed accepted identities, stale selection bytes and selected metrics from another checkpoint.
-- [ ] Add temporary synthetic parser-envelope tests for successful full-lineage parsing and rehashed wrong history/selected weights. Verify declaration↔summary↔8-row history↔best/last↔selection consistency, 34997/7497 coverage, 106-supported/124 outputs, exact 139992 updates, HR receipts/fingerprints and operation/attempt inventory. Fixture envelopes are never exported as target evidence.
-- [ ] Run `python -m pytest tests/e1hr/test_campaign.py tests/e1hr/test_artifacts.py -q` to RED; implement strict HR parsing/selection. Selection records `STOP_FOR_USER_HR_G3b_REVIEW` and `final_execution_authorized=false`; rerun to PASS and commit. Operational interruption resumes the same run; an uncompletable candidate stops for explicit review without scientific fallback.
+- [x] Test exactly four declarations/one tuning seed and separate fresh final declarations with three distinct seeds. Neither operation submits jobs. Exclusive creation prevents overwriting declarations/ledger/selection.
+- [x] Pin global-maximum oracle: scores `[.5000000,.5000006,.5000012,.4900000]` in grid order select `5e-5`, unchanged under any record order. Reject missing/duplicate/extra/failed/short candidates and caller-supplied scores, mixed accepted identities, stale selection bytes and selected metrics from another checkpoint.
+- [x] Add temporary synthetic parser-envelope tests for successful full-lineage parsing and rehashed wrong history/selected weights. Verify declaration↔summary↔8-row history↔best/last↔selection consistency, 34997/7497 coverage, 106-supported/124 outputs, exact 139992 updates, HR receipts/fingerprints and operation/attempt inventory. Fixture envelopes are never exported as target evidence.
+- [x] Run `python -m pytest tests/e1hr/test_campaign.py tests/e1hr/test_artifacts.py -q` to RED; implement strict HR parsing/selection. Selection records `STOP_FOR_USER_HR_G3b_REVIEW` and `final_execution_authorized=false`; rerun to PASS and commit. Operational interruption resumes the same run; an uncompletable candidate stops for explicit review without scientific fallback.
 
 ### HR-T09 — Selected analyses, three-seed aggregate and E1 comparison
 

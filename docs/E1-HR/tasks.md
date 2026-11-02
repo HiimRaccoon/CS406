@@ -61,7 +61,7 @@ These are settled inputs, not review questions for another hyperparameter search
 | HR-T05 | HR-T03/T04 | Narrow engine reuse; update scheduler, tail weighting and comparator | **COMPLETE - CPU/PREPARATION ONLY**; 12 passed; scheduler independent interior/endpoints, tail weighting, comparator and unchanged E1 engine regression |
 | HR-T06 | HR-T01/T02/T03/T05 | HR full-state atomic checkpoints and completed-epoch replay | **COMPLETE - CPU/PREPARATION ONLY**; 20 passed; full-state atomic boundary replay, HR kind/shape and audit-only commit acceptance with runtime-change rejection |
 | HR-T07 | HR-T01–T06 | Current-target preflight/runtime and one-run/attempt orchestration | **COMPLETE - CPU/PREPARATION ONLY**; 61 HR CPU cases passed; eight-epoch runner/replay, projection identity, transitive-source rejection and rehashed E1-evidence guard |
-| HR-T08 | HR-T01/T07 | Four declarations, strict evidence ledger, locked LR selection and fresh final declarations | **NOT STARTED — GATED** |
+| HR-T08 | HR-T01/T07 | Four declarations, strict evidence ledger, locked LR selection and fresh final declarations | **COMPLETE - CPU/PREPARATION ONLY**; 73 HR CPU cases passed; complete parser lineage, attempts, independent LR oracle, audit-only source projection and locked selection guards |
 | HR-T09 | HR-T02–T08 | Selected validation exports, three-seed aggregate and official E1 comparison | **NOT STARTED — GATED** |
 | HR-T10 | HR-T01–T09 | CPU regression, single-run wrapper/runbook and opt-in acceptance probe preparation | **NOT STARTED — GATED**; no target work without HR-TARGET-AUTH |
 | HR-T11 | HR-T10 + HR-TARGET-AUTH | Actual HR target acceptance evidence and unapproved HR-G2 candidate | **NOT STARTED — GATED**; separate from HR-G2 review |
@@ -128,9 +128,9 @@ Maintain exact path/bytes/SHA-256/role inventories of acceptance tests/helpers/e
 
 ### HR-T08 — Campaign
 
-- [ ] RED→GREEN exact four tuning/three final declaration counts and independent fresh initialization; no submission/automatic stage launch.
-- [ ] Global-maximum tolerance oracle and order invariance; reject failed/short/missing/extra/duplicate/mixed-identity trials and stale/rehashed inconsistent evidence.
-- [ ] Full parser lineage and attempt records; locked selection requires all four valid 8/8 outcomes and mandatory STOP for HR-G3b.
+- [x] RED→GREEN exact four tuning/three final declaration counts and independent fresh initialization; no submission/automatic stage launch.
+- [x] Global-maximum tolerance oracle and order invariance; reject failed/short/missing/extra/duplicate/mixed-identity trials and stale/rehashed inconsistent evidence.
+- [x] Full parser lineage and attempt records; locked selection requires all four valid 8/8 outcomes and mandatory STOP for HR-G3b.
 
 ### HR-T09 — Reports/comparison
 

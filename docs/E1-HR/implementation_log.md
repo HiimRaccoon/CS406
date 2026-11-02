@@ -27,3 +27,5 @@ HR-T06: complete - 20 passed; full-state atomic boundary replay, HR kind/shape a
 Ruling: keep runtime/preflight source-identity regressions in tests/e1hr/test_runtime.py for focused review; include this exact additional CPU test path in the separate audit inventory under the frozen contract additional-files policy. Cost if wrong: an extra audit entry, never a scientific identity key.
 
 HR-T07: complete - 61 HR CPU cases passed; eight-epoch runner/replay, projection identity, transitive-source rejection and rehashed E1-evidence guard. RED/GREEN logs: .tools/e1hr/hr-t07-red.log and -green.log. No target/GPU work.
+
+HR-T08: complete - 73 HR CPU cases passed; complete parser lineage, attempts, independent LR oracle, audit-only source projection and locked selection guards. RED/GREEN logs: .tools/e1hr/hr-t08-red.log and -green.log. No target/GPU work.

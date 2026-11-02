@@ -33,7 +33,7 @@ from .runtime import inspect_target_inputs, prepare as _setup
 from .config import scientific_identity
 
 
-def preflight(config: dict) -> dict:
+def approved_identity(config: dict) -> dict:
     config = validate_run(config)
     paths = config['paths']
     acceptance_path = Path(paths['acceptance_record'])
@@ -62,8 +62,14 @@ def preflight(config: dict) -> dict:
         selection = read_selection(Path(paths['selection']), config['recipe'])
         if selection['lr'] != config['lr'] or approval.get('selection_sha256') != config['selection_sha256']:
             raise ValueError('HR-G3b does not bind this locked final selection')
+    return acceptance['identity']
+
+
+def preflight(config: dict) -> dict:
+    config = validate_run(config)
+    accepted = approved_identity(config)
     checked = inspect_target_inputs(config)
-    if scientific_identity(checked) != scientific_identity(acceptance['identity']):
+    if scientific_identity(checked) != scientific_identity(accepted):
         raise ValueError('Consumed-source/runtime/data changed; renewed HR target acceptance required')
     return checked
 
