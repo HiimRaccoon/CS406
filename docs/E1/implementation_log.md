@@ -1,0 +1,137 @@
+# E1 implementation evidence
+
+Plan: `docs/E1/plan.md`. Base: `b7a4f6ba706bf38948166fb053532cdfdcf4d15b`.
+Client date: 2026-11-01. G1 is approved in `g1_approval.json`; the exact frozen contract bytes and sidecar remain unchanged. Implementation scope is T01-T09. T10 GPU work, G2, G3a, G3b, and test-image access remain blocked.
+
+Baseline: `python -B -m pytest -q -m "not gpu" --basetemp=.tools/pytest-e1-baseline` — 109 passed, 1 deselected.
+
+Ruling: use native task-by-task execution for the instruction to continue — implementation method was not explicitly named; no per-task agents are needed — cost if wrong: workflow preference only, with one independent review after T09.
+
+Ruling: implement in the user's existing non-Git workspace and mirror scoped deliverables to the existing publishing checkout on branch `e1-implementation` — preserve the IDE workspace and avoid creating another worktree or modifying main — cost if wrong: synchronization must be verified before each commit.
+
+Ruling: use native Python/PowerShell equivalents of skill ledger helpers on Windows — preserve per-task red/green output and commits without a WSL dependency — cost if wrong: ledger completeness is checked manually.
+
+Preflight interfaces: T01 run/recipe dictionaries feed T02/T03/T07/T08; T02 yields `(tensor,target,path)` for T04/T05/T09; T03 produces model/optimizer for T05/T06; T05 shares metrics/evaluation with T07/T09; T06 restores full progress/loaders for T07; T07 complete summaries/checkpoints feed T08/T09. No interface conflicts found. CPU fixtures replace external setup edges; no production synthetic-evidence switch is permitted.
+
+Tasks T01-T09: implemented and CPU-verified in order, with one independent whole-branch review and one correction pass. T10 and later stages remain pending.
+
+T01: complete. RED: new task tests failed before implementation (see local .tools/e1-t01-red.log). GREEN: 15 passed; tests/e1/test_config.py. Task commit follows on e1-implementation; no GPU work.
+
+T02: complete. RED: new task tests failed before implementation (see local .tools/e1-t02-red.log). GREEN: 8 passed (E1 data + preprocessing); expected CPU pin-memory warning. Task commit follows on e1-implementation; no GPU work.
+
+T03: complete. RED: new task tests failed before implementation (see local .tools/e1-t03-red.log). GREEN: 4 passed; tests/e1/test_model.py. Task commit follows on e1-implementation; no GPU work.
+
+T04: complete. RED: new task tests failed before implementation (see local .tools/e1-t04-red.log). GREEN: 3 passed; tests/e1/test_metrics.py. Task commit follows on e1-implementation; no GPU work.
+
+T05: complete. RED: new task tests failed before implementation (see local .tools/e1-t05-red.log). GREEN: 4 passed; tests/e1/test_engine.py. Task commit follows on e1-implementation; no GPU work.
+
+T06: complete. RED: new task tests failed before implementation (see local .tools/e1-t06-red.log). GREEN: 2 passed; tests/e1/test_checkpoint.py; fsync Windows writable-handle correction and valid atomic-failure fixture. Task commit follows on e1-implementation; no GPU work.
+
+Ruling: last.pt carries a CPU snapshot of selected weights; best.pt is reporting-only and rebuilt from that snapshot after resume - repairs crashes between atomic replacements without rolling back optimizer budget - cost if wrong: an extra model-weight copy in last.pt; CPU interruption equivalence covers scientific state.
+
+Ruling: private setup edges in CPU integration fixtures provide tiny counts and a synthetic identity, with no production bypass option - exercises the real eight-epoch runner/checkpoints/engine while campaign validation rejects such evidence - cost if wrong: target CUDA acceptance remains necessary at T10.
+
+T07: complete. RED: new task tests failed before implementation (see local .tools/e1-t07-red.log). GREEN: 38 passed through T07; synthetic eight-epoch/flat/decreasing/replay/lock checks; expected CPU pin-memory warning. Task commit follows on e1-implementation; no GPU work.
+
+T08: complete. RED: new task tests failed before implementation (see local .tools/e1-t08-red.log). GREEN: 8 passed; tests/e1/test_campaign.py; no automatic job launch. Task commit follows on e1-implementation; no GPU work.
+
+T09: complete. RED: new task tests failed before implementation (see local .tools/e1-t09-red.log). GREEN: 3 passed; tests/e1/test_report.py; selected-checkpoint exports and sample-std aggregation. Task commit follows on e1-implementation; no GPU work.
+
+Task commits, in order: T01 `82affd6`, T02 `2d675ac`, T03 `6f54add`, T04 `6ef667a`, T05 `caa1445`, T06 `f2f6740`, T07 `d8d107f`, T08 `fde7db0`, T09 `466d0fe`.
+
+Final independent review: six important findings, no critical/minor findings; author corrections and limits are recorded in [implementation_review.md](implementation_review.md). All nine reproducing cases failed before the corrections (`.tools/e1-review-red.log`), then the corrected regressions plus runner/campaign checks passed 22/22. Three additional parser tests cover actual successful evidence validation/selection and rehashed bad histories/weights; fabricated envelopes remain temporary CPU test inputs.
+
+Final: fixed current-data audit, zero-boundary retry, terminal publication recovery, persistent-loader RNG drift, mixed tuning identities, and lost attempt/replay evidence. Each finding has a named RED-to-GREEN regression in the review record. No second reviewer pass is claimed.
+
+Final author check: a corrupt last.pt could make the failure handler's diagnostic reread mask the original load error and leave status running. `test_corrupt_resume_is_recorded_as_failure_without_masking_load_error` failed, then passed after the diagnostic probe treated unreadable state as unknown and preserved the original failure. This correction is part of the same final fix commit.
+
+Ruling: verify current train/validation bytes once in every production preflight - stale audit records alone cannot prove immutability or path containment before allocation - cost if wrong: additional startup I/O, not extra optimizer work or image decoding.
+
+Ruling: persistent-worker reconstruction reuses the original worker bootstrap state while preserving the committed logical loader generator - matches uninterrupted persistent-worker progression and keeps sample-keyed randomness - cost if wrong: depends on pinned Torch DataLoader lifecycle and still needs target T10 resume acceptance.
+
+Final review limits: CUDA/full-size/real-weight acceptance stays at T10; Slurm deployment and G2/G3 execution are outside this delivery; trusted local artifact records are not cryptographic attestations against mutually fabricated inputs; cross-stack bitwise equivalence is not claimed. These limits preserve the reviewed gates rather than weakening implementation acceptance. Deferred minors: none reported.
+
+Final verification:
+
+- `python -B -m pytest -q -m "not gpu" --basetemp=.tools/pytest-e1-final2`: **171 passed, 1 deselected**, no warnings (62 E1 cases plus 109 existing cases). The opt-in GPU test was deselected, not executed.
+- `python -B -m compileall -q src/e1 tests/e1`: PASS.
+- CPU CLI help for `src.e1.train`, `src.e1.campaign`, `src.e1.report`: PASS; no model/job allocation.
+- Frozen numeric contract/sidecar, four fixed split artifacts, preprocessing module/config, and referenced pilot source hashes: unchanged and verified. No raw test images opened, pretrained weights downloaded, Slurm/GPU jobs launched, tuning trials/final seeds trained, or test evaluation performed.
+
+Next required stage: T10 deployment/acceptance under its own target-work authorization. G2, G3a, G3b and final test evaluation remain open. This implementation is not evidence that the required target checks have passed.
+
+## T10 deployment delivery (2026-11-01)
+
+Scope: T10 only, starting from `b55d0139bb15192ffce0cc7844b51809c211e7cf` on `e1-implementation`. User explicitly requests commit/push to this branch. T01-T09 scientific modules, numeric contract/sidecar, preprocessing, split artifacts and pilot files are preserved byte-for-byte. No official declaration, stage approval or GPU job is created by this delivery.
+
+Delivered: one-run `scripts/slurm/e1_train.sbatch`, `docs/E1/runbook.md`, CPU entrypoint/wrapper tests, opt-in E1 GPU/resume test, and `docs/E1/t10_acceptance.json`. The allocation is normal/uit/mig2-35/gpu:2g.35gb:1, one task, 4 CPUs, 16384 MiB, 09:00:00. The wrapper exports the official seed and reviewed thread/CUBLAS variables before the first Python process; it accepts only one declaration and optionally that run's existing last.pt. Production preflight still enforces actual allocation and G2/stage approval.
+
+Evidence provenance: the user's current 62-pass UIT CPU suite, H200 MIG environment, pinned-weight synthetic and real-train/frozen-preprocessing forward/backward results are accepted exactly as supplied, without agent rerun. Unreported driver, source commit, full package inventory and resume results remain unreported. The acceptance record distinguishes those attestations from future machine-captured identity. G2/G3a/G3b remain unapproved; final T10 target resume acceptance and readiness/declaration review are pending.
+
+Ruling: use existing `_setup`, `train_epoch`, `E1Loader` and checkpoint APIs in an opt-in test, with a minimal test-only checkpoint configuration mapping one two-image segment to a mechanics boundary - exercises real model/optimizer/full scheduler/RNG/persistent-worker reconstruction without a shortened official run or production bypass - cost if wrong: bounded state reconstruction does not prove a full natural GPU epoch, Slurm termination delivery, or cross-stack bitwise equivalence; existing CPU runner tests cover interruption control flow and actual official runs must still pass preflight/full budget.
+
+The final target smoke imports passing historical preprocessing conformance, refreshes current train/validation hash/containment integrity before GPU model allocation, decodes only two train members through frozen preprocessing, saves a committed last.pt, discards subsequent uncommitted work, reconstructs state/workers and requires bitwise model/optimizer/scheduler/RNG/loader equality after replay. Full 139992-update scheduler parameters, batch 2 and all canonical training decisions stay unchanged. Its checkpoint/configuration cannot be validated as an official declaration. It writes only an unapproved G2 candidate, never stage authorization.
+
+RED: initial new CPU deployment tests failed because wrapper and smoke helpers did not exist (`.tools/t10-red.log`: 3 failed, 8 passed). An earlier invocation used inaccessible system pytest temp and was rerun with workspace basetemp. GREEN: initial entrypoint checks 11 passed; initial E1 regression 73 passed, 1 GPU deselected. The wrapper test exposed an apostrophe inside Bash parameter-expansion error text; removing that apostrophe fixed the syntax, verified by actual Bash execution and `bash -n`. Two additional CPU checks verify configuration-only dispatch and missing-field rejection. No GPU test was executed by the agent.
+
+Local validation and independent review results follow below. T10 remains partially complete until the user-executed final target smoke and readiness review exist. The exact next UIT command and evidence paths are in [runbook.md](runbook.md).
+
+T10 independent review: a fresh read-only reviewer inspected the scoped wrapper/tests/runbook/acceptance/ledger diff against the frozen contract and existing E1 APIs. Blockers: none; important findings: none; minors: none. The reviewer did not execute tests, target work or jobs. No review fix pass was necessary.
+
+Final: Ruling: reviewer set aside user-attested UIT results - accept the user's explicit confirmation without agent re-verification - cost if wrong: supplied attestations lack machine-captured raw logs; final smoke captures current identity separately.
+
+Final: Ruling: reviewer set aside actual target smoke outcome - leave it pending for the user's next authorized UIT execution - cost if wrong: target acceptance cannot be claimed from local CPU success.
+
+Final: Ruling: reviewer set aside OS termination and full-epoch GPU resume - retain the documented bounded state-discard/reconstruction probe and existing CPU interruption tests - cost if wrong: no actual Slurm-kill/full-natural-epoch GPU equivalence is established by this delivery.
+
+Final: Ruling: reviewer set aside unchanged T01-T09 behavior beyond consumed APIs - preserve all scientific source bytes and rely on existing regression evidence - cost if wrong: pre-existing defects outside this T10 diff are not independently re-reviewed here.
+
+Final local validation: full CPU regression `python -m pytest -q -m "not gpu"` (workspace basetemp) passed **184 tests, 2 deselected**. `python -m compileall -q src/e1 tests/e1` and `bash -n scripts/slurm/e1_train.sbatch` passed. The 34 protected scientific/input files match their pre-T10 SHA-256 values; frozen contract remains `c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143`. The GPU/resume test remains unexecuted by the agent. G2/G3a/G3b remain open; no tuning/final jobs or test-image access occurred. Exact scoped E1 final count is recorded with delivery below.
+
+Final required E1 command: `python -m pytest tests/e1 -q -m "not gpu"` (workspace basetemp) passed **75 tests, 1 deselected** in 48.21 seconds. Full CPU regression passed **184 tests, 2 deselected** in 52.81 seconds. Both are local CPU results, separate from the user's manually reported UIT 62-pass result. No deferred minor findings. Delivery commit contains only the seven T10 files listed above, including this log and the updated ledger; push is explicitly requested by the user.
+
+## Official tuning documentation handoff (2026-11-01)
+
+The user explicitly instructs this status update on `e1-implementation`: **G2 PASS, G3a PASS, T11a COMPLETE**. Source evidence is the supplied workspace file `src/e1/e1_tuning_4lr_8epochs.csv` (7081 bytes; SHA-256 `e569c69696ef9cf2fac831a575e66a6187095ce3be658f9943bf43f865ac055c`). Current handoff: [t11a_handoff.md](t11a_handoff.md). Earlier T10 preparation statements above and `t10_acceptance.json` remain historical snapshots; no additional target smoke observations are invented here.
+
+Read-only CSV verification found exactly 32 epoch rows: four frozen candidates `[2.5e-5, 5e-5, 1e-4, 2e-4]`, all seed 1001, each with epochs 1-8, eight validation records, 17499 updates per epoch and 139992 total updates. All four reach final LR 1e-6. Applying the frozen chronological tau=1e-6/earlier checkpoint rule gives selected epochs `[8, 7, 7, 7]` and supported Macro-F1 `[0.4184037454532644, 0.4519227584900749, 0.45248836792097563, 0.36256515948775014]`. The global-maximum-anchored tolerance/lower-LR rule selects **1e-4**, epoch **7**, best supported Macro-F1 **0.45248836792097563**; its 0.00056560943090073 margin over 5e-5 exceeds tau. Every trial still completed epoch 8. No selection artifact was regenerated or changed.
+
+Gate provenance: G2/G3a PASS and official stage completion are recorded from the user's explicit confirmation; CSV checks independently confirm budget coverage and the selection arithmetic. The CSV does not carry checkpoint hashes, allocation/source identity or failure/retry inventory. Existing run evidence is preserved, and these absent details are not reconstructed. The workspace CSV is not republished or added to Git in this documentation-only update.
+
+**STOP for explicit G3b review. G3b OPEN / NOT APPROVED. Final seeds 2001/3001/4001 NOT STARTED. Test access LOCKED.** No final declaration, stage receipt or job is created. No scientific code, frozen numeric contract, preprocessing/split/pilot file, selection artifact or run evidence is modified. Only current E1 documentation/task/gate status is updated; no training or runtime tests are needed for this status-only change. Verification covers CSV completeness/selection, unchanged protected-file hashes, documentation consistency and the exact Git diff scope before commit/push.
+
+Documentation verification: PASS - 32 CSV rows and frozen selection calculation; all 35 protected scientific/input files unchanged including the exact CSV bytes and frozen contract; five documentation copies match the publishing checkout; G2/G3a checked PASS, G3b unchecked, all five T11b steps unchecked, final seeds not started and test access locked; Git whitespace/diff scope checked. No training, GPU jobs, selection writes or source/evidence commits were performed for this update.
+
+## T10 user-executed acceptance reconciliation (2026-11-02)
+
+The user confirms the already completed UIT GPU/resume smoke: Slurm **job 8198**, pytest **1 passed**, `evidence.json` status **PASS**, current train/val hash audit passed, real H200 MIG environment verified, finite forward/backward, and resume replay model/optimizer/scheduler/RNG/loader state **bitwise equal**. **No test images opened.** This is user-executed evidence; the agent did not execute or rerun the smoke. This record supersedes earlier pending-T10 status statements in this chronological log. T10 is COMPLETE; the task ledger and plan T10 checklists now reflect completion.
+
+Corrected all three outdated UIT Python executable references in the runbook to `/datastore/binhvp/BuiTrongTan/CS406/envs/cs406/bin/python`. The current runbook and tuning handoff attribute the smoke to the user and preserve the historical `t10_acceptance.json` preparation snapshot. No run evidence, scientific code, frozen numeric contract or selection artifact is edited.
+
+Gate state is unchanged: **G2 PASS, G3a PASS, T11a COMPLETE; STOP for explicit G3b review. G3b OPEN / NOT APPROVED; final seeds 2001/3001/4001 NOT STARTED; test access LOCKED.** This is a documentation-only correction, with no GPU jobs, training or smoke reruns by the agent.
+
+Verification: PASS - no outdated Python executable path remains in tracked files; all three runbook references use the corrected envs/cs406 path; plan/task T10 checklists are complete with explicit user attribution; G2/G3a/T11a and G3b/final/test states remain unchanged; all 206 protected source/config/evidence files retain their prior SHA-256 values, including the frozen contract and historical acceptance record. Documentation copies match the publishing checkout and Git whitespace/scope checks pass. No training or GPU tests were rerun for this documentation-only correction.
+
+## Final-training CSV review and partial T11b completion (2026-11-02)
+
+The user explicitly instructs recording **G3b PASS** and final LR **1e-4**. Read-only review of `src/e1/e1_final_3seeds_8epochs.csv` found 24 rows: distinct final seeds 2001/3001/4001, each with epochs 1-8, eight validation-metric records, 17499 updates per epoch/139992 total and final LR 1e-6. Applying the frozen chronological supported-Macro-F1 tau=1e-6/earlier rule gives selected epochs **2001→8, 3001→7, 4001→8**. All five metrics use those same selected rows. Arithmetic mean/sample std (ddof=1), computed from unrounded input before four-decimal percentage display, independently matches: **Macro-F1 44.2748 ± 0.5174%; Weighted-F1 74.2949 ± 0.1534%; Top-1 75.5058 ± 0.0505%; Top-3 89.0000 ± 0.1426%; Top-5 92.6104 ± 0.1286%**.
+
+Input provenance: exact CSV 5243 bytes, SHA-256 `da2b0bbade159b7ce59f36fed3d8dc7d406cc28a6361a61c1b94308389541687`. The CSV is unchanged and not added to Git. The new [t11b_training_status.md](t11b_training_status.md) is a documentation summary, not the official report. G3b PASS is recorded from the user's instruction, not inferred from CSV metric values or fabricated receipt timing. The agent did not execute training or access remote UIT artifacts.
+
+T11b training-execution/checkpoint-epoch arithmetic items supported by the CSV are checked; **T11b/E1 closeout remains INCOMPLETE**. Read-only workspace inspection found no official final checkpoints, lineage-bearing selected analyses or official three-seed aggregate available for verification; existing pilot/CPU fixtures do not qualify. Still required: verify original approval/declarations and locked-selection/source/runtime/data identity, fresh pinned initialization, full validation sample coverage, best.pt/last.pt hashes and history lineage, official per-seed validation exports and aggregate, failure/retry inventory, archive and limitations review. The CSV alone cannot prove those requirements. Remote artifacts may exist but have not been verified here.
+
+G2/G3a remain PASS, T10/T11a COMPLETE; G3b is now PASS. Earlier chronological status entries are historical and superseded by this final-training review. **Test access remains LOCKED** under its own later gate. No scientific code, numeric contract, frozen preprocessing/split, selection/run evidence or gate dependency is changed; no test evaluation or E1-HR/E2/E3 work is started.
+
+Verification: PASS - all 24 final CSV rows, three eight-epoch budgets, selected epochs 8/7/8 and all five mean/sample-std displays match the requested values. Plan/ledger checks confirm only supported training items are checked and official report/lineage/closeout items remain open; test access remains LOCKED. All 207 protected source/config/evidence files, including both experiment CSVs and the frozen contract, retain their prior SHA-256 values. Six documentation copies match the publishing checkout; Git whitespace and docs-only scope checks pass. A documentation check caught PowerShell stdin replacing the plus/minus symbol in two generated paragraphs; those two displays were corrected and the exact Unicode metric checks then passed. No training, GPU evaluation or report-generation tests were run for this status-only change.
+
+## Final E1 supplied-package closeout verification (2026-11-02)
+
+The user supplied the missing local lineage package under `src/e1/closeout_evidence/` and resumed verification. All requested checks PASS; **no evidence inconsistency found**. Declaration JSONs match resolved configs; scientific/config fingerprints recompute against the frozen recipe; all config selection SHA-256 bindings match the actual local selection file. Exact `history.json` bytes hash to the values in summaries and analyses; complete histories match the final CSV and selected validation metrics. Every run summary reports complete 8/8 epochs, 8 validations, 139992 updates, original budget and test_images_opened=0. The selected best-checkpoint checksums agree across the supplied checksum file, summaries, analyses and report. Selection fingerprint recomputes to the aggregate's value. Its historical STOP_FOR_USER_G3b_REVIEW/final_execution_authorized=false fields remain an immutable tuning-stage handoff; separate later G3b PASS is not a contradiction.
+
+The official aggregate and all three validation-analysis folders are fully cross-checked: predictions cover the exact 7497 validation manifest members; 124x124 confusion matrices reproduce Top-k/F1/per-class/bucket metrics; all 124 class rows, four buckets plus 1-2 extreme tail, most-confused pairs and eight-epoch learning curves match. Arithmetic mean/sample std ddof=1 matches JSON and Markdown exactly. Final LR 1e-4, seeds 2001/3001/4001, selected epochs 8/7/8. Final metrics: Macro-F1 44.2748 +/- 0.5174%; Weighted-F1 74.2949 +/- 0.1534%; Top-1 75.5058 +/- 0.0505%; Top-3 89.0000 +/- 0.1426%; Top-5 92.6104 +/- 0.1286%. Full fingerprints/scope, evidence inventory and limitations are recorded in [closeout_review.md](closeout_review.md).
+
+Verification scope: 42 supplied local evidence files, including 14 closeout-package files. The supplied best.pt checksum record is matched to referenced hashes; binary checkpoint bytes were not reread or changed, and remote operational/approval archives were not re-downloaded. Declarations bind the fresh pinned initialization policy and frozen runtime; no initialization/training/report generation or GPU work was re-executed. Evidence and checkpoints remain unchanged. Geographic/panorama independence is unproven; extreme-tail support is tiny (the 1-2 subset has only two validation images); seed std does not eliminate sampling uncertainty; all results are validation-only.
+
+**T11b COMPLETE. E1 train/validation closeout DONE. Ready to hand off to E1-HR specification/planning review.** The supplied package resolves the previously documented lineage gap; historical pending entries above are superseded. The project roadmap and task ledger reflect E1 completion and E1-HR as the next experiment. No E1 evidence blocker remains, but E1-HR still needs its own reviewed specification/plan and explicit implementation/target/execution authorization. E1-HR is NOT IMPLEMENTED / NOT RUNNING. **Final test access LOCKED / NOT AUTHORIZED; final-test evaluation NOT COMPLETE.** No frozen protocol, scientific code or original run/selection evidence is modified by this docs-only closeout.
+
+Final closeout verification: PASS. Read-only export and end-to-end lineage audits completed successfully; all 42 indexed input sizes/SHA-256 values match, all 247 protected source/config/evidence files are unchanged, and frozen contract SHA-256 remains c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143. Documentation checks confirm all T11b items checked, project E1 train/validation DONE, and all eight E1-HR plus all eight final-evaluation checklist items remain unchecked. Nine documentation files (including the new review and documentation inventory) are the only delivery scope. No new scientific tests, GPU work or training were run; verification consisted of the supplied read-only artifacts and derived consistency/hash calculations. This final closeout supersedes the uncommitted paused review and earlier chronological pending-state entries.

@@ -1,0 +1,15 @@
+{
+  "gate": "G1",
+  "approved": true,
+  "client_date": "2026-11-01",
+  "contract_id": "e1_numeric_contract_v1",
+  "contract_sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143",
+  "authorized_tasks": ["T01", "T02", "T03", "T04", "T05", "T06", "T07", "T08", "T09"],
+  "execution_method": "native",
+  "method_provenance": "Agent chooses native execution for the user's instruction to implement T01-T09 and subsequent instruction to continue; no delegated implementation was requested.",
+  "target_gpu_authorized": false,
+  "official_tuning_authorized": false,
+  "final_training_authorized": false,
+  "test_access_authorized": false,
+  "user_instruction": "G1 approved. Freeze E1 numeric contract v1 with SHA-256: c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143. Authorize E1 implementation starting from T01. Keep the reviewed task order and gates unchanged. Use src/e1/ and tests/e1/. Do not start UIT GPU work yet. Implement T01-T09 first according to the reviewed plan. T10 target GPU work still requires its separate authorization. Official tuning remains blocked until G2 + G3a."
+}

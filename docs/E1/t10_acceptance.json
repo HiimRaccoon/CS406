@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "e1_t10_acceptance_preparation",
+  "date": "2026-11-01",
+  "contract_sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143",
+  "gate": "G2",
+  "approved": false,
+  "status": "pending_final_target_resume_smoke_and_user_readiness_review",
+  "G3a_approved": false,
+  "G3b_approved": false,
+  "user_attestation": {
+    "provenance": "Current user T10 request: manually tested on the reviewed UIT environment; explicitly accepted without agent re-verification",
+    "raw_logs_supplied": false,
+    "agent_reran_UIT_checks": false,
+    "cpu_e1_regression": {"passed": 62},
+    "torch_target_environment": {
+      "cuda": true,
+      "device": "NVIDIA H200 MIG 2g.35gb",
+      "vram_gib": 32.5,
+      "torch": "2.8.0+cu128",
+      "cuda_version": "12.8",
+      "cudnn": 91002
+    },
+    "real_pretrained_synthetic_forward_backward": {
+      "batch": 2,
+      "input": [2, 3, 384, 896],
+      "logits": [2, 124],
+      "finite_gradients": true,
+      "peak_reserved_gib_approx": 1.754,
+      "parameters": 27915484
+    },
+    "real_train_frozen_preprocessing_forward_backward": {
+      "batch_shape": [2, 3, 384, 896],
+      "logits": [2, 124],
+      "finite_gradients": true,
+      "peak_reserved_gib_approx": 1.754
+    },
+    "unreported_observations": ["driver", "exact device bytes", "source commit", "full package inventory", "Slurm job ID and allocation record", "boundary/resume equivalence"]
+  },
+  "remaining_evidence": [
+    "User-executed opt-in tests/e1/test_gpu_smoke.py on the clean delivered commit",
+    "Actual source/software/device/driver/allocation identity and current train/val hash integrity",
+    "Real-weight/train-only full-size segment plus interrupted-state reconstruction and last.pt resume equality",
+    "Review resulting evidence.json and unapproved g2_candidate.json",
+    "Explicit user readiness and concrete tuning-declaration review for G2; G3a remains separate"
+  ],
+  "target_command": "See docs/E1/runbook.md: Next action: final T10 GPU/resume smoke",
+  "agent_local_validation": {
+    "e1_cpu": {"command": "python -m pytest tests/e1 -q -m \"not gpu\"", "passed": 75, "deselected": 1},
+    "all_cpu": {"command": "python -m pytest -q -m \"not gpu\"", "passed": 184, "deselected": 2},
+    "compileall": "pass: python -m compileall -q src/e1 tests/e1",
+    "shell_syntax": "pass: bash -n scripts/slurm/e1_train.sbatch",
+    "pytest_temp_policy": "Workspace basetemp used because system pytest temp is inaccessible",
+    "protected_file_hashes_unchanged": 34,
+    "independent_review": "Read-only fresh reviewer: no blockers, important findings or minors",
+    "GPU_executed": false
+  },
+  "test_images_opened_by_agent": 0,
+  "official_jobs_submitted": 0,
+  "approval_policy": "Neither this record, user-reported forward/backward passes, nor an automatic smoke pass approves G2/G3a/G3b"
+}

@@ -1,5 +1,7 @@
 # E1 Implementation Plan
 
+**Execution update (2026-11-02):** G1 remains bound to the frozen contract; G2/G3a/G3b are PASS. T10/T11a/T11b are COMPLETE and **E1 train/validation closeout DONE** after the supplied local lineage/report checks PASS. LR 1e-4, seeds 2001/3001/4001, selected epochs 8/7/8 and official sample-std metrics are verified; see [closeout_review.md](closeout_review.md). **Next experiment: E1-HR, planning/review only, NOT IMPLEMENTED / NOT RUNNING. Final test access LOCKED / NOT AUTHORIZED; final-test evaluation NOT COMPLETE.** No scientific interface, frozen value or gate dependency is changed.
+
 > **For agentic workers:** REQUIRED SUB-SKILL for future authorized execution: use `executing-plans` for native execution, or `subagent-driven-development` if that method is explicitly selected. Execute one reviewed task at a time; checkbox steps track completion. This document does not select an execution method or authorize implementation.
 
 **Goal:** Build the official E1 full-image baseline with reproducible four-LR tuning and three disjoint final seeds, following the reviewed eight-epoch protocol.
@@ -44,11 +46,11 @@ These failure modes need observable tests at the interfaces named below:
 | Gate | Required before proceeding | Current state |
 |---|---|---|
 | G0 - design/plan approval | User approves the specification, this plan, and task ledger as the planning basis for T00 only | PASS; explicit user approval recorded in t00_review.md |
-| G1 - contract freeze and implementation authorization | User reviews/freezes the complete versioned numeric contract/checksum and reconciled plan, explicitly authorizes T01+, and selects the execution method | NOT approved; complete contract submitted for review |
-| G2 - implementation acceptance | T01-T10 pass their relevant CPU/target checks; user reviews readiness and concrete run declarations | Not started |
-| G3a - official tuning | Explicit authorization after G2 for only the four declared UIT/Slurm tuning trials through T11a | Not granted; stop and hand off after LR selection |
-| G3b - final training | Separate explicit review of completed T11a ledger/selected LR and authorization for three final seeds through T11b | Not granted; G3a cannot authorize final seeds |
-| Final test access | Separate final-evaluation specification/authorization after locked checkpoints/protocol | Outside scope |
+| G1 - contract freeze and implementation authorization | User reviews/freezes the complete versioned numeric contract/checksum and reconciled plan, explicitly authorizes T01+, and selects the execution method | PASS; g1_approval.json |
+| G2 - implementation acceptance | T01-T10 pass their relevant CPU/target checks; user reviews readiness and concrete run declarations | PASS; user confirmation recorded in t11a_handoff.md |
+| G3a - official tuning | Explicit authorization after G2 for only the four declared UIT/Slurm tuning trials through T11a | PASS; T11a complete, selected LR 1e-4; separate G3b now PASS |
+| G3b - final training | Separate explicit review of completed T11a ledger/selected LR and authorization for three final seeds through T11b | PASS; final training and supplied lineage/report checks complete; T11b train/validation closeout DONE |
+| Final test access | Separate final-evaluation specification/authorization after locked checkpoints/protocol | LOCKED; outside current authorization |
 
 Target GPU smoke in T10 also requires its own explicit target-work authorization. G1 permits implementation only; G2 does not authorize tuning or final training.
 
@@ -255,11 +257,13 @@ def test_checkpoint_tie_does_not_use_nll():
 
 **Dependencies:** T01-T09; target checks additionally require explicit UIT authorization. **Create after review:** `scripts/slurm/e1_train.sbatch`, `docs/E1/runbook.md`, `tests/e1/test_entrypoints.py`, `tests/e1/test_gpu_smoke.py`.
 
-- [ ] Write CPU CLI tests proving configuration-only checks allocate no model/GPU, missing fields fail clearly, one invocation names one run, and test access/search overrides are rejected. Mark GPU tests opt-in under the existing `gpu` marker; require real reviewed paths/hash/configuration.
-- [ ] Write the E1-specific single-run Slurm wrapper and runbook using reviewed allocation/runtime/environment variables. Preserve the eight-epoch configuration and boundary-resume contract; do not turn the wrapper into an architecture/LR/batch search loop or reuse pilot run IDs.
-- [ ] Run `python -m pytest tests/e1 -q -m "not gpu"`, the existing CPU regression suite, `python -m compileall -q src/e1 tests/e1`, and a shell syntax check of the new wrapper. Require all applicable checks to pass; no dependency upgrade or pilot/preprocessing modification is part of acceptance.
-- [ ] After target authorization, verify actual environment/weight/dataset/conformance identity and run a bounded synthetic/train-only smoke for real model loading, full-size forward/backward, finite gradients, memory, and interrupted/resumed behavior. Record the observed results as smoke/acceptance evidence, not an official trial or a P1-v2 study.
-- [ ] Review readiness and concrete run declarations with the user; commit the implementation/runbook and acceptance record through the approved publishing workflow. G2 remains open until target checks are actually evidenced, not merely listed here.
+- [x] Write CPU CLI tests proving configuration-only checks allocate no model/GPU, missing fields fail clearly, one invocation names one run, and test access/search overrides are rejected. Mark GPU tests opt-in under the existing `gpu` marker; require real reviewed paths/hash/configuration.
+- [x] Write the E1-specific single-run Slurm wrapper and runbook using reviewed allocation/runtime/environment variables. Preserve the eight-epoch configuration and boundary-resume contract; do not turn the wrapper into an architecture/LR/batch search loop or reuse pilot run IDs.
+- [x] Run `python -m pytest tests/e1 -q -m "not gpu"`, the existing CPU regression suite, `python -m compileall -q src/e1 tests/e1`, and a shell syntax check of the new wrapper. Require all applicable checks to pass; no dependency upgrade or pilot/preprocessing modification is part of acceptance.
+- [x] After target authorization, verify actual environment/weight/dataset/conformance identity and run a bounded synthetic/train-only smoke for real model loading, full-size forward/backward, finite gradients, memory, and interrupted/resumed behavior. Record the observed results as smoke/acceptance evidence, not an official trial or a P1-v2 study.
+- [x] Review readiness and concrete run declarations with the user; commit the implementation/runbook and acceptance record through the approved publishing workflow. G2 is PASS per the user-confirmed target evidence and readiness review recorded below.
+
+**Completion record (2026-11-02): T10 COMPLETE.** User-executed UIT Slurm job **8198**, pytest **1 passed**, `evidence.json` **PASS**; current train/val hash audit passed; real H200 MIG environment verified; forward/backward finite; resume replay model/optimizer/scheduler/RNG/loader state **bitwise equal**; **no test images opened**. The agent did not execute or rerun this smoke. G2 PASS, G3a PASS and T11a COMPLETE remain unchanged. **G3b PASS; T11b/E1 train/validation closeout DONE; final test access LOCKED / NOT AUTHORIZED.** Run evidence and the frozen contract are unchanged. See [runbook.md](runbook.md) for the user-executed evidence record.
 
 ## Task T11a: Official LR Tuning and Mandatory User Handoff
 
@@ -273,9 +277,11 @@ def test_checkpoint_tie_does_not_use_nll():
 
 **Dependencies:** completed T11a handoff, G1 PASS, G2 PASS, and explicit G3b authorization. **Files:** final-seed artifacts and E1 validation report under the reviewed output root.
 
-- [ ] Review and execute the three final declarations under their distinct, disjoint final seeds. Require eight training epochs/eight validations per successful run and unchanged full scheduler horizons on resume.
-- [ ] Generate selected-checkpoint validation analysis and mean/std reports using T09. Preserve per-seed checkpoints and lineage for possible later E3 work; do not create feature caches.
-- [ ] Review results/limitations and archive the artifact inventory. Test remains locked: final test evaluation requires its own later authorization, not automatic continuation of this task.
+- [x] Record G3b PASS and three completed official final runs at LR 1e-4, seeds 2001/3001/4001, eight epochs/eight validations and 139992 updates each; selected epochs 8/7/8. Verify declarations/configs, complete summaries/histories and full split coverage from the supplied package.
+- [x] Verify selection/config/history fingerprints, best checkpoint checksum references and selected-checkpoint validation analysis/aggregate, including per-class and long-tail/bucket outputs. Preserve evidence/checkpoint references and create no feature caches. The audit scope uses the supplied checksum manifest, not a local binary-checkpoint rerun.
+- [x] Review official results/limitations and inventory the supplied closeout artifacts; close **E1 train/validation DONE** and hand off to E1-HR specification/planning review. Preserve original operational archives. Final test access remains **LOCKED / NOT AUTHORIZED**; final-test evaluation is **NOT COMPLETE**.
+
+**Current disposition: T11b COMPLETE; E1 train/validation closeout DONE.** All requested local evidence checks pass, no inconsistency found. See [closeout_review.md](closeout_review.md). E1-HR is the next experiment, but implementation and execution remain unstarted and require their own approvals.
 
 ## Validation and Handoff Rules
 
@@ -285,4 +291,4 @@ Do not mark an implementation task complete because this plan names its files or
 
 **T00 self-review:** spec Sections 3-5 map to T01-T03; Sections 6-8 to T01/T03/T05-T08; Sections 9-10 to T04/T06-T10; pilot-evidence limits and runtime acceptance to T00/T10; acceptance to future tests and G2. The complete contract records the user's R1-R4/R6-R9 decisions. Schedule, seed, ranking, trial-selection, and std oracles are reconciled above; T11a/T11b retain separate gates. All implementation checks remain unexecuted.
 
-The next step is separate G1 review/freeze of the complete contract/checksum and planning diff, explicit implementation authorization, and selection of the execution method. G0 and input decisions do not satisfy G1. No task below the approval gates runs automatically.
+Historical T00 preparation ended at separate G1 review. Current execution state is E1 train/validation DONE; next is E1-HR specification/planning review with separate stage approval. No future experiment or final-test task runs automatically.
