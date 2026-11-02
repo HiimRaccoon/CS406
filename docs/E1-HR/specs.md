@@ -1,8 +1,8 @@
 # E1-HR — Controlled Full-Image Resolution Ablation
 
-**DRAFT FOR HR-G0 REVIEW — specification only; no implementation or execution authorization.**
+**HR-G0 PASS — specification reviewed; design artifacts ready for HR-G1 review. HR-G1 NOT APPROVED / AWAITING REVIEW.**
 
-Revision date: **2026-11-02**. E1 train/validation is closed; E1-HR has no official results. The user's rewrite instruction fixes the inherited controls below for E1-HR. Approval of this written specification, its HR-specific implementation artifacts, and execution remain separate gates. This revision creates only this document.
+Revision date: **2026-11-02**. E1 train/validation is closed; E1-HR has no official results. The user's rewrite instruction fixes the inherited controls below for E1-HR. The specification has passed HR-G0 review, and the implementation plan, task ledger and numeric-contract draft are ready for HR-G1 review. HR-G1 remains NOT APPROVED / AWAITING REVIEW. Implementation, target work, tuning, final training and test evaluation remain unauthorized; specification approval grants none of those permissions.
 
 ## 1. Experimental question and source authority
 
@@ -132,7 +132,7 @@ Run IDs must identify HR explicitly, for example `e1hr-final-lr0.00010000-seed20
 
 Preserve immutable declarations/configs, complete run summaries/eight-epoch histories, `best.pt`/`last.pt`, operation/attempt records, all four trial outcomes, locked selection, selected analyses, three-seed report and scoped checksum inventory. Verify declaration ↔ summary ↔ history ↔ selected checkpoint ↔ selection ↔ report consistency, and record `test_images_opened=0`.
 
-HR entrypoint/schema/package and bounded reuse of E1 mechanics belong in the later implementation plan. Existing E1 validators pin the E1 contract: do not bypass them or rewrite E1 scientific code/frozen artifacts to accept HR. Do not create a generic permanent training framework or introduce a runtime dependency on pilot code.
+HR entrypoint/schema/package and bounded reuse of E1 mechanics are defined in the [implementation plan](plan.md), pending HR-G1 review. Existing E1 validators pin the E1 contract: do not bypass them or rewrite E1 scientific code/frozen artifacts to accept HR. Do not create a generic permanent training framework or introduce a runtime dependency on pilot code.
 
 ## 8. Final-test gate
 
@@ -156,12 +156,12 @@ The scientific controls above are settled. What remains stage-specific is their 
 
 | Gate | Required review / authorization | Current state |
 |---|---|---|
-| HR-G0 | Review this specification; authorize preparation of the HR implementation plan/task ledger and explicit contract binding | **OPEN — ready for review** |
-| HR-G1 | Approve those written artifacts, freeze exact HR contract bytes/sidecar, select implementation method and explicitly authorize implementation | Not approved |
+| HR-G0 | Specification reviewed; preparation of the HR implementation plan/task ledger and explicit contract binding authorized | **PASS** |
+| HR-G1 | Review the prepared design artifacts, freeze exact HR contract bytes/sidecar, select implementation method and explicitly authorize implementation | **NOT APPROVED / AWAITING REVIEW** |
 | HR target-work authorization | Explicitly permit HR GPU deployment/acceptance under Section 6 | Not granted |
 | HR-G2 | Accept CPU/regression and authorized HR target evidence, actual environment identity and concrete four-trial declarations | Not started |
 | HR-G3a | Explicitly authorize only the four HR LR trials after HR-G2 | Not granted |
 | HR-G3b | Review the completed tuning handoff/selection, then explicitly authorize three HR final seeds | Not granted |
 | Final evaluation | Separate study-wide authorization under Section 8 | Not authorized |
 
-No scientific decision or missing local evidence blocks **HR-G0 specification review**. Later gates still need their stage artifacts and actual acceptance evidence. This document prepares no plan/tasks, runnable contract/config, implementation or job, and asserts no HR acceptance/result. Only a **material HR target-acceptance failure that prevents the frozen E1-HR protocol from being executed correctly** may trigger explicit user review of an inherited control; it cannot authorize unilateral changes. Minor operational failures do not reopen scientific controls.
+**HR-G0 is PASS.** The [implementation plan](plan.md), [task ledger](tasks.md) and [numeric-contract draft](e1hr_numeric_contract_v1.json) are ready for explicit **HR-G1 review; HR-G1 remains NOT APPROVED / AWAITING REVIEW**. Later gates still need their stage artifacts and actual acceptance evidence. No implementation, target work, tuning, final training or test evaluation is authorized, and no HR acceptance/result is asserted. Only a **material HR target-acceptance failure that prevents the frozen E1-HR protocol from being executed correctly** may trigger explicit user review of an inherited control; it cannot authorize unilateral changes. Minor operational failures do not reopen scientific controls.

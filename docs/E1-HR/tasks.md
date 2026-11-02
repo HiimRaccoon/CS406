@@ -4,7 +4,7 @@ Updated: **2026-11-02**. **HR-G0 PASS; design preparation complete for HR-G1 rev
 
 Authority: the approved [E1-HR specification](specs.md), with the user's two minor wording clarifications, and the unchanged [E1 inherited numeric reference](../E1/e1_numeric_contract_v1.json). Technical interfaces, test oracles and future commands are in [plan.md](plan.md). The [HR numeric contract candidate](e1hr_numeric_contract_v1.json) is a **draft for HR-G1**, not an approved execution recipe. This ledger owns current completion/gate state; historical E1 completion checkboxes do not transfer to HR.
 
-The user explicitly confirmed HR-G0 PASS in this session. The spec's retained draft header/OPEN table are historical wording; no HR-G1 or target/execution approval is inferred. The current work creates only design artifacts. E1 train/validation is closed and its evidence stays unchanged.
+The reviewed specification directly records HR-G0 PASS. The design artifacts are ready for HR-G1 review; HR-G1 remains NOT APPROVED / AWAITING REVIEW. No implementation, target work, tuning, final training or test evaluation is authorized. The current work changes only design artifacts. E1 train/validation is closed and its evidence stays unchanged.
 
 ## Status definitions
 
@@ -71,6 +71,12 @@ These are settled inputs, not review questions for another hyperparameter search
 
 All production tasks HR-T01 onward require HR-G1, including tasks whose immediate dependencies list only prior task IDs.
 
+## Scientific/runtime identity versus audit evidence
+
+HR acceptance and official runs compare `identity.scientific_runtime`: the explicit consumed-file map/fingerprint specified in plan.md and the numeric contract, plus the unchanged contract/data/preprocessing/weights and software/effective runtime/device/driver/allocation-policy bindings. The closure enumerates exact HR declaration/data/model/metrics/engine/checkpoint/runtime/train/campaign modules, necessary package markers, reused E1 engine/metrics, exact `src/preprocessing/geoguessr_v1.py`, frozen preprocessing config and its runtime-read checksum sidecar, requirements/pyproject and the official Slurm wrapper. No wildcard or acceptance-only test belongs in that closure. Check actual transitive imports and review any additional consumed file before acceptance; a consumed-file change always requires renewed target acceptance.
+
+Maintain exact path/bytes/SHA-256/role inventories of acceptance tests/helpers/evidence separately, including `tests/e1hr/test_gpu_smoke.py`, and preserve the inventory for each attempt. Record the current clean Git commit/cleanliness and these inventories as `audit` metadata at acceptance and official attempts; reporting-only tooling is likewise audited separately. A docs-only or test-only clean commit after acceptance does not invalidate an unchanged scientific/runtime identity. Commit SHA, acceptance-test inventory and operational job IDs are not scientific equality keys. Test-only changes affecting the validity of an acceptance proof require evidence review; unrelated test edits do not automatically require renewed target acceptance. All input/config/receipt/checkpoint integrity checks remain mandatory.
+
 ## Observable acceptance per task
 
 ### HR-T00 — Design preparation
@@ -114,10 +120,11 @@ All production tasks HR-T01 onward require HR-G1, including tasks whose immediat
 
 ### HR-T07 — Runtime/runner/recovery
 
-- [ ] RED→GREEN current-root integrity, conformance/source/software/allocation/runtime/receipt failures before model allocation; refresh train/val hashes and containment.
+- [ ] RED→GREEN current-root integrity, conformance/consumed-source/software/allocation/runtime/receipt failures before model allocation; refresh train/val hashes and containment. Verify the explicit runtime closure and separate exact-hash acceptance/test inventory.
+- [ ] Docs/test-only clean-commit changes with identical consumed hashes/runtime remain eligible across acceptance/run/resume/campaign checks; any consumed-file or runtime-binding change fails and requires renewed target acceptance. Test-harness edits change audit inventory without changing scientific identity. Do not compare whole audit records or commit SHA as scientific identity.
 - [ ] Eight-epoch flat/decreasing-curve integration and complete selected-state lineage; no production fixture bypass.
 - [ ] Same-declaration boundary-zero/mid-epoch/epoch-eight publication recovery and single writer; reconstruct persistent workers without logical loader RNG drift.
-- [ ] Immutable per-attempt environments/boundaries/outcomes and retained failure/replay/unknown-partial-work records; completed totals never include replayed work.
+- [ ] Immutable per-attempt environments/boundaries/outcomes and retained failure/replay/unknown-partial-work records; preserve clean commit and tooling inventories as audit metadata separate from scientific equality. Completed totals never include replayed work.
 
 ### HR-T08 — Campaign
 
@@ -140,7 +147,7 @@ All production tasks HR-T01 onward require HR-G1, including tasks whose immediat
 ### HR-T11 — Actual target acceptance
 
 - [ ] Explicit HR-TARGET-AUTH recorded before GPU deployment/acceptance.
-- [ ] Current consumed source/stack/root/data/weights/preprocessing/allocation/device/driver verified; full train/val audit and HR conformance before model allocation.
+- [ ] Exact reviewed consumed-source fingerprint and stack/root/data/weights/preprocessing/allocation/device/driver verified; full train/val audit and HR conformance before model allocation. Clean Git commit and exact acceptance/test hashes are captured as separate audit metadata; only scientific/runtime bindings determine identity equality across accepted runs.
 - [ ] Real train-only batch `[2,3,576,1344]`, logits `[2,124]`, finite forward/backward/all trainable gradients and memory records.
 - [ ] Bounded discard/reconstruct/restore/replay equivalence on actual deterministic stack; record fixture/boundary scope, all RNG/loaders and full horizon. No official epoch/optimization result claim.
 - [ ] Retain failures/attempts and emit only approved=false HR-G2 candidate; hand off acceptance plus CPU checks/concrete declarations for separate HR-G2 review.

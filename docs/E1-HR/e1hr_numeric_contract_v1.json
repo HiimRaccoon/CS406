@@ -498,7 +498,7 @@
       "cuda": "12.8",
       "cudnn": 91002
     },
-    "execution_identity": "Actual HR acceptance binds clean consumed-source identity, software/runtime, current dataset root/content, device/driver/allocation and frozen fingerprints. Material differences cannot silently proceed. Preserve accepted scientific/runtime/source identity across attempts; job IDs and MIG UUIDs are operational observations, not fixed equality requirements.",
+    "execution_identity": "Acceptance and official runs compare identity.scientific_runtime: reviewed consumed-source file hashes/fingerprint, HR contract, software/effective runtime/device/driver/allocation policy and current data/preprocessing/pretrained/conformance bindings. Record the actual clean Git commit, cleanliness, acceptance/test inventories and job/MIG identifiers separately as audit metadata, not scientific equality keys. A docs-only or test-only clean commit after acceptance does not invalidate unchanged scientific/runtime identity. Any consumed runtime/scientific file change requires renewed target acceptance; runtime/input mismatches cannot silently proceed. Immutable config, receipt and checkpoint checks remain mandatory.",
     "pilot_driver_reference": "580.126.20; historical supporting evidence, not an unconditional exact-driver lock",
     "local_validation": "Draft preparation performs document/contract checks only. Future synthetic CPU fixtures are never official HR or UIT evidence."
   },
@@ -525,8 +525,7 @@
       "separate_explicit_target_authorization_required": true,
       "e1_acceptance_or_pilot_substitution": false,
       "required_actual_identity": [
-        "consumed HR and reused source hashes",
-        "clean Git commit",
+        "Explicit reviewed scientific/runtime consumed-file map and canonical fingerprint",
         "software/runtime settings",
         "device/driver/allocation",
         "current data root/content",
@@ -572,7 +571,14 @@
       ],
       "probe_scope": "Bounded discard/reconstruct/restore/replay on accepted deterministic stack; test-only mechanics boundary cannot count as an official completed epoch or campaign outcome; CPU integration separately checks full-epoch control flow",
       "acceptance_candidate_approved": false,
-      "automatic_stage_approval_or_submission": false
+      "automatic_stage_approval_or_submission": false,
+      "required_audit_metadata": [
+        "actual clean Git commit and cleanliness observation",
+        "exact acceptance/test harness path, byte length and SHA-256 inventory",
+        "exact acceptance evidence/output inventory",
+        "actual job/allocation identifiers and MIG UUID when available"
+      ],
+      "identity_equality": "Reviewed identity.scientific_runtime projection only; clean Git commit and acceptance/test inventory are separate audit metadata. Different docs/test-only clean commits remain eligible when consumed hashes and all other scientific/runtime bindings match; any consumed-file change requires renewed target acceptance."
     },
     "walltime_resume": "09:00:00 limits one job attempt, not the run; one run may span attempts; never assume eight HR epochs finish in one allocation, reset warmup, change horizon or extend completed budget",
     "account": "uit",
@@ -590,7 +596,7 @@
       "last.pt": "Atomic full-state committed boundary for same-run resume; never resume from best.pt"
     },
     "boundaries": "Boundary zero and completed-epoch boundaries only. An epoch is committed after its full training and full validation, with counters/history/selection and full state atomically in last.pt. No partial/minibatch training commit. An attempt terminating during an epoch discards it and replays it from its beginning from the previous committed last.pt.",
-    "identity": "Explicit E1-HR experiment/resolution/stage/seed/LR/original budget, HR config/contract hashes, fixed data/preprocessing/pretrained fingerprints and accepted source/runtime/device identity; reject all E1 and pilot checkpoint kinds and cross-run mismatches",
+    "identity": "Explicit E1-HR experiment/resolution/stage/seed/LR/original budget, HR config/contract hashes, fixed data/preprocessing/pretrained fingerprints and accepted identity.scientific_runtime projection. Compare reviewed consumed-source fingerprint and runtime bindings, not audit Git commit or acceptance/test inventory; record each clean commit/inventory separately. Reject all E1/pilot kinds, cross-run config mismatches and changed consumed source/runtime; a consumed-file change requires renewed target acceptance.",
     "safety": "Atomic replacement and one writer per immutable run directory; failed writes retain prior committed boundary; no overwrite with a new trial",
     "reports": "Every per-run metric uses the same selected HR checkpoint even if last.pt is later. Final initialization is fresh ImageNet, never selected tuning/E1/pilot state.",
     "kind": "official_e1hr_checkpoint_v1",
@@ -715,12 +721,12 @@
       "docs/E1-HR/plan.md",
       "docs/E1-HR/tasks.md"
     ],
-    "snapshot_semantics": "Source document/reference hashes below identify preparation inputs, not future accepted HR runtime source. No plan/ledger update requires mutating this frozen candidate after approval. This JSON never embeds its own digest.",
+    "snapshot_semantics": "Source document/reference hashes below identify preparation inputs, not future accepted HR scientific/runtime identity. The scientific/runtime consumed-file fingerprint is separate from docs and acceptance/test audit inventories. Later docs/test-only clean commits do not invalidate unchanged accepted consumed-source/runtime identity. No plan/ledger update requires mutating frozen contract bytes after approval. This JSON never embeds its own digest.",
     "source_evidence": [
       {
         "path": "docs/E1-HR/specs.md",
-        "bytes": 21590,
-        "sha256": "cd6c56f9535ebe4f1add40e49aa32bc8bc4ba473428b778387a9751458ca85dd",
+        "bytes": 21969,
+        "sha256": "abae930e930f7bb2d62cea534d615039156bcb86d9cbfcc3d95b18b22e51f16f",
         "role": "Direct approved HR scientific authority; includes two minor clarifications requested after HR-G0"
       },
       {
@@ -913,22 +919,34 @@
     "analysis_kind": "e1hr_selected_validation_analysis_v1",
     "aggregate_kind": "e1hr_three_seed_validation_report_v1",
     "source_fingerprint_closure": [
-      "src/e1hr/*.py",
+      "src/__init__.py",
+      "src/e1hr/__init__.py",
+      "src/e1hr/config.py",
+      "src/e1hr/data.py",
+      "src/e1hr/model.py",
+      "src/e1hr/metrics.py",
+      "src/e1hr/engine.py",
+      "src/e1hr/checkpoint.py",
+      "src/e1hr/runtime.py",
+      "src/e1hr/train.py",
+      "src/e1hr/campaign.py",
+      "src/e1/__init__.py",
       "src/e1/engine.py",
       "src/e1/metrics.py",
-      "src/e1/__init__.py",
-      "src/preprocessing/*.py",
+      "src/preprocessing/__init__.py",
+      "src/preprocessing/geoguessr_v1.py",
+      "configs/preprocessing/geoguessr_v1.json",
+      "configs/preprocessing/geoguessr_v1.sha256",
       "requirements.txt",
       "pyproject.toml",
-      "scripts/slurm/e1hr_train.sbatch",
-      "tests/e1hr/test_gpu_smoke.py"
+      "scripts/slurm/e1hr_train.sbatch"
     ],
-    "source_record": "Record exact consumed file hashes and canonical fingerprint plus actual clean Git commit at acceptance and runs; draft reference snapshots are not accepted HR runtime identity",
+    "source_record": "Record exact repository-relative consumed-file SHA-256 map and its canonical fingerprint in identity.scientific_runtime. Record each actual clean Git commit/cleanliness and exact acceptance/test inventory in audit metadata, at acceptance and every official attempt; never impose Git-commit equality on scientific identity. Preparation-reference hashes do not assert future HR acceptance.",
     "canonical_fingerprint": "SHA-256 of UTF-8 json.dumps(value,sort_keys=True,ensure_ascii=True,allow_nan=False); distinct from exact-byte file SHA-256",
     "receipts": {
       "HR-G1": "Exact HR contract bytes/sidecar, written plan/ledger, implementation method and explicit implementation permission",
       "target_work": "Explicit HR GPU acceptance authorization before HR-T11",
-      "HR-G2": "Approved actual HR identity/device plus acceptance evidence digest and concrete four-trial readiness review",
+      "HR-G2": "Approved identity.scientific_runtime/device and acceptance evidence digest; retain clean acceptance Git commit and exact harness/evidence inventory separately as audit metadata. Later clean docs/test-only commits do not invalidate unchanged consumed-source/runtime identity.",
       "HR-G3a": "HR-G2 receipt SHA-256 and exactly four authorized HR tuning run IDs",
       "HR-G3b": "HR-G2 receipt SHA-256, exact locked-selection SHA-256 and exactly three authorized HR final run IDs"
     },
@@ -945,7 +963,7 @@
       "three-seed report and E1 comparison",
       "scoped exact-byte checksum inventory"
     ],
-    "lineage_validation": "declaration <-> resolved config <-> summary <-> complete history <-> selected checkpoint <-> locked selection <-> analyses <-> aggregate/report; reject wrong experiment/resolution/stage/seed/LR/budget/source/runtime/fingerprints",
+    "lineage_validation": "declaration <-> resolved config <-> summary <-> complete history <-> selected checkpoint <-> locked selection <-> analyses <-> aggregate/report; reject wrong experiment/resolution/stage/seed/LR/budget/consumed-source/runtime/fingerprints. Compare scientific_runtime projections across acceptance/runs/resume/campaign; audit commit/tooling inventory differences alone do not fail scientific identity. Preserve all audit records and exact config/receipt/evidence/checkpoint checks.",
     "e1_or_pilot_artifact_relabeling": false,
     "required_bindings": [
       "experiment",
@@ -981,7 +999,93 @@
       "selection_sha256"
     ],
     "report_binding_policy": "Per-run reports carry stage/seed/lr/budget and common identity explicitly; aggregates carry stage=final, all three per_seed identities and shared LR/budget/accepted identity, with each selected checkpoint/history/declaration binding retained. Acceptance is a distinct nonofficial evidence stage, never a tuning/final outcome.",
-    "required_test_images_opened": 0
+    "required_test_images_opened": 0,
+    "source_fingerprint_policy": {
+      "definition": "SHA-256 of canonical JSON for the explicit repository-relative path -> exact-byte SHA-256 map, using canonical_fingerprint serialization",
+      "wildcards_allowed": false,
+      "package_markers": "Normal src.e1.engine/src.e1.metrics and preprocessing imports execute the listed src, src.e1hr, src.e1 and src.preprocessing package markers; include their exact bytes",
+      "campaign_consumption": "Final-run selection/preflight validation consumes src/e1hr/campaign.py",
+      "actual_import_review": "Verify actual transitive runtime imports at implementation/acceptance; missing listed files fail. Explicitly add any additional consumed repository file to the reviewed closure before acceptance; never silently omit it.",
+      "consumed_file_change_requires_renewed_target_acceptance": true,
+      "reporting_only_source": "src/e1hr/report.py is hashed in reporting audit inventory, outside the training closure unless actually imported by the training path",
+      "separate_integrity_bindings": "The frozen HR contract, dataset/label files, pretrained weights, accepted conformance/acceptance evidence and stage receipts retain their independent exact-hash checks; exclusion from this source map does not waive them"
+    },
+    "acceptance_test_evidence_inventory": {
+      "role": "Exact-hash audit inventory, separate from the scientific/runtime fingerprint; capture actual files when implemented, never fabricate hashes for nonexistent files",
+      "harness_files": [
+        "tests/e1hr/conftest.py",
+        "tests/e1hr/test_config.py",
+        "tests/e1hr/test_data.py",
+        "tests/e1hr/test_model.py",
+        "tests/e1hr/test_metrics.py",
+        "tests/e1hr/test_engine.py",
+        "tests/e1hr/test_checkpoint.py",
+        "tests/e1hr/test_train.py",
+        "tests/e1hr/test_recovery.py",
+        "tests/e1hr/test_campaign.py",
+        "tests/e1hr/test_artifacts.py",
+        "tests/e1hr/test_report.py",
+        "tests/e1hr/test_entrypoints.py",
+        "tests/e1hr/test_gpu_smoke.py"
+      ],
+      "optional_package_markers_if_present": [
+        "tests/__init__.py",
+        "tests/e1hr/__init__.py"
+      ],
+      "additional_files": "Enumerate every actually consumed acceptance-only helper and each acceptance evidence/output by exact path; do not use this inventory as a training source closure",
+      "entry_fields": [
+        "path",
+        "bytes",
+        "sha256",
+        "role"
+      ],
+      "snapshot_policy": "Preserve immutable inventory/evidence for each acceptance attempt; later edits do not rewrite earlier proof",
+      "part_of_scientific_runtime_fingerprint": false,
+      "unrelated_test_edit_requires_renewed_target_acceptance": false,
+      "proof_validity_policy": "A test-only correction affecting validity of an acceptance proof requires evidence review; unrelated test edits do not automatically invalidate accepted scientific/runtime identity"
+    },
+    "scientific_identity_equality": {
+      "projection": "identity.scientific_runtime",
+      "equality_bindings": [
+        "consumed_source_files",
+        "consumed_source_sha256",
+        "contract_sha256",
+        "software",
+        "effective_runtime",
+        "device_and_driver",
+        "reviewed_allocation_policy",
+        "dataset_root",
+        "fixed_split_label_fingerprints",
+        "preprocessing_config_and_implementation_fingerprints",
+        "pretrained_sha256",
+        "accepted_conformance_sha256"
+      ],
+      "separate_mandatory_lineage_checks": [
+        "immutable declaration/full config identity",
+        "HR-G2 receipt and accepted evidence exact hashes",
+        "HR-G3a or HR-G3b stage authorization",
+        "same-run checkpoint/history/selection lineage"
+      ],
+      "audit_metadata_excluded_from_equality": [
+        "clean_git_commit",
+        "git_cleanliness_observation",
+        "acceptance_test_evidence_inventory",
+        "reporting_tool_inventory",
+        "job_id",
+        "allocation_instance",
+        "MIG_UUID"
+      ],
+      "clean_git_requirement": "Require and record an actual clean checkout at acceptance and each official attempt; cleanliness is mandatory, but the commit SHA need not match acceptance",
+      "docs_only_or_test_only_clean_commit_invalidates_acceptance": false,
+      "unchanged_identity_condition": "Every consumed-file hash and all other reviewed scientific/runtime bindings must remain equal; full config, receipts and evidence still validate",
+      "consumed_file_change": "Reject before model allocation and require renewed target acceptance; no scientific control is changed by this policy",
+      "comparison_sites": [
+        "acceptance-to-official preflight",
+        "same-run checkpoint restore",
+        "completed-run campaign validation",
+        "selection and final-report lineage"
+      ]
+    }
   },
   "input_completeness": {
     "unresolved_frozen_scientific_fields": [],
