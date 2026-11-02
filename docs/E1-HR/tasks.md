@@ -60,7 +60,7 @@ These are settled inputs, not review questions for another hyperparameter search
 | HR-T04 | HR-T01/T02 | Narrow metrics reuse and independent full-split/bucket oracles | **COMPLETE - CPU/PREPARATION ONLY**; 7 passed; independent full-split cross-bucket/tie/metadata bucket oracles and unchanged E1 metrics regression |
 | HR-T05 | HR-T03/T04 | Narrow engine reuse; update scheduler, tail weighting and comparator | **COMPLETE - CPU/PREPARATION ONLY**; 12 passed; scheduler independent interior/endpoints, tail weighting, comparator and unchanged E1 engine regression |
 | HR-T06 | HR-T01/T02/T03/T05 | HR full-state atomic checkpoints and completed-epoch replay | **COMPLETE - CPU/PREPARATION ONLY**; 20 passed; full-state atomic boundary replay, HR kind/shape and audit-only commit acceptance with runtime-change rejection |
-| HR-T07 | HR-T01–T06 | Current-target preflight/runtime and one-run/attempt orchestration | **NOT STARTED — GATED** |
+| HR-T07 | HR-T01–T06 | Current-target preflight/runtime and one-run/attempt orchestration | **COMPLETE - CPU/PREPARATION ONLY**; 61 HR CPU cases passed; eight-epoch runner/replay, projection identity, transitive-source rejection and rehashed E1-evidence guard |
 | HR-T08 | HR-T01/T07 | Four declarations, strict evidence ledger, locked LR selection and fresh final declarations | **NOT STARTED — GATED** |
 | HR-T09 | HR-T02–T08 | Selected validation exports, three-seed aggregate and official E1 comparison | **NOT STARTED — GATED** |
 | HR-T10 | HR-T01–T09 | CPU regression, single-run wrapper/runbook and opt-in acceptance probe preparation | **NOT STARTED — GATED**; no target work without HR-TARGET-AUTH |
@@ -120,11 +120,11 @@ Maintain exact path/bytes/SHA-256/role inventories of acceptance tests/helpers/e
 
 ### HR-T07 — Runtime/runner/recovery
 
-- [ ] RED→GREEN current-root integrity, conformance/consumed-source/software/allocation/runtime/receipt failures before model allocation; refresh train/val hashes and containment. Verify the explicit runtime closure and separate exact-hash acceptance/test inventory.
-- [ ] Docs/test-only clean-commit changes with identical consumed hashes/runtime remain eligible across acceptance/run/resume/campaign checks; any consumed-file or runtime-binding change fails and requires renewed target acceptance. Test-harness edits change audit inventory without changing scientific identity. Do not compare whole audit records or commit SHA as scientific identity.
-- [ ] Eight-epoch flat/decreasing-curve integration and complete selected-state lineage; no production fixture bypass.
-- [ ] Same-declaration boundary-zero/mid-epoch/epoch-eight publication recovery and single writer; reconstruct persistent workers without logical loader RNG drift.
-- [ ] Immutable per-attempt environments/boundaries/outcomes and retained failure/replay/unknown-partial-work records; preserve clean commit and tooling inventories as audit metadata separate from scientific equality. Completed totals never include replayed work.
+- [x] RED→GREEN current-root integrity, conformance/consumed-source/software/allocation/runtime/receipt failures before model allocation; refresh train/val hashes and containment. Verify the explicit runtime closure and separate exact-hash acceptance/test inventory.
+- [x] Docs/test-only clean-commit changes with identical consumed hashes/runtime remain eligible across acceptance/run/resume/campaign checks; any consumed-file or runtime-binding change fails and requires renewed target acceptance. Test-harness edits change audit inventory without changing scientific identity. Do not compare whole audit records or commit SHA as scientific identity.
+- [x] Eight-epoch flat/decreasing-curve integration and complete selected-state lineage; no production fixture bypass.
+- [x] Same-declaration boundary-zero/mid-epoch/epoch-eight publication recovery and single writer; reconstruct persistent workers without logical loader RNG drift.
+- [x] Immutable per-attempt environments/boundaries/outcomes and retained failure/replay/unknown-partial-work records; preserve clean commit and tooling inventories as audit metadata separate from scientific equality. Completed totals never include replayed work.
 
 ### HR-T08 — Campaign
 

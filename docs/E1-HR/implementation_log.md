@@ -23,3 +23,7 @@ HR-T04: complete - 7 passed; independent full-split cross-bucket/tie/metadata bu
 HR-T05: complete - 12 passed; scheduler independent interior/endpoints, tail weighting, comparator and unchanged E1 engine regression. RED/GREEN logs: .tools/e1hr/hr-t05-red.log and -green.log. No target/GPU work.
 
 HR-T06: complete - 20 passed; full-state atomic boundary replay, HR kind/shape and audit-only commit acceptance with runtime-change rejection. RED/GREEN logs: .tools/e1hr/hr-t06-red.log and -green.log. No target/GPU work.
+
+Ruling: keep runtime/preflight source-identity regressions in tests/e1hr/test_runtime.py for focused review; include this exact additional CPU test path in the separate audit inventory under the frozen contract additional-files policy. Cost if wrong: an extra audit entry, never a scientific identity key.
+
+HR-T07: complete - 61 HR CPU cases passed; eight-epoch runner/replay, projection identity, transitive-source rejection and rehashed E1-evidence guard. RED/GREEN logs: .tools/e1hr/hr-t07-red.log and -green.log. No target/GPU work.
