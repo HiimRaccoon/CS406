@@ -70,6 +70,11 @@
       "passed": 32,
       "red_failed": 9,
       "red_passed": 18
+    },
+    "publication_byte_parity_configuration_runtime": {
+      "passed": 24,
+      "command": "python -B -m pytest tests/e1hr/test_config.py tests/e1hr/test_runtime.py -q",
+      "scope": "after token-identical CRLF-to-LF package-marker normalization"
     }
   },
   "local_consumed_source_files": {
@@ -82,7 +87,7 @@
     "src/e1/__init__.py": "86e1743cd7ce8dfca6e50725a34ee7fd93bb41f9a4e01a0f6c325346a7bec53e",
     "src/e1/engine.py": "5a1787d852e6012410f97fd0e9031d4a2ef18b74e81b195ced37068adcd8d693",
     "src/e1/metrics.py": "3b1709b7813d26ee1fdc0516d6c47d1d5aef2782d04ed334c4d1d07fdce61448",
-    "src/e1hr/__init__.py": "abc5c9945c728c93c0521e9d595fdcd7d8533702342cbb08977d8b684a996335",
+    "src/e1hr/__init__.py": "293a5a04a8297cf4b979c0c7d6537afdccc024f06767bbaf131321fc66d936fc",
     "src/e1hr/campaign.py": "7f2b8d182c5d53a353b45af53f2ed37280f5df2818f041e1c242b81bb9b6f517",
     "src/e1hr/checkpoint.py": "6075c1c8b61b2a1d908738a1cc525a1ce32eb97e936fcae0ee5e4b33b5b6a93a",
     "src/e1hr/config.py": "d4f1024c753c68ef089fc262332752843a3641b80307a33ba568200d23947914",
@@ -95,7 +100,7 @@
     "src/preprocessing/__init__.py": "45fbd0b8466477ec3dc0b13c9a877aaa516c49885ded2dbc4367e67c4a26991b",
     "src/preprocessing/geoguessr_v1.py": "4d1dea328f69c1c7e1fa4f333c7276de0c3bc81b322db40dc33530969357e666"
   },
-  "local_consumed_source_fingerprint": "cbbb59216dd19c60eae22904220363e4c9d835029c6734febd270484ac408cf7",
+  "local_consumed_source_fingerprint": "8ab9b3f25c5de7e803ee65a92f4914f913c04c4a0edfd815b0a3e48e3636391a",
   "source_snapshot_role": "Local CPU preparation snapshot only; no accepted actual UIT source/runtime/device identity is asserted",
   "acceptance_test_inventory": {
     "tests/conftest.py": {
@@ -415,5 +420,6 @@
       "role": "local_cpu_verification_only"
     }
   },
-  "protected_files_verified": 159
+  "protected_files_verified": 159,
+  "publication_verification": "Final exact Git blob verification caught local CRLF in the one-line HR package marker; normalized to the existing remote LF bytes and refreshed this local snapshot. Python tokens/behavior unchanged. Contract, receipt and protected E1 inputs unchanged."
 }

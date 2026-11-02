@@ -91,3 +91,7 @@ Scoped implementation commits (published to e1hr-design-review):
 | HR-T10 | `9b47464fc74c7f6040e61acc3ec499b9c595b689` |
 
 The following review-fix/evidence commit binds the final source and tests; its exact SHA is supplied in the handoff and Git history.
+
+Final publication check: GitHub publication used LF; local src/e1hr/__init__.py alone retained CRLF. Normalize the one-line package marker to the already published LF bytes and refresh the CPU source map/fingerprint. Python tokens and behavior are unchanged; contract/receipt and all protected E1 files remain unchanged. Final remote exact-byte verification covers the full scoped branch, rather than relying on text equality.
+
+Post-normalization allocation-free configuration/runtime regression: 24 passed in 1.36s. This checks the frozen-byte/receipt/source identity guards; it does not grant target acceptance.
