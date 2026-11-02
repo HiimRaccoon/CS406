@@ -1,0 +1,1007 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "e1hr_numeric_contract_v1",
+  "client_date": "2026-11-02",
+  "artifact_role": "versioned_numeric_training_contract_candidate_for_HR_G1_review",
+  "scope": {
+    "experiment": "E1-HR",
+    "scientific_question": "Resolution-only ablation of completed E1: global WH 896x384 to 1344x576; all other frozen scientific controls unchanged",
+    "implementation_package": "src/e1hr/",
+    "test_package": "tests/e1hr/",
+    "python_module_prefix": "src.e1hr",
+    "resolution_wh": [
+      1344,
+      576
+    ],
+    "global_views_per_original_image": 1,
+    "local_views": 0,
+    "inheritance_reference": {
+      "path": "docs/E1/e1_numeric_contract_v1.json",
+      "sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143",
+      "modifiable": false
+    },
+    "bounded_reuse": {
+      "unchanged_runtime_modules": [
+        "src.e1.engine",
+        "src.e1.metrics"
+      ],
+      "frozen_preprocessor": "src.preprocessing.geoguessr_v1.Preprocessor",
+      "hr_owned_authority": [
+        "configuration",
+        "data integration",
+        "model/optimizer construction",
+        "checkpoint identity",
+        "target/runtime identity",
+        "one-run orchestration",
+        "campaign validation",
+        "report lineage"
+      ],
+      "forbidden": [
+        "E1 validator bypass or contract mutation",
+        "runtime imports from src.pilot",
+        "generic permanent training framework",
+        "E1 evidence modification"
+      ]
+    },
+    "excluded_work": [
+      "local views/fusion",
+      "architecture/augmentation/geometry search",
+      "class balancing",
+      "additional LR candidates",
+      "P1-v2 or another optimization pilot",
+      "E2/E3 implementation or feature caching",
+      "test-image access or evaluator",
+      "automatic tuning-to-final execution",
+      "longer Slurm walltime without review"
+    ]
+  },
+  "data": {
+    "split_version": "baseline124-v1",
+    "artifacts_directory": "artifacts/baseline124",
+    "source_repository": "https://github.com/HiimRaccoon/cs406-geoguessr",
+    "source_commit": "33cb29d72974f1677efab0f56ed92360e5a9f712",
+    "artifacts": {
+      "manifest.csv": {
+        "bytes": 7519661,
+        "sha256": "9cbd8b70e8522b5aa4a20fba4fa7b2ecea855cf377f98e41ebb162a07f8a8040",
+        "source_git_blob_sha": "1aff247439aadcc88e2c47cd54051a0da9219442"
+      },
+      "summary.json": {
+        "bytes": 994,
+        "sha256": "cf3dcf909aefd17c531cd115d6c30e54bbeb3dbd13962f974317ccde8a2f3e4b",
+        "source_git_blob_sha": "0f0b628d441c8af20d50e3dcf77c18ca31e37b0e"
+      },
+      "labels.json": {
+        "bytes": 1927,
+        "sha256": "5f7e8f5810e9ac8c43c1c22b2e4febe2e7a6174629b9031d3e943fce511832aa",
+        "source_git_blob_sha": "386afe34c64087123f160c564a8095af6e47058a"
+      },
+      "class_support.csv": {
+        "bytes": 6308,
+        "sha256": "ff46f4074464644f573b4ca64eb61320a61a8cc3daed3a3886a350cbc3c6fb75",
+        "source_git_blob_sha": "43c8d6dec70742d592990057ab66e66bec0c345d"
+      }
+    },
+    "split_counts": {
+      "train": 34997,
+      "val": 7497,
+      "test": 7502
+    },
+    "supported_labels": {
+      "train": 124,
+      "val": 106,
+      "test": 111
+    },
+    "num_output_labels": 124,
+    "label_id_definition": "Index in the immutable labels.json ordered list, 0 through 123",
+    "historical_split_seed": 406,
+    "regenerate_membership": false,
+    "reorder_labels": false,
+    "image_access": {
+      "allowed_splits": [
+        "train",
+        "val"
+      ],
+      "test": "metadata_only; reject every test image access before opening files throughout all E1-HR stages",
+      "invalid_samples": "fail and record; never skip or replace",
+      "path_policy": "Resolve manifest-relative paths inside configured dataset root; reject escapes and label mismatches"
+    },
+    "audit": {
+      "train_images": 34997,
+      "validation_images": 7497,
+      "test_images": 0,
+      "policy": "Current full 34997-train/7497-val byte-hash and containment audit plus preprocessing conformance for actual root/packages before model allocation; dataset remains immutable; archived pilot or E1 acceptance alone cannot satisfy HR acceptance. Refresh integrity in official preflight and repeat conformance when root/content/packages change."
+    }
+  },
+  "preprocessing": {
+    "id": "geoguessr-ui-global-local-v1",
+    "config_path": "configs/preprocessing/geoguessr_v1.json",
+    "config_sha256": "4f49dd41738168cfc65d4322fbe1b659ef5595229bb487ad86dd671a26a8903f",
+    "implementation_path": "src/preprocessing/geoguessr_v1.py",
+    "implementation_sha256": "4d1dea328f69c1c7e1fa4f333c7276de0c3bc81b322db40dc33530969357e666",
+    "reuse_unchanged": true,
+    "view": "global_only",
+    "output_wh": [
+      1344,
+      576
+    ],
+    "output_chw": [
+      3,
+      576,
+      1344
+    ],
+    "raw_layouts_wh": [
+      [
+        1536,
+        662
+      ],
+      [
+        1030,
+        703
+      ]
+    ],
+    "footer_crop_bottom_px": 14,
+    "geometry_ui_and_resize_authority": "Use unchanged frozen config/module; no duplicate coordinate tables, weights.transforms(), preview inputs, EXIF transposition, uint8 requantization, post-resize hard remasking or alternative backend. Only global target WH changes.",
+    "arithmetic": {
+      "device": "cpu",
+      "dtype": "float32",
+      "input_range": [
+        0,
+        1
+      ],
+      "resize": "tensor bilinear",
+      "antialias": true,
+      "rounding": "floor(value+0.5)",
+      "fill": "exact float32 ImageNet mean",
+      "normalization_mean": [
+        0.485,
+        0.456,
+        0.406
+      ],
+      "normalization_std": [
+        0.229,
+        0.224,
+        0.225
+      ],
+      "inplace": false,
+      "letterbox": "scale=min(target_w/source_w,target_h/source_h); content_w=min(target_w,max(1,floor(source_w*scale+0.5))); content_h analogously; left=(target_w-content_w)//2, top=(target_h-content_h)//2; remainder right/bottom; pad after resize; normalize last"
+    },
+    "augmentation": {
+      "train_enabled": true,
+      "brightness_amplitude": 0.1,
+      "contrast_amplitude": 0.1,
+      "factor_interval": [
+        0.9,
+        1.1
+      ],
+      "independent_draws": true,
+      "draws_per_original_image": 2,
+      "draw_order": [
+        "brightness",
+        "contrast"
+      ],
+      "application": "Frozen valid-scene photometric formulas before UI mean fill; brightness before contrast; preserve masks/padding",
+      "validation_enabled": false,
+      "other_augmentation": "disabled",
+      "photometric_formulas": {
+        "scope": "Valid scene pixels after footer crop, before UI mean fill; UI excluded from statistics",
+        "brightness": "clamp(image*b,0,1)",
+        "contrast_grayscale_weights": [
+          0.2989,
+          0.587,
+          0.114
+        ],
+        "contrast": "gray_mean = mean(sum(brightness_adjusted_scene * grayscale_weights, channel), valid_pixels); clamp(c*image+(1-c)*gray_mean,0,1)",
+        "fill": "Fill UI with exact ImageNet float32 mean after photometric changes; preserve padding"
+      }
+    },
+    "experiment_mode": "e1hr",
+    "constructor": "Preprocessor(experiment=\"e1hr\", global_wh=(1344,576))",
+    "global_source": "Decoded raw image through the frozen preprocessor; never upscale an E1 image or canvas",
+    "decode": {
+      "backend": "Pillow.Image.open(...).convert(\"RGB\")",
+      "apply_exif_transpose": false,
+      "unknown_layout": "raise; never rescale UI templates",
+      "corrupt_image": "raise; never skip or replace"
+    }
+  },
+  "model": {
+    "architecture": "torchvision ConvNeXt-Tiny",
+    "input_nchw": [
+      "N",
+      3,
+      576,
+      1344
+    ],
+    "representation_dimension": 768,
+    "output_logits": 124,
+    "preserve_pretrained": [
+      "feature extractor",
+      "global average pooling",
+      "final LayerNorm"
+    ],
+    "classifier": {
+      "type": "Linear",
+      "in_features": 768,
+      "out_features": 124,
+      "bias": true
+    },
+    "full_fine_tuning_from_epoch": 1,
+    "maximum_stochastic_depth": 0.1,
+    "stochastic_depth_schedule": "TorchVision 0.23.0 block-index linear schedule from 0 to 0.1",
+    "evaluation": "model.eval(); stochastic depth disabled",
+    "pretrained": {
+      "enum": "torchvision.models.ConvNeXt_Tiny_Weights.IMAGENET1K_V1",
+      "filename": "convnext_tiny-983f1562.pth",
+      "sha256": "983f1562536e84ff750a1576fb08e54de751dbf2e17c0d8a4a13704341fdcd3d",
+      "verification": "Require exact filename, existence, and full digest before strict state loading",
+      "automatic_download": false,
+      "starting_state": "Fresh pinned ImageNet weights for every HR tuning trial and final seed; fresh optimizer/scheduler; no E1, pilot, other-trial or selected-tuning checkpoint warm-start",
+      "strict_state_loading": true
+    }
+  },
+  "campaign": {
+    "lr_candidates": [
+      2.5e-05,
+      5e-05,
+      0.0001,
+      0.0002
+    ],
+    "tuning_seed": 1001,
+    "final_seeds": [
+      2001,
+      3001,
+      4001
+    ],
+    "forbidden_training_seeds": [
+      3406,
+      406
+    ],
+    "all_four_training_ids_distinct": true,
+    "tuning_trials": 4,
+    "tuning_seeds_per_candidate": 1,
+    "final_runs": 3,
+    "selection": {
+      "metric": "selected_checkpoint_supported_validation_macro_f1",
+      "tolerance": 1e-06,
+      "reference": "Global maximum M over all four valid completed trial selected-checkpoint scores",
+      "eligible": "M-score <= 1e-6",
+      "tie_break": "lowest_base_lr",
+      "use_nll_or_trial_order": false,
+      "require_all_four_full_budget_valid_outcomes": true,
+      "selected_lr_policy": "Derived only from all four valid full-budget HR trials; unknown until locked HR selection; no selected numeric LR is serialized in this draft"
+    },
+    "failure_policy": {
+      "operational_interruption": "Retain attempt records and resume the same immutable declared run from its own last.pt at boundary zero or a completed epoch, replaying an uncommitted epoch from its beginning without changing budget",
+      "invalid_or_uncompletable_candidate": "Stop and return for explicit user review; do not ignore, replace, or select from a subset",
+      "records": "Retain all failures, interruptions, replays, and any reviewed retries with identity/lineage; no silent fresh replacement",
+      "new_or_replacement_lr": false,
+      "validation_based_grid_refinement": false
+    },
+    "stage_authorization": {
+      "tuning": "Explicit HR-G3a only after HR-G1, actual HR target acceptance and HR-G2",
+      "post_selection": "STOP and hand off complete tuning ledger, all four outcomes and locked HR selection for user review",
+      "final": "Separate explicit HR-G3b after tuning handoff; binds HR-G2, selected-LR bytes and three fresh final declarations",
+      "automatic_tuning_to_final_launch": false,
+      "declarations_submit_jobs": false
+    },
+    "independent_hr_tuning": true,
+    "inherit_e1_selected_lr": false
+  },
+  "batch": {
+    "original_images_per_effective_batch": 2,
+    "microbatch": 2,
+    "gradient_accumulation": 1,
+    "drop_last": false,
+    "train_sampling": "Natural shuffled permutation without replacement; every unique train image exactly once per completed epoch",
+    "validation_sampling": "All validation images in fixed manifest order, no shuffle or augmentation",
+    "microbatches_per_epoch": 17499,
+    "updates_per_epoch": 17499,
+    "tail_microbatch_images": 1,
+    "accumulation_loss": "For each accumulation group with D actual original images, sum unweighted CE and divide by D, including all short tails; one optimizer/scheduler update per completed group"
+  },
+  "loss": {
+    "name": "standard_unweighted_cross_entropy",
+    "label_smoothing": 0,
+    "class_weights": {
+      "enabled": false
+    },
+    "balanced_sampling": false,
+    "loss_reporting": "Sample means over all split images, never unweighted averages of batch means"
+  },
+  "optimizer": {
+    "name": "AdamW",
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "head_lr_multiplier": 1,
+    "llrd": false,
+    "gradient_clipping": {
+      "enabled": false
+    },
+    "groups": {
+      "conv_and_linear_weights": {
+        "weight_decay": 0.05
+      },
+      "biases": {
+        "weight_decay": 0.0
+      },
+      "layernorm_parameters": {
+        "weight_decay": 0.0
+      },
+      "convnext_layer_scale_parameters": {
+        "weight_decay": 0.0
+      }
+    },
+    "group_validation": "Enumerate actual parameter names; every trainable tensor appears exactly once; fail unexpected categories, duplicates or omissions; all groups share candidate base LR and schedule",
+    "numerical_failure": "Nonfinite logits/loss/unscaled gradients or OOM fails and is recorded; no silent batch/update skip or LR/batch/resolution/runtime substitution"
+  },
+  "budget": {
+    "max_epochs": 8,
+    "epoch_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "reported_epoch_numbers": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "full_validations": 8,
+    "validation_every_completed_epoch": true,
+    "early_stopping": false,
+    "planned_max_updates": 139992,
+    "success": "Exactly eight completed training epochs and eight complete validations; never a shortened successful run",
+    "resume_budget_extension": false
+  },
+  "scheduler": {
+    "name": "linear_warmup_then_update_cosine",
+    "unit": "optimizer_updates",
+    "planned_updates": 139992,
+    "warmup_updates": 1000,
+    "warmup_start_factor": 0.1,
+    "cosine_floor_lr": 1e-06,
+    "update_index": "u is the zero-based optimizer update being executed, 0 <= u < N; L is the candidate base LR, W=1000, N=139992, f=1e-6",
+    "warmup_formula": "L * (0.1 + 0.9 * u / W), for u < W",
+    "cosine_formula": "f + (L-f)/2 * (1 + cos(pi * (u-W)/(N-W-1))), for u >= W",
+    "application": "Apply LR(u) before optimizer update u; advance completed-update state only after the update; validation does not advance scheduler",
+    "endpoints": {
+      "first_update_index": 0,
+      "first_lr": "0.1 * L",
+      "first_cosine_update_index": 1000,
+      "first_cosine_lr": "L",
+      "final_update_index": 139991,
+      "final_lr": 1e-06,
+      "final_floor_equality": "Exact at final update; no remaining scheduler update is executed afterward"
+    },
+    "restoration": "Restore the same completed-update position and immutable full horizon/parameters; do not reset warmup or change horizon based on selected checkpoint; reject over-budget updates"
+  },
+  "initialization": {
+    "method": "linear_default",
+    "weight": "kaiming_uniform_(a=sqrt(5))",
+    "bias": "uniform(-1/sqrt(768), +1/sqrt(768))",
+    "seed": "official training seed for this run",
+    "rng_context": "Isolated CPU RNG context immediately around initialization; restore outer CPU RNG afterward",
+    "framework": "torch 2.8.0+cu128",
+    "fan_in": 768
+  },
+  "rng": {
+    "global_python": "random.seed(training_seed)",
+    "global_numpy": "numpy.random.seed(training_seed % 2**32)",
+    "global_torch": "torch.manual_seed(training_seed) and torch.cuda.manual_seed_all(training_seed)",
+    "derived_seed": {
+      "encoding": "UTF-8 of pipe-separated str values: str(training_seed) followed by each key part, joined with |",
+      "digest": "SHA-256",
+      "take_first_bytes": 8,
+      "byte_order": "little",
+      "modulus": 9223372036854775807,
+      "builtin_python_hash": false,
+      "architecture_key_added": false
+    },
+    "epoch_order": {
+      "key": [
+        "training_seed",
+        "zero_based_epoch",
+        "order"
+      ],
+      "generator": "Fresh CPU torch.Generator seeded with derived_seed; torch.randperm(dataset_length)",
+      "persistent_workers": "Carry epoch with every sampled index; never depend on a mutable parent-only epoch"
+    },
+    "augmentation": {
+      "key": [
+        "training_seed",
+        "zero_based_epoch",
+        "manifest_relative_path",
+        "jitter"
+      ],
+      "generator": "Fresh CPU torch.Generator seeded with derived_seed",
+      "draws": "Two sequential torch.rand scalar draws, brightness then contrast, each mapped by 1-amplitude+2*amplitude*draw"
+    },
+    "loaders": {
+      "train_key": [
+        "training_seed",
+        "loader",
+        "train"
+      ],
+      "validation_key": [
+        "training_seed",
+        "loader",
+        "val"
+      ],
+      "generator": "Separate CPU torch.Generator per split; state saved/restored",
+      "worker_python_numpy_seed": "torch.initial_seed() % 2**32; seed Python and NumPy in worker initialization; torch worker seed comes from DataLoader generator"
+    },
+    "process_start": "Export PYTHONHASHSEED=str(official_run_seed) before every Python process, including declaration checks; never copy pilot 3406",
+    "checkpoint_state": [
+      "Python random",
+      "NumPy",
+      "torch CPU",
+      "all CUDA RNGs",
+      "train and validation loader generator states",
+      "epoch/order and selected-checkpoint/history progress"
+    ],
+    "partial_epoch": "Discard uncommitted epoch; restore previous committed last.pt and replay that epoch from its beginning; replay is operational work and never extra completed budget",
+    "persistent_worker_resume": "Reconstruct fresh workers using original bootstrap state while restoring/preserving committed logical loader generator state; restarting workers must not consume an additional logical loader draw versus uninterrupted persistent workers"
+  },
+  "runtime": {
+    "device": "cuda",
+    "dtype": "float32",
+    "amp": {
+      "enabled": false
+    },
+    "grad_scaler": {
+      "enabled": false
+    },
+    "tf32_matmul": false,
+    "tf32_cudnn": false,
+    "torch_compile": {
+      "enabled": false
+    },
+    "float32_matmul_precision": "highest",
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": false,
+    "num_workers": 2,
+    "pin_memory": true,
+    "persistent_workers": true,
+    "prefetch_factor": 2,
+    "cpu_threads": 2,
+    "environment": {
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "PYTHONHASHSEED": "str(official_training_seed), exported before Python process startup"
+    },
+    "tf32_environment_overrides": "Reject any effective environment override that enables TF32; record actual effective Torch settings, not requested values alone",
+    "software_lock": {
+      "python": "3.11.17",
+      "torch": "2.8.0+cu128",
+      "torchvision": "0.23.0+cu128",
+      "Pillow": "11.3.0",
+      "numpy": "2.1.3",
+      "pandas": "2.2.3",
+      "scikit-learn": "1.6.1",
+      "cuda": "12.8",
+      "cudnn": 91002
+    },
+    "execution_identity": "Actual HR acceptance binds clean consumed-source identity, software/runtime, current dataset root/content, device/driver/allocation and frozen fingerprints. Material differences cannot silently proceed. Preserve accepted scientific/runtime/source identity across attempts; job IDs and MIG UUIDs are operational observations, not fixed equality requirements.",
+    "pilot_driver_reference": "580.126.20; historical supporting evidence, not an unconditional exact-driver lock",
+    "local_validation": "Draft preparation performs document/contract checks only. Future synthetic CPU fixtures are never official HR or UIT evidence."
+  },
+  "deployment": {
+    "scheduler": "Slurm",
+    "partition": "normal",
+    "gres": "gpu:2g.35gb:1",
+    "ntasks": 1,
+    "cpus_per_task": 4,
+    "ram_gib": 16,
+    "slurm_mem_mib": 16384,
+    "job_walltime": "09:00:00",
+    "job_walltime_seconds": 32400,
+    "expected_gpu_class": "NVIDIA H200 MIG 2g.35gb",
+    "specific_mig_uuid_required": false,
+    "gpu_work": "UIT Slurm only, after explicit HR stage-specific authorization; HR-G1 implementation approval grants no target work",
+    "paths": {
+      "dataset": "/datastore/binhvp/BuiTrongTan/CS406/data/geoguessr",
+      "pretrained": "/datastore/binhvp/BuiTrongTan/CS406/pretrained/convnext_tiny-983f1562.pth",
+      "official_e1hr_runs": "/datastore/binhvp/BuiTrongTan/CS406/runs/E1-HR",
+      "hr_evidence": "/datastore/binhvp/BuiTrongTan/CS406/reports/E1-HR"
+    },
+    "target_acceptance": {
+      "separate_explicit_target_authorization_required": true,
+      "e1_acceptance_or_pilot_substitution": false,
+      "required_actual_identity": [
+        "consumed HR and reused source hashes",
+        "clean Git commit",
+        "software/runtime settings",
+        "device/driver/allocation",
+        "current data root/content",
+        "split/label/preprocessing/pretrained fingerprints"
+      ],
+      "before_model_allocation": "Full train/val byte-hash integrity, containment and frozen preprocessing conformance for actual root/packages, including HR input construction",
+      "input_nchw": [
+        2,
+        3,
+        576,
+        1344
+      ],
+      "output_nc": [
+        2,
+        124
+      ],
+      "real_pinned_weights": true,
+      "decoded_image_splits": [
+        "train"
+      ],
+      "both_raw_layouts_required": true,
+      "finite_checks": [
+        "logits",
+        "sample-mean CE loss",
+        "all trainable gradients"
+      ],
+      "memory_records": [
+        "peak_allocated_bytes",
+        "peak_reserved_bytes"
+      ],
+      "resume_equality": [
+        "model",
+        "optimizer",
+        "full scheduler",
+        "inactive scaler policy",
+        "Python RNG",
+        "NumPy RNG",
+        "CPU RNG",
+        "all CUDA RNGs",
+        "loader generators",
+        "epoch/order progression",
+        "history/selected-checkpoint state"
+      ],
+      "probe_scope": "Bounded discard/reconstruct/restore/replay on accepted deterministic stack; test-only mechanics boundary cannot count as an official completed epoch or campaign outcome; CPU integration separately checks full-epoch control flow",
+      "acceptance_candidate_approved": false,
+      "automatic_stage_approval_or_submission": false
+    },
+    "walltime_resume": "09:00:00 limits one job attempt, not the run; one run may span attempts; never assume eight HR epochs finish in one allocation, reset warmup, change horizon or extend completed budget",
+    "account": "uit",
+    "qos": "mig2-35",
+    "python_executable": "/datastore/binhvp/BuiTrongTan/CS406/envs/cs406/bin/python",
+    "path_adoption": "HR roots are implementation-design choices submitted for HR-G1 approval; separate from E1 and pilot. Dataset/pretrained/Python paths inherit reviewed UIT references. No directory or job exists by virtue of this draft."
+  },
+  "checkpoint": {
+    "metric": "supported_validation_macro_f1",
+    "tolerance": 1e-06,
+    "tie_break": "earlier",
+    "rule": "Select first completed epoch initially; replace only when current_metric - selected_metric > tau, where tau = 1e-6; retain earlier checkpoint otherwise; NLL cannot break ties",
+    "roles": {
+      "best.pt": "Selected checkpoint for validation reporting",
+      "last.pt": "Atomic full-state committed boundary for same-run resume; never resume from best.pt"
+    },
+    "boundaries": "Boundary zero and completed-epoch boundaries only. An epoch is committed after its full training and full validation, with counters/history/selection and full state atomically in last.pt. No partial/minibatch training commit. An attempt terminating during an epoch discards it and replays it from its beginning from the previous committed last.pt.",
+    "identity": "Explicit E1-HR experiment/resolution/stage/seed/LR/original budget, HR config/contract hashes, fixed data/preprocessing/pretrained fingerprints and accepted source/runtime/device identity; reject all E1 and pilot checkpoint kinds and cross-run mismatches",
+    "safety": "Atomic replacement and one writer per immutable run directory; failed writes retain prior committed boundary; no overwrite with a new trial",
+    "reports": "Every per-run metric uses the same selected HR checkpoint even if last.pt is later. Final initialization is fresh ImageNet, never selected tuning/E1/pilot state.",
+    "kind": "official_e1hr_checkpoint_v1",
+    "publication_recovery": "last.pt is authoritative and carries selected_weights plus selection/history; reconstruct derived best.pt/history after interrupted publication without advancing training beyond the committed boundary or epoch eight"
+  },
+  "reporting": {
+    "topk": [
+      1,
+      3,
+      5
+    ],
+    "ranking": "Descending original logits; exactly tied logits ordered by ascending label_id; never alter logits",
+    "rank_outputs": 124,
+    "macro_f1": "Average full-split per-class F1 over GT-supported classes only",
+    "unsupported_f1": "null; excluded from supported macro average",
+    "weighted_f1": "Weight full-split per-class F1 by evaluation GT support",
+    "nll": "Sample-mean unweighted CE; diagnostic only",
+    "frequency_buckets_train_images": [
+      [
+        1,
+        19
+      ],
+      [
+        20,
+        99
+      ],
+      [
+        100,
+        499
+      ],
+      [
+        500,
+        "unbounded"
+      ]
+    ],
+    "extreme_tail_subset_train_images": [
+      1,
+      2
+    ],
+    "bucket_f1": "Average supported bucket member per-class F1 computed on entire evaluation split, retaining cross-bucket false positives",
+    "bucket_topk": "GT-conditioned bucket samples ranked across all 124 outputs; no-support bucket metrics are null",
+    "aggregation": {
+      "seeds": [
+        2001,
+        3001,
+        4001
+      ],
+      "mean": "arithmetic",
+      "std": "sample",
+      "ddof": 1,
+      "require_all_three_complete_distinct_final_seeds": true,
+      "same_locked_selection_and_contract": true,
+      "ensemble": false
+    },
+    "machine_precision": "Preserve full floating-point values in JSON/CSV; do not round before aggregate calculations",
+    "human_display": {
+      "classification_metrics": "percentages",
+      "decimal_places": 4,
+      "std": "Same percentage units and four decimals as mean"
+    },
+    "outputs": [
+      "selected-checkpoint overall metrics",
+      "124-label per-class metrics",
+      "fixed frequency buckets including 1-2 subset",
+      "manifest-keyed validation predictions with Top-k",
+      "confusion matrix and most-confused pairs",
+      "full histories and learning curves",
+      "per-final-seed metrics and mean/sample std",
+      "source/config/checkpoint lineage and failure/retry inventory"
+    ],
+    "pilot_metrics": "Diagnostic only; no official score acceptance threshold or evidence substitution",
+    "final_test_access": "LOCKED / NOT AUTHORIZED throughout HR specification, implementation, acceptance, tuning, finals, validation reporting and closeout; no test evaluator",
+    "final_evaluation_gate": "Only after all intended comparison experiments, including E3 if retained, freeze protocols/checkpoints and close intended training/validation work, followed by separate explicit user approval; no HR gate or closeout substitutes",
+    "per_class_fields": [
+      "label_id",
+      "label",
+      "n_train",
+      "bucket",
+      "support",
+      "predicted_count",
+      "precision",
+      "recall",
+      "f1"
+    ],
+    "supported_zero_true_positives_f1": 0,
+    "validation_supported_classes": 106,
+    "zero_support_bucket_metrics": "null",
+    "same_selected_checkpoint_for_all_metrics": true,
+    "comparison": {
+      "official_e1_aggregate_path": "src/e1/e1_three_seed_validation_report_v1.json",
+      "official_e1_aggregate_sha256": "3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e",
+      "policy": "Read-only comparison against E1 three-seed aggregate; never pilot or best E1 seed. Verify same benchmark, metric definitions, three seed IDs and ddof=1. Preserve source-file digest.",
+      "paired_deltas": "Optional matching-seed E1-versus-HR deltas; three seeds alone do not establish significance"
+    },
+    "efficiency": {
+      "secondary_measured_information_only": true,
+      "throughput_unit": "original_images_per_second",
+      "separate_scopes": [
+        "train_only",
+        "validation",
+        "checkpoint/report_IO",
+        "full_job_attempt_including_replay"
+      ],
+      "memory": [
+        "peak_allocated_bytes",
+        "peak_reserved_bytes"
+      ],
+      "compute_matching_claim": false,
+      "pilot_timing_is_official_timing": false
+    },
+    "limitations": [
+      "Fixed split does not establish geographic/panorama independence",
+      "Extreme-tail sample support is scarce",
+      "Three-seed variation does not eliminate seed/sampling uncertainty or establish significance",
+      "Validation-only results; final test locked"
+    ]
+  },
+  "provenance": {
+    "numeric_authority": "Approved docs/E1-HR/specs.md plus explicit user HR-G0 confirmation and the requested wording clarifications; inherited values are settled requirements, not proposals",
+    "recorded_client_date": "2026-11-02",
+    "planning_artifacts": [
+      "docs/E1-HR/plan.md",
+      "docs/E1-HR/tasks.md"
+    ],
+    "snapshot_semantics": "Source document/reference hashes below identify preparation inputs, not future accepted HR runtime source. No plan/ledger update requires mutating this frozen candidate after approval. This JSON never embeds its own digest.",
+    "source_evidence": [
+      {
+        "path": "docs/E1-HR/specs.md",
+        "bytes": 21590,
+        "sha256": "cd6c56f9535ebe4f1add40e49aa32bc8bc4ba473428b778387a9751458ca85dd",
+        "role": "Direct approved HR scientific authority; includes two minor clarifications requested after HR-G0"
+      },
+      {
+        "path": "docs/E1/e1_numeric_contract_v1.json",
+        "bytes": 31796,
+        "sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143",
+        "role": "Frozen inherited numeric reference, read-only"
+      },
+      {
+        "path": "docs/E1/e1_numeric_contract_v1.sha256",
+        "bytes": 94,
+        "sha256": "d7644d4d4d0a1c7c4ec0ba67e14cdbd9965fd60fad24281a39b215e53057af1c",
+        "role": "Inherited exact-byte checksum sidecar, read-only"
+      },
+      {
+        "path": "docs/E1/closeout_review.md",
+        "bytes": 8603,
+        "sha256": "a9e304cf9db33e27d30583b613e209ae399036f6694bc7744b73622ac6ac1510",
+        "role": "Completed E1 comparator/methodology and evidence-scope reference"
+      },
+      {
+        "path": "artifacts/baseline124/provenance.json",
+        "bytes": 1321,
+        "sha256": "eb569adb68b1fe56dbf7052e6bf3de22f2007f3a0aed857293dc48270659f0fb",
+        "role": "Fixed split provenance authority"
+      },
+      {
+        "path": "configs/preprocessing/geoguessr_v1.json",
+        "bytes": 10069,
+        "sha256": "4f49dd41738168cfc65d4322fbe1b659ef5595229bb487ad86dd671a26a8903f",
+        "role": "Frozen preprocessing configuration"
+      },
+      {
+        "path": "src/preprocessing/geoguessr_v1.py",
+        "bytes": 4924,
+        "sha256": "4d1dea328f69c1c7e1fa4f333c7276de0c3bc81b322db40dc33530969357e666",
+        "role": "Frozen raw-to-HR preprocessing implementation"
+      },
+      {
+        "path": "src/e1/engine.py",
+        "bytes": 7387,
+        "sha256": "5a1787d852e6012410f97fd0e9031d4a2ef18b74e81b195ced37068adcd8d693",
+        "role": "Bounded unchanged numerical mechanics reuse reference"
+      },
+      {
+        "path": "src/e1/metrics.py",
+        "bytes": 4050,
+        "sha256": "3b1709b7813d26ee1fdc0516d6c47d1d5aef2782d04ed334c4d1d07fdce61448",
+        "role": "Bounded unchanged full-split metrics reuse reference"
+      },
+      {
+        "path": "reports/pilot/evidence/uit_2026-10-31/p0/e1hr/config_resolved.json",
+        "bytes": 2573,
+        "sha256": "69f2cdd3fd3532f5ef7e596eb24b85eb31569b25ae83b2eb52c1c2ff3d4f20bd",
+        "role": "Diagnostic HR feasibility declaration, never official HR approval"
+      },
+      {
+        "path": "reports/pilot/evidence/uit_2026-10-31/p0/e1hr/run_summary.json",
+        "bytes": 9421,
+        "sha256": "615fcfc09d559a9162411a3aeb11a15073ca584d5976703309dcc173954a3e6a",
+        "role": "Diagnostic train-only timing/feasibility, never official HR result"
+      },
+      {
+        "path": "reports/pilot/evidence/uit_2026-10-31/p1/e1hr/config_resolved.json",
+        "bytes": 2846,
+        "sha256": "fcbbce9b1e23c2b8461ce774fe62912bfda2f85a6fcaa320bef7b3ea157de18a",
+        "role": "Historical bounded diagnostic policy"
+      },
+      {
+        "path": "reports/pilot/evidence/uit_2026-10-31/p1/e1hr/history.json",
+        "bytes": 77041,
+        "sha256": "d4970a194b1ca34496f8a4a78c211777caf72c60a096460ef19ee3e3900db148",
+        "role": "Historical timing/history supporting multi-attempt planning, no scientific adoption decision"
+      },
+      {
+        "path": "reports/pilot/evidence/uit_2026-10-31/p1/e1hr/run_summary.json",
+        "bytes": 1676,
+        "sha256": "a233740b714385fd0590e060fec5171bbcb017c12c35c775154f0569f7ea5dc5",
+        "role": "Historical diagnostic completion, not HR acceptance"
+      },
+      {
+        "path": "src/e1/e1_three_seed_validation_report_v1.json",
+        "bytes": 53691,
+        "sha256": "3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e",
+        "role": "Official read-only E1 comparator, not an HR output"
+      }
+    ],
+    "numeric_value_rationales": {
+      "resolution": "HR spec Sections 1/3: accepted 1344x576; direct frozen raw preprocessing; only input-policy change",
+      "data_model_loss_optimizer_init_rng_runtime_batch_budget_schedule": "HR spec Sections 2-4 explicitly inherit exact completed E1 controls; no re-adoption or search",
+      "grid_seeds_checkpoint_lr_selection": "HR spec Sections 2/5; independent HR four-trial campaign and mandatory STOP before separately authorized finals",
+      "attempt_resume_acceptance": "HR spec Section 6 and user clarification: completed-epoch commits, full uncommitted-epoch replay, per-attempt nine-hour limit and HR-specific real-target acceptance",
+      "identity": "HR spec Section 7; separate HR package/kinds/roots/receipts; design choices submitted for HR-G1",
+      "reporting_and_test_gate": "HR spec Sections 8/9; ddof=1/full precision; official E1 aggregate comparator and study-wide final-test gate including E3 if retained",
+      "control_review_trigger": "User post-HR-G0 clarification: material target-acceptance failure preventing correct frozen-protocol execution only; minor operations do not reopen science"
+    }
+  },
+  "approval_snapshot_at_preparation": {
+    "snapshot_role": "Historical preparation status; no receipt or execution authorization",
+    "HR-G0": "PASS; explicit user confirmation in current session",
+    "HR-G1": "AWAITING_REVIEW; not approved",
+    "HR_target_work_authorization": "not_granted",
+    "HR_target_acceptance": "not_started",
+    "HR-G2": "not_started",
+    "HR-G3a": "not_granted",
+    "HR-G3b": "not_granted",
+    "HR_train_validation_closeout": "not_started",
+    "final_test_evaluation": "LOCKED / NOT AUTHORIZED",
+    "implementation_method": "User selects at HR-G1; not a scientific numeric field",
+    "approval_binding": "HR-G1 must explicitly approve the exact JSON bytes by SHA-256, external checksum sidecar, plan/ledger and implementation method; draft parsing or hashing grants no approval",
+    "checksum_policy": {
+      "algorithm": "SHA-256",
+      "scope": "exact UTF-8 LF file bytes",
+      "sidecar_path": "docs/E1-HR/e1hr_numeric_contract_v1.sha256",
+      "sidecar_format": "<64 lowercase hex>  e1hr_numeric_contract_v1.json followed by LF",
+      "sidecar_creation": "At explicit HR-G1 freeze; not created during draft preparation",
+      "embed_own_checksum": false
+    },
+    "gate_flow": [
+      "HR-G0",
+      "HR-T00",
+      "HR-G1",
+      "HR-T01-HR-T10",
+      "separate HR target-work authorization",
+      "HR-T11 target acceptance",
+      "HR-G2",
+      "HR-G3a",
+      "HR-T12 tuning",
+      "STOP for user review",
+      "HR-G3b",
+      "HR-T13 final train/validation",
+      "HR-T14 closeout review",
+      "separate study-wide final-evaluation gate"
+    ]
+  },
+  "scientific_control_change_policy": {
+    "controls_are_requirements_not_proposals": true,
+    "review_trigger": "Only a material HR target-acceptance failure that prevents the frozen E1-HR protocol from being executed correctly may trigger explicit user review of inherited controls",
+    "minor_operational_failures_reopen_controls": false,
+    "automatic_fallback": false,
+    "user_review_required_for_any_change": true,
+    "forbidden_justifications": [
+      "implementation convenience",
+      "spare memory",
+      "elapsed walltime",
+      "observed validation scores"
+    ]
+  },
+  "attempts": {
+    "runs_per_job_attempt": 1,
+    "multiple_attempts_per_run": true,
+    "attempt_walltime": "09:00:00",
+    "attempt_walltime_seconds": 32400,
+    "declaration_immutable_across_attempts": true,
+    "resume_checkpoint": "Same declared run directory/last.pt only",
+    "committed_training_boundary": "completed_epoch_after_full_validation",
+    "initial_boundary_zero": true,
+    "partial_epoch_policy": "Restore the previous committed last.pt and replay the entire uncommitted epoch from its beginning; discard partial work",
+    "budget": "Original eight epochs/eight full validations/139992 completed optimizer updates across all attempts; replays never count twice",
+    "scheduler_reset": false,
+    "scheduler_horizon_change": false,
+    "completed_budget_extension": false,
+    "silent_fresh_replacement": false,
+    "resume_from_best": false,
+    "single_writer": true,
+    "atomic_failed_write": "Retain previous readable committed boundary",
+    "records": [
+      "immutable request/config binding",
+      "actual attempt job/allocation/environment",
+      "start committed epoch/update boundary",
+      "interruptions/failures/outcomes",
+      "reviewed retries",
+      "observed replay work with timing scope",
+      "unknown uncommitted work explicitly marked unknown"
+    ],
+    "retry_policy": "Review recorded outcome and preserve same declaration/identity/budget; no automatic resubmission or longer walltime choice",
+    "scientific_control_review": "Minor operational failures do not reopen controls; only material target-acceptance inability to execute the frozen protocol correctly may trigger explicit user review"
+  },
+  "identity_and_evidence": {
+    "experiment": "E1-HR",
+    "resolution_wh": [
+      1344,
+      576
+    ],
+    "run_id_template": "e1hr-{stage}-lr{lr:.8f}-seed{seed}",
+    "declaration_kind": "official_e1hr_run_config_v1",
+    "checkpoint_kind": "official_e1hr_checkpoint_v1",
+    "summary_kind": "official_e1hr_run_summary_v1",
+    "selection_kind": "e1hr_lr_selection_v1",
+    "analysis_kind": "e1hr_selected_validation_analysis_v1",
+    "aggregate_kind": "e1hr_three_seed_validation_report_v1",
+    "source_fingerprint_closure": [
+      "src/e1hr/*.py",
+      "src/e1/engine.py",
+      "src/e1/metrics.py",
+      "src/e1/__init__.py",
+      "src/preprocessing/*.py",
+      "requirements.txt",
+      "pyproject.toml",
+      "scripts/slurm/e1hr_train.sbatch",
+      "tests/e1hr/test_gpu_smoke.py"
+    ],
+    "source_record": "Record exact consumed file hashes and canonical fingerprint plus actual clean Git commit at acceptance and runs; draft reference snapshots are not accepted HR runtime identity",
+    "canonical_fingerprint": "SHA-256 of UTF-8 json.dumps(value,sort_keys=True,ensure_ascii=True,allow_nan=False); distinct from exact-byte file SHA-256",
+    "receipts": {
+      "HR-G1": "Exact HR contract bytes/sidecar, written plan/ledger, implementation method and explicit implementation permission",
+      "target_work": "Explicit HR GPU acceptance authorization before HR-T11",
+      "HR-G2": "Approved actual HR identity/device plus acceptance evidence digest and concrete four-trial readiness review",
+      "HR-G3a": "HR-G2 receipt SHA-256 and exactly four authorized HR tuning run IDs",
+      "HR-G3b": "HR-G2 receipt SHA-256, exact locked-selection SHA-256 and exactly three authorized HR final run IDs"
+    },
+    "preserved_artifacts": [
+      "immutable declarations/config_resolved.json",
+      "eight-epoch history.json and metrics.csv",
+      "best.pt",
+      "last.pt",
+      "run_summary.json",
+      "operation/attempt environments and outcomes",
+      "all four trial outcomes and failures/retries",
+      "locked HR selection",
+      "selected validation analyses/exports",
+      "three-seed report and E1 comparison",
+      "scoped exact-byte checksum inventory"
+    ],
+    "lineage_validation": "declaration <-> resolved config <-> summary <-> complete history <-> selected checkpoint <-> locked selection <-> analyses <-> aggregate/report; reject wrong experiment/resolution/stage/seed/LR/budget/source/runtime/fingerprints",
+    "e1_or_pilot_artifact_relabeling": false,
+    "required_bindings": [
+      "experiment",
+      "resolution_wh",
+      "stage",
+      "seed",
+      "base LR (serialized as lr)",
+      "original_epoch_update_budget",
+      "HR contract SHA-256 (serialized as contract_sha256)",
+      "accepted_source_identity",
+      "actual_software_runtime_device_identity",
+      "fixed_split_label_fingerprints",
+      "preprocessing_config_and_module_fingerprints",
+      "pretrained_fingerprint",
+      "declaration_config_checkpoint_history_selection_lineage"
+    ],
+    "run_configuration_fields": [
+      "kind",
+      "experiment",
+      "resolution_wh",
+      "recipe",
+      "contract_sha256",
+      "stage",
+      "lr",
+      "seed",
+      "budget",
+      "run_id",
+      "paths",
+      "scientific_sha256",
+      "config_sha256"
+    ],
+    "final_extra_fields": [
+      "selection_sha256"
+    ],
+    "report_binding_policy": "Per-run reports carry stage/seed/lr/budget and common identity explicitly; aggregates carry stage=final, all three per_seed identities and shared LR/budget/accepted identity, with each selected checkpoint/history/declaration binding retained. Acceptance is a distinct nonofficial evidence stage, never a tuning/final outcome.",
+    "required_test_images_opened": 0
+  },
+  "input_completeness": {
+    "unresolved_frozen_scientific_fields": [],
+    "pending_design_review": [
+      "HR-G1 approval/freeze of exact candidate bytes and external sidecar",
+      "implementation method selection",
+      "HR package/schema and separate root adoption as proposed in plan"
+    ],
+    "later_required_observations_or_outputs": [
+      "accepted current HR source/software/runtime/device/driver/allocation evidence",
+      "current actual-root integrity/conformance and HR acceptance results",
+      "stage approval receipts",
+      "HR selected LR and full tuning ledger",
+      "actual attempt/job IDs",
+      "selected final checkpoint/history/selection hashes",
+      "per-seed and aggregate measured metrics",
+      "closeout inventory"
+    ],
+    "later_outputs_policy": "Do not serialize invented values or numeric defaults for these outputs; collect them only at the authorized stage",
+    "execution_authorized_by_this_draft": false
+  },
+  "record_semantics": "All settings, expected counts and zero-test-access values are requirements, not observed HR execution results. Preparation hashes identify existing input/reference files only. This draft grants no execution authorization."
+}
