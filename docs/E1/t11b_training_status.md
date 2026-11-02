@@ -1,14 +1,14 @@
-# E1 final-training status and closeout checklist
+# E1 final training and verified train/validation closeout
 
-Recorded: **2026-11-02**, branch `e1-implementation`. The user explicitly
-confirms **G3b PASS** and supplies `src/e1/e1_final_3seeds_8epochs.csv` for
-documentation review. Final LR is **`1e-4`**. G2/G3a remain PASS and T11a
-remains COMPLETE. This is a CSV-based status summary, not the official
-checkpoint-backed report or a new runtime authorization receipt.
+Updated: **2026-11-02**, branch `e1-implementation`. G2/G3a/G3b PASS;
+T10/T11a/T11b COMPLETE. Final LR **1e-4**, seeds **2001/3001/4001**, each with
+eight epochs/eight validations; selected epochs **8/7/8**.
 
-**Final training execution is complete for seeds 2001/3001/4001; T11b and E1
-closeout remain INCOMPLETE pending official report/checkpoint-lineage
-verification. Test access remains LOCKED.**
+**E1 train/validation closeout DONE. Ready to hand off to E1-HR planning/review.**
+Official report, validation exports and the supplied closeout lineage package
+have been verified; see [closeout_review.md](closeout_review.md) for exact
+scope, hashes and limitations. Final test access is **LOCKED / NOT AUTHORIZED**;
+final-test evaluation is **NOT COMPLETE**. E1-HR is not implemented or running.
 
 ## CSV-supported completion
 
@@ -44,9 +44,10 @@ units, rounded to four decimal places.
 | Top-3 | **89.0000 ± 0.1426%** |
 | Top-5 | **92.6104 ± 0.1286%** |
 
-These are independently recalculated CSV summaries. They do not replace
-selected-checkpoint validation analysis or the lineage-validated T09 aggregate.
-The unchanged CSV retains the original floating-point metric values.
+These figures now match the independently verified official aggregate JSON/Markdown,
+selected-checkpoint analyses, original selected histories and unchanged CSV.
+Per-class and long-tail/bucket report outputs are also verified. The original
+evidence retains full floating-point values; no report is regenerated here.
 
 ## Evidence boundary and provenance
 
@@ -58,30 +59,26 @@ The unchanged CSV retains the original floating-point metric values.
   seed/LR/epoch/update coverage and the selected-row arithmetic; it does not
   itself supply the original approval receipt or prove its timing.
 
-Read-only inspection of the available workspace found no official E1 final
-`best.pt`/`last.pt`, lineage-bearing `validation_analysis/analysis.json` or
-official three-seed aggregate to verify. Pilot artifacts and CPU fixtures are
-not substitutes. Remote UIT artifacts were not accessed or regenerated; their
-existence is not ruled out. No checkpoint initialization, full validation
-sample coverage, immutable resume identity or failure/retry lineage is inferred
-from this scalar CSV alone. Scientific code, frozen protocol, selection/run
-evidence and input CSV are unchanged; the CSV is not added to Git by this
-documentation-only update. The agent did not execute final training.
+The previously missing closeout links are now supplied under
+`src/e1/closeout_evidence/`. Declaration/config fingerprints, exact history file
+hashes, selected metrics/epochs, checkpoint checksum references and selection
+fingerprint all match summaries, analyses and the official aggregate. The
+supplied best-checkpoint checksum list is used without reading or changing
+binary checkpoints. See [closeout_review.md](closeout_review.md) for the 42-file
+evidence inventory, verification boundaries and reviewed limitations.
 
-## Remaining before final E1 closeout
+## Completed final E1 closeout
 
-- [ ] Verify all three official declarations, complete run summaries and
-  histories, G3b/selected-LR linkage, accepted source/runtime/data identity and
-  failure/interruption/retry inventory. Confirm fresh pinned ImageNet starts,
-  full split/sample coverage and original budget on any resume.
-- [ ] Verify each selected `best.pt` and resume `last.pt`, their hashes and
-  identities, selected epochs 8/7/8, and matching committed history. Preserve
-  checkpoints and their lineage; create no E3 cache.
-- [ ] Verify the T09 selected-checkpoint analyses and official three-seed
-  mean/sample-std report against those same artifacts: overall/per-class and
-  frequency-bucket metrics, manifest-keyed predictions, confusion/most-confused
-  pairs and histories/learning curves. Archive the output inventory and review
-  limitations. This CSV-derived table alone does not satisfy that requirement.
-- [ ] Complete the validation closeout review and handoff for separately
-  authorized final evaluation. **Keep test access LOCKED**; neither G3b nor
-  completed training authorizes test evaluation or E1-HR/E2/E3 work.
+- [x] Verify three declarations/resolved configs, complete summaries/histories,
+  frozen controls and full epoch/sample/update coverage; selection bindings agree.
+- [x] Verify history/config fingerprints and best checkpoint checksums across
+  the supplied manifest, summaries, analyses and report; preserve checkpoint references.
+- [x] Verify official per-seed selected analyses and sample-std aggregate,
+  per-class/bucket reports, predictions/confusion and learning curves; record
+  official metrics and limitations without modifying evidence.
+- [x] Complete T11b/E1 **train/validation** closeout and hand off to E1-HR
+  specification/planning review. No E1 evidence blocker remains for this handoff.
+
+Final-test evaluation remains a separate, uncompleted task: **LOCKED / NOT
+AUTHORIZED**. E1-HR needs its own reviewed specification/plan and implementation/
+target/execution authorization; this closeout does not implement or run it.

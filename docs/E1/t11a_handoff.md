@@ -13,7 +13,7 @@ status record, not a new selection artifact or runtime authorization receipt.
 | G3a | **PASS**, for the completed official tuning stage |
 | T11a | **COMPLETE**; all four reviewed LR trials completed eight epochs with seed 1001 |
 | G3b | **PASS**, per subsequent user confirmation; see t11b_training_status.md |
-| T11b | **Training execution complete**, seeds 2001/3001/4001 at 1e-4 for eight epochs each; **closeout INCOMPLETE** pending official report/checkpoint-lineage verification |
+| T11b | **COMPLETE; E1 train/validation closeout DONE** after supplied lineage/report verification; ready for E1-HR planning handoff |
 | Final test access | **LOCKED**; separate later authorization required |
 
 ## Completed tuning evidence
@@ -74,6 +74,7 @@ T11a stopped at its mandatory handoff for separate G3b review. The user has
 subsequently confirmed **G3b PASS** and supplied completed final-training
 histories for seeds 2001/3001/4001. Final LR is **1e-4**, eight epochs each,
 selected epochs **8/7/8**. See [t11b_training_status.md](t11b_training_status.md)
-for the selected-row aggregates and remaining official report/checkpoint-lineage
-checks. **T11b/E1 closeout is not complete. Test access remains LOCKED.**
+for the verified official metrics and [closeout_review.md](closeout_review.md)
+for completed supplied-package lineage checks. **T11b COMPLETE; E1 train/validation
+closeout DONE. Final test access LOCKED / NOT AUTHORIZED. Next: E1-HR planning/review only.**
 No E1-HR/E2/E3 work or further execution is authorized by this status update.

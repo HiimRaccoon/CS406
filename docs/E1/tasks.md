@@ -1,10 +1,10 @@
 # E1 Task Ledger
 
-**G2/G3a/G3b PASS - T11a COMPLETE. Final LR: 1e-4; three final seeds completed eight epochs each. T11b/E1 closeout INCOMPLETE pending official report/checkpoint-lineage verification. Test access LOCKED.**
+**G2/G3a/G3b PASS - T11a/T11b COMPLETE. E1 train/validation closeout DONE. Ready to hand off to E1-HR planning/review; E1-HR NOT IMPLEMENTED / NOT RUNNING. Final test access LOCKED / NOT AUTHORIZED.**
 
 Updated: **2026-11-02**. Authority: [specs.md](specs.md), the [T00 user decision record](t00_review.md), and the complete [E1 numeric contract v1](e1_numeric_contract_v1.json) with its [checksum](e1_numeric_contract_v1.sha256), explicitly frozen at G1. Technical interfaces remain in [plan.md](plan.md); this ledger owns current gate/completion state. G0 and R1-R4/R6-R9 input decisions are recorded; G1 is PASS; see [g1_approval.json](g1_approval.json), [implementation evidence](implementation_log.md), and [independent review corrections](implementation_review.md).
 
-Current final-training status is recorded in [t11b_training_status.md](t11b_training_status.md). The user confirms G3b PASS; the supplied final CSV records seeds 2001/3001/4001 at LR `1e-4`, eight epochs each, selected epochs 8/7/8. Selected-checkpoint Macro-F1 is **44.2748 ± 0.5174%** (sample std, ddof=1); all five aggregate metrics are in the status summary. G2/G3a remain PASS and T11a COMPLETE; its tuning handoff remains in [t11a_handoff.md](t11a_handoff.md). **T11b/E1 closeout is INCOMPLETE** until official report and checkpoint lineage are verified. Test access remains **LOCKED**. Scientific code, frozen protocol and existing run/selection evidence remain unchanged.
+Current closeout evidence is in [closeout_review.md](closeout_review.md): all requested local declaration/config/history/summary/checkpoint-checksum/selection/report checks PASS; no evidence inconsistency found. Final LR is `1e-4`, seeds 2001/3001/4001, eight epochs/eight validations each, selected epochs 8/7/8. The official report uses sample std ddof=1 and records zero test-image access; per-class and long-tail/bucket analyses are verified. **T11b and E1 train/validation closeout are DONE.** Next experiment is **E1-HR**, for specification/planning review only; no implementation or execution is started. Final test access remains **LOCKED / NOT AUTHORIZED**, and final-test evaluation is not complete. Scientific code, frozen protocol and original evidence are unchanged.
 
 ## 1. Fixed Protocol Guardrails
 
@@ -146,14 +146,16 @@ Dependencies define execution order; they do not request parallel agents or auth
 
 ### T11b - Official UIT Final Training, Only After G3b
 
-**Training execution COMPLETE for seeds 2001/3001/4001; G3b PASS. T11b/E1 closeout INCOMPLETE pending official report/checkpoint-lineage verification. Test access LOCKED.**
+**T11b COMPLETE. E1 train/validation closeout DONE. G3b PASS. Ready for E1-HR planning handoff. Final test access LOCKED / NOT AUTHORIZED.**
 
 - [x] Record the user's G3b PASS instruction for the selected LR `1e-4` and three final seeds. This status record does not recreate the original runtime approval receipt.
 - [x] Record CSV-supported execution at `1e-4` for distinct seeds 2001/3001/4001, disjoint from tuning seed 1001; each completed epochs 1-8.
-- [x] Verify eight validation-metric records and 17499 updates per epoch/139992 total per seed, final LR 1e-6, and selected epochs **2001→8, 3001→7, 4001→8**. Aggregate all metrics from these same selected rows with sample std ddof=1: Macro-F1 **44.2748 ± 0.5174%**, Weighted-F1 **74.2949 ± 0.1534%**, Top-1 **75.5058 ± 0.0505%**, Top-3 **89.0000 ± 0.1426%**, Top-5 **92.6104 ± 0.1286%**. This scalar summary is not an official checkpoint-backed report.
-- [ ] Verify official declarations/accepted identity, full split/sample coverage, fresh pinned ImageNet initialization (no tuning warm-start), immutable resume budget and selected best.pt/last.pt lineage against complete histories/run summaries and the locked selection. The CSV alone does not prove these details.
-- [ ] Verify selected-checkpoint per-seed validation analysis and the official T09 mean/std report, archive checkpoints/identities/failures/retries, and review limitations. The CSV-derived summary does not satisfy this closeout requirement; see [t11b_training_status.md](t11b_training_status.md).
-- [ ] Complete the closeout review and handoff for separately authorized final evaluation. Keep test images **LOCKED** and do not start E1-HR/E2/E3 automatically.
+- [x] Verify eight validation-metric records and 17499 updates per epoch/139992 total per seed, final LR 1e-6, and selected epochs **2001→8, 3001→7, 4001→8**. Aggregate all metrics from these same selected rows with sample std ddof=1: Macro-F1 **44.2748 ± 0.5174%**, Weighted-F1 **74.2949 ± 0.1534%**, Top-1 **75.5058 ± 0.0505%**, Top-3 **89.0000 ± 0.1426%**, Top-5 **92.6104 ± 0.1286%**. These figures now also match the verified official report and supplied lineage evidence.
+- [x] Verify all three declaration JSONs against config_resolved.json and the frozen recipe; recompute config/scientific fingerprints and selection-file bindings. Full histories/summaries confirm the original eight-epoch budget and train/val sample coverage; declarations bind fresh pinned ImageNet initialization. The audit did not re-execute initialization or training.
+- [x] Verify history file SHA-256 against summaries/analyses, recomputed selected metrics/epochs, and best checkpoint checksum agreement across final_best_checkpoint_sha256.txt, summaries, analyses and aggregate. Verify selection fingerprint and all per-seed/aggregate/per-class/bucket exports; retain the supplied evidence inventory and recorded limitations. Binary checkpoint bytes are not reread; verification scope is documented in [closeout_review.md](closeout_review.md).
+- [x] Complete the E1 train/validation closeout review and documentation handoff to **E1-HR planning/review**, without implementing or running it. Existing operational archives/evidence remain unchanged. Final evaluation is a separate gate: test access **LOCKED / NOT AUTHORIZED**, final-test evaluation **NOT COMPLETE**.
+
+Next experiment: **E1-HR**. No E1 evidence blocker remains for handoff; E1-HR needs its own reviewed specification/plan, implementation authorization and separate target/execution approval. Do not start E1-HR/E2/E3 automatically.
 
 ## 5. Completion and Evidence Rules
 
@@ -161,4 +163,4 @@ For future authorized implementation, follow each task's technical red/green/che
 
 Test fixtures may exercise eight epochs with tiny CPU models; they are not UIT measurements or official experiment records. Runtime policy, source identity, and artifact validation must prevent synthetic evidence from becoming official campaign evidence.
 
-G1 remains bound to the exact frozen contract SHA-256 in [g1_approval.json](g1_approval.json). G2/G3a/G3b are PASS; T11a is COMPLETE and the final CSV supports completed eight-epoch training at LR 1e-4 for seeds 2001/3001/4001. **T11b/E1 closeout remains INCOMPLETE** pending official report/checkpoint-lineage verification, as itemized in [t11b_training_status.md](t11b_training_status.md). Test access remains **LOCKED** under a separate later gate. Earlier records retain their historical meaning. This documentation-only update changes no scientific code, numeric contract, selection artifact, run evidence or gate dependency.
+G1 remains bound to the exact frozen contract SHA-256 in [g1_approval.json](g1_approval.json). G2/G3a/G3b are PASS; T10/T11a/T11b are COMPLETE. **E1 train/validation closeout DONE**, based on the verified supplied local evidence package in [closeout_review.md](closeout_review.md). **Ready to hand off to E1-HR planning/review**, with its own stage approvals still required. Final test access is **LOCKED / NOT AUTHORIZED**; final-test evaluation is not complete. Historical preparation/implementation entries do not override this current status. No scientific code, frozen numeric contract, original checkpoint/selection/run evidence or gate dependency is changed.

@@ -2,7 +2,7 @@
 
 **DRAFT FOR USER REVIEW — chưa frozen, chưa authorize implementation**
 
-Tài liệu trung tâm để review thiết kế E1 → E1-HR → E2 → E3. **Status update 2026-10-31:** UIT conformance, strict P0 và bounded P1 đã hoàn tất; xem [pilot results](../reports/pilot/pilot_results.md). Official specification/implementation là phase tiếp theo, **chưa bắt đầu**; task hiện tại chỉ cập nhật status/report, không tạo training code hoặc official configs.
+Tài liệu trung tâm để review thiết kế E1 → E1-HR → E2 → E3. **Status update 2026-11-02:** E1 official train/validation closeout is **DONE**, T11b complete, based on the verified local lineage/report package; see [E1 closeout review](E1/closeout_review.md) and [task ledger](E1/tasks.md). Next experiment is **E1-HR**, ready for specification/planning review only. E1-HR implementation and jobs are **NOT STARTED / NOT AUTHORIZED**. Final test access remains **LOCKED / NOT AUTHORIZED**; no final-test evaluation is complete. The master design remains a draft for future stages; E1 frozen controls and its completed gates are documented separately.
 
 Nguồn quyết định research/training là [Grillme đã review](grillme.md); nếu khác master spec cũ, Grillme mới hơn được ưu tiên. Nguồn chuẩn về split/preprocessing/geometry là [fixed artifacts](../artifacts/baseline124/README.md), [provenance](../artifacts/baseline124/provenance.json) và [preprocessing v1 config](../configs/preprocessing/geoguessr_v1.json). Freeze các nguồn này không đồng nghĩa master spec đã frozen.
 
@@ -237,7 +237,9 @@ Report **mean ± std**, không cherry-pick seed có test score cao nhất. Train
 
 Effective batch size tính theo **original images**; năm E2 views vẫn là một mẫu. Microbatch/accumulation có thể khác để giữ cùng effective batch. Không tự cắt epochs/trials riêng cho architecture chậm; nếu compute buộc thay đổi, điều chỉnh common protocol trước official search. Slurm resume không cấp thêm training budget.
 
-## F. Pilot completed — official numeric contract còn NEEDS REVIEW
+## F. Historical pilot context; E1 numeric contract frozen
+
+The pilot-era NEEDS REVIEW register below is historical for E1. Its official values were resolved and frozen at G1 in [the E1 numeric contract](E1/e1_numeric_contract_v1.json), and E1 train/validation is now DONE. Future architecture stages retain their own specification/approval workflow; this status update changes no numeric value.
 
 **UIT pilot completed:** target conformance PASS, strict full-epoch P0 PASS và bounded P1 COMPLETE (3/3 epochs) cho cả E1/E1-HR/E2. [Pilot results](../reports/pilot/pilot_results.md) lưu actual numeric pilot records, identity, curves và evidence links. User đã review đủ để đi tiếp, không cần P1-v2; official **max_epochs=8** frozen sau P1. Official recipe **chưa fully frozen**, không coi diagnostic scores là official results hoặc tự promote pilot LR/seed.
 
@@ -315,7 +317,9 @@ E3 cache gắn với source checkpoint/seed, feature definition, split/label/pre
 
 ## I. Main execution workflow
 
-**Master vẫn draft chờ user review; official implementation chưa bắt đầu.** UIT pilot trong workflow dưới đây đã hoàn tất và không cần P1-v2; numeric recipe/official spec là bước tiếp theo. Giữ sơ đồ làm trình tự tham chiếu, không authorize chạy thêm stage hoặc imply các official stages đã hoàn thành:
+**Current roadmap position (2026-11-02): E1 train/validation DONE -> E1-HR specification/planning review NEXT.** E1 is ready for handoff with no remaining requested evidence inconsistency. Review/freeze the E1-HR stage specification/plan and obtain explicit implementation and target/execution authorization before starting it. The workflow below is research order, not automatic permission; final test stays LOCKED.
+
+**The master design remains a draft for future stages; E1 official implementation, training and validation are complete under its separately frozen protocol.** The pilot is historical and requires no P1-v2. The diagram below preserves research order; it does not authorize the next experiment, reopen E1 or unlock final test evaluation.
 
 ~~~text
 Frozen dataset/split
@@ -364,7 +368,7 @@ Comparison + report
 
 # Project checklist
 
-Các ô [x] xác nhận deliverable/định nghĩa hoặc completed pilot gate đã có evidence, không xác nhận official model đã implement hoặc master đã frozen. Research-design items có bằng chứng trong [Grillme](grillme.md); completed pilot items có [report/evidence](../reports/pilot/pilot_results.md). Các official stages và numeric decisions chưa review giữ [ ].
+Checkmarks record evidenced deliverables. E1 entries now include completed official training/validation and the verified [closeout package](E1/closeout_review.md), not only pilot definitions. Pilot/research context remains historical; the master design is not globally frozen by E1 closeout. Future experiments and all final-test tasks remain unchecked until separately reviewed, authorized and evidenced.
 
 ### Dataset & preprocessing
 
@@ -404,23 +408,30 @@ Các ô [x] xác nhận deliverable/định nghĩa hoặc completed pilot gate �
 - [x] Common effective pilot batch frozen (official adoption còn review)
 - [x] Brightness/contrast amplitudes accepted via train-only review
 - [x] Official max epochs=8 reviewed/frozen after pilot
-- [ ] Official warmup/patience/tolerance/scheduler numeric contract frozen
-- [ ] LR candidate grid frozen
-- [ ] Exact official tuning/final training seed IDs frozen
-- [ ] Remaining numeric training recipe frozen
+- [x] E1 official warmup/tolerance/eight-epoch scheduler contract frozen at G1; early stopping OFF (no patience policy)
+- [x] E1 four-candidate LR grid frozen in its numeric contract
+- [x] E1 official tuning/final IDs frozen and completed; no seed search
+- [x] E1 complete numeric contract frozen; future stages retain their own review/approval requirements
 
 ### E1
 
-- [ ] E1 experiment specification
-- [ ] E1 implementation
-- [ ] E1 smoke test
-- [ ] E1 LR tuning
-- [ ] E1 final seed 1
-- [ ] E1 final seed 2
-- [ ] E1 final seed 3
-- [ ] E1 analysis completed
+- [x] E1 experiment specification
+- [x] E1 implementation
+- [x] E1 smoke test
+- [x] E1 LR tuning
+- [x] E1 final seed 1: 2001, LR 1e-4, 8 epochs, selected epoch 8
+- [x] E1 final seed 2: 3001, LR 1e-4, 8 epochs, selected epoch 7
+- [x] E1 final seed 3: 4001, LR 1e-4, 8 epochs, selected epoch 8
+- [x] E1 official selected-checkpoint/per-class/bucket analysis and ddof=1 aggregate verified
+
+- [x] E1 train/validation closeout **DONE**; supplied declaration/history/checkpoint-checksum/selection/report lineage verified in [closeout_review.md](E1/closeout_review.md).
+- [x] E1 ready to hand off to E1-HR specification/planning review.
+
+Scope: E1 training and validation only. Final-test evaluation is **NOT COMPLETE** and access is **LOCKED / NOT AUTHORIZED**. No E1 scientific protocol is changed by this status update.
 
 ### E1-HR
+
+**NEXT EXPERIMENT - planning/review handoff ready. NOT IMPLEMENTED / NOT RUNNING.** No E1 evidence blocker remains. E1-HR still requires its own reviewed specification/plan, implementation authorization and separate target/execution approval. E1 closeout does not authorize this stage.
 
 - [ ] E1-HR experiment specification
 - [ ] E1-HR implementation
