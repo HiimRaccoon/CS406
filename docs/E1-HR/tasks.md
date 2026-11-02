@@ -1,10 +1,10 @@
 # E1-HR Task Ledger
 
-Updated: **2026-11-02**. **HR-G0 PASS; design preparation complete for HR-G1 review. HR-G1 NOT APPROVED. Production implementation, target work and official execution NOT STARTED. Final test access LOCKED / NOT AUTHORIZED.**
+Updated: **2026-11-02**. **HR-G0 PASS; design preparation complete for HR-G1 review. HR-G1 PASS. HR-T01-HR-T10 implementation authorized; target work and official execution NOT AUTHORIZED. Final test access LOCKED / NOT AUTHORIZED.**
 
-Authority: the approved [E1-HR specification](specs.md), with the user's two minor wording clarifications, and the unchanged [E1 inherited numeric reference](../E1/e1_numeric_contract_v1.json). Technical interfaces, test oracles and future commands are in [plan.md](plan.md). The [HR numeric contract candidate](e1hr_numeric_contract_v1.json) is a **draft for HR-G1**, not an approved execution recipe. This ledger owns current completion/gate state; historical E1 completion checkboxes do not transfer to HR.
+Authority: the approved [E1-HR specification](specs.md), with the user's two minor wording clarifications, and the unchanged [E1 inherited numeric reference](../E1/e1_numeric_contract_v1.json). Technical interfaces, test oracles and future commands are in [plan.md](plan.md). The [HR numeric contract candidate](e1hr_numeric_contract_v1.json) is **frozen at HR-G1**; its preparation snapshot is unchanged. This ledger owns current completion/gate state; historical E1 completion checkboxes do not transfer to HR.
 
-The reviewed specification directly records HR-G0 PASS. The design artifacts are ready for HR-G1 review; HR-G1 remains NOT APPROVED / AWAITING REVIEW. No implementation, target work, tuning, final training or test evaluation is authorized. The current work changes only design artifacts. E1 train/validation is closed and its evidence stays unchanged.
+The reviewed specification directly records HR-G0 PASS. The design artifacts are approved at HR-G1; HR-T01-HR-T10 implementation is authorized. Only HR-T01-HR-T10 implementation is authorized; target work, target acceptance, tuning, final training and test evaluation remain unauthorized. The current work changes only design artifacts. E1 train/validation is closed and its evidence stays unchanged.
 
 ## Status definitions
 
@@ -23,7 +23,7 @@ Future task completion requires actual evidence, not the presence of a plan. A s
 | ID | State | Decision / evidence needed | Scope after approval |
 |---|---|---|---|
 | HR-G0 | **PASS** | User confirms approved revised HR spec and requests these artifacts | Design preparation only |
-| HR-G1 | **AWAITING REVIEW** | Approve plan/ledger and full draft contract; freeze exact JSON bytes and external `.sha256` sidecar; record digest-bound HR-G1 receipt; select implementation method; explicitly authorize implementation | HR-T01–T10 implementation/CPU/deployment preparation, no target jobs |
+| HR-G1 | **PASS** | Approve plan/ledger and full draft contract; freeze exact JSON bytes and external `.sha256` sidecar; record digest-bound HR-G1 receipt; select implementation method; explicitly authorize implementation | HR-T01–T10 implementation/CPU/deployment preparation, no target jobs |
 | HR-TARGET-AUTH | **NOT GRANTED** | Explicit authorization for bounded HR target deployment/acceptance under reviewed Slurm policy | HR-T11 target work only; not tuning |
 | HR-TARGET-ACCEPTANCE | **NOT STARTED — GATED** | HR-T11 current-source/root/software/device/allocation evidence, real pinned weights, finite HR forward/backward and interrupted-state reconstruction/replay | Supplies evidence for HR-G2; does not approve it |
 | HR-G2 | **NOT STARTED — GATED** | User reviews HR-T01–T11 evidence, actual accepted identity and concrete four tuning declarations; receipt binds experiment/resolution/contract/acceptance evidence | Implementation readiness accepted, no tuning permission by itself |
@@ -84,7 +84,7 @@ Maintain exact path/bytes/SHA-256/role inventories of acceptance tests/helpers/e
 - [x] Apply only the completed-epoch replay and material-acceptance-failure wording improvements to the spec.
 - [x] Prepare English implementation plan, explicit-status ledger and complete numeric draft; no production code, GPU job or test evaluator.
 - [x] Verify JSON structure, exact inherited numeric controls/fingerprints, referenced paths and independent arithmetic; verify protected E1/preprocessing/split/pilot bytes remain unchanged.
-- [ ] HR-G1 user review/freeze, sidecar/approval receipt and implementation-method selection. This is an unapproved gate, not an unfinished design deliverable.
+- [x] HR-G1 user approval/freeze, sidecar/receipt and native task-by-task implementation method recorded.
 
 ### HR-T01 — Contract and declaration guards
 
@@ -172,6 +172,10 @@ Maintain exact path/bytes/SHA-256/role inventories of acceptance tests/helpers/e
 
 ## Current handoff
 
-**Ready for HR-G1 review; not approved.** No frozen scientific field remains unresolved in the draft. Actual accepted source/runtime/device observations, contract freeze receipt, HR selected LR, attempt/job IDs, checkpoint/result hashes and measured metrics must be supplied by their later stages; they are not missing scientific defaults. The candidate contains policies/schema requirements for them without fabricated values. The exact-byte sidecar and approval receipt will be created only as part of explicit HR-G1 freeze.
+**HR-G1 PASS; HR-T01-HR-T10 implementation authorized.** No frozen scientific field remains unresolved in the draft. Actual accepted source/runtime/device observations, HR selected LR, attempt/job IDs, checkpoint/result hashes and measured metrics must be supplied by their later stages; they are not missing scientific defaults. The candidate contains policies/schema requirements for them without fabricated values. The exact-byte sidecar and digest-bound approval receipt now record the explicit HR-G1 freeze.
 
-No HR implementation, acceptance, trial/final run, closeout or test evaluation is complete. E1 and pilot evidence cannot satisfy those statuses. Next action is user review of the concrete design package, contract-byte freeze and implementation-method choice under HR-G1.
+No HR implementation, acceptance, trial/final run, closeout or test evaluation is complete. E1 and pilot evidence cannot satisfy those statuses. Next action is native task-by-task HR-T01-HR-T10 implementation, followed by a mandatory stop before separate target-work authorization.
+
+## HR-G1 approval record (2026-11-02)
+
+HR-G1 is **PASS**, bound to exact contract SHA-256 `e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d` and [hr_g1_approval.json](hr_g1_approval.json). The [checksum sidecar](e1hr_numeric_contract_v1.sha256) freezes the approved bytes. Implementation is authorized for **HR-T01-HR-T10 only**, using native task-by-task RED -> GREEN -> regression -> scoped commits. Contract preparation-status/provenance snapshots remain unchanged. Target/GPU work, HR-T11 acceptance, HR-G2, HR-G3a/tuning, HR-G3b/final seeds and final-test access remain **NOT AUTHORIZED**. Stop after HR-T10 readiness evidence.

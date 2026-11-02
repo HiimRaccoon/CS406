@@ -8,9 +8,9 @@
 
 **Tech Stack:** The inherited Python 3.11.17 / Torch 2.8.0+cu128 / TorchVision 0.23.0+cu128 stack, Pillow, NumPy, pandas, scikit-learn, pytest, JSON/CSV and UIT Slurm. Local CPU fixtures are not target acceptance. No dependency changes are planned.
 
-**Spec:** [specs.md](specs.md), Sections 1–10, with the two user-requested resume/material-failure clarifications. **Recorded 2026-11-02:** the specification is reviewed and HR-G0 is PASS; these design artifacts are ready for HR-G1 review. HR-G1 remains NOT APPROVED / AWAITING REVIEW; implementation and all target/execution stages remain unauthorized.
+**Spec:** [specs.md](specs.md), Sections 1–10, with the two user-requested resume/material-failure clarifications. **Recorded 2026-11-02:** the specification is reviewed and HR-G0 is PASS; these design artifacts are approved at HR-G1. HR-G1 is PASS; HR-T01-HR-T10 implementation is authorized; all target/execution stages remain unauthorized.
 
-**Status:** Design artifacts prepared for **HR-G1 review**. The [numeric contract](e1hr_numeric_contract_v1.json) is a draft candidate, not an approved executable recipe. [tasks.md](tasks.md) owns current task/gate statuses. E1 train/validation remains closed.
+**Status:** **HR-G1 PASS**. The [numeric contract](e1hr_numeric_contract_v1.json) is frozen at the explicitly approved digest; its preparation snapshot remains unchanged. HR-T01-HR-T10 implementation is authorized. [tasks.md](tasks.md) owns current task/gate statuses. E1 train/validation remains closed.
 
 ## Global Constraints
 
@@ -44,7 +44,7 @@ Use the approved HR spec first, then the unchanged E1 numeric contract SHA-256 `
 | Gate / milestone | Required evidence and permitted next work | Current state |
 |---|---|---|
 | HR-G0 | Approved HR specification; prepare design artifacts | PASS, explicit user confirmation |
-| HR-G1 | Review plan/ledger and complete contract candidate; freeze exact JSON bytes and external `.sha256` sidecar; record approval binding the digest; select implementation method; explicitly authorize HR-T01–T10 implementation | AWAITING REVIEW; not approved |
+| HR-G1 | Review plan/ledger and complete contract candidate; freeze exact JSON bytes and external `.sha256` sidecar; record approval binding the digest; select implementation method; explicitly authorize HR-T01–T10 implementation | PASS; exact contract frozen, native HR-T01-HR-T10 authorized |
 | HR target-work authorization | Explicit permission for bounded HR GPU deployment/acceptance under the reviewed allocation | NOT GRANTED; CPU deployment preparation does not grant it |
 | HR target acceptance, HR-T11 | Authorized current-source/current-root/current-stack integrity, real-weight HR forward/backward and boundary/replay evidence; unapproved acceptance candidate only | NOT STARTED |
 | HR-G2 | Review CPU/regression and HR-T11 evidence, actual source/runtime/device/allocation identity and four concrete tuning declarations | NOT STARTED; does not authorize tuning |
@@ -119,12 +119,12 @@ Each implementation task below begins only after HR-G1 and its dependencies. Wri
 
 ### HR-T00 — Design preparation and contract binding candidate
 
-**Files:** this plan, task ledger, draft contract and only the two requested spec wording clarifications. **Status:** PREPARED; HR-G1 pending.
+**Files:** this plan, task ledger, draft contract and only the two requested spec wording clarifications. **Status:** COMPLETE; HR-G1 PASS.
 
 - [x] Carry forward the approved scientific values and separate later observations/outputs.
 - [x] Specify module boundaries, schemas, independent oracles and gate sequence.
 - [x] Check draft JSON, inherited-value equality, source fingerprints, links and documentation scope; record review readiness in the handoff.
-- [ ] Obtain HR-G1 approval of exact bytes/sidecar, implementation method and explicit implementation authorization. This pending gate is not a missing numeric choice.
+- [x] Record explicit HR-G1 approval of exact bytes/sidecar and native task-by-task HR-T01-HR-T10 implementation authorization; see hr_g1_approval.json.
 
 ### HR-T01 — Strict HR contract and declarations
 
@@ -254,4 +254,8 @@ Each implementation task below begins only after HR-G1 and its dependencies. Wri
 
 Spec coverage: Sections 1–4 → HR-T01–T05/T07; Section 5 → HR-T05/T08/T12/T13; Section 6 → HR-T06/T07/T10/T11; Section 7 → HR-T01/T06–T09/T14; Section 8 → all entrypoint/data/report guards and HR-T14; Section 9 → HR-T04/T09/T14; Section 10 → the gate table and ledger. No planned task changes E1 scientific files/evidence, performs E3 work, adds LR candidates, changes inherited controls or exposes test evaluation.
 
-Preparation verification is limited to document/contract parsing, inherited-value/digest/link checks, independent arithmetic and unchanged protected files. Future implementation/CPU/target outcomes above remain unexecuted. HR-G1 review must approve the written artifacts and exact contract bytes/sidecar, select the implementation method and explicitly authorize implementation before HR-T01 starts. Target work, tuning, final training, closeout and final evaluation retain their separate gates.
+Preparation verification is limited to document/contract parsing, inherited-value/digest/link checks, independent arithmetic and unchanged protected files. Future implementation/CPU/target outcomes above remain unexecuted. HR-G1 has approved the written artifacts and exact contract bytes/sidecar, with native task-by-task HR-T01-HR-T10 implementation authorization. Target work, tuning, final training, closeout and final evaluation retain their separate gates.
+
+## HR-G1 approval record (2026-11-02)
+
+HR-G1 is **PASS**, bound to exact contract SHA-256 `e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d` and [hr_g1_approval.json](hr_g1_approval.json). The [checksum sidecar](e1hr_numeric_contract_v1.sha256) freezes the approved bytes. Implementation is authorized for **HR-T01-HR-T10 only**, using native task-by-task RED -> GREEN -> regression -> scoped commits. Contract preparation-status/provenance snapshots remain unchanged. Target/GPU work, HR-T11 acceptance, HR-G2, HR-G3a/tuning, HR-G3b/final seeds and final-test access remain **NOT AUTHORIZED**. Stop after HR-T10 readiness evidence.

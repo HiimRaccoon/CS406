@@ -1,0 +1,11 @@
+# E1-HR implementation evidence
+
+Plan: [plan.md](plan.md). Spec: [specs.md](specs.md). Base: `5367ba16923450037b445d9366df87e5d86ac389`. Client date: 2026-11-02.
+
+HR-G1 PASS; exact approved contract `e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d` verified before freeze. [hr_g1_approval.json](hr_g1_approval.json) authorizes HR-T01-HR-T10 only, native task-by-task. Target/GPU work, HR-T11/HR-G2/HR-G3a/HR-G3b and test images remain unauthorized.
+
+Ruling: implement in the user's existing IDE workspace and publish scoped exact file trees to e1hr-design-review through GitHub tools; preserve the existing E1 publishing checkout. Cost if wrong: verify remote bytes and protected hashes on every commit.
+
+Ruling: frozen provenance entries are preparation-input snapshots, including the pre-freeze specification digest; status updates do not rewrite the frozen contract. Cost if wrong: auditors must distinguish snapshots from current status records.
+
+Pre-flight: reviewed config/data/model/metrics/engine/checkpoint/runtime/campaign/report interfaces match. Scientific/runtime identity equality excludes clean Git commit and tooling audit inventory, while preserving consumed-file/runtime/data/receipt integrity.
