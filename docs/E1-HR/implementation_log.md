@@ -29,3 +29,5 @@ Ruling: keep runtime/preflight source-identity regressions in tests/e1hr/test_ru
 HR-T07: complete - 61 HR CPU cases passed; eight-epoch runner/replay, projection identity, transitive-source rejection and rehashed E1-evidence guard. RED/GREEN logs: .tools/e1hr/hr-t07-red.log and -green.log. No target/GPU work.
 
 HR-T08: complete - 73 HR CPU cases passed; complete parser lineage, attempts, independent LR oracle, audit-only source projection and locked selection guards. RED/GREEN logs: .tools/e1hr/hr-t08-red.log and -green.log. No target/GPU work.
+
+HR-T09: complete - 8 report checks passed (5 HR plus 3 unchanged E1); earlier-best exports, ddof=1, source projection and read-only official E1 comparator. RED/GREEN logs: .tools/e1hr/hr-t09-red.log and -green.log. No target/GPU work.

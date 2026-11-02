@@ -62,7 +62,7 @@ These are settled inputs, not review questions for another hyperparameter search
 | HR-T06 | HR-T01/T02/T03/T05 | HR full-state atomic checkpoints and completed-epoch replay | **COMPLETE - CPU/PREPARATION ONLY**; 20 passed; full-state atomic boundary replay, HR kind/shape and audit-only commit acceptance with runtime-change rejection |
 | HR-T07 | HR-T01–T06 | Current-target preflight/runtime and one-run/attempt orchestration | **COMPLETE - CPU/PREPARATION ONLY**; 61 HR CPU cases passed; eight-epoch runner/replay, projection identity, transitive-source rejection and rehashed E1-evidence guard |
 | HR-T08 | HR-T01/T07 | Four declarations, strict evidence ledger, locked LR selection and fresh final declarations | **COMPLETE - CPU/PREPARATION ONLY**; 73 HR CPU cases passed; complete parser lineage, attempts, independent LR oracle, audit-only source projection and locked selection guards |
-| HR-T09 | HR-T02–T08 | Selected validation exports, three-seed aggregate and official E1 comparison | **NOT STARTED — GATED** |
+| HR-T09 | HR-T02–T08 | Selected validation exports, three-seed aggregate and official E1 comparison | **COMPLETE - CPU/PREPARATION ONLY**; 8 report checks passed (5 HR plus 3 unchanged E1); earlier-best exports, ddof=1, source projection and read-only official E1 comparator |
 | HR-T10 | HR-T01–T09 | CPU regression, single-run wrapper/runbook and opt-in acceptance probe preparation | **NOT STARTED — GATED**; no target work without HR-TARGET-AUTH |
 | HR-T11 | HR-T10 + HR-TARGET-AUTH | Actual HR target acceptance evidence and unapproved HR-G2 candidate | **NOT STARTED — GATED**; separate from HR-G2 review |
 | HR-T12 | HR-T11 + HR-G2 + HR-G3a | Four full-budget tuning trials, locked selection and mandatory handoff | **NOT STARTED — GATED** |
@@ -134,9 +134,9 @@ Maintain exact path/bytes/SHA-256/role inventories of acceptance tests/helpers/e
 
 ### HR-T09 — Reports/comparison
 
-- [ ] RED→GREEN earlier-best selected exports, complete validation coverage, lineage and full-split class/bucket/prediction/confusion/curve consistency.
-- [ ] Exactly three complete final seeds, shared locked selection/accepted identity, unrounded mean/sample std ddof=1, four-decimal percentages; no ensemble/cherry-pick.
-- [ ] Read-only official E1 aggregate comparison, matching protocol/metric definitions and digest; retain validation-only and uncertainty limitations. No pilot comparator or test evaluator.
+- [x] RED→GREEN earlier-best selected exports, complete validation coverage, lineage and full-split class/bucket/prediction/confusion/curve consistency.
+- [x] Exactly three complete final seeds, shared locked selection/accepted identity, unrounded mean/sample std ddof=1, four-decimal percentages; no ensemble/cherry-pick.
+- [x] Read-only official E1 aggregate comparison, matching protocol/metric definitions and digest; retain validation-only and uncertainty limitations. No pilot comparator or test evaluator.
 
 ### HR-T10 — Deployment preparation and CPU readiness
 

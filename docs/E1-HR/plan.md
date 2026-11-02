@@ -202,10 +202,10 @@ Each implementation task below begins only after HR-G1 and its dependencies. Wri
 
 **Depends:** HR-T02–T08. **Files:** HR report/test_report. **Interfaces:** reporting APIs above.
 
-- [ ] Test a complete run with best earlier than last; every reported metric/prediction must reproduce the same selected checkpoint/history. Write overall/per-class/bucket/predictions/confusion/most-confused/learning-curves exports and a lineage-bearing analysis index last. Reject wrong checkpoint/history/identity; no test-split evaluator exists.
-- [ ] Require all three complete distinct final seeds at one locked HR selection and accepted identity; compute unrounded arithmetic mean/sample std ddof=1. Independent fractions `[.1,.2,.3]` give mean=.2,std=.1, display `20.0000% +/- 10.0000%`. Null unsupported coverage stays null; no seed cherry-picking or logit ensemble.
-- [ ] Read official `src/e1/e1_three_seed_validation_report_v1.json` without modifying it; verify its digest, E1 contract, three seeds, ddof and benchmark/metric definitions. Compare overall and fixed buckets; optional paired deltas join matching IDs. Never substitute pilot/best-seed metrics. Label validation-only scope, sampling/geographic/extreme-tail limitations and measured efficiency scopes.
-- [ ] Run `python -m pytest tests/e1hr/test_report.py -q` to RED; implement reports and comparison; rerun to PASS and commit. Every report envelope carries the HR identity fields, not just a renamed E1 kind.
+- [x] Test a complete run with best earlier than last; every reported metric/prediction must reproduce the same selected checkpoint/history. Write overall/per-class/bucket/predictions/confusion/most-confused/learning-curves exports and a lineage-bearing analysis index last. Reject wrong checkpoint/history/identity; no test-split evaluator exists.
+- [x] Require all three complete distinct final seeds at one locked HR selection and accepted identity; compute unrounded arithmetic mean/sample std ddof=1. Independent fractions `[.1,.2,.3]` give mean=.2,std=.1, display `20.0000% +/- 10.0000%`. Null unsupported coverage stays null; no seed cherry-picking or logit ensemble.
+- [x] Read official `src/e1/e1_three_seed_validation_report_v1.json` without modifying it; verify its digest, E1 contract, three seeds, ddof and benchmark/metric definitions. Compare overall and fixed buckets; optional paired deltas join matching IDs. Never substitute pilot/best-seed metrics. Label validation-only scope, sampling/geographic/extreme-tail limitations and measured efficiency scopes.
+- [x] Run `python -m pytest tests/e1hr/test_report.py -q` to RED; implement reports and comparison; rerun to PASS and commit. Every report envelope carries the HR identity fields, not just a renamed E1 kind.
 
 ### HR-T10 — CPU readiness, deployment preparation and runbook
 
