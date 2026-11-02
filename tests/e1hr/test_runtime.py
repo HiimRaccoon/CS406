@@ -46,6 +46,16 @@ def test_inspection_rejects_wrong_python_before_target_access(recipe,tmp_path,mo
     with pytest.raises(ValueError,match='Python executable'):runtime.inspect_target_inputs(config)
 
 
+def test_acceptance_inventory_includes_executed_root_conftest(recipe):
+    import hashlib
+    from src.e1hr.runtime import acceptance_inventory,ROOT
+    inventory=acceptance_inventory(recipe)
+    raw=(ROOT/'tests/conftest.py').read_bytes()
+    assert inventory['tests/conftest.py']['bytes']==len(raw)
+    assert inventory['tests/conftest.py']['sha256']==hashlib.sha256(raw).hexdigest()
+    assert 'tests/conftest.py' not in recipe['identity_and_evidence']['source_fingerprint_closure']
+
+
 def test_official_preflight_compares_projection_without_commit_equality(run_config,tmp_path,monkeypatch):
     import src.e1hr.train as train
     from src.e1hr.config import CONTRACT_SHA256,sha256_file

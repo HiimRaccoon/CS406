@@ -1,0 +1,22 @@
+F...                                                                     [100%]
+================================== FAILURES ===================================
+______ test_real_torchvision_architecture_head_init_groups_and_gradients ______
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+
+    def test_real_torchvision_architecture_head_init_groups_and_gradients(recipe):
+        from src.e1hr.model import E1HRModel, build_optimizer
+        backbone = convnext_tiny(weights=None, stochastic_depth_prob=.1)
+        outer = torch.get_rng_state()
+        m = E1HRModel(backbone, {**recipe["initialization"], "seed": 1001})
+>       assert torch.equal(outer, torch.get_rng_state())
+E       assert False
+E        +  where False = <built-in method equal of type object at 0x00007FFBDC48B860>(tensor([100, 142, 120,  ...,   0,   0,   0], dtype=torch.uint8), tensor([233,   3,   0,  ...,   0,   0,   0], dtype=torch.uint8))
+E        +    where <built-in method equal of type object at 0x00007FFBDC48B860> = torch.equal
+E        +    and   tensor([233,   3,   0,  ...,   0,   0,   0], dtype=torch.uint8) = <function get_rng_state at 0x0000026A1420A020>()
+E        +      where <function get_rng_state at 0x0000026A1420A020> = torch.get_rng_state
+
+tests\e1hr\test_model.py:15: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/e1hr/test_model.py::test_real_torchvision_architecture_head_init_groups_and_gradients
+1 failed, 3 passed in 2.08s

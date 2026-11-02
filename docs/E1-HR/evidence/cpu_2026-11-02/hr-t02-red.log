@@ -1,0 +1,116 @@
+..FF.....FF..                                                            [100%]
+================================== FAILURES ===================================
+_ test_both_layouts_global_only_deterministic_validation_and_path_guard[wh0] __
+
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t02-red/test_both_layouts_global_only_0')
+wh = (1536, 662)
+
+    @pytest.mark.parametrize("wh", [(1536, 662), (1030, 703)])
+    def test_both_layouts_global_only_deterministic_validation_and_path_guard(tmp_path, wh):
+        from src.e1hr.data import E1HRDataset, Record, resolve_image
+        path = tmp_path / "Aland/a.jpg"
+        path.parent.mkdir()
+        Image.new("RGB", wh, (70, 120, 160)).save(path)
+        record = Record("Aland/a.jpg", "Aland", 0, "val", "unused", *wh)
+        class Mini:
+            def records(self, split):
+                if split != "val":
+                    raise ValueError("train/val only")
+                return (record,)
+        d = E1HRDataset(Mini(), tmp_path, "val", 1001, {"train_enabled": False})
+        x, y, rel = d[0]
+>       assert x.shape == (3, 576, 1344) and y == 0 and rel == "Aland/a.jpg"
+E       assert (torch.Size([3, 384, 896]) == (3, 576, 1344)
+E         
+E         At index 1 diff: 384 != 576
+E         Use -v to get more diff)
+
+tests\e1hr\test_data.py:41: AssertionError
+_ test_both_layouts_global_only_deterministic_validation_and_path_guard[wh1] __
+
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t02-red/test_both_layouts_global_only_1')
+wh = (1030, 703)
+
+    @pytest.mark.parametrize("wh", [(1536, 662), (1030, 703)])
+    def test_both_layouts_global_only_deterministic_validation_and_path_guard(tmp_path, wh):
+        from src.e1hr.data import E1HRDataset, Record, resolve_image
+        path = tmp_path / "Aland/a.jpg"
+        path.parent.mkdir()
+        Image.new("RGB", wh, (70, 120, 160)).save(path)
+        record = Record("Aland/a.jpg", "Aland", 0, "val", "unused", *wh)
+        class Mini:
+            def records(self, split):
+                if split != "val":
+                    raise ValueError("train/val only")
+                return (record,)
+        d = E1HRDataset(Mini(), tmp_path, "val", 1001, {"train_enabled": False})
+        x, y, rel = d[0]
+>       assert x.shape == (3, 576, 1344) and y == 0 and rel == "Aland/a.jpg"
+E       assert (torch.Size([3, 384, 896]) == (3, 576, 1344)
+E         
+E         At index 1 diff: 384 != 576
+E         Use -v to get more diff)
+
+tests\e1hr\test_data.py:41: AssertionError
+________ test_direct_raw_hr_and_independent_padding[wh0-content0-pad0] ________
+
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t02-red/test_direct_raw_hr_and_indepen0')
+wh = (1536, 662), content = (1344, 567), pad = (0, 4, 0, 5)
+
+    @pytest.mark.parametrize('wh,content,pad', [
+        ((1536,662),(1344,567),(0,4,0,5)),
+        ((1030,703),(861,576),(241,0,242,0)),
+    ])
+    def test_direct_raw_hr_and_independent_padding(tmp_path,wh,content,pad):
+        import numpy as np
+        from src.e1hr.data import E1HRDataset, Record
+        from src.preprocessing.geoguessr_v1 import Preprocessor
+        p=tmp_path/'Aland/textured.png'; p.parent.mkdir()
+        pixels=np.random.default_rng(44).integers(0,256,(wh[1],wh[0],3),dtype=np.uint8)
+        Image.fromarray(pixels).save(p)
+        class Mini:
+            def records(self,split): return (Record('Aland/textured.png','Aland',0,'val','unused',*wh),)
+        d=E1HRDataset(Mini(),tmp_path,'val',1001,{'train_enabled':False})
+        x,_,_=d[0]
+        with Image.open(p) as image:
+            processor=Preprocessor('e1hr',global_wh=(1344,576))
+>           assert torch.equal(x,processor(image)['global'])
+E           assert False
+E            +  where False = <built-in method equal of type object at 0x00007FFBDC48B860>(tensor([[[0., 0., 0.,  ..., 0., 0., 0.],\n         [0., 0., 0.,  ..., 0., 0., 0.],\n         [0., 0., 0.,  ..., 0., 0., ...    [0., 0., 0.,  ..., 0., 0., 0.],\n         [0., 0., 0.,  ..., 0., 0., 0.],\n         [0., 0., 0.,  ..., 0., 0., 0.]]]), tensor([[[0., 0., 0.,  ..., 0., 0., 0.],\n         [0., 0., 0.,  ..., 0., 0., 0.],\n         [0., 0., 0.,  ..., 0., 0., ...    [0., 0., 0.,  ..., 0., 0., 0.],\n         [0., 0., 0.,  ..., 0., 0., 0.],\n         [0., 0., 0.,  ..., 0., 0., 0.]]]))
+E            +    where <built-in method equal of type object at 0x00007FFBDC48B860> = torch.equal
+
+tests\e1hr\test_data.py:123: AssertionError
+________ test_direct_raw_hr_and_independent_padding[wh1-content1-pad1] ________
+
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t02-red/test_direct_raw_hr_and_indepen1')
+wh = (1030, 703), content = (861, 576), pad = (241, 0, 242, 0)
+
+    @pytest.mark.parametrize('wh,content,pad', [
+        ((1536,662),(1344,567),(0,4,0,5)),
+        ((1030,703),(861,576),(241,0,242,0)),
+    ])
+    def test_direct_raw_hr_and_independent_padding(tmp_path,wh,content,pad):
+        import numpy as np
+        from src.e1hr.data import E1HRDataset, Record
+        from src.preprocessing.geoguessr_v1 import Preprocessor
+        p=tmp_path/'Aland/textured.png'; p.parent.mkdir()
+        pixels=np.random.default_rng(44).integers(0,256,(wh[1],wh[0],3),dtype=np.uint8)
+        Image.fromarray(pixels).save(p)
+        class Mini:
+            def records(self,split): return (Record('Aland/textured.png','Aland',0,'val','unused',*wh),)
+        d=E1HRDataset(Mini(),tmp_path,'val',1001,{'train_enabled':False})
+        x,_,_=d[0]
+        with Image.open(p) as image:
+            processor=Preprocessor('e1hr',global_wh=(1344,576))
+>           assert torch.equal(x,processor(image)['global'])
+E           assert False
+E            +  where False = <built-in method equal of type object at 0x00007FFBDC48B860>(tensor([[[0., 0., 0.,  ..., 0., 0., 0.],\n         [0., 0., 0.,  ..., 0., 0., 0.],\n         [0., 0., 0.,  ..., 0., 0., ...    [0., 0., 0.,  ..., 0., 0., 0.],\n         [0., 0., 0.,  ..., 0., 0., 0.],\n         [0., 0., 0.,  ..., 0., 0., 0.]]]), tensor([[[0., 0., 0.,  ..., 0., 0., 0.],\n         [0., 0., 0.,  ..., 0., 0., 0.],\n         [0., 0., 0.,  ..., 0., 0., ...    [0., 0., 0.,  ..., 0., 0., 0.],\n         [0., 0., 0.,  ..., 0., 0., 0.],\n         [0., 0., 0.,  ..., 0., 0., 0.]]]))
+E            +    where <built-in method equal of type object at 0x00007FFBDC48B860> = torch.equal
+
+tests\e1hr\test_data.py:123: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/e1hr/test_data.py::test_both_layouts_global_only_deterministic_validation_and_path_guard[wh0]
+FAILED tests/e1hr/test_data.py::test_both_layouts_global_only_deterministic_validation_and_path_guard[wh1]
+FAILED tests/e1hr/test_data.py::test_direct_raw_hr_and_independent_padding[wh0-content0-pad0]
+FAILED tests/e1hr/test_data.py::test_direct_raw_hr_and_independent_padding[wh1-content1-pad1]
+4 failed, 9 passed in 8.96s

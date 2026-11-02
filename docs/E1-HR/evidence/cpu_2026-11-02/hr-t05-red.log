@@ -1,0 +1,38 @@
+FFFF                                                                     [100%]
+================================== FAILURES ===================================
+_______ test_sample_weighted_short_accumulation_matches_direct_batches ________
+
+    def test_sample_weighted_short_accumulation_matches_direct_batches():
+>       from src.e1hr.engine import train_epoch
+E       ModuleNotFoundError: No module named 'src.e1hr.engine'
+
+tests\e1hr\test_engine.py:21: ModuleNotFoundError
+_____________ test_scheduler_independent_oracle_and_full_horizon ______________
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+
+    def test_scheduler_independent_oracle_and_full_horizon(recipe):
+>       from src.e1hr.engine import UpdateScheduler
+E       ModuleNotFoundError: No module named 'src.e1hr.engine'
+
+tests\e1hr\test_engine.py:36: ModuleNotFoundError
+____________ test_chronological_tau_earlier_comparator_ignores_nll ____________
+
+    def test_chronological_tau_earlier_comparator_ignores_nll():
+>       from src.e1hr.engine import select_checkpoint
+E       ModuleNotFoundError: No module named 'src.e1hr.engine'
+
+tests\e1hr\test_engine.py:58: ModuleNotFoundError
+___ test_validation_exports_same_checkpoint_predictions_and_nonfinite_fails ___
+
+    def test_validation_exports_same_checkpoint_predictions_and_nonfinite_fails():
+>       from src.e1hr.engine import evaluate, train_epoch
+E       ModuleNotFoundError: No module named 'src.e1hr.engine'
+
+tests\e1hr\test_engine.py:68: ModuleNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/e1hr/test_engine.py::test_sample_weighted_short_accumulation_matches_direct_batches
+FAILED tests/e1hr/test_engine.py::test_scheduler_independent_oracle_and_full_horizon
+FAILED tests/e1hr/test_engine.py::test_chronological_tau_earlier_comparator_ignores_nll
+FAILED tests/e1hr/test_engine.py::test_validation_exports_same_checkpoint_predictions_and_nonfinite_fails
+4 failed in 0.03s

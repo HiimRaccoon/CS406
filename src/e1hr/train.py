@@ -15,6 +15,7 @@ import platform
 import random
 import signal
 import subprocess
+import tempfile
 import time
 from pathlib import Path
 
@@ -121,11 +122,36 @@ def _checkpoint_args(context):
 
 
 def _attempt_snapshot(path, value):
+    """Publish a complete immutable record atomically, without replacing one."""
+    path = Path(path)
     text = json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False) + "\n"
-    with Path(path).open("x", encoding="utf-8", newline="\n") as stream:
-        stream.write(text)
-        stream.flush()
-        os.fsync(stream.fileno())
+    fd, temporary = tempfile.mkstemp(prefix='.' + path.name + '.', suffix='.tmp', dir=path.parent)
+    try:
+        with os.fdopen(fd, 'w', encoding='utf-8', newline='\n') as stream:
+            stream.write(text)
+            stream.flush()
+            os.fsync(stream.fileno())
+        # Hard-link publication is atomic and exclusive on the target Linux/NTFS
+        # filesystems. Unlike replace(), it can never overwrite audit evidence.
+        os.link(temporary, path)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+
+
+def read_attempt_metadata(path):
+    """Return a parsed object or an exact-byte issue for an interrupted record."""
+    path = Path(path)
+    if not path.exists():
+        return None, {'issue': 'missing'}
+    raw = path.read_bytes()
+    try:
+        value = json.loads(raw)
+        if not isinstance(value, dict):
+            raise ValueError('Attempt metadata must be an object')
+    except (ValueError, UnicodeError):
+        return None, {'issue': 'invalid_json_object', 'bytes': len(raw), 'sha256': sha256_file(path)}
+    return value, None
 
 
 def _begin_attempt(folder, config, operation):
@@ -133,10 +159,27 @@ def _begin_attempt(folder, config, operation):
     root.mkdir(exist_ok=True)
     previous = sorted(p for p in root.iterdir() if p.is_dir() and p.name.isdigit())
     for old in previous:
-        if not (old / "outcome.json").exists() and not (old / "abandoned.json").exists():
+        outcome, issue = read_attempt_metadata(old / 'outcome.json')
+        if issue is not None and not (old / 'abandoned.json').exists():
+            metadata = {name: read_attempt_metadata(old / name) for name in
+                        ('request.json', 'environment.json', 'start_boundary.json', 'outcome.json')}
             observation = {"status": "terminated_without_outcome", "uncommitted_work": "unknown after abrupt termination",
+                           **{k: config[k] for k in ('run_id', 'config_sha256', 'contract_sha256')},
+                           'metadata_issues': {name: result[1] for name, result in metadata.items() if result[1] is not None},
                            "observed_utc": dt.datetime.now(dt.timezone.utc).isoformat()}
             _attempt_snapshot(old / "abandoned.json", observation)
+        if (old / 'abandoned.json').exists():
+            observation = read_json(old / 'abandoned.json')
+            events = read_json(folder / 'events.json') if (folder / 'events.json').exists() else []
+            # Reconcile a kill between immutable publication and its event, but
+            # never rewrite an existing observation or the interrupted raw bytes.
+            environment, env_issue = read_attempt_metadata(old / 'environment.json')
+            rel = f'attempts/{old.name}/environment.json'
+            if env_issue is None and not any(e.get('environment_path') == rel for e in events):
+                _event(folder, 'attempt_metadata_reconciled', attempt_id=old.name,
+                       environment_path=rel, environment_sha256=sha256_file(old / 'environment.json'))
+            if any(e.get('event') == 'attempt_abandoned' and e.get('attempt_id') == old.name for e in events):
+                continue
             _event(folder, "attempt_abandoned", attempt_id=old.name, **observation)
     number = max((int(p.name) for p in previous), default=0) + 1
     attempt = root / f"{number:06d}"
@@ -193,7 +236,16 @@ def run(config: dict, run_dir: Path, *, resume: Path | None = None, stop_request
         _event(folder, operation, attempt_id=attempt.name, replay_policy="last committed epoch boundary; original budget")
         atomic_json(folder / "run_summary.json", {"status": "running", "run_id": config["run_id"], "contract_sha256": CONTRACT_SHA256})
         try:
+            accepted_resume = None
+            if resume:
+                accepted_resume = approved_identity(config)
+                state = read_checkpoint(resume, config=config, identity=accepted_resume)
+                if state['role'] != 'last':
+                    raise ValueError('Resume checkpoint role mismatch')
+                del state
             checked = preflight(config)
+            if accepted_resume is not None and scientific_identity(checked) != scientific_identity(accepted_resume):
+                raise ValueError('Accepted resume identity changed during preflight')
             context = _setup(config, checked)
             cfg = context["config"]
             recipe = cfg["recipe"]

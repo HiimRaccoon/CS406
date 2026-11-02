@@ -65,8 +65,8 @@ def completed_trials(recipe,tmp_path):
         atomic_json(attempt/'environment.json',{'audit':identity['audit'],'actual_torch_settings':actual})
         atomic_json(attempt/'start_boundary.json',{'completed_epoch':0,'updates':0})
         atomic_json(attempt/'outcome.json',{'status':'complete','last_committed_epoch':8,'last_committed_updates':139992})
-        atomic_json(folder/'events.json',[{'event':'created'}, {'event':'attempt_environment','environment_path':'attempts/000001/environment.json','environment_sha256':sha256_file(attempt/'environment.json')},
-                    *[{'event':'epoch_committed','epoch':e,'updates':17499*e} for e in range(1,9)],{'event':'complete'}])
+        atomic_json(folder/'events.json',[{'event':'created','attempt_id':'000001'}, {'event':'attempt_environment','attempt_id':'000001','environment_path':'attempts/000001/environment.json','environment_sha256':sha256_file(attempt/'environment.json')},
+                    *[{'event':'epoch_committed','attempt_id':'000001','epoch':e,'updates':17499*e} for e in range(1,9)],{'event':'complete','attempt_id':'000001'}])
         summary={'kind':'official_e1hr_run_summary_v1','experiment':'E1-HR','resolution_wh':[1344,576],'budget':recipe['budget'],
              'status':'complete','evidence_kind':'official_uit_slurm','contract_sha256':CONTRACT_SHA256,'test_images_opened':0,'identity':identity,
              **{k:config[k] for k in ('run_id','stage','seed','lr','config_sha256')},'planned_epochs':8,'completed_epochs':8,'validations':8,
@@ -112,3 +112,57 @@ def test_docs_only_commit_audit_is_not_campaign_identity(completed_trials):
     folder=completed_trials[0];summary=read_json(folder/'run_summary.json')
     summary['identity']['audit']['clean_git_commit']='b'*40;atomic_json(folder/'run_summary.json',summary)
     assert validate_completed_run(folder)['summary']['completed_epochs']==8
+
+
+@pytest.mark.parametrize('missing',['environment.json','start_boundary.json'])
+def test_completed_attempt_requires_initialized_records(completed_trials,missing):
+    from src.e1hr.campaign import validate_completed_run
+    (completed_trials[0]/'attempts/000001'/missing).unlink()
+    with pytest.raises(ValueError):validate_completed_run(completed_trials[0])
+
+
+def test_attempt_event_cannot_reference_missing_directory(completed_trials):
+    from src.e1hr.campaign import validate_completed_run
+    from src.e1hr.checkpoint import atomic_json
+    from src.e1hr.config import read_json
+    folder=completed_trials[0];events=read_json(folder/'events.json')
+    events.insert(0,{'event':'created','attempt_id':'000000'})
+    atomic_json(folder/'events.json',events)
+    with pytest.raises(ValueError):validate_completed_run(folder)
+
+
+@pytest.mark.parametrize('status',['failed_preflight','abandoned_request','abandoned_outcome'])
+def test_prior_uninitialized_or_interrupted_attempt_is_auditable(completed_trials,status):
+    from src.e1hr.campaign import validate_completed_run
+    from src.e1hr.checkpoint import atomic_json
+    from src.e1hr.config import read_json,sha256_file
+    from src.e1hr.train import read_attempt_metadata
+    folder=completed_trials[0];config=read_json(folder/'config_resolved.json')
+    earlier=folder/'attempts/000000';earlier.mkdir()
+    binding={k:config[k] for k in ('run_id','config_sha256','contract_sha256')}
+    atomic_json(earlier/'request.json',binding)
+    prefix=[]
+    if status=='failed_preflight':
+        atomic_json(earlier/'outcome.json',{'status':'failed','last_committed_epoch':None,'last_committed_updates':None})
+        prefix=[{'event':'created','attempt_id':'000000'},{'event':'failure','attempt_id':'000000'}]
+    else:
+        if status=='abandoned_request':
+            (earlier/'request.json').write_text('{')
+        else:
+            atomic_json(earlier/'environment.json',{'observed_allocation':'synthetic'})
+            atomic_json(earlier/'start_boundary.json',{'completed_epoch':0,'updates':0})
+            (earlier/'outcome.json').write_text('{')
+            prefix=[{'event':'created','attempt_id':'000000'},
+                    {'event':'attempt_environment','attempt_id':'000000','environment_path':'attempts/000000/environment.json',
+                     'environment_sha256':sha256_file(earlier/'environment.json')},
+                    {'event':'attempt_boundary','attempt_id':'000000','completed_epoch':0,'updates':0}]
+        records={name:read_attempt_metadata(earlier/name) for name in
+                 ('request.json','environment.json','start_boundary.json','outcome.json')}
+        issues={name:record[1] for name,record in records.items() if record[1] is not None}
+        atomic_json(earlier/'abandoned.json',{**binding,'status':'terminated_without_outcome','metadata_issues':issues})
+        prefix.append({'event':'attempt_abandoned','attempt_id':'000000','metadata_issues':issues})
+    atomic_json(folder/'events.json',prefix+read_json(folder/'events.json'))
+    assert validate_completed_run(folder)['summary']['completed_epochs']==8
+    if status=='abandoned_request':
+        (earlier/'request.json').write_text('{"altered":')
+        with pytest.raises(ValueError):validate_completed_run(folder)

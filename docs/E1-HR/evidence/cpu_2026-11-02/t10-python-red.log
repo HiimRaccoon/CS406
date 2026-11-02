@@ -1,0 +1,61 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+__________ test_inspection_rejects_wrong_python_before_target_access __________
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-python-red/test_inspection_rejects_wrong_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001C0FA0A09D0>
+
+    def test_inspection_rejects_wrong_python_before_target_access(recipe,tmp_path,monkeypatch):
+        import src.e1hr.runtime as runtime
+        from src.e1hr.config import resolve_run
+        d=recipe['deployment']['paths']
+        config=resolve_run(recipe,stage='tuning',seed=1001,lr=1e-4,paths={'data_root':d['dataset'],'weights':d['pretrained'],
+            'runs_dir':d['official_e1hr_runs'],'conformance_report':str(tmp_path/'conformance.json'),
+            'acceptance_record':str(tmp_path/'g2.json'),'authorization_record':str(tmp_path/'g3a.json')})
+        monkeypatch.setattr(runtime,'_allocation',lambda *a:pytest.fail('target access before interpreter verification'))
+>       with pytest.raises(ValueError,match='Python executable'):runtime.inspect_target_inputs(config)
+
+tests\e1hr\test_runtime.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...01', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+
+    def inspect_target_inputs(config: dict) -> dict:
+        """No model allocation; callers enforce acceptance or official stage permission."""
+        config = validate_run(config)
+        recipe,paths = config['recipe'],config['paths']
+        d = recipe['deployment']
+        for key,pinned in [('data_root','dataset'),('weights','pretrained'),('runs_dir','official_e1hr_runs')]:
+            if paths[key] != d['paths'][pinned]:
+                raise ValueError('HR paths differ from reviewed target')
+        required_env = {'OMP_NUM_THREADS':'2','MKL_NUM_THREADS':'2','CUBLAS_WORKSPACE_CONFIG':':4096:8','PYTHONHASHSEED':str(config['seed'])}
+        if any(os.environ.get(k) != v for k,v in required_env.items()) or os.environ.get('NVIDIA_TF32_OVERRIDE') not in {None,'0'}:
+>           raise ValueError('Export exact HR runtime variables before Python startup')
+E           ValueError: Export exact HR runtime variables before Python startup
+
+src\e1hr\runtime.py:167: ValueError
+
+During handling of the above exception, another exception occurred:
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-python-red/test_inspection_rejects_wrong_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001C0FA0A09D0>
+
+    def test_inspection_rejects_wrong_python_before_target_access(recipe,tmp_path,monkeypatch):
+        import src.e1hr.runtime as runtime
+        from src.e1hr.config import resolve_run
+        d=recipe['deployment']['paths']
+        config=resolve_run(recipe,stage='tuning',seed=1001,lr=1e-4,paths={'data_root':d['dataset'],'weights':d['pretrained'],
+            'runs_dir':d['official_e1hr_runs'],'conformance_report':str(tmp_path/'conformance.json'),
+            'acceptance_record':str(tmp_path/'g2.json'),'authorization_record':str(tmp_path/'g3a.json')})
+        monkeypatch.setattr(runtime,'_allocation',lambda *a:pytest.fail('target access before interpreter verification'))
+>       with pytest.raises(ValueError,match='Python executable'):runtime.inspect_target_inputs(config)
+E       AssertionError: Regex pattern did not match.
+E        Regex: 'Python executable'
+E        Input: 'Export exact HR runtime variables before Python startup'
+
+tests\e1hr\test_runtime.py:46: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/e1hr/test_runtime.py::test_inspection_rejects_wrong_python_before_target_access
+1 failed in 1.09s

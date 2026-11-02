@@ -1,0 +1,37 @@
+..F                                                                      [100%]
+================================== FAILURES ===================================
+__________ test_hr_checkpoint_metadata_and_audit_only_commit_change ___________
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...c6', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t06-red/test_hr_checkpoint_metadata_an0')
+
+    def test_hr_checkpoint_metadata_and_audit_only_commit_change(run_config,tmp_path):
+        from src.e1hr.checkpoint import save_checkpoint,read_checkpoint
+        c,m,o,s,loaders=components(run_config)
+        identity={'scientific_runtime':{'consumed_source_sha256':'a'*64,'runtime':'fp32'},'audit':{'clean_git_commit':'1'*40,'test_inventory':'old'}}
+        p=tmp_path/'last.pt'
+        progress={'completed_epoch':0,'updates':0,'history':[],'selected':None,'selected_weights':None}
+        save_checkpoint(p,model=m,optimizer=o,scheduler=s,scaler=None,config=c,progress=progress,identity=identity,loaders=loaders)
+        current=copy.deepcopy(identity);current['audit']={'clean_git_commit':'2'*40,'test_inventory':'new'}
+>       state=read_checkpoint(p,config=c,identity=current)
+
+tests\e1hr\test_checkpoint.py:100: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t06-red/test_hr_checkpoint_metadata_an0/last.pt')
+
+    def read_checkpoint(path: Path, *, config: dict, identity: dict) -> dict:
+        # Only trusted local official artifacts are deserialized; pretrained loading uses weights_only=True.
+        state = torch.load(path, map_location="cpu", weights_only=False)
+        required = {"kind", "role", "model", "optimizer", "scheduler", "scaler", "config", "config_sha256", "identity", "progress", "rng", "loader_rng"}
+        try:
+            if (set(state) != required or state["kind"] != "official_e1hr_checkpoint_v1" or state["role"] not in {"best", "last"}
+                    or state["config_sha256"] != fingerprint(config) or fingerprint(state["config"]) != fingerprint(config)
+                    or state["identity"] != identity):
+>               raise ValueError("Checkpoint identity/config/kind mismatch")
+E               ValueError: Checkpoint identity/config/kind mismatch
+
+src\e1hr\checkpoint.py:98: ValueError
+=========================== short test summary info ===========================
+FAILED tests/e1hr/test_checkpoint.py::test_hr_checkpoint_metadata_and_audit_only_commit_change
+1 failed, 2 passed in 0.98s

@@ -76,7 +76,7 @@ def acceptance_inventory(recipe: dict | None = None) -> dict:
     recipe = load_recipe() if recipe is None else recipe
     spec = recipe['identity_and_evidence']['acceptance_test_evidence_inventory']
     paths = list(spec['harness_files'])
-    paths += ['tests/e1hr/test_runtime.py']
+    paths += ['tests/e1hr/test_runtime.py', 'tests/conftest.py']
     paths += [p for p in spec['optional_package_markers_if_present'] if (ROOT / p).is_file()]
     return {p: {'bytes': (ROOT/p).stat().st_size, 'sha256': sha256_file(ROOT/p), 'role': 'acceptance_test_tooling'}
             for p in sorted(paths)}

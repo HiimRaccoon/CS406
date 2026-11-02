@@ -1,0 +1,54 @@
+.......................................................................F [ 25%]
+........................................................................ [ 51%]
+........................................................................ [ 77%]
+..............................................................           [100%]
+================================== FAILURES ===================================
+_____ test_flat_and_decreasing_scores_still_finish_all_eight_epochs[0.01] _____
+
+run_config = {'config_sha256': '26159903ffeee51a1c3ed468f21c2caf69368a5d062ed3d3a81843c3e030225b', 'contract_sha256': 'c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143', 'kind': 'official_e1_run_config', 'lr': 0.0001, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000025F8A9EF290>
+slope = 0.01
+
+    @pytest.mark.parametrize("slope", [0., .01])
+    def test_flat_and_decreasing_scores_still_finish_all_eight_epochs(run_config, monkeypatch, slope):
+        module = install_cpu_edges(monkeypatch)
+        real = module.evaluate
+        calls = []
+        def decreasing(*a, **kw):
+            metrics = real(*a, **kw)
+            calls.append(len(calls)+1)
+            metrics["macro_f1_supported"] = .5 - slope*len(calls)
+            return metrics
+        monkeypatch.setattr(module, "evaluate", decreasing)
+        folder = __import__('pathlib').Path(run_config["paths"]["runs_dir"]) / run_config["run_id"]
+>       result = module.run(run_config, folder)
+
+tests\e1\test_train.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\e1\train.py:318: in run
+    _event(folder, "epoch_started", attempt_id=attempt.name, epoch=epoch + 1,
+src\e1\train.py:197: in _event
+    atomic_json(path, events)
+src\e1\checkpoint.py:37: in atomic_json
+    _atomic(path, write)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-all-final2/test_flat_and_decreasing_score1/runs/tuning-lr0.00010000-seed1001/events.json')
+writer = <function atomic_json.<locals>.write at 0x0000025F8A90FB00>
+
+    def _atomic(path: Path, writer) -> None:
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        fd, temporary = tempfile.mkstemp(prefix=path.name + ".", suffix=".tmp", dir=path.parent)
+        os.close(fd)
+        try:
+            writer(Path(temporary))
+            with open(temporary, "r+b") as stream:
+                os.fsync(stream.fileno())
+>           os.replace(temporary, path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e1hr\\pytest-all-final2\\test_flat_and_decreasing_score1\\runs\\tuning-lr0.00010000-seed1001\\events.json.0jsfg52a.tmp' -> 'C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e1hr\\pytest-all-final2\\test_flat_and_decreasing_score1\\runs\\tuning-lr0.00010000-seed1001\\events.json'
+
+src\e1\checkpoint.py:26: PermissionError
+=========================== short test summary info ===========================
+FAILED tests/e1/test_train.py::test_flat_and_decreasing_scores_still_finish_all_eight_epochs[0.01]
+1 failed, 277 passed, 3 deselected in 105.24s (0:01:45)

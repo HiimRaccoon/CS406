@@ -115,7 +115,7 @@ Use plain serialized dictionaries and E1's canonical fingerprint convention (sor
 
 ## Implementation sequence
 
-Each implementation task below begins only after HR-G1 and its dependencies. Write the named behavioral tests, observe an assertion failure attributable to the missing behavior, implement the minimal scoped change, rerun the stated command, inspect the diff/protected hashes, then make a scoped commit through the chosen repository workflow. A missing import alone is not a completed behavioral red/green cycle. Steps are future work; no tests or implementation are claimed here.
+Each implementation task below begins only after HR-G1 and its dependencies. Write the named behavioral tests, observe an assertion failure attributable to the missing behavior, implement the minimal scoped change, rerun the stated command, inspect the diff/protected hashes, then make a scoped commit through the chosen repository workflow. A missing import alone is not a completed behavioral red/green cycle. The checkboxes record completed CPU/preparation work; tasks.md and implementation_log.md bind its observed verification. Later target/campaign steps remain gated.
 
 ### HR-T00 — Design preparation and contract binding candidate
 
@@ -259,3 +259,5 @@ Preparation verification is limited to document/contract parsing, inherited-valu
 ## HR-G1 approval record (2026-11-02)
 
 HR-G1 is **PASS**, bound to exact contract SHA-256 `e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d` and [hr_g1_approval.json](hr_g1_approval.json). The [checksum sidecar](e1hr_numeric_contract_v1.sha256) freezes the approved bytes. Implementation is authorized for **HR-T01-HR-T10 only**, using native task-by-task RED -> GREEN -> regression -> scoped commits. Contract preparation-status/provenance snapshots remain unchanged. Target/GPU work, HR-T11 acceptance, HR-G2, HR-G3a/tuning, HR-G3b/final seeds and final-test access remain **NOT AUTHORIZED**. Stop after HR-T10 readiness evidence.
+
+HR-T01-HR-T10 CPU/preparation completion: 290 passed, 3 GPU deselected in final full regression; 106 passed, 1 GPU deselected in the HR suite. Four Important final-review findings were fixed with RED -> GREEN regressions. See implementation_log.md and cpu_readiness.json. STOP before HR-T11 pending separate target-work authorization.

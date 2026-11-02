@@ -124,3 +124,53 @@ def test_corrupt_resume_is_recorded_as_failure_without_masking_load_error(run_co
     assert json.loads((folder / "run_summary.json").read_text())["status"] == "failed"
     events = json.loads((folder / "events.json").read_text())
     assert events[-1]["event"] == "failure" and events[-1]["last_committed_epoch"] is None
+
+
+def test_wrong_resume_is_rejected_before_target_inspection_or_model(run_config,monkeypatch):
+    module=install_cpu_edges(monkeypatch)
+    folder=Path(run_config['paths']['runs_dir'])/run_config['run_id']
+    calls=iter([False,True]);module.run(run_config,folder,stop_requested=lambda:next(calls))
+    path=folder/'last.pt';state=torch.load(path,weights_only=False)
+    state['kind']='official_e1_checkpoint_v1';torch.save(state,path)
+    identity={'scientific_runtime':{'evidence_kind':'synthetic_cpu_fixture'},'audit':{'clean_git_commit':'a'*40}}
+    monkeypatch.setattr(module,'approved_identity',lambda c:identity)
+    monkeypatch.setattr(module,'preflight',lambda c:pytest.fail('target inspection before wrong-resume rejection'))
+    monkeypatch.setattr(module,'_setup',lambda *a:pytest.fail('GPU model before wrong-resume rejection'))
+    with pytest.raises(ValueError,match='mismatch'):
+        module.run(run_config,folder,resume=path)
+
+
+def test_attempt_snapshot_never_exposes_partial_final_and_never_overwrites(tmp_path,monkeypatch):
+    import src.e1hr.train as module
+    path=tmp_path/'outcome.json'
+    class Kill(BaseException):pass
+    def interrupted(_):raise Kill('killed before durable publication')
+    monkeypatch.setattr(module.os,'fsync',interrupted)
+    with pytest.raises(Kill):module._attempt_snapshot(path,{'status':'complete'})
+    assert not path.exists()
+    monkeypatch.undo()
+    module._attempt_snapshot(path,{'status':'failed'})
+    with pytest.raises(FileExistsError):module._attempt_snapshot(path,{'status':'complete'})
+    assert json.loads(path.read_text())=={'status':'failed'}
+
+
+@pytest.mark.parametrize('phase',['request.json','environment.json','outcome.json'])
+def test_attempt_publication_kill_is_recorded_and_same_run_recovers(run_config,monkeypatch,phase):
+    module=install_cpu_edges(monkeypatch)
+    real=module._attempt_snapshot
+    class Kill(BaseException):pass
+    def partial(path,value):
+        if Path(path).name==phase:
+            Path(path).write_text('{')
+            raise Kill('injected interrupted legacy publication')
+        return real(path,value)
+    monkeypatch.setattr(module,'_attempt_snapshot',partial)
+    folder=Path(run_config['paths']['runs_dir'])/run_config['run_id']
+    with pytest.raises(Kill):module.run(run_config,folder)
+    monkeypatch.setattr(module,'_attempt_snapshot',real)
+    resume=folder/'last.pt' if (folder/'last.pt').exists() else None
+    assert module.run(run_config,folder,resume=resume)['status']=='complete'
+    abandoned=json.loads((folder/'attempts/000001/abandoned.json').read_text())
+    assert abandoned['status']=='terminated_without_outcome'
+    assert phase in abandoned['metadata_issues']
+    assert (folder/'attempts/000001'/phase).read_text()=='{'

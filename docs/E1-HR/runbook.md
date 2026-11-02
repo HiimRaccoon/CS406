@@ -14,6 +14,8 @@ Data remains `/datastore/binhvp/BuiTrongTan/CS406/data/geoguessr`, and pinned of
 
 The frozen contract explicitly enumerates 21 consumed runtime files. All must exist; additional repository imports outside the reviewed closure fail. Source equality uses the exact path/hash map and canonical fingerprint, software/effective FP32 runtime, device/driver/allocation policy, data root/content and frozen fingerprints. Clean Git commit and exact acceptance/test inventories are audit metadata, not equality keys. A clean docs/test-only commit with unchanged consumed bytes/runtime does not invalidate acceptance; any consumed-file change requires renewed target acceptance. Stage receipts, immutable declarations and checkpoint/evidence hashes still validate independently. Reporting-only code is hashed separately in report audit inventories.
 
+The acceptance audit inventory includes the executed root `tests/conftest.py`, HR fixtures/tests and package markers with exact byte counts and hashes. These are separate from the consumed scientific/runtime map.
+
 ## HR-T11 acceptance, only after separate authorization
 
 After an explicit user decision, author a reviewed external receipt with gate `HR-TARGET-AUTH`, approved=true, experiment `E1-HR`, resolution_wh `[1344,576]`, the exact frozen contract digest, authorized_tasks `["HR-T11"]` and target_gpu_authorized=true. No such receipt is created by HR-T10, and the HR-G1 receipt cannot substitute for it. Preserve every receipt/evidence file with its exact hash.
@@ -75,6 +77,8 @@ sbatch --export=ALL scripts/slurm/e1hr_train.sbatch \
 ```
 
 This is a path-format example, not a selected HR LR or authorization to create that job. Preserve all immutable attempt environments/boundaries/outcomes, events, failures and reviewed retries; abrupt unknown partial work stays explicitly unknown. Replays never add completed work beyond eight epochs/eight validations/139992 updates. last.pt is authoritative if best/history publication was interrupted. A completed epoch-eight boundary can finish publication without another optimizer update; a published completed run cannot be extended. Never resume best.pt or silently initialize a fresh replacement.
+
+Resume validates the checkpoint kind, declaration, role, budget and accepted scientific identity before current-target image inspection or model allocation. Attempt metadata uses flushed temporary files and exclusive atomic hard-link publication; existing records cannot be overwritten. An abrupt attempt with missing or interrupted metadata receives a separate abandonment observation binding any original partial bytes. Original records remain intact. Campaign validation reconciles every attempt directory with its events, requires initialized request/environment/start records for initialized attempts, and verifies every environment hash. A genuine failure before initialization remains auditable without inventing an environment or boundary.
 
 ## Tuning handoff, finals and reporting
 

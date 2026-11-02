@@ -63,25 +63,56 @@ def _science(config, identity):
 
 
 def _attempt_inventory(folder: Path, config: dict, events: list[dict]) -> dict:
+    from .train import read_attempt_metadata
     attempts=folder/'attempts'
     if not attempts.is_dir():raise ValueError('Missing HR attempt records')
     inventory={}
     roots=sorted(p for p in attempts.iterdir() if p.is_dir())
     if not roots or any(not p.name.isdigit() for p in roots):raise ValueError('Invalid attempt identities')
+    if {e.get('attempt_id') for e in events}!={p.name for p in roots}:
+        raise ValueError('Attempt directories and event lineage mismatch')
     for p in roots:
-        request=read_json(p/'request.json')
-        if any(request[k]!=config[k] for k in ('run_id','config_sha256','contract_sha256')):
+        records={name:read_attempt_metadata(p/name) for name in
+                 ('request.json','environment.json','start_boundary.json','outcome.json')}
+        request,request_issue=records['request.json']
+        outcome,outcome_issue=records['outcome.json']
+        own_events=[e for e in events if e['attempt_id']==p.name]
+        names={e['event'] for e in own_events}
+        abandoned=None
+        if outcome_issue is not None:
+            abandoned=read_json(p/'abandoned.json')
+            issues={name:result[1] for name,result in records.items() if result[1] is not None}
+            if (abandoned.get('status')!='terminated_without_outcome' or abandoned.get('metadata_issues')!=issues
+                    or any(abandoned.get(k)!=config[k] for k in ('run_id','config_sha256','contract_sha256'))
+                    or not any(e.get('event')=='attempt_abandoned' and e.get('metadata_issues')==issues for e in own_events)):
+                raise ValueError('Interrupted attempt metadata was not explicitly reconciled')
+        elif outcome.get('status') not in {'complete','interrupted','failed'}:
+            raise ValueError('Invalid attempt outcome')
+        if request_issue is not None:
+            if abandoned is None or names & {'created','resume','recover_initialization','attempt_environment','attempt_boundary','epoch_started','epoch_committed'}:
+                raise ValueError('Missing initialized attempt request')
+        elif any(request.get(k)!=config[k] for k in ('run_id','config_sha256','contract_sha256')):
             raise ValueError('Attempt declaration mismatch')
-        outcome=read_json(p/('outcome.json' if (p/'outcome.json').exists() else 'abandoned.json'))
-        if (p/'start_boundary.json').exists():
-            boundary=read_json(p/'start_boundary.json')
+        initialized=(outcome is not None and outcome.get('status') in {'complete','interrupted'})
+        training_events={'attempt_boundary','epoch_started','training_observed','epoch_committed','complete','interrupted'}
+        environment,env_issue=records['environment.json']
+        boundary,boundary_issue=records['start_boundary.json']
+        if (initialized or names & (training_events|{'attempt_environment'})) and env_issue is not None:
+            raise ValueError('Missing initialized attempt environment')
+        if (initialized or names & training_events) and boundary_issue is not None:
+            raise ValueError('Missing initialized attempt start boundary')
+        if boundary_issue is None:
             if (type(boundary['completed_epoch']) is not int or not 0<=boundary['completed_epoch']<=8
                     or boundary['updates']!=boundary['completed_epoch']*17499):
                 raise ValueError('Invalid committed attempt boundary')
-        if (p/'environment.json').exists():
+        if env_issue is None:
             rel=(p/'environment.json').relative_to(folder).as_posix()
-            if not any(e.get('environment_path')==rel and e.get('environment_sha256')==sha256_file(p/'environment.json') for e in events):
+            if not any(e.get('environment_path')==rel and e.get('environment_sha256')==sha256_file(p/'environment.json') for e in own_events):
                 raise ValueError('Attempt environment hash/lineage mismatch')
+        for event in own_events:
+            if 'environment_path' in event and (event['environment_path']!=f'attempts/{p.name}/environment.json'
+                    or env_issue is not None or event.get('environment_sha256')!=sha256_file(p/'environment.json')):
+                raise ValueError('Dangling attempt environment evidence')
         for f in p.iterdir():
             if not f.is_file() or not f.resolve().is_relative_to(folder):raise ValueError('Unsafe attempt file')
             inventory[f.relative_to(folder).as_posix()]=sha256_file(f)

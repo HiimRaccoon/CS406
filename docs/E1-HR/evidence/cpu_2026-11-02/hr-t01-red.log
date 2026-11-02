@@ -1,0 +1,20 @@
+............F..                                                          [100%]
+================================== FAILURES ===================================
+_____________ test_roles_grid_explicit_paths_and_immutable_budget _____________
+
+run_config = {'config_sha256': 'fcada08b32eec6baee52f06063b76f38afc5d3814aa67d1b9820add2b35d3ed9', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'kind': 'official_e1hr_run_config_v1', 'lr': 0.0001, ...}
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+
+    def test_roles_grid_explicit_paths_and_immutable_budget(run_config,recipe):
+        from src.e1hr.config import resolve_run,validate_run
+>       assert run_config['run_id']=='e1hr-tuning-lr0.00010000-seed1001'
+E       AssertionError: assert 'tuning-lr0.00010000-seed1001' == 'e1hr-tuning-...0000-seed1001'
+E         
+E         - e1hr-tuning-lr0.00010000-seed1001
+E         ? -----
+E         + tuning-lr0.00010000-seed1001
+
+tests\e1hr\test_config.py:43: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/e1hr/test_config.py::test_roles_grid_explicit_paths_and_immutable_budget
+1 failed, 14 passed in 0.11s

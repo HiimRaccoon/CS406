@@ -13,12 +13,19 @@ def install_cpu_edges(monkeypatch):
     from src.e1hr.engine import UpdateScheduler
     identity = {"scientific_runtime": {"evidence_kind": "synthetic_cpu_fixture"}, "audit": {"clean_git_commit": "a"*40}}
     monkeypatch.setattr(module, "preflight", lambda config: identity)
-    def setup(config, checked):
-        torch.manual_seed(config["seed"])
+    monkeypatch.setattr(module, "approved_identity", lambda config: identity)
+    def cpu_config(config):
         c = copy.deepcopy(config)
         # Private integration fixture only; production _setup never substitutes reviewed counts.
         c["recipe"]["batch"]["updates_per_epoch"] = 4
         c["recipe"]["budget"]["planned_max_updates"] = 32
+        return c
+    from src.e1hr.checkpoint import read_checkpoint
+    monkeypatch.setattr(module, 'read_checkpoint', lambda path, *, config, identity:
+                        read_checkpoint(path, config=cpu_config(config), identity=identity))
+    def setup(config, checked):
+        torch.manual_seed(config["seed"])
+        c = cpu_config(config)
         m = Tiny(.2)
         optimizer = torch.optim.AdamW(m.parameters(), lr=c["lr"])
         scheduler = UpdateScheduler(optimizer, {"warmup_updates": 2, "warmup_start_factor": .1, "cosine_floor_lr": 1e-6}, 32)
