@@ -55,7 +55,7 @@ These are settled inputs, not review questions for another hyperparameter search
 |---|---|---|---|
 | HR-T00 | HR-G0 | Two spec wording clarifications; English plan/ledger; complete HR numeric draft | **COMPLETE — DESIGN ONLY**; document/contract checks, no implementation/target evidence |
 | HR-T01 | HR-G1 | HR package/config/declaration schemas and isolated CPU fixtures | **COMPLETE - CPU/PREPARATION ONLY**; 30 passed (15 HR config plus 15 unchanged E1 config cases); baseline 184 passed, 2 GPU deselected |
-| HR-T02 | HR-T01 | Exact manifest, direct raw-to-HR preprocessing, order/jitter/loaders | **NOT STARTED — GATED** |
+| HR-T02 | HR-T01 | Exact manifest, direct raw-to-HR preprocessing, order/jitter/loaders | **COMPLETE - CPU/PREPARATION ONLY**; 36 passed (HR config/data and unchanged E1 data/preprocessing regression); direct HR/padding/RNG/isolation oracles |
 | HR-T03 | HR-T01 | HR pinned model/head/full fine-tuning/optimizer groups | **NOT STARTED — GATED** |
 | HR-T04 | HR-T01/T02 | Narrow metrics reuse and independent full-split/bucket oracles | **NOT STARTED — GATED** |
 | HR-T05 | HR-T03/T04 | Narrow engine reuse; update scheduler, tail weighting and comparator | **NOT STARTED — GATED** |
@@ -93,9 +93,9 @@ Maintain exact path/bytes/SHA-256/role inventories of acceptance tests/helpers/e
 
 ### HR-T02 — Data/preprocessing/RNG/loaders
 
-- [ ] RED→GREEN artifact/hash/metadata/path/corruption/test-access guards; test rejection before opening images.
-- [ ] Both raw layouts produce direct frozen HR tensors with independent padding oracle, stable valid-scene jitter and deterministic validation; no locals or E1-canvas upscaling.
-- [ ] Natural epoch coverage/one-image tail/fixed val order, exact seed derivation and persistent-worker restart equivalence; frozen regression and unchanged-input checks pass.
+- [x] RED→GREEN artifact/hash/metadata/path/corruption/test-access guards; test rejection before opening images.
+- [x] Both raw layouts produce direct frozen HR tensors with independent padding oracle, stable valid-scene jitter and deterministic validation; no locals or E1-canvas upscaling.
+- [x] Natural epoch coverage/one-image tail/fixed val order, exact seed derivation and persistent-worker restart equivalence; frozen regression and unchanged-input checks pass.
 
 ### HR-T03 — Model/optimizer
 

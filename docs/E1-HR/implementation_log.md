@@ -11,3 +11,5 @@ Ruling: frozen provenance entries are preparation-input snapshots, including the
 Pre-flight: reviewed config/data/model/metrics/engine/checkpoint/runtime/campaign/report interfaces match. Scientific/runtime identity equality excludes clean Git commit and tooling audit inventory, while preserving consumed-file/runtime/data/receipt integrity.
 
 HR-T01: complete - 30 passed (15 HR config plus 15 unchanged E1 config cases); baseline 184 passed, 2 GPU deselected. RED/GREEN logs: .tools/e1hr/hr-t01-red.log and -green.log. No target/GPU work.
+
+HR-T02: complete - 36 passed (HR config/data and unchanged E1 data/preprocessing regression); direct HR/padding/RNG/isolation oracles. RED/GREEN logs: .tools/e1hr/hr-t02-red.log and -green.log. No target/GPU work.
