@@ -130,10 +130,10 @@ Each implementation task below begins only after HR-G1 and its dependencies. Wri
 
 **Depends:** HR-G1. **Files:** HR config/package, conftest/test_config; HR-only byte-preservation rules if needed. **Interfaces:** HR recipe/declaration APIs above.
 
-- [ ] Add `test_hr_contract_rejects_e1_and_rehashed_wrong_resolution`: E1 kind/hash/receipt and WH `[896,384]` fail even after caller recomputes a hash. Add missing-field/nonfinite/duplicate-key/seed-role/unknown-override/changed-invariant cases. Assert four exact LRs, 2/2/1 batch, 17499/139992 updates, eight epochs and locked test policy.
-- [ ] Run `python -m pytest tests/e1hr/test_config.py -q`; confirm the intended failures.
-- [ ] Implement exact frozen-byte/sidecar/HR-G1 validation and immutable explicit HR declarations; final declarations require a persisted locked selection reference. Never import E1 contract authority.
-- [ ] Rerun the same test file; require all cases PASS, inspect scope and commit. No execution approval is inferred from declaration validity.
+- [x] Add `test_hr_contract_rejects_e1_and_rehashed_wrong_resolution`: E1 kind/hash/receipt and WH `[896,384]` fail even after caller recomputes a hash. Add missing-field/nonfinite/duplicate-key/seed-role/unknown-override/changed-invariant cases. Assert four exact LRs, 2/2/1 batch, 17499/139992 updates, eight epochs and locked test policy.
+- [x] Run `python -m pytest tests/e1hr/test_config.py -q`; confirm the intended failures.
+- [x] Implement exact frozen-byte/sidecar/HR-G1 validation and immutable explicit HR declarations; final declarations require a persisted locked selection reference. Never import E1 contract authority.
+- [x] Rerun the same test file; require all cases PASS, inspect scope and commit. No execution approval is inferred from declaration validity.
 
 ### HR-T02 — Exact data and HR preprocessing/loaders
 

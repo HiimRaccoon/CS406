@@ -54,7 +54,7 @@ These are settled inputs, not review questions for another hyperparameter search
 | Task | Depends on | Deliverable | Current status / evidence |
 |---|---|---|---|
 | HR-T00 | HR-G0 | Two spec wording clarifications; English plan/ledger; complete HR numeric draft | **COMPLETE — DESIGN ONLY**; document/contract checks, no implementation/target evidence |
-| HR-T01 | HR-G1 | HR package/config/declaration schemas and isolated CPU fixtures | **NOT STARTED — GATED** |
+| HR-T01 | HR-G1 | HR package/config/declaration schemas and isolated CPU fixtures | **COMPLETE - CPU/PREPARATION ONLY**; 30 passed (15 HR config plus 15 unchanged E1 config cases); baseline 184 passed, 2 GPU deselected |
 | HR-T02 | HR-T01 | Exact manifest, direct raw-to-HR preprocessing, order/jitter/loaders | **NOT STARTED — GATED** |
 | HR-T03 | HR-T01 | HR pinned model/head/full fine-tuning/optimizer groups | **NOT STARTED — GATED** |
 | HR-T04 | HR-T01/T02 | Narrow metrics reuse and independent full-split/bucket oracles | **NOT STARTED — GATED** |
@@ -88,8 +88,8 @@ Maintain exact path/bytes/SHA-256/role inventories of acceptance tests/helpers/e
 
 ### HR-T01 — Contract and declaration guards
 
-- [ ] RED→GREEN tests for exact HR bytes/sidecar/receipt, schema/identity/resolution, role/grid/budget and unknown/altered controls; E1/pilot receipts/configs rejected even with recomputed caller hashes.
-- [ ] Implement and verify allocation-free HR recipe/declaration APIs; final declarations bind locked selection bytes. Scope-reviewed commit after checks.
+- [x] RED→GREEN tests for exact HR bytes/sidecar/receipt, schema/identity/resolution, role/grid/budget and unknown/altered controls; E1/pilot receipts/configs rejected even with recomputed caller hashes.
+- [x] Implement and verify allocation-free HR recipe/declaration APIs; final declarations bind locked selection bytes. Scope-reviewed commit after checks.
 
 ### HR-T02 — Data/preprocessing/RNG/loaders
 
