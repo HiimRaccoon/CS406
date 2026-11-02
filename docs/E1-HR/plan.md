@@ -148,9 +148,9 @@ Each implementation task below begins only after HR-G1 and its dependencies. Wri
 
 **Depends:** HR-T01. **Files:** HR model/test_model. **Interfaces:** model and optimizer APIs above.
 
-- [ ] Add exact filename/full-digest/strict-load rejection cases before load; tiny CPU mechanics verify retained features/avgpool/final LayerNorm, 768 features/124 raw logits, full trainability, explicit block-linear 0→0.1 stochastic depth and eval determinism. Isolated CPU head initialization uses the official seed and restores outer RNG.
-- [ ] Test exhaustive unique optimizer membership, decay 0.05 for Conv/Linear weight and 0 for bias/LayerNorm/all CNBlock layer_scale; unknown/duplicate/omitted categories fail. All groups use candidate LR and the same schedule.
-- [ ] Run `python -m pytest tests/e1hr/test_model.py -q` to RED; implement the HR builder without E1 load_recipe or downloads; rerun to PASS and commit. Real pinned weights/full HR batches belong to HR-T11.
+- [x] Add exact filename/full-digest/strict-load rejection cases before load; tiny CPU mechanics verify retained features/avgpool/final LayerNorm, 768 features/124 raw logits, full trainability, explicit block-linear 0→0.1 stochastic depth and eval determinism. Isolated CPU head initialization uses the official seed and restores outer RNG.
+- [x] Test exhaustive unique optimizer membership, decay 0.05 for Conv/Linear weight and 0 for bias/LayerNorm/all CNBlock layer_scale; unknown/duplicate/omitted categories fail. All groups use candidate LR and the same schedule.
+- [x] Run `python -m pytest tests/e1hr/test_model.py -q` to RED; implement the HR builder without E1 load_recipe or downloads; rerun to PASS and commit. Real pinned weights/full HR batches belong to HR-T11.
 
 ### HR-T04 — Metrics reuse and independent oracles
 

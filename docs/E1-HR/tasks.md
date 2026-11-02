@@ -56,7 +56,7 @@ These are settled inputs, not review questions for another hyperparameter search
 | HR-T00 | HR-G0 | Two spec wording clarifications; English plan/ledger; complete HR numeric draft | **COMPLETE — DESIGN ONLY**; document/contract checks, no implementation/target evidence |
 | HR-T01 | HR-G1 | HR package/config/declaration schemas and isolated CPU fixtures | **COMPLETE - CPU/PREPARATION ONLY**; 30 passed (15 HR config plus 15 unchanged E1 config cases); baseline 184 passed, 2 GPU deselected |
 | HR-T02 | HR-T01 | Exact manifest, direct raw-to-HR preprocessing, order/jitter/loaders | **COMPLETE - CPU/PREPARATION ONLY**; 36 passed (HR config/data and unchanged E1 data/preprocessing regression); direct HR/padding/RNG/isolation oracles |
-| HR-T03 | HR-T01 | HR pinned model/head/full fine-tuning/optimizer groups | **NOT STARTED — GATED** |
+| HR-T03 | HR-T01 | HR pinned model/head/full fine-tuning/optimizer groups | **COMPLETE - CPU/PREPARATION ONLY**; 36 passed (HR config/data/model and unchanged E1 model regression); isolated CPU head RNG, strict offline loading and exhaustive groups |
 | HR-T04 | HR-T01/T02 | Narrow metrics reuse and independent full-split/bucket oracles | **NOT STARTED — GATED** |
 | HR-T05 | HR-T03/T04 | Narrow engine reuse; update scheduler, tail weighting and comparator | **NOT STARTED — GATED** |
 | HR-T06 | HR-T01/T02/T03/T05 | HR full-state atomic checkpoints and completed-epoch replay | **NOT STARTED — GATED** |
@@ -99,8 +99,8 @@ Maintain exact path/bytes/SHA-256/role inventories of acceptance tests/helpers/e
 
 ### HR-T03 — Model/optimizer
 
-- [ ] RED→GREEN strict offline weight verification/loading, retained representation, isolated official-seed head initialization, full trainability/drop-path/eval checks.
-- [ ] Every trainable parameter appears once with required decay/no-decay and same LR; unknown groups fail. CPU mechanics are not real-weight target acceptance.
+- [x] RED→GREEN strict offline weight verification/loading, retained representation, isolated official-seed head initialization, full trainability/drop-path/eval checks.
+- [x] Every trainable parameter appears once with required decay/no-decay and same LR; unknown groups fail. CPU mechanics are not real-weight target acceptance.
 
 ### HR-T04 — Metrics
 

@@ -13,3 +13,5 @@ Pre-flight: reviewed config/data/model/metrics/engine/checkpoint/runtime/campaig
 HR-T01: complete - 30 passed (15 HR config plus 15 unchanged E1 config cases); baseline 184 passed, 2 GPU deselected. RED/GREEN logs: .tools/e1hr/hr-t01-red.log and -green.log. No target/GPU work.
 
 HR-T02: complete - 36 passed (HR config/data and unchanged E1 data/preprocessing regression); direct HR/padding/RNG/isolation oracles. RED/GREEN logs: .tools/e1hr/hr-t02-red.log and -green.log. No target/GPU work.
+
+HR-T03: complete - 36 passed (HR config/data/model and unchanged E1 model regression); isolated CPU head RNG, strict offline loading and exhaustive groups. RED/GREEN logs: .tools/e1hr/hr-t03-red.log and -green.log. No target/GPU work.
