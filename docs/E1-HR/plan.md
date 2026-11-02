@@ -164,10 +164,10 @@ Each implementation task below begins only after HR-G1 and its dependencies. Wri
 
 **Depends:** HR-T03/T04. **Files:** HR engine/test_engine. **Interfaces:** E1-compatible mechanics above.
 
-- [ ] Pin used-update LR oracle L=1,W=2,N=6,start=.1,f=.01: `[.1,.55,1,.7525,.2575,.01]`; final floor exact. Official endpoints u=0→.1L,1000→L,139991→1e-6; reject update 139992 and changed horizon on restore. Apply LR before optimizer update; increment completion afterward; validation advances neither.
-- [ ] Test true image-denominator weighting for the one-image tail and a generic short accumulation fixture against direct sample means; official batch remains 2/1. Nonfinite logits/loss/gradients and OOM propagate as attempt failures, never skipped updates.
-- [ ] Assert chronological tau/earlier: selected .5 retains later .5000005 despite better NLL, replaces at .500002; lower F1 never replaces. Flat/decreasing curves still require full runner budget in HR-T07.
-- [ ] Run `python -m pytest tests/e1hr/test_engine.py -q` to RED; expose unchanged E1 mechanics through HR engine; rerun to PASS and commit.
+- [x] Pin used-update LR oracle L=1,W=2,N=6,start=.1,f=.01: `[.1,.55,1,.7525,.2575,.01]`; final floor exact. Official endpoints u=0→.1L,1000→L,139991→1e-6; reject update 139992 and changed horizon on restore. Apply LR before optimizer update; increment completion afterward; validation advances neither.
+- [x] Test true image-denominator weighting for the one-image tail and a generic short accumulation fixture against direct sample means; official batch remains 2/1. Nonfinite logits/loss/gradients and OOM propagate as attempt failures, never skipped updates.
+- [x] Assert chronological tau/earlier: selected .5 retains later .5000005 despite better NLL, replaces at .500002; lower F1 never replaces. Flat/decreasing curves still require full runner budget in HR-T07.
+- [x] Run `python -m pytest tests/e1hr/test_engine.py -q` to RED; expose unchanged E1 mechanics through HR engine; rerun to PASS and commit.
 
 ### HR-T06 — HR checkpoints and completed-epoch replay
 

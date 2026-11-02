@@ -19,3 +19,5 @@ HR-T03: complete - 36 passed (HR config/data/model and unchanged E1 model regres
 Ruling: HR-T04/HR-T05 are bounded import adapters to already implemented unchanged E1 numerical code. Their initial RED is the missing HR interface; independent literal numerical oracles run against the real exported mechanics after GREEN rather than introducing a deliberately wrong duplicate algorithm. Cost if wrong: adapter-only RED proves interface absence, while behavioral assurance comes from the independent HR and unchanged E1 regression suites.
 
 HR-T04: complete - 7 passed; independent full-split cross-bucket/tie/metadata bucket oracles and unchanged E1 metrics regression. RED/GREEN logs: .tools/e1hr/hr-t04-red.log and -green.log. No target/GPU work.
+
+HR-T05: complete - 12 passed; scheduler independent interior/endpoints, tail weighting, comparator and unchanged E1 engine regression. RED/GREEN logs: .tools/e1hr/hr-t05-red.log and -green.log. No target/GPU work.

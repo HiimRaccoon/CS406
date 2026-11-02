@@ -58,7 +58,7 @@ These are settled inputs, not review questions for another hyperparameter search
 | HR-T02 | HR-T01 | Exact manifest, direct raw-to-HR preprocessing, order/jitter/loaders | **COMPLETE - CPU/PREPARATION ONLY**; 36 passed (HR config/data and unchanged E1 data/preprocessing regression); direct HR/padding/RNG/isolation oracles |
 | HR-T03 | HR-T01 | HR pinned model/head/full fine-tuning/optimizer groups | **COMPLETE - CPU/PREPARATION ONLY**; 36 passed (HR config/data/model and unchanged E1 model regression); isolated CPU head RNG, strict offline loading and exhaustive groups |
 | HR-T04 | HR-T01/T02 | Narrow metrics reuse and independent full-split/bucket oracles | **COMPLETE - CPU/PREPARATION ONLY**; 7 passed; independent full-split cross-bucket/tie/metadata bucket oracles and unchanged E1 metrics regression |
-| HR-T05 | HR-T03/T04 | Narrow engine reuse; update scheduler, tail weighting and comparator | **NOT STARTED — GATED** |
+| HR-T05 | HR-T03/T04 | Narrow engine reuse; update scheduler, tail weighting and comparator | **COMPLETE - CPU/PREPARATION ONLY**; 12 passed; scheduler independent interior/endpoints, tail weighting, comparator and unchanged E1 engine regression |
 | HR-T06 | HR-T01/T02/T03/T05 | HR full-state atomic checkpoints and completed-epoch replay | **NOT STARTED — GATED** |
 | HR-T07 | HR-T01–T06 | Current-target preflight/runtime and one-run/attempt orchestration | **NOT STARTED — GATED** |
 | HR-T08 | HR-T01/T07 | Four declarations, strict evidence ledger, locked LR selection and fresh final declarations | **NOT STARTED — GATED** |
@@ -109,8 +109,8 @@ Maintain exact path/bytes/SHA-256/role inventories of acceptance tests/helpers/e
 
 ### HR-T05 — Engine
 
-- [ ] RED→GREEN independent scheduler interior/endpoints/exhaustion/restore and sample-weighted tail tests; validate-before-step/update-after-step convention.
-- [ ] Tau/earlier ignores NLL; validation never advances scheduler; nonfinite/OOM outcomes remain failures with no skipped updates or scientific fallback.
+- [x] RED→GREEN independent scheduler interior/endpoints/exhaustion/restore and sample-weighted tail tests; validate-before-step/update-after-step convention.
+- [x] Tau/earlier ignores NLL; validation never advances scheduler; nonfinite/OOM outcomes remain failures with no skipped updates or scientific fallback.
 
 ### HR-T06 — Checkpoints
 
