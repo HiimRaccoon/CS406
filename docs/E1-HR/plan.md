@@ -156,9 +156,9 @@ Each implementation task below begins only after HR-G1 and its dependencies. Wri
 
 **Depends:** HR-T01/T02. **Files:** HR metrics/test_metrics. **Interfaces:** Metrics124/rank_logits above.
 
-- [ ] Pin exact-tie logits: all equal ranks `[0,1,2,3,4]`; target 4 misses Top-1/3 and hits Top-5; logits stay unchanged. Rank all 124 outputs including unsupported labels.
-- [ ] Pin full-split cross-bucket oracle: GT labels `[0,1]`, predictions `[0,0]`, label 0 tail/label 1 head implies class-0 and tail F1=2/3, supported Macro-F1=1/3. Unsupported F1=null; supported zero-TP F1=0; no-support bucket metrics=null; NLL uses sample mean. Verify fixed bucket coverage from metadata.
-- [ ] Run `python -m pytest tests/e1hr/test_metrics.py -q` to RED; add the narrow reuse exports; rerun to PASS and commit. Do not duplicate metric implementations.
+- [x] Pin exact-tie logits: all equal ranks `[0,1,2,3,4]`; target 4 misses Top-1/3 and hits Top-5; logits stay unchanged. Rank all 124 outputs including unsupported labels.
+- [x] Pin full-split cross-bucket oracle: GT labels `[0,1]`, predictions `[0,0]`, label 0 tail/label 1 head implies class-0 and tail F1=2/3, supported Macro-F1=1/3. Unsupported F1=null; supported zero-TP F1=0; no-support bucket metrics=null; NLL uses sample mean. Verify fixed bucket coverage from metadata.
+- [x] Run `python -m pytest tests/e1hr/test_metrics.py -q` to RED; add the narrow reuse exports; rerun to PASS and commit. Do not duplicate metric implementations.
 
 ### HR-T05 — Scheduler, tails and comparator reuse
 
