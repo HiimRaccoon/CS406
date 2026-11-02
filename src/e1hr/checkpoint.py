@@ -6,6 +6,7 @@ import math
 import os
 import random
 import tempfile
+import time
 from pathlib import Path
 
 import numpy as np
@@ -23,7 +24,16 @@ def _atomic(path: Path, writer) -> None:
         writer(Path(temporary))
         with open(temporary, "r+b") as stream:
             os.fsync(stream.fileno())
-        os.replace(temporary, path)
+        for attempt in range(5):
+            try:
+                os.replace(temporary, path)
+                break
+            except PermissionError as exc:
+                # Windows may briefly deny replacement while another process has
+                # a handle open. Retry this same atomic write, never training work.
+                if getattr(exc, "winerror", None) not in {5, 32, 33} or attempt == 4:
+                    raise
+                time.sleep(.05 * 2**attempt)
     finally:
         if os.path.exists(temporary):
             os.unlink(temporary)

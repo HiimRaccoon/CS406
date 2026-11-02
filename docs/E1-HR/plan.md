@@ -1,6 +1,6 @@
 # E1-HR Implementation Plan
 
-> **For agentic workers:** After HR-G1 selects the execution method and explicitly authorizes implementation, use `executing-plans` for native task-by-task execution or `subagent-driven-development` if the user selects that method. Steps use checkbox syntax; this plan does not select a method or authorize execution.
+> **For agentic workers:** HR-G1 selects native task-by-task execution using `executing-plans` for HR-T01-HR-T10 only. Keep RED -> GREEN -> regression -> scoped commits, then STOP before HR-T11 and separate target-work authorization. A fresh whole-branch reviewer checks the completed CPU/preparation work.
 
 **Goal:** Implement and verify the resolution-only E1-HR experiment, independently tune its four LRs, and, after separate approval, train/report three final seeds under the unchanged eight-epoch protocol.
 
@@ -211,10 +211,10 @@ Each implementation task below begins only after HR-G1 and its dependencies. Wri
 
 **Depends:** HR-T01–T09. **Files:** future HR wrapper/runbook/test_entrypoints/test_gpu_smoke; no job creation/submission during preparation.
 
-- [ ] Write CLI/wrapper tests: one declaration, seed matching, strict unknown options, no test/search/batch/LR overrides, check-config without model/GPU allocation, own existing last.pt only, exact allocation/env before Python startup. Adapt E1 wrapper mechanics without editing E1 wrapper or tests.
-- [ ] Prepare the HR wrapper for normal/uit/mig2-35/gpu:2g.35gb:1, one task, 4 CPUs, 16384 MiB, 09:00:00. Document USR1 warning/boundary stop and forced-kill replay; a warning near walltime cannot guarantee finishing an epoch. Require review of recorded attempt outcomes before same-declaration resubmission. Do not silently auto-resubmit or request longer time.
-- [ ] Prepare opt-in HR target acceptance with new output directory per acceptance attempt, real pinned weights, both raw train layouts, actual `[2,3,576,1344]→[2,124]` FP32 path and reconstruction/replay; no production G2 bypass flag. Missing target inputs under explicit opt-in fail rather than skip. Without opt-in, skipped GPU tests are not acceptance.
-- [ ] Run `python -m pytest tests/e1hr -q -m "not gpu"`, `python -m pytest -q -m "not gpu"`, `python -m compileall -q src/e1hr tests/e1hr` and `bash -n scripts/slurm/e1hr_train.sbatch`; require PASS and unchanged protected hashes. Record local environment/limits, inspect diff and commit. STOP before target work pending its explicit authorization.
+- [x] Write CLI/wrapper tests: one declaration, seed matching, strict unknown options, no test/search/batch/LR overrides, check-config without model/GPU allocation, own existing last.pt only, exact allocation/env before Python startup. Adapt E1 wrapper mechanics without editing E1 wrapper or tests.
+- [x] Prepare the HR wrapper for normal/uit/mig2-35/gpu:2g.35gb:1, one task, 4 CPUs, 16384 MiB, 09:00:00. Document USR1 warning/boundary stop and forced-kill replay; a warning near walltime cannot guarantee finishing an epoch. Require review of recorded attempt outcomes before same-declaration resubmission. Do not silently auto-resubmit or request longer time.
+- [x] Prepare opt-in HR target acceptance with new output directory per acceptance attempt, real pinned weights, both raw train layouts, actual `[2,3,576,1344]→[2,124]` FP32 path and reconstruction/replay; no production G2 bypass flag. Missing target inputs under explicit opt-in fail rather than skip. Without opt-in, skipped GPU tests are not acceptance.
+- [x] Run `python -m pytest tests/e1hr -q -m "not gpu"`, `python -m pytest -q -m "not gpu"`, `python -m compileall -q src/e1hr tests/e1hr` and `bash -n scripts/slurm/e1hr_train.sbatch`; require PASS and unchanged protected hashes. Record local environment/limits, inspect diff and commit. STOP before target work pending its explicit authorization.
 
 ### HR-T11 — Separately authorized HR target acceptance
 
@@ -254,7 +254,7 @@ Each implementation task below begins only after HR-G1 and its dependencies. Wri
 
 Spec coverage: Sections 1–4 → HR-T01–T05/T07; Section 5 → HR-T05/T08/T12/T13; Section 6 → HR-T06/T07/T10/T11; Section 7 → HR-T01/T06–T09/T14; Section 8 → all entrypoint/data/report guards and HR-T14; Section 9 → HR-T04/T09/T14; Section 10 → the gate table and ledger. No planned task changes E1 scientific files/evidence, performs E3 work, adds LR candidates, changes inherited controls or exposes test evaluation.
 
-Preparation verification is limited to document/contract parsing, inherited-value/digest/link checks, independent arithmetic and unchanged protected files. Future implementation/CPU/target outcomes above remain unexecuted. HR-G1 has approved the written artifacts and exact contract bytes/sidecar, with native task-by-task HR-T01-HR-T10 implementation authorization. Target work, tuning, final training, closeout and final evaluation retain their separate gates.
+Preparation verification is limited to document/contract parsing, inherited-value/digest/link checks, independent arithmetic and unchanged protected files. Implementation/CPU outcomes are recorded task-by-task in implementation_log.md; all target outcomes remain unexecuted. HR-G1 has approved the written artifacts and exact contract bytes/sidecar, with native task-by-task HR-T01-HR-T10 implementation authorization. Target work, tuning, final training, closeout and final evaluation retain their separate gates.
 
 ## HR-G1 approval record (2026-11-02)
 

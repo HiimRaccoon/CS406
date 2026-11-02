@@ -157,14 +157,14 @@ The scientific controls above are settled. What remains stage-specific is their 
 | Gate | Required review / authorization | Current state |
 |---|---|---|
 | HR-G0 | Specification reviewed; preparation of the HR implementation plan/task ledger and explicit contract binding authorized | **PASS** |
-| HR-G1 | Review the prepared design artifacts, freeze exact HR contract bytes/sidecar, select implementation method and explicitly authorize implementation | **PASS ? explicit user approval; native task-by-task HR-T01-HR-T10 only** |
+| HR-G1 | Review the prepared design artifacts, freeze exact HR contract bytes/sidecar, select implementation method and explicitly authorize implementation | **PASS - explicit user approval; native task-by-task HR-T01-HR-T10 only** |
 | HR target-work authorization | Explicitly permit HR GPU deployment/acceptance under Section 6 | Not granted |
 | HR-G2 | Accept CPU/regression and authorized HR target evidence, actual environment identity and concrete four-trial declarations | Not started |
 | HR-G3a | Explicitly authorize only the four HR LR trials after HR-G2 | Not granted |
 | HR-G3b | Review the completed tuning handoff/selection, then explicitly authorize three HR final seeds | Not granted |
 | Final evaluation | Separate study-wide authorization under Section 8 | Not authorized |
 
-**HR-G0 is PASS.** The [implementation plan](plan.md), [task ledger](tasks.md) and [numeric-contract draft](e1hr_numeric_contract_v1.json) are approved at **HR-G1; HR-T01-HR-T10 implementation is authorized**. Later gates still need their stage artifacts and actual acceptance evidence. Only HR-T01-HR-T10 implementation is authorized; target work, target acceptance, tuning, final training and test evaluation remain unauthorized, and no HR acceptance/result is asserted. Only a **material HR target-acceptance failure that prevents the frozen E1-HR protocol from being executed correctly** may trigger explicit user review of an inherited control; it cannot authorize unilateral changes. Minor operational failures do not reopen scientific controls.
+**HR-G0 is PASS.** The [implementation plan](plan.md), [task ledger](tasks.md) and [frozen numeric contract](e1hr_numeric_contract_v1.json) are approved at **HR-G1; HR-T01-HR-T10 implementation is authorized**. Later gates still need their stage artifacts and actual acceptance evidence. Only HR-T01-HR-T10 implementation is authorized; target work, target acceptance, tuning, final training and test evaluation remain unauthorized, and no HR acceptance/result is asserted. Only a **material HR target-acceptance failure that prevents the frozen E1-HR protocol from being executed correctly** may trigger explicit user review of an inherited control; it cannot authorize unilateral changes. Minor operational failures do not reopen scientific controls.
 
 ## HR-G1 approval record (2026-11-02)
 

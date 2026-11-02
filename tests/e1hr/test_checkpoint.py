@@ -104,3 +104,18 @@ def test_hr_checkpoint_metadata_and_audit_only_commit_change(run_config,tmp_path
     with pytest.raises(ValueError): read_checkpoint(p,config=c,identity=current)
     state['kind']='official_e1_checkpoint_v1';torch.save(state,p)
     with pytest.raises(ValueError): read_checkpoint(p,config=c,identity=identity)
+
+
+def test_transient_windows_sharing_error_retries_same_atomic_replacement(tmp_path,monkeypatch):
+    import src.e1hr.checkpoint as checkpoint
+    p=tmp_path/'record.json';checkpoint.atomic_json(p,{'boundary':0})
+    replace=checkpoint.os.replace;calls=[]
+    def sharing(source,target):
+        calls.append(1)
+        if len(calls)<3:
+            exc=PermissionError('temporary Windows sharing denial');exc.winerror=32;raise exc
+        replace(source,target)
+    monkeypatch.setattr(checkpoint.os,'replace',sharing)
+    checkpoint.atomic_json(p,{'boundary':1})
+    assert checkpoint.json.loads(p.read_text())=={'boundary':1}
+    assert len(calls)==3

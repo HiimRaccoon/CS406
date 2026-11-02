@@ -7,6 +7,7 @@ import os
 import platform
 import random
 import subprocess
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -159,6 +160,8 @@ def inspect_target_inputs(config: dict) -> dict:
     config = validate_run(config)
     recipe,paths = config['recipe'],config['paths']
     d = recipe['deployment']
+    if os.path.abspath(sys.executable) != d['python_executable']:
+        raise ValueError('Reviewed Python executable required before target access')
     for key,pinned in [('data_root','dataset'),('weights','pretrained'),('runs_dir','official_e1hr_runs')]:
         if paths[key] != d['paths'][pinned]:
             raise ValueError('HR paths differ from reviewed target')
@@ -201,6 +204,8 @@ def inspect_target_inputs(config: dict) -> dict:
         'pretrained_sha256':recipe['model']['pretrained']['sha256'],'accepted_conformance_sha256':sha256_file(report_path),
         'hr_preprocessing_conformance':current_hr,'evidence_kind':'official_uit_slurm'},
         'audit':{**source['audit'],'acceptance_test_evidence_inventory':acceptance_inventory(recipe),
+                 'platform':platform.platform(),'python_executable':sys.executable,
+                 'runtime_environment':{k:os.environ.get(k) for k in (*required_env,'NVIDIA_TF32_OVERRIDE')},
                  'allocation':allocation,'current_image_hash_audit':audit,'cuda_visible_devices':os.environ.get('CUDA_VISIBLE_DEVICES')}}
 
 

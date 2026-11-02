@@ -1,10 +1,10 @@
 # E1-HR Task Ledger
 
-Updated: **2026-11-02**. **HR-G0 PASS; design preparation complete for HR-G1 review. HR-G1 PASS. HR-T01-HR-T10 implementation authorized; target work and official execution NOT AUTHORIZED. Final test access LOCKED / NOT AUTHORIZED.**
+Updated: **2026-11-02**. **HR-G0 PASS; HR-G1 PASS. Implementation progress and CPU evidence are recorded below. HR-T01-HR-T10 implementation authorized; target work and official execution NOT AUTHORIZED. Final test access LOCKED / NOT AUTHORIZED.**
 
 Authority: the approved [E1-HR specification](specs.md), with the user's two minor wording clarifications, and the unchanged [E1 inherited numeric reference](../E1/e1_numeric_contract_v1.json). Technical interfaces, test oracles and future commands are in [plan.md](plan.md). The [HR numeric contract candidate](e1hr_numeric_contract_v1.json) is **frozen at HR-G1**; its preparation snapshot is unchanged. This ledger owns current completion/gate state; historical E1 completion checkboxes do not transfer to HR.
 
-The reviewed specification directly records HR-G0 PASS. The design artifacts are approved at HR-G1; HR-T01-HR-T10 implementation is authorized. Only HR-T01-HR-T10 implementation is authorized; target work, target acceptance, tuning, final training and test evaluation remain unauthorized. The current work changes only design artifacts. E1 train/validation is closed and its evidence stays unchanged.
+The reviewed specification directly records HR-G0 PASS. The design artifacts are approved at HR-G1; HR-T01-HR-T10 implementation is authorized. Only HR-T01-HR-T10 implementation is authorized; target work, target acceptance, tuning, final training and test evaluation remain unauthorized. Current scope is HR-T01-HR-T10 implementation and CPU/deployment preparation only. E1 train/validation is closed and its evidence stays unchanged.
 
 ## Status definitions
 
@@ -63,7 +63,7 @@ These are settled inputs, not review questions for another hyperparameter search
 | HR-T07 | HR-T01–T06 | Current-target preflight/runtime and one-run/attempt orchestration | **COMPLETE - CPU/PREPARATION ONLY**; 61 HR CPU cases passed; eight-epoch runner/replay, projection identity, transitive-source rejection and rehashed E1-evidence guard |
 | HR-T08 | HR-T01/T07 | Four declarations, strict evidence ledger, locked LR selection and fresh final declarations | **COMPLETE - CPU/PREPARATION ONLY**; 73 HR CPU cases passed; complete parser lineage, attempts, independent LR oracle, audit-only source projection and locked selection guards |
 | HR-T09 | HR-T02–T08 | Selected validation exports, three-seed aggregate and official E1 comparison | **COMPLETE - CPU/PREPARATION ONLY**; 8 report checks passed (5 HR plus 3 unchanged E1); earlier-best exports, ddof=1, source projection and read-only official E1 comparator |
-| HR-T10 | HR-T01–T09 | CPU regression, single-run wrapper/runbook and opt-in acceptance probe preparation | **NOT STARTED — GATED**; no target work without HR-TARGET-AUTH |
+| HR-T10 | HR-T01–T09 | CPU regression, single-run wrapper/runbook and opt-in acceptance probe preparation | **COMPLETE - CPU/PREPARATION ONLY**; 278 passed, 3 GPU deselected in full CPU regression; HR/CLI/atomic-retry coverage, compileall and Git Bash syntax PASS; no target work |
 | HR-T11 | HR-T10 + HR-TARGET-AUTH | Actual HR target acceptance evidence and unapproved HR-G2 candidate | **NOT STARTED — GATED**; separate from HR-G2 review |
 | HR-T12 | HR-T11 + HR-G2 + HR-G3a | Four full-budget tuning trials, locked selection and mandatory handoff | **NOT STARTED — GATED** |
 | HR-T13 | HR-T12 + HR-G3b + applicable HR-G2 | Three full-budget fresh final runs and selected validation exports | **NOT STARTED — GATED** |
@@ -140,9 +140,9 @@ Maintain exact path/bytes/SHA-256/role inventories of acceptance tests/helpers/e
 
 ### HR-T10 — Deployment preparation and CPU readiness
 
-- [ ] CLI/wrapper CPU guards pass; one immutable declaration and own last.pt only; exact allocation and pre-start environment variables.
-- [ ] Prepare HR-only wrapper/runbook and opt-in acceptance probe; no jobs created/submitted. State nine-hour attempt limit, full-epoch replay and explicit retry review.
-- [ ] HR and whole-repository CPU regressions, compile and shell syntax checks pass; protected E1/frozen/pilot bytes unchanged. Record evidence and STOP before target work until HR-TARGET-AUTH.
+- [x] CLI/wrapper CPU guards pass; one immutable declaration and own last.pt only; exact allocation and pre-start environment variables.
+- [x] Prepare HR-only wrapper/runbook and opt-in acceptance probe; no jobs created/submitted. State nine-hour attempt limit, full-epoch replay and explicit retry review.
+- [x] HR and whole-repository CPU regressions, compile and shell syntax checks pass; protected E1/frozen/pilot bytes unchanged. Record evidence and STOP before target work until HR-TARGET-AUTH.
 
 ### HR-T11 — Actual target acceptance
 
@@ -174,7 +174,7 @@ Maintain exact path/bytes/SHA-256/role inventories of acceptance tests/helpers/e
 
 **HR-G1 PASS; HR-T01-HR-T10 implementation authorized.** No frozen scientific field remains unresolved in the draft. Actual accepted source/runtime/device observations, HR selected LR, attempt/job IDs, checkpoint/result hashes and measured metrics must be supplied by their later stages; they are not missing scientific defaults. The candidate contains policies/schema requirements for them without fabricated values. The exact-byte sidecar and digest-bound approval receipt now record the explicit HR-G1 freeze.
 
-No HR implementation, acceptance, trial/final run, closeout or test evaluation is complete. E1 and pilot evidence cannot satisfy those statuses. Next action is native task-by-task HR-T01-HR-T10 implementation, followed by a mandatory stop before separate target-work authorization.
+HR-T01-HR-T10 implementation and CPU/deployment-preparation checks are complete; see cpu_readiness.json and implementation_log.md. HR target acceptance, tuning/finals, closeout and test evaluation remain unstarted and unauthorized. E1/pilot evidence does not satisfy those stages. STOPPED after HR-T10; next is separate explicit target-work authorization for HR-T11, not execution.
 
 ## HR-G1 approval record (2026-11-02)
 

@@ -35,6 +35,17 @@ def test_new_unreviewed_transitive_import_is_rejected(recipe,tmp_path,monkeypatc
     with pytest.raises(ValueError,match='closure'): runtime.source_identity(recipe)
 
 
+def test_inspection_rejects_wrong_python_before_target_access(recipe,tmp_path,monkeypatch):
+    import src.e1hr.runtime as runtime
+    from src.e1hr.config import resolve_run
+    d=recipe['deployment']['paths']
+    config=resolve_run(recipe,stage='tuning',seed=1001,lr=1e-4,paths={'data_root':d['dataset'],'weights':d['pretrained'],
+        'runs_dir':d['official_e1hr_runs'],'conformance_report':str(tmp_path/'conformance.json'),
+        'acceptance_record':str(tmp_path/'g2.json'),'authorization_record':str(tmp_path/'g3a.json')})
+    monkeypatch.setattr(runtime,'_allocation',lambda *a:pytest.fail('target access before interpreter verification'))
+    with pytest.raises(ValueError,match='Python executable'):runtime.inspect_target_inputs(config)
+
+
 def test_official_preflight_compares_projection_without_commit_equality(run_config,tmp_path,monkeypatch):
     import src.e1hr.train as train
     from src.e1hr.config import CONTRACT_SHA256,sha256_file

@@ -1,0 +1,177 @@
+{
+  "kind": "e1hr_cpu_readiness_v1",
+  "experiment": "E1-HR",
+  "resolution_wh": [
+    1344,
+    576
+  ],
+  "stage": "HR-T10_CPU_and_deployment_preparation",
+  "recorded_client_date": "2026-11-02",
+  "status": "PASS_LOCAL_CPU_ONLY",
+  "contract_sha256": "e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d",
+  "hr_g1_receipt_sha256": "728a15d169fa7508de6d6ef026108db26d5a1cc720560e4ff741a114424ba694",
+  "authorized_and_completed_tasks": [
+    "HR-T01",
+    "HR-T02",
+    "HR-T03",
+    "HR-T04",
+    "HR-T05",
+    "HR-T06",
+    "HR-T07",
+    "HR-T08",
+    "HR-T09",
+    "HR-T10"
+  ],
+  "target_acceptance": "NOT STARTED / NOT AUTHORIZED",
+  "HR_G2": "NOT STARTED",
+  "HR_G3a": "NOT AUTHORIZED",
+  "HR_G3b": "NOT AUTHORIZED",
+  "test_images_opened": 0,
+  "official_runs_executed": 0,
+  "slurm_jobs_submitted": 0,
+  "gpu_tests_executed": 0,
+  "local_environment": {
+    "python": "3.11.18",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.8.0+cpu",
+      "torchvision": "0.23.0+cpu",
+      "Pillow": "11.3.0",
+      "numpy": "2.1.3",
+      "pandas": "2.2.3",
+      "scikit-learn": "1.6.1",
+      "pytest": "8.3.5"
+    }
+  },
+  "verification": {
+    "full_cpu_command": "python -B -m pytest -q -m \"not gpu\"",
+    "full_cpu_result": {
+      "passed": 278,
+      "gpu_deselected": 3
+    },
+    "dedicated_hr_cpu_before_final_retry_regression": {
+      "passed": 93,
+      "gpu_deselected": 1
+    },
+    "final_checkpoint_runner_recovery": {
+      "passed": 15
+    },
+    "entrypoints_and_wrapper": {
+      "passed": 14
+    },
+    "compileall": "PASS",
+    "bash_syntax": "PASS using actual Git Bash"
+  },
+  "local_consumed_source_files": {
+    "configs/preprocessing/geoguessr_v1.json": "4f49dd41738168cfc65d4322fbe1b659ef5595229bb487ad86dd671a26a8903f",
+    "configs/preprocessing/geoguessr_v1.sha256": "752db1ce69ce0a0fab3c12a04ce3e953efd6019d1f8860123f1df824809c48ba",
+    "pyproject.toml": "aa1a9177445ab29cfe2de16ed6d0c2f05f7884f02706254c38c321ae2ce59d0d",
+    "requirements.txt": "2b21d7c94e7dd31d8abbef8e0392ad0325db71eeee49bfa8beb0825aa7f99cc4",
+    "scripts/slurm/e1hr_train.sbatch": "cf4b24fbc6556b7588bd6c2f2b27fca83148705efd9ba9ff4c3113e5dab86b5e",
+    "src/__init__.py": "c4078d546234a5fb1c107f8064b06b8c0f914473f4e6d866a42dde1761c8f41e",
+    "src/e1/__init__.py": "86e1743cd7ce8dfca6e50725a34ee7fd93bb41f9a4e01a0f6c325346a7bec53e",
+    "src/e1/engine.py": "5a1787d852e6012410f97fd0e9031d4a2ef18b74e81b195ced37068adcd8d693",
+    "src/e1/metrics.py": "3b1709b7813d26ee1fdc0516d6c47d1d5aef2782d04ed334c4d1d07fdce61448",
+    "src/e1hr/__init__.py": "abc5c9945c728c93c0521e9d595fdcd7d8533702342cbb08977d8b684a996335",
+    "src/e1hr/campaign.py": "19e9bc45490678e4309d4799ca07bd976ec4d5c4eb4728f9029426a8ee4f7f28",
+    "src/e1hr/checkpoint.py": "6075c1c8b61b2a1d908738a1cc525a1ce32eb97e936fcae0ee5e4b33b5b6a93a",
+    "src/e1hr/config.py": "d4f1024c753c68ef089fc262332752843a3641b80307a33ba568200d23947914",
+    "src/e1hr/data.py": "646654bf29261029a9daf1d1e026f2e0741ea1ae8425458a2c73b0cb45c2ad76",
+    "src/e1hr/engine.py": "da31de555b7effbdf3eccf92daed30212c359ff86eeefe91eb3d9aee9ae85dda",
+    "src/e1hr/metrics.py": "27504cddfa8c492f7a1247ede527c6040221abf2f4f37a08d33e0ee7576d72fc",
+    "src/e1hr/model.py": "9fb1c9de8bde9338b2d1da90e71d0ed07b83cebb87966ad0d55c6b25c2983e94",
+    "src/e1hr/runtime.py": "8b2ffecc1c0770113ed0dee815f2b7080ca3dd2893fa0c7a2f4e387b36ed942e",
+    "src/e1hr/train.py": "4e663c123adf2b91bdd20c781fb5a9b689bba0ad8a6bfcb8196d6bcd5d2b141c",
+    "src/preprocessing/__init__.py": "45fbd0b8466477ec3dc0b13c9a877aaa516c49885ded2dbc4367e67c4a26991b",
+    "src/preprocessing/geoguessr_v1.py": "4d1dea328f69c1c7e1fa4f333c7276de0c3bc81b322db40dc33530969357e666"
+  },
+  "local_consumed_source_fingerprint": "dcee4d7b545870191c4e3cf5890726be248a8f20ed9264c85906beb97f76a565",
+  "source_snapshot_role": "Local CPU preparation snapshot only; no accepted actual UIT source/runtime/device identity is asserted",
+  "acceptance_test_inventory": {
+    "tests/e1hr/__init__.py": {
+      "bytes": 77,
+      "sha256": "a9bbfde7a6fff36c285cc6481ec5568fea2c497a88d2c1407c9c1b42f827a181",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e1hr/conftest.py": {
+      "bytes": 715,
+      "sha256": "aedb3d63d1dbe193030f0107d45bdf355217da0ae4a1ee2f69b4d4e579192107",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e1hr/test_artifacts.py": {
+      "bytes": 9281,
+      "sha256": "46626dc485fd1b29cf01be60e5c9ab3e172b52b95533d776b1d9b9292bb7bf14",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e1hr/test_campaign.py": {
+      "bytes": 5817,
+      "sha256": "4eddc7ff470b143a09662dad1e306a617988ae11366484fc9b394e5656ee574a",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e1hr/test_checkpoint.py": {
+      "bytes": 6572,
+      "sha256": "e099c23c31391136e0b0a0b55945a7b6d71b29df38a4cca7cc3d8133ac78e7a5",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e1hr/test_config.py": {
+      "bytes": 3107,
+      "sha256": "287b582b78029490c8235c2d385b4d1ca86c15c0f97f25931ffddcd9d62194de",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e1hr/test_data.py": {
+      "bytes": 6704,
+      "sha256": "3a181494c037a7e790c5a7c708b271c8bac17494393ca4e189e265b563d52c0f",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e1hr/test_engine.py": {
+      "bytes": 3568,
+      "sha256": "1cab78220256728ae22d34ad987427c4bbe862eee9795442d7a7646235a5c2af",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e1hr/test_entrypoints.py": {
+      "bytes": 7863,
+      "sha256": "95a03318e6a09c3e3abcb90d3b88e6221878eec59a8ffd0f9bdc9685fdca1303",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e1hr/test_gpu_smoke.py": {
+      "bytes": 12430,
+      "sha256": "0667b2c187d47bbda492ed7d8dcc137b4b0d49c53e89f1b53f0e7543319605c2",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e1hr/test_metrics.py": {
+      "bytes": 2681,
+      "sha256": "9fff8f2e48d700878421c29b5817d0d770b3ab1eb936955de9ad85a33d626545",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e1hr/test_model.py": {
+      "bytes": 3438,
+      "sha256": "59cec5bb8bced7fda2263d90a7daa258405f8d69a2fa9c2d3ea5bda250728e11",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e1hr/test_recovery.py": {
+      "bytes": 6747,
+      "sha256": "a436f46df0c493ad72de0b969b2a4755ffe7666bdb0a3ad7a0ff0c450b3c247b",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e1hr/test_report.py": {
+      "bytes": 7190,
+      "sha256": "5809819397327c2da14f6e74421690e5189de0f060f30b12fca5b97937e3246f",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e1hr/test_runtime.py": {
+      "bytes": 6577,
+      "sha256": "7ee91dba01a5b1d3cce7607c86ae4a57ad999e4b8c41d4bc684c7dd1c184c7b9",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e1hr/test_train.py": {
+      "bytes": 5218,
+      "sha256": "691c9ed0c0f8c8d8ee87d4d2edc3db44766f2f1eca427ab6af34424025953799",
+      "role": "acceptance_test_tooling"
+    }
+  },
+  "prior_failures": [
+    "Initial whole-suite run: HR flat-curve runner failed Windows WinError 5 replacing last.pt; 276 passed, 3 deselected. Isolated rerun passed. Injected sharing-denial RED -> bounded atomic replacement retry -> 15 targeted cases PASS.",
+    "Second whole-suite run: unchanged E1 decreasing-curve runner failed Windows WinError 5 replacing events.json; 277 passed, 3 deselected. Isolated E1 rerun passed; E1 unchanged. Third complete regression passed 278/278."
+  ],
+  "next_required_gate": "Separate explicit HR target-work authorization for HR-T11; neither local CPU success nor this record grants permission"
+}
