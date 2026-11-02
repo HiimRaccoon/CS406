@@ -21,3 +21,5 @@ Ruling: HR-T04/HR-T05 are bounded import adapters to already implemented unchang
 HR-T04: complete - 7 passed; independent full-split cross-bucket/tie/metadata bucket oracles and unchanged E1 metrics regression. RED/GREEN logs: .tools/e1hr/hr-t04-red.log and -green.log. No target/GPU work.
 
 HR-T05: complete - 12 passed; scheduler independent interior/endpoints, tail weighting, comparator and unchanged E1 engine regression. RED/GREEN logs: .tools/e1hr/hr-t05-red.log and -green.log. No target/GPU work.
+
+HR-T06: complete - 20 passed; full-state atomic boundary replay, HR kind/shape and audit-only commit acceptance with runtime-change rejection. RED/GREEN logs: .tools/e1hr/hr-t06-red.log and -green.log. No target/GPU work.

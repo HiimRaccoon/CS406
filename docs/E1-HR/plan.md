@@ -173,10 +173,10 @@ Each implementation task below begins only after HR-G1 and its dependencies. Wri
 
 **Depends:** HR-T01/T02/T03/T05. **Files:** HR checkpoint/test_checkpoint. **Interfaces:** save/read/restore above.
 
-- [ ] Test `official_e1hr_checkpoint_v1` and explicit experiment/resolution identity; reject E1/pilot kinds, cross-run configs, altered seed/LR/batch/source/runtime/budget and best.pt resume. Read best only for reporting. Boundary zero and epoch e require updates=e×17499 and full history/selection consistency (small CPU fixtures use explicitly nonofficial mechanics counts).
-- [ ] Compare uninterrupted versus discard/reconstruct/restore/replay with dropout: model/optimizer/full scheduler, inactive scaler, Python/NumPy/CPU RNG, loader generators, selected weights/epoch and scientific history. CUDA RNG is additionally verified at HR-T11. No minibatch boundary is an official training commit.
-- [ ] Inject a failed atomic last.pt write: previous boundary remains readable. Test incomplete/corrupt state and crash between last/best/history writes; last.pt is authoritative and selected_weights permits rebuilding best without resetting training.
-- [ ] Run `python -m pytest tests/e1hr/test_checkpoint.py -q` to RED; implement HR-owned identity/state handling; rerun to PASS and commit.
+- [x] Test `official_e1hr_checkpoint_v1` and explicit experiment/resolution identity; reject E1/pilot kinds, cross-run configs, altered seed/LR/batch/source/runtime/budget and best.pt resume. Read best only for reporting. Boundary zero and epoch e require updates=e×17499 and full history/selection consistency (small CPU fixtures use explicitly nonofficial mechanics counts).
+- [x] Compare uninterrupted versus discard/reconstruct/restore/replay with dropout: model/optimizer/full scheduler, inactive scaler, Python/NumPy/CPU RNG, loader generators, selected weights/epoch and scientific history. CUDA RNG is additionally verified at HR-T11. No minibatch boundary is an official training commit.
+- [x] Inject a failed atomic last.pt write: previous boundary remains readable. Test incomplete/corrupt state and crash between last/best/history writes; last.pt is authoritative and selected_weights permits rebuilding best without resetting training.
+- [x] Run `python -m pytest tests/e1hr/test_checkpoint.py -q` to RED; implement HR-owned identity/state handling; rerun to PASS and commit.
 
 ### HR-T07 — Current-target checks and one-run orchestration
 

@@ -59,7 +59,7 @@ These are settled inputs, not review questions for another hyperparameter search
 | HR-T03 | HR-T01 | HR pinned model/head/full fine-tuning/optimizer groups | **COMPLETE - CPU/PREPARATION ONLY**; 36 passed (HR config/data/model and unchanged E1 model regression); isolated CPU head RNG, strict offline loading and exhaustive groups |
 | HR-T04 | HR-T01/T02 | Narrow metrics reuse and independent full-split/bucket oracles | **COMPLETE - CPU/PREPARATION ONLY**; 7 passed; independent full-split cross-bucket/tie/metadata bucket oracles and unchanged E1 metrics regression |
 | HR-T05 | HR-T03/T04 | Narrow engine reuse; update scheduler, tail weighting and comparator | **COMPLETE - CPU/PREPARATION ONLY**; 12 passed; scheduler independent interior/endpoints, tail weighting, comparator and unchanged E1 engine regression |
-| HR-T06 | HR-T01/T02/T03/T05 | HR full-state atomic checkpoints and completed-epoch replay | **NOT STARTED — GATED** |
+| HR-T06 | HR-T01/T02/T03/T05 | HR full-state atomic checkpoints and completed-epoch replay | **COMPLETE - CPU/PREPARATION ONLY**; 20 passed; full-state atomic boundary replay, HR kind/shape and audit-only commit acceptance with runtime-change rejection |
 | HR-T07 | HR-T01–T06 | Current-target preflight/runtime and one-run/attempt orchestration | **NOT STARTED — GATED** |
 | HR-T08 | HR-T01/T07 | Four declarations, strict evidence ledger, locked LR selection and fresh final declarations | **NOT STARTED — GATED** |
 | HR-T09 | HR-T02–T08 | Selected validation exports, three-seed aggregate and official E1 comparison | **NOT STARTED — GATED** |
@@ -114,9 +114,9 @@ Maintain exact path/bytes/SHA-256/role inventories of acceptance tests/helpers/e
 
 ### HR-T06 — Checkpoints
 
-- [ ] RED→GREEN HR kind/config/identity/budget/role guards; reject E1/pilot and best.pt resume.
-- [ ] Boundary-zero and completed-epoch CPU reconstruction/replay preserve all scientific/RNG/loader/selection state; atomic-write failures retain previous last.pt.
-- [ ] Authoritative last.pt repairs derived best/history after publication interruption; no extra budget or stopping counters.
+- [x] RED→GREEN HR kind/config/identity/budget/role guards; reject E1/pilot and best.pt resume.
+- [x] Boundary-zero and completed-epoch CPU reconstruction/replay preserve all scientific/RNG/loader/selection state; atomic-write failures retain previous last.pt.
+- [x] Authoritative last.pt repairs derived best/history after publication interruption; no extra budget or stopping counters.
 
 ### HR-T07 — Runtime/runner/recovery
 

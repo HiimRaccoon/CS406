@@ -111,3 +111,13 @@ def validate_run(config: dict) -> dict:
     except (KeyError, TypeError) as exc:
         raise ValueError("Incomplete E1-HR run configuration") from exc
     return copy.deepcopy(config)
+
+
+def scientific_identity(identity: dict) -> dict:
+    """Equality projection; audit commits/tooling remain recorded, never compared."""
+    if (not isinstance(identity, dict) or set(identity) != {"scientific_runtime", "audit"}
+            or not isinstance(identity["scientific_runtime"], dict) or not identity["scientific_runtime"]
+            or not isinstance(identity["audit"], dict)):
+        raise ValueError("Explicit scientific/runtime identity and separate audit metadata required")
+    fingerprint(identity["scientific_runtime"])
+    return copy.deepcopy(identity["scientific_runtime"])
