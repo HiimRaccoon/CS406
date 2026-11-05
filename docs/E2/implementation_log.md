@@ -27,3 +27,6 @@ T03: 5 behavioral RED failures; 16 GREEN model/E1/HR regression cases passed; ex
 T03 commit: `4a72a098e294d348e1a3c7c520085968842d1537`.
 
 T04: ranking behavioral RED failed; 11 GREEN metric/E1/HR cases passed Protected hashes verified: 266; frozen contract unchanged. No target work.
+T04 commit: `89e60c81eb7ec281dbba6a4830a94984b4cb6c78`.
+
+T05: dual-view loop RED failed; 17 GREEN engine/E1/HR cases passed; original-image tail matches direct updates Protected hashes verified: 266; frozen contract unchanged. No target work.

@@ -73,7 +73,7 @@ T00b must serialize both comparator roles/hashes as required scientific/reportin
 | E2-T02 | E2-T01 | Exact manifest, shared-jitter five-view dataset, deterministic loaders and dual transfer | **COMPLETE — CPU/PREPARATION ONLY**; 6 RED failures; 27 GREEN five-view/preprocessing/E1/HR data cases passed |
 | E2-T03 | E2-T01/T02 | Strict pinned shared model, global/local execution/fusion, head fan-in 1536, exact 190,588 classifier / 28,010,716 total parameter oracles and decay groups | **COMPLETE — CPU/PREPARATION ONLY**; 5 behavioral RED failures; 16 GREEN model/E1/HR regression cases passed; exact architecture counts verified |
 | E2-T04 | E2-T01/T02 | Narrow unchanged metrics reuse and independent ranking/bucket oracles | **COMPLETE — CPU/PREPARATION ONLY**; ranking behavioral RED failed; 11 GREEN metric/E1/HR cases passed |
-| E2-T05 | E2-T02/T03/T04 | E2 multi-view train/evaluate, image-denominator accounting and scheduler/comparator reuse | **NOT STARTED — GATED** |
+| E2-T05 | E2-T02/T03/T04 | E2 multi-view train/evaluate, image-denominator accounting and scheduler/comparator reuse | **COMPLETE — CPU/PREPARATION ONLY**; dual-view loop RED failed; 17 GREEN engine/E1/HR cases passed; original-image tail matches direct updates |
 | E2-T06 | E2-T01/T02/T03/T05 | State primitives, strict atomic E2 checkpoints and completed-boundary replay | **NOT STARTED — GATED** |
 | E2-T07 | E2-T01–T06 | Current-target inspection/preflight, deterministic one-run/attempt lifecycle | **NOT STARTED — GATED**; final preflight remains fail-closed until T08 selection integration |
 | E2-T08 | E2-T01/T07 | Strict campaign/lineage parser, declarations, locked LR selection, final preflight integration | **NOT STARTED — GATED** |

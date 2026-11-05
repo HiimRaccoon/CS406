@@ -251,11 +251,11 @@ assert model.classifier.out_features == 124
 
 **Depends:** E2-T02/T03/T04. **Files:** E2 engine and `test_engine.py`. **Consumes:** `move_views`, model/metrics, unchanged E1 scheduler/comparator. **Produces:** E2 train/evaluate interfaces above.
 
-- [ ] RED: add `test_dictionary_views_transfer_and_original_image_counts`, `test_one_image_tail_matches_direct_sample_mean_steps`, and `test_evaluate_preserves_manifest_paths_and_same_logits`. Compare a tiny fused model with a direct optimizer/CE reference for batch sizes 2 then 1; count three original samples, two updates, and no per-view loss. Verify both tensor transfers, raw logits, sample-weighted loss/NLL, prediction ordering, and finite checks.
-- [ ] Pin independent scheduler LR oracle `L=1,W=2,N=6,start=.1,f=.01`: `[.1,.55,1,.7525,.2575,.01]`; official u=0/1000/139991 endpoints and exact floor; reject over-budget update/changed restored horizon. Validation advances neither scheduler nor optimizer. Keep eight-epoch control-flow checks in T07.
-- [ ] Pin selected F1=.5 retaining later .5000005 despite better NLL, replacing at .500002, and retaining equal/lower values. Reject AMP/scaler/clipping and malformed view/label batches; nonfinite logits/loss/gradients or OOM propagate without a skipped update.
-- [ ] Run `python -m pytest tests/e2/test_engine.py -q` to RED; implement only multi-view loops and narrow numerical reuse. No single-tensor E1 loop re-export.
-- [ ] GREEN/regression: rerun it plus `python -m pytest tests/e1/test_engine.py tests/e1hr/test_engine.py -q`; require PASS, log/diff/protected-hash review, commit.
+- [x] RED: add `test_dictionary_views_transfer_and_original_image_counts`, `test_one_image_tail_matches_direct_sample_mean_steps`, and `test_evaluate_preserves_manifest_paths_and_same_logits`. Compare a tiny fused model with a direct optimizer/CE reference for batch sizes 2 then 1; count three original samples, two updates, and no per-view loss. Verify both tensor transfers, raw logits, sample-weighted loss/NLL, prediction ordering, and finite checks.
+- [x] Pin independent scheduler LR oracle `L=1,W=2,N=6,start=.1,f=.01`: `[.1,.55,1,.7525,.2575,.01]`; official u=0/1000/139991 endpoints and exact floor; reject over-budget update/changed restored horizon. Validation advances neither scheduler nor optimizer. Keep eight-epoch control-flow checks in T07.
+- [x] Pin selected F1=.5 retaining later .5000005 despite better NLL, replacing at .500002, and retaining equal/lower values. Reject AMP/scaler/clipping and malformed view/label batches; nonfinite logits/loss/gradients or OOM propagate without a skipped update.
+- [x] Run `python -m pytest tests/e2/test_engine.py -q` to RED; implement only multi-view loops and narrow numerical reuse. No single-tensor E1 loop re-export.
+- [x] GREEN/regression: rerun it plus `python -m pytest tests/e1/test_engine.py tests/e1hr/test_engine.py -q`; require PASS, log/diff/protected-hash review, commit.
 
 ### E2-T06 — Atomic official checkpoints and shared recovery primitives
 
