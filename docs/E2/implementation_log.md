@@ -18,3 +18,6 @@ G1 commit: `83f7044538393900ed45183002bb497fe833db28`.
 T01: 12 behavioral RED failures; 42 GREEN config/regression cases passed Protected hashes verified: 266; frozen contract unchanged. No target work.
 
 T01: 12 behavioral RED failures; 42 GREEN config/regression cases passed Protected hashes verified: 266; frozen contract unchanged. No target work.
+T01 commit: `fe93051433a2c13a55a9cbc2eab9fe01e5bc2120`.
+
+T02: 6 RED failures; 27 GREEN five-view/preprocessing/E1/HR data cases passed Protected hashes verified: 266; frozen contract unchanged. No target work.

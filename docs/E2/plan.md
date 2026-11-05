@@ -206,8 +206,8 @@ CPU tests use temporary output roots and explicitly nonofficial evidence. Do not
 
 **Depends:** E2-T01. **Files:** `src/e2/data.py`, `tests/e2/test_data.py`. **Consumes:** validated E2 recipe/declaration and unchanged `Preprocessor`. **Produces:** manifest/dataset/sampler/loader/transfer interfaces above.
 
-- [ ] RED: add `test_both_layouts_global_and_locals_match_frozen_preprocessor`, `test_one_jitter_pair_is_shared_by_all_views`, `test_collation_and_transfer_preserve_original_images`, and test-before-open guards. Use synthetic raw RGB canvases of both real layout sizes; independently extract config rectangles from one processed raw tensor and verify locals against direct frozen resize/normalize, not crops from global.
-- [ ] Pin the structural assertions below, tail B=1, natural permutation/no duplicates, deterministic image-keyed jitter, worker epoch propagation, path containment, corrupt/missing data failure, and test split rejection before an image-open sentinel.
+- [x] RED: add `test_both_layouts_global_and_locals_match_frozen_preprocessor`, `test_one_jitter_pair_is_shared_by_all_views`, `test_collation_and_transfer_preserve_original_images`, and test-before-open guards. Use synthetic raw RGB canvases of both real layout sizes; independently extract config rectangles from one processed raw tensor and verify locals against direct frozen resize/normalize, not crops from global.
+- [x] Pin the structural assertions below, tail B=1, natural permutation/no duplicates, deterministic image-keyed jitter, worker epoch propagation, path containment, corrupt/missing data failure, and test split rejection before an image-open sentinel.
 
 ```python
 assert views["global"].shape == (2, 3, 384, 896)
@@ -215,8 +215,8 @@ assert views["local"].shape == (2, 4, 3, 320, 320)
 assert len(targets) == len(paths) == 2
 ```
 
-- [ ] Run `python -m pytest tests/e2/test_data.py -q` to behavioral RED; implement the owned data path and dual-tensor transfer without changing preprocessing.
-- [ ] GREEN/regression: rerun it plus `python -m pytest tests/test_preprocessing.py tests/e1/test_data.py tests/e1hr/test_data.py -q`; require PASS, unchanged frozen hashes, then log and commit.
+- [x] Run `python -m pytest tests/e2/test_data.py -q` to behavioral RED; implement the owned data path and dual-tensor transfer without changing preprocessing.
+- [x] GREEN/regression: rerun it plus `python -m pytest tests/test_preprocessing.py tests/e1/test_data.py tests/e1hr/test_data.py -q`; require PASS, unchanged frozen hashes, then log and commit.
 
 ### E2-T03 — Pinned shared encoder, exact fusion, and fused-head initialization
 
