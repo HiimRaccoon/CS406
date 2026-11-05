@@ -33,3 +33,6 @@ T05: dual-view loop RED failed; 17 GREEN engine/E1/HR cases passed; original-ima
 T05 commit: `f8747f355de11765666a2372ee2059282828ac0f`.
 
 T06: 3 behavioral RED failures; 9 GREEN checkpoint/E1/HR cases passed; strict official envelope separated from replay primitives Protected hashes verified: 266; frozen contract unchanged. No target work.
+T06 commit: `59b92abe6006fe1bcf96c652920d25ef63af8be1`.
+
+T07: 7 behavioral RED failures; 63 GREEN lifecycle/source/runtime/E1/HR cases passed; fixture envelopes remain test-owned; all official receipts bind declaration digests Protected hashes verified: 266; frozen contract unchanged. No target work.
