@@ -1,6 +1,6 @@
 # E2 — Shared-Encoder Global/Local Representation
 
-**E2-G0 APPROVED — corrected specification, plan and task ledger reviewed by the user. E2-T00b numeric-contract candidate preparation only is complete. E2-G1 is NOT APPROVED; implementation and all execution stages remain NOT AUTHORIZED. Final test remains LOCKED / NOT AUTHORIZED.**
+**E2-G0 APPROVED — corrected specification, plan and task ledger reviewed by the user. E2-T00b numeric-contract candidate preparation only is complete. E2-G1 is PASS; native E2-T01?T10 implementation/CPU preparation is authorized. Target and later execution stages remain NOT AUTHORIZED. Final test remains LOCKED / NOT AUTHORIZED.**
 
 Revision date: **2026-11-05**. E1 training/validation is closed. The user has confirmed completion of E1-HR and PASS for HR-G2/HR-G3a/HR-G3b; its three-seed validation reports are available. This specification takes that handoff as given. Earlier preparation-status text in the master/E1-HR documents does not override the current user handoff, and this document does not revise their frozen contracts or approval records.
 
@@ -350,3 +350,7 @@ Final-test evaluation may be considered only after **all experiments intended fo
 | Final evaluation | Separate study-wide explicit authorization under Section 14 | **LOCKED / NOT AUTHORIZED** |
 
 The E2-T00b candidate is **86,335 bytes**, exact SHA-256 **`ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72`**. JSON, inherited controls, numerical arithmetic/oracles, source-reference hashes and comparator bindings were checked as documentation only. No E2 checksum sidecar, approval receipt, official declaration, accepted target identity or result was created. The candidate records the exact pre-status-update G0-reviewed document snapshots; later ledger/status changes do not rewrite that provenance or create a digest cycle. Selected E2 LR/results and accepted runtime hashes remain future outputs. **STOP for explicit E2-G1 review of the exact candidate digest, implementation method and named scope.**
+
+## E2-G1 approval record (2026-11-05)
+
+E2-G1 is **PASS**, explicitly approved by the user for exact contract SHA-256 `ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72` at reviewed commit `c40dd00a22de2d3ef50440440107d66db7b7dc45`. The approved JSON bytes remain unchanged; the exact-byte sidecar and [G1 receipt](e2_g1_approval.json) record the freeze. Native task-by-task **E2-T01?T10 only** is authorized, with CPU RED ? GREEN ? scoped regression and commits. Earlier preparation-status text and frozen candidate snapshots are historical. Target/GPU work, target acceptance, tuning, finals, E3 and test images remain **NOT AUTHORIZED**. STOP after T10.

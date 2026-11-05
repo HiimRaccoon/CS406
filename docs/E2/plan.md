@@ -8,7 +8,7 @@
 
 **Tech stack:** Python 3.11.17; Torch 2.8.0+cu128; TorchVision 0.23.0+cu128; deterministic FP32; the remaining software lock in spec Section 8; pytest CPU fixtures and separately opted-in UIT Slurm target acceptance.
 
-**Spec:** [specs.md](specs.md). **Current status:** **E2-G0 PASS**, explicitly approved by the user on 2026-11-05 for **E2-T00b only**; **E2-G1 NOT APPROVED**. The complete [numeric-contract candidate](e2_numeric_contract_v1.json) is prepared and checked as documentation. The [task ledger](tasks.md) records live status. No sidecar, approval receipt, implementation, CPU/GPU tests, declarations or jobs are authorized or produced by T00b.
+**Spec:** [specs.md](specs.md). **Current status:** **E2-G0 PASS**, explicitly approved by the user on 2026-11-05 for **E2-T00b only**; **E2-G1 PASS ? native T01?T10 authorized**. The complete [numeric-contract candidate](e2_numeric_contract_v1.json) is prepared and checked as documentation. The [task ledger](tasks.md) records live status. No sidecar, approval receipt, implementation, CPU/GPU tests, declarations or jobs are authorized or produced by T00b.
 
 ## Global constraints
 
@@ -196,11 +196,11 @@ CPU tests use temporary output roots and explicitly nonofficial evidence. Do not
 
 **Depends:** E2-G1 freeze/implementation permission. **Files:** E2 package/config, `tests/e2/__init__.py`, `conftest.py`, `test_config.py`. **Consumes:** frozen E2 contract/G1 receipt. **Produces:** config interfaces and serialized declaration/kind contracts above.
 
-- [ ] RED: add `test_e2_topology_and_common_controls_are_immutable`, `test_other_stage_receipts_are_rejected`, and `test_final_requires_locked_selection`. Assert 4 tuning declarations with seed 1001, separate final seed set, five-view identity, head 1536→124, exact 17499/139992 accounting, G1 digest binding, and rejection of E1/HR/pilot kinds or unknown overrides.
-- [ ] Run `python -m pytest tests/e2/test_config.py -q` and record behavioral RED.
-- [ ] GREEN: implement strict recipe/declaration validation, separate nonofficial acceptance-request validation and canonical hashes; test that acceptance requests cannot enter the official training CLI/campaign path. Configuration checks allocate no model/GPU and submit no jobs. Synthetic fixtures are test-owned and cannot alter production approvals or reviewed counts.
-- [ ] Run that command plus `python -m pytest tests/e1/test_config.py tests/e1hr/test_config.py -q`; require all selected cases PASS.
-- [ ] Review protected hashes and record evidence; commit only this task's files and ledger/log entries.
+- [x] RED: add `test_e2_topology_and_common_controls_are_immutable`, `test_other_stage_receipts_are_rejected`, and `test_final_requires_locked_selection`. Assert 4 tuning declarations with seed 1001, separate final seed set, five-view identity, head 1536→124, exact 17499/139992 accounting, G1 digest binding, and rejection of E1/HR/pilot kinds or unknown overrides.
+- [x] Run `python -m pytest tests/e2/test_config.py -q` and record behavioral RED.
+- [x] GREEN: implement strict recipe/declaration validation, separate nonofficial acceptance-request validation and canonical hashes; test that acceptance requests cannot enter the official training CLI/campaign path. Configuration checks allocate no model/GPU and submit no jobs. Synthetic fixtures are test-owned and cannot alter production approvals or reviewed counts.
+- [x] Run that command plus `python -m pytest tests/e1/test_config.py tests/e1hr/test_config.py -q`; require all selected cases PASS.
+- [x] Review protected hashes and record evidence; commit only this task's files and ledger/log entries.
 
 ### E2-T02 — Fixed manifest, five-view inputs, and deterministic loaders
 
@@ -368,3 +368,7 @@ bash -n scripts/slurm/e2_train.sbatch
 | 14–15: test lock and gate order | All entrypoint/data/report guards and the gate/ledger tables |
 
 Preparation checks are document-only: resolve links, verify task IDs/dependencies/interfaces/coverage and frozen numeric references, check independent arithmetic/oracles, and compare protected files. They do not constitute behavioral RED/GREEN, CPU training, or GPU acceptance. E2-G0 is PASS and E2-T00b candidate preparation is complete. The current package is ready for **E2-G1 review of the exact candidate digest, implementation method and named scope**; it is not frozen or authorized for implementation. No scientific input remains unresolved in preparation; later runtime/acceptance/results remain gated observations.
+
+## E2-G1 approval record (2026-11-05)
+
+E2-G1 is **PASS**, explicitly approved by the user for exact contract SHA-256 `ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72` at reviewed commit `c40dd00a22de2d3ef50440440107d66db7b7dc45`. The approved JSON bytes remain unchanged; the exact-byte sidecar and [G1 receipt](e2_g1_approval.json) record the freeze. Native task-by-task **E2-T01?T10 only** is authorized, with CPU RED ? GREEN ? scoped regression and commits. Earlier preparation-status text and frozen candidate snapshots are historical. Target/GPU work, target acceptance, tuning, finals, E3 and test images remain **NOT AUTHORIZED**. STOP after T10.

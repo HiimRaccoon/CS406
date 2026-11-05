@@ -13,3 +13,8 @@ Initial baseline invocation failed before temporary fixtures: 99 passed, 191 err
 G1: freeze exact approved contract and scoped native authorization Protected hashes verified: 266; frozen contract unchanged. No target work.
 
 G1: freeze exact approved contract and scoped native authorization Protected hashes verified: 266; frozen contract unchanged. No target work.
+G1 commit: `83f7044538393900ed45183002bb497fe833db28`.
+
+T01: 12 behavioral RED failures; 42 GREEN config/regression cases passed Protected hashes verified: 266; frozen contract unchanged. No target work.
+
+T01: 12 behavioral RED failures; 42 GREEN config/regression cases passed Protected hashes verified: 266; frozen contract unchanged. No target work.
