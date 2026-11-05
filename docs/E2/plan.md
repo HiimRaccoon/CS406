@@ -242,10 +242,10 @@ assert model.classifier.out_features == 124
 
 **Depends:** E2-T01/T02. **Files:** E2 metrics and `test_metrics.py`. **Consumes/produces:** unchanged `Metrics124` and ranking interfaces.
 
-- [ ] RED: assert all-equal logits rank `[0,1,2,3,4]` without changing logits; target label 4 misses Top-1/3 and hits Top-5. Rank every one of 124 outputs, including unsupported labels.
-- [ ] Pin cross-bucket GT `[0,1]`, predictions `[0,0]`: class-0/tail F1=2/3 and supported Macro-F1=1/3. Preserve false positives from the head bucket. Unsupported F1 and no-support bucket metrics are null, supported zero-TP F1=0, and NLL is sample-mean CE. Verify fixed bucket coverage using metadata only.
-- [ ] Run `python -m pytest tests/e2/test_metrics.py -q` to RED; add narrow reuse exports, not a second metric implementation.
-- [ ] GREEN/regression: run it plus `python -m pytest tests/e1/test_metrics.py tests/e1hr/test_metrics.py -q`; require PASS, log/protected-hash review, commit.
+- [x] RED: assert all-equal logits rank `[0,1,2,3,4]` without changing logits; target label 4 misses Top-1/3 and hits Top-5. Rank every one of 124 outputs, including unsupported labels.
+- [x] Pin cross-bucket GT `[0,1]`, predictions `[0,0]`: class-0/tail F1=2/3 and supported Macro-F1=1/3. Preserve false positives from the head bucket. Unsupported F1 and no-support bucket metrics are null, supported zero-TP F1=0, and NLL is sample-mean CE. Verify fixed bucket coverage using metadata only.
+- [x] Run `python -m pytest tests/e2/test_metrics.py -q` to RED; add narrow reuse exports, not a second metric implementation.
+- [x] GREEN/regression: run it plus `python -m pytest tests/e1/test_metrics.py tests/e1hr/test_metrics.py -q`; require PASS, log/protected-hash review, commit.
 
 ### E2-T05 — Multi-view epoch loops, sample denominators, schedule and comparator
 
