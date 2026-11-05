@@ -1,0 +1,51 @@
+{
+  "gate": "E2-G1",
+  "approved": true,
+  "client_date": "2026-11-05",
+  "experiment": "E2",
+  "contract_id": "e2_numeric_contract_v1",
+  "contract_sha256": "ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72",
+  "reviewed_commit": "c40dd00a22de2d3ef50440440107d66db7b7dc45",
+  "execution_method": "native_task_by_task",
+  "authorized_tasks": [
+    "E2-T01",
+    "E2-T02",
+    "E2-T03",
+    "E2-T04",
+    "E2-T05",
+    "E2-T06",
+    "E2-T07",
+    "E2-T08",
+    "E2-T09",
+    "E2-T10"
+  ],
+  "implementation_cpu_preparation_authorized": true,
+  "target_gpu_authorized": false,
+  "target_acceptance_authorized": false,
+  "tuning_authorized": false,
+  "final_training_authorized": false,
+  "E3_authorized": false,
+  "test_access_authorized": false,
+  "stop_after": "E2-T10 CPU/regression/deployment preparation; before E2-TARGET-AUTH",
+  "approval_source": "Explicit user E2-G1 approval in this conversation for exact digest and native T01-T10 only",
+  "views": {
+    "global_wh": [
+      896,
+      384
+    ],
+    "local_wh": [
+      320,
+      320
+    ],
+    "local_count": 4,
+    "local_order": [
+      "left",
+      "middle_left",
+      "middle_right",
+      "right_raised"
+    ],
+    "fusion": "global_then_mean_local",
+    "representation_dimension": 1536,
+    "view_execution": "global_then_flattened_locals_batch_major"
+  }
+}
