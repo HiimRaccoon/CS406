@@ -1,0 +1,1036 @@
+{
+  "kind": "e2_cpu_readiness_v1",
+  "experiment": "E2",
+  "date": "2026-11-05",
+  "scope": "native T01-T10 CPU implementation/preparation only; not target acceptance",
+  "official_run": false,
+  "contract_sha256": "ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72",
+  "reviewed_commit": "c40dd00a22de2d3ef50440440107d66db7b7dc45",
+  "environment": {
+    "python": "3.11.18",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "python_executable": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+    "torch": "2.8.0+cpu",
+    "torchvision": "0.23.0+cpu",
+    "Pillow": "11.3.0",
+    "numpy": "2.1.3",
+    "pandas": "2.2.3",
+    "scikit-learn": "1.6.1"
+  },
+  "prepared_consumed_source_files": {
+    "configs/preprocessing/geoguessr_v1.json": "4f49dd41738168cfc65d4322fbe1b659ef5595229bb487ad86dd671a26a8903f",
+    "configs/preprocessing/geoguessr_v1.sha256": "752db1ce69ce0a0fab3c12a04ce3e953efd6019d1f8860123f1df824809c48ba",
+    "pyproject.toml": "aa1a9177445ab29cfe2de16ed6d0c2f05f7884f02706254c38c321ae2ce59d0d",
+    "requirements.txt": "2b21d7c94e7dd31d8abbef8e0392ad0325db71eeee49bfa8beb0825aa7f99cc4",
+    "scripts/slurm/e2_train.sbatch": "1683caf2d9daba62e80c97f79544a13f10e78db8dd74d047b39af0f7bb90c62b",
+    "src/__init__.py": "c4078d546234a5fb1c107f8064b06b8c0f914473f4e6d866a42dde1761c8f41e",
+    "src/e1/__init__.py": "86e1743cd7ce8dfca6e50725a34ee7fd93bb41f9a4e01a0f6c325346a7bec53e",
+    "src/e1/engine.py": "5a1787d852e6012410f97fd0e9031d4a2ef18b74e81b195ced37068adcd8d693",
+    "src/e1/metrics.py": "3b1709b7813d26ee1fdc0516d6c47d1d5aef2782d04ed334c4d1d07fdce61448",
+    "src/e2/__init__.py": "ee0a8bb5389409af90dc5eeac2eaf67359656bf677c073356d4b06b178f4ea95",
+    "src/e2/campaign.py": "b4319888356c99d1bdcccb850893c1346e5888223ff10f52fedaa3536c710f2f",
+    "src/e2/checkpoint.py": "54145af08a22652aaa9001adc1006e45cfc4a4436232099f1958dee9883ed7d2",
+    "src/e2/config.py": "e954b0b598a9d55c70c660312030311a5375b4d070994c289ba692e4b6af012a",
+    "src/e2/data.py": "afa72628296f3337f0e6e7b4a7124ee98492c561a48748b3dc0750aadcc5a9d1",
+    "src/e2/engine.py": "689d1d04b4eaba0d6ccf1d0d17186eb44609b81730f58f0e7a1a9f1b3592c599",
+    "src/e2/metrics.py": "e907a5eb820c28686cfea9dbdebc51ab8f2a52678bb67f74ca77596f576f107e",
+    "src/e2/model.py": "bfbcef7965fd9579ed08c898a2a66891b43e6aee6ba1bf60897c885effebf1c3",
+    "src/e2/runtime.py": "ecbe7750e388817d8036ad7ec1ebbd06e0dfa272f728659cff20db7fc93a7931",
+    "src/e2/train.py": "ab5e7a5d8927ab00fa13cee0e2a5af67777fd870eb6730d41d38ae793e5cd6d1",
+    "src/preprocessing/__init__.py": "45fbd0b8466477ec3dc0b13c9a877aaa516c49885ded2dbc4367e67c4a26991b",
+    "src/preprocessing/geoguessr_v1.py": "4d1dea328f69c1c7e1fa4f333c7276de0c3bc81b322db40dc33530969357e666"
+  },
+  "prepared_consumed_source_sha256": "3fd2171e79d59cb91b7b61616b44f2e38941aabcfcd42e7ff1aa47a76c1780c2",
+  "consumed_source_count": 21,
+  "actual_transitive_import_review": "pass; explicit closure only",
+  "acceptance_test_tooling_audit": {
+    "tests/conftest.py": {
+      "bytes": 250,
+      "sha256": "abc5d6b97b68ec6035277af599e7dcc48ffad8818eb6cacb3c0ff29d06c2fa18",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e2/__init__.py": {
+      "bytes": 72,
+      "sha256": "a7873dd55ee8c3b03201c318ab4cca91cc3398d66d920de8f0ca4c1432b14608",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e2/conftest.py": {
+      "bytes": 727,
+      "sha256": "37b4311cd5f67f3737188758bbf1342a65a4b715a71b87f28b44bff41f13d159",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e2/helpers.py": {
+      "bytes": 1424,
+      "sha256": "82e651f7d21ca6ae381d79f32d1aafbba813e64e53f0627071df7355ac5f4ffc",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e2/test_artifacts.py": {
+      "bytes": 14750,
+      "sha256": "3aa1f33a4d20fdb50197144ffdbbf0ea5ce869f0c041d7d71b40ca65e2605111",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e2/test_campaign.py": {
+      "bytes": 6064,
+      "sha256": "b23d8b27eec8fe488bee3af00ecf0cae6c90742f9616e3835dafc4560f275804",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e2/test_checkpoint.py": {
+      "bytes": 3714,
+      "sha256": "a9657cc56e399db53559c475a1b5db841d46729d729cd31ba7f94535ffd0507e",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e2/test_config.py": {
+      "bytes": 3026,
+      "sha256": "c00599b2cf1914c42a4d454bbca35d890119fe22370dfbcb2bff7192fa28ed3b",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e2/test_data.py": {
+      "bytes": 3144,
+      "sha256": "6c53b13126622ce1b96215b605fd2a2c33ea64c8cb0561ba29dabac1fd8cb298",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e2/test_engine.py": {
+      "bytes": 4228,
+      "sha256": "921b3f56c1b9d49842c855f8f9e20a15cbfea051286dee2695723e7ba9eb9c6d",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e2/test_entrypoints.py": {
+      "bytes": 7879,
+      "sha256": "8260129ad9dfe4ce88c79bf594da80241541710b91b57069b9593a39875696b2",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e2/test_gpu_smoke.py": {
+      "bytes": 12483,
+      "sha256": "70aaba0b18ff1a5a66d048a57b8063fc7aff58d4e8bec7ae38f0bbb49e09657b",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e2/test_metrics.py": {
+      "bytes": 2671,
+      "sha256": "4cd5bd7efb5701ebcad32bdd51ff7ee3107d5f09188a6c1933a76b3dbb32f3ad",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e2/test_model.py": {
+      "bytes": 5097,
+      "sha256": "0e0c178c5b312538b82f35b45efc4cdb92072f02ca643edde83d601c1168175b",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e2/test_recovery.py": {
+      "bytes": 10085,
+      "sha256": "f83a15867dc9451d010e777ff12f4c82e49979b232d9ef345668c8e093da14f3",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e2/test_report.py": {
+      "bytes": 10389,
+      "sha256": "3922dc9470a9655abfcbd842c5b3de97451819c8ee84f877eb766de93280d0c9",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e2/test_runtime.py": {
+      "bytes": 10822,
+      "sha256": "1bc1647d75d13ae313bcdabee3fb85cb4429e3c7907b60cdd96abac60b5b2969",
+      "role": "acceptance_test_tooling"
+    },
+    "tests/e2/test_train.py": {
+      "bytes": 5783,
+      "sha256": "cfd8e98876b78a575b549c200e3dfd90d0fd89e0639890200db3564d16f8e5fc",
+      "role": "acceptance_test_tooling"
+    }
+  },
+  "reporting_tool_audit": {
+    "src/e2/report.py": {
+      "bytes": 18613,
+      "sha256": "d2f1fa484662daa7202612752229e3c80ddd0f464a89ba296c40e588047521d6"
+    }
+  },
+  "protected_files_verified_unchanged": 266,
+  "protected_baseline_sha256": "fba4f96f7dda8f5b27135a49c8cd3669641ef862dae231aa09f5df72a8287d73",
+  "checks": [
+    {
+      "label": "t01-red",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_config.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t01-red",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 1,
+      "summary": "12 failed in 0.08s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t01-red.log"
+    },
+    {
+      "label": "baseline",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests",
+        "-q",
+        "-m",
+        "not gpu",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-baseline",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "290 passed, 3 deselected in 113.53s (0:01:53)",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\baseline.log"
+    },
+    {
+      "label": "t01-green",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_config.py",
+        "tests/e1/test_config.py",
+        "tests/e1hr/test_config.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t01-green",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "42 passed in 0.28s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t01-green.log"
+    },
+    {
+      "label": "t02-red",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_data.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t02-red",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 1,
+      "summary": "6 failed in 1.28s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t02-red.log"
+    },
+    {
+      "label": "t02-green",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_data.py",
+        "tests/test_preprocessing.py",
+        "tests/e1/test_data.py",
+        "tests/e1hr/test_data.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t02-green",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "27 passed in 17.76s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t02-green.log"
+    },
+    {
+      "label": "t03-red",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_model.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t03-red",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 1,
+      "summary": "5 failed in 1.32s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t03-red.log"
+    },
+    {
+      "label": "t03-green",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_model.py",
+        "tests/e1/test_model.py",
+        "tests/e1hr/test_model.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t03-green",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "16 passed in 4.29s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t03-green.log"
+    },
+    {
+      "label": "t04-red",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_metrics.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t04-red",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 1,
+      "summary": "1 failed, 3 passed in 1.61s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t04-red.log"
+    },
+    {
+      "label": "t04-green",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_metrics.py",
+        "tests/e1/test_metrics.py",
+        "tests/e1hr/test_metrics.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t04-green",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "11 passed in 1.96s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t04-green.log"
+    },
+    {
+      "label": "t05-red",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_engine.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t05-red",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 1,
+      "summary": "2 failed, 7 passed in 1.06s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t05-red.log"
+    },
+    {
+      "label": "t05-green",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_engine.py",
+        "tests/e1/test_engine.py",
+        "tests/e1hr/test_engine.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t05-green",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "17 passed in 1.18s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t05-green.log"
+    },
+    {
+      "label": "t06-red",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_checkpoint.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t06-red",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 1,
+      "summary": "3 failed in 1.15s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t06-red.log"
+    },
+    {
+      "label": "t06-green",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_checkpoint.py",
+        "tests/e1/test_checkpoint.py",
+        "tests/e1hr/test_checkpoint.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t06-green",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "9 passed in 1.65s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t06-green.log"
+    },
+    {
+      "label": "t07-red",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_train.py",
+        "tests/e2/test_runtime.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t07-red",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 1,
+      "summary": "7 failed in 1.21s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t07-red.log"
+    },
+    {
+      "label": "t07-green-first",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_train.py",
+        "tests/e2/test_runtime.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t07-green-first",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 1,
+      "summary": "1 failed, 6 passed in 7.45s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t07-green-first.log"
+    },
+    {
+      "label": "t07-green",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_train.py",
+        "tests/e2/test_recovery.py",
+        "tests/e2/test_runtime.py",
+        "tests/e1/test_entrypoints.py",
+        "tests/e1/test_recovery.py",
+        "tests/e1hr/test_train.py",
+        "tests/e1hr/test_recovery.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t07-green",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "63 passed in 73.58s (0:01:13)",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t07-green.log"
+    },
+    {
+      "label": "t08-red",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_campaign.py",
+        "tests/e2/test_artifacts.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t08-red",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 1,
+      "summary": "12 failed, 6 passed in 12.75s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t08-red.log"
+    },
+    {
+      "label": "t08-green-first",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_campaign.py",
+        "tests/e2/test_artifacts.py",
+        "tests/e2/test_runtime.py",
+        "tests/e1/test_campaign.py",
+        "tests/e1/test_artifacts.py",
+        "tests/e1hr/test_campaign.py",
+        "tests/e1hr/test_artifacts.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t08-green-first",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 1,
+      "summary": "1 failed, 54 passed in 29.26s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t08-green-first.log"
+    },
+    {
+      "label": "t08-green",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_campaign.py",
+        "tests/e2/test_artifacts.py",
+        "tests/e2/test_runtime.py",
+        "tests/e1/test_campaign.py",
+        "tests/e1/test_artifacts.py",
+        "tests/e1hr/test_campaign.py",
+        "tests/e1hr/test_artifacts.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t08-green",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "55 passed in 28.82s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t08-green.log"
+    },
+    {
+      "label": "t09-red",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_report.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t09-red",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 1,
+      "summary": "6 failed in 5.93s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t09-red.log"
+    },
+    {
+      "label": "t09-green-first",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_report.py",
+        "tests/e1/test_report.py",
+        "tests/e1hr/test_report.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t09-green-first",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "14 passed in 11.52s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t09-green-first.log"
+    },
+    {
+      "label": "t09-export-red",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_report.py",
+        "-k",
+        "selected_checkpoint",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t09-export-red",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 1,
+      "summary": "1 failed, 5 deselected in 2.80s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t09-export-red.log"
+    },
+    {
+      "label": "t09-green",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_report.py",
+        "tests/e1/test_report.py",
+        "tests/e1hr/test_report.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t09-green",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "14 passed in 11.71s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t09-green.log"
+    },
+    {
+      "label": "t10-red",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_entrypoints.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-red",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 1,
+      "summary": "10 failed, 4 passed in 30.27s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-red.log"
+    },
+    {
+      "label": "t10-entry-green",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_entrypoints.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-entry-green",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "14 passed in 30.65s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-entry-green.log"
+    },
+    {
+      "label": "t10-e2-cpu",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2",
+        "-q",
+        "-m",
+        "not gpu",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-e2-cpu",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "106 passed, 1 deselected in 70.88s (0:01:10)",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-e2-cpu.log"
+    },
+    {
+      "label": "t10-runtime",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_runtime.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-runtime",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "21 passed in 2.18s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-runtime.log"
+    },
+    {
+      "label": "t10-metric-red",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_artifacts.py",
+        "-k",
+        "consistently_rehashed",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-metric-red",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 1,
+      "summary": "4 failed, 10 deselected in 6.10s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-metric-red.log"
+    },
+    {
+      "label": "t10-full-cpu",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "-q",
+        "-m",
+        "not gpu",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-full-cpu",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "407 passed, 4 deselected in 193.13s (0:03:13)",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-full-cpu.log"
+    },
+    {
+      "label": "t10-metric-green",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_artifacts.py",
+        "tests/e2/test_campaign.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-metric-green",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "22 passed in 28.97s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-metric-green.log"
+    },
+    {
+      "label": "t10-final-e2",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2",
+        "-q",
+        "-m",
+        "not gpu",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-final-e2",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "121 passed, 1 deselected in 94.91s (0:01:34)",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-final-e2.log"
+    },
+    {
+      "label": "t10-final-full",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "-q",
+        "-m",
+        "not gpu",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-final-full",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "411 passed, 4 deselected in 214.25s (0:03:34)",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-final-full.log"
+    },
+    {
+      "label": "t10-lost-last-red",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_recovery.py",
+        "-k",
+        "lost_authoritative",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-lost-last-red",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 1,
+      "summary": "2 failed, 11 deselected in 5.63s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-lost-last-red.log"
+    },
+    {
+      "label": "t10-recovery-green",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_recovery.py",
+        "tests/e2/test_train.py",
+        "tests/e1/test_recovery.py",
+        "tests/e1hr/test_recovery.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-recovery-green",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "39 passed in 43.18s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-recovery-green.log"
+    },
+    {
+      "label": "t10-verified-e2",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2",
+        "-q",
+        "-m",
+        "not gpu",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-verified-e2",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "123 passed, 1 deselected in 99.52s (0:01:39)",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-verified-e2.log"
+    },
+    {
+      "label": "t10-verified-full",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "-q",
+        "-m",
+        "not gpu",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-verified-full",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "413 passed, 4 deselected in 218.39s (0:03:38)",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-verified-full.log"
+    },
+    {
+      "label": "t10-external-input-red",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_report.py",
+        "-k",
+        "repository_aggregate",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-external-input-red",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 1,
+      "summary": "1 failed, 6 deselected in 1.75s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-external-input-red.log"
+    },
+    {
+      "label": "t10-external-input-green",
+      "command": [
+        "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "tests/e2/test_report.py",
+        "-q",
+        "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-external-input-green",
+        "-o",
+        "faulthandler_timeout=60"
+      ],
+      "exit_code": 0,
+      "summary": "7 passed in 6.87s",
+      "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-external-input-green.log"
+    }
+  ],
+  "syntax_checks": {
+    "python_compileall": "PASS; src/e2 tests/e2",
+    "bash_n": "PASS; scripts/slurm/e2_train.sbatch; Git Bash"
+  },
+  "limitations": [
+    "Local Windows Python 3.11.18 and CPU Torch/TorchVision are not the target software lock",
+    "No real pinned-weight target model, GPU/device/driver/allocation or target dataset audit observed",
+    "Scientific source inventory is readiness evidence, not an accepted target identity",
+    "Initial baseline failed 99 passed/191 errors/3 deselected from absent temporary parent; summary retained in implementation log; original stdout not retained"
+  ],
+  "target_gpu_work_performed": false,
+  "slurm_jobs_submitted": 0,
+  "test_images_opened": 0,
+  "tuning_execution_authorized": false,
+  "final_execution_authorized": false,
+  "target_acceptance_authorized": false,
+  "E3_authorized": false,
+  "final_test": "LOCKED",
+  "next_gate": "STOP_BEFORE_E2_TARGET_AUTH",
+  "archived_cpu_evidence": {
+    "docs/E2/evidence/cpu_2026-11-05/baseline.log": {
+      "bytes": 458,
+      "sha256": "5b13245794e4ec8e006aab94b0268914ebc36876f7a4ce8ac88bf4c18507f203"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/checks.json": {
+      "bytes": 21339,
+      "sha256": "ea8bea2c045e146b5a621129ee17b498be46a2d97d63cea8a91926267535bae9"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/protected_baseline.json": {
+      "bytes": 31899,
+      "sha256": "fba4f96f7dda8f5b27135a49c8cd3669641ef862dae231aa09f5df72a8287d73"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t01-green.log": {
+      "bytes": 103,
+      "sha256": "8a82e82a2b20a48b64d148f6ede64bd0bf16baedfdaa22e6d65945e91bce8cbd"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t01-red.log": {
+      "bytes": 11013,
+      "sha256": "08c371ac1e6a10d9407ed770abe8a2c98077a8a1c05e4734711e9478b6fd792d"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t02-green.log": {
+      "bytes": 104,
+      "sha256": "f2cb4f6aa5deeba6f2e48319f752577bea2e18cfc529755ab41e425d4e22544b"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t02-red.log": {
+      "bytes": 5880,
+      "sha256": "11ebd87c8d69ea8e632fae25c67b25f728ab513ea9cf6fbdbb0959c1db8df1e8"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t03-green.log": {
+      "bytes": 103,
+      "sha256": "ac4a6596262bb7f5914f45be081bdf21a832e6fe2dcccfe2a5303073a837f6e9"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t03-red.log": {
+      "bytes": 4052,
+      "sha256": "ba1f62081dd7b49f4c4bb651ec3a69ecb5d49ddbf54d8a42b5eaec7689f42b5a"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t04-green.log": {
+      "bytes": 103,
+      "sha256": "ab243e6be6c3fb10009fc1a0997fcc3e5aa1cc8dbf11725862b82d1504bcdfab"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t04-red.log": {
+      "bytes": 920,
+      "sha256": "a1f194787d0b4a40d4925062a91cd044eef384edebca8197ba235327b9996443"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t05-green.log": {
+      "bytes": 103,
+      "sha256": "28d5037df6dd99935abed4871a509eaf2edb38265b1cdf39c4218c3f2c86c8cc"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t05-red.log": {
+      "bytes": 3116,
+      "sha256": "242aef1638fb58ccf0ab7abc3aa41e5e7c134463c355d40426ae9f211bc75294"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t06-green.log": {
+      "bytes": 102,
+      "sha256": "a35674db36f333d1aa8a80a37394fc0968f19034b80857aa44ffe5579d22451c"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t06-red.log": {
+      "bytes": 5025,
+      "sha256": "2a97732efb09402f0fe17950f355156f4ba907f186fae4b33e5d7b297fa2a54d"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t07-green-first.log": {
+      "bytes": 1242,
+      "sha256": "ebdbba345e6d27e5725892f3990d21e89e514a90a4fcb52d67272cc4308bcd74"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t07-green.log": {
+      "bytes": 114,
+      "sha256": "73d1693049f83857ae5b7f6a86b0a61cc587b2fd0409e39873785d4f9a8ebd62"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t07-red.log": {
+      "bytes": 9619,
+      "sha256": "96a1812abcdb5bd2026a17bc0ca9960959a81a97befc83f9de07de7fb4328c43"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t08-green-first.log": {
+      "bytes": 3639,
+      "sha256": "1b68216535fe9c47ddc93df26dcc84ba1b406fb18d45bbf62a4a6ca0fa37459a"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t08-green.log": {
+      "bytes": 104,
+      "sha256": "0af496963d288ba6913bbf629b8f63a9723bdeec19c37efa5e984714cee3759c"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t08-red.log": {
+      "bytes": 37268,
+      "sha256": "ec8fb2e76336b018250a52212ec512b5940da67dcab9660d9c8ecccab568af83"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t09-export-red.log": {
+      "bytes": 2976,
+      "sha256": "028332956da530c9812859438e1852baca111376689982a701cf3c98db58d1d9"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t09-green-first.log": {
+      "bytes": 104,
+      "sha256": "0a12946d7deac9190c20d75d7e4d86b9b90971b9cc78234a7bf3eb94a638abef"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t09-green.log": {
+      "bytes": 104,
+      "sha256": "f63bb92b8b36746527c9174bd471a9ed6192ab276f5b1562ddb439e057f98f78"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t09-red.log": {
+      "bytes": 8483,
+      "sha256": "505a57e5c7b7f8a985d691e8a69b65a1e251516376a60f791a128d29d54211f4"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t10-e2-cpu.log": {
+      "bytes": 211,
+      "sha256": "9b755bff01c9383deb9e66312f9a8fd04cc0046b385566b282b10d07c45b06cc"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t10-entry-green.log": {
+      "bytes": 104,
+      "sha256": "19c3f7f8b48fe06b6b2c0a18df6ba81c041bf2ab5506a754bd035d0aa81bbbf9"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t10-external-input-green.log": {
+      "bytes": 100,
+      "sha256": "d6ff6e24425c47401ebfb8f26481676237330796713c44c825a5e9736ee4ba83"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t10-external-input-red.log": {
+      "bytes": 2802,
+      "sha256": "1fe4e9a28cb7c5d62f64863fd60208bf73e2332f28c8d2f9334bb538534f44c7"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t10-final-e2.log": {
+      "bytes": 208,
+      "sha256": "60eae20a33d457232a704446745767892f702baa183757d324b64f79434eedd3"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t10-final-full.log": {
+      "bytes": 533,
+      "sha256": "daaa095f1e9ab99fcaefae186bf6ae05a2d05c2d15e7e4bfc2cdc4882bb72eac"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t10-full-cpu.log": {
+      "bytes": 533,
+      "sha256": "872de596b4b77fa569fea2a9c6ca2643e309a0616898add02df720ca3141fdef"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t10-lost-last-red.log": {
+      "bytes": 2834,
+      "sha256": "83d641b9983d1c4f1b941265a3e1f6ea6501ab3f9cc543f9b5a51c3855e0519e"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t10-metric-green.log": {
+      "bytes": 102,
+      "sha256": "1a0f010d864ce43a2ae8d90567d9e17a4ec5bd5a22edbcf3a1f769a0dac7d843"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t10-metric-red.log": {
+      "bytes": 8778,
+      "sha256": "baf993576b70e9fa8b5657bec6a9431701a6ef8b14a8ece6a04dcb1980fc7d95"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t10-recovery-green.log": {
+      "bytes": 102,
+      "sha256": "0842a07392bbda36cf0d15f9b0f1d995484f8c6547e4c5a545b95f7caf9846ed"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t10-red.log": {
+      "bytes": 13123,
+      "sha256": "08bdadc9596a388df1950336dbf7f93dc7aaedf517e5938c6727f2d10e302470"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t10-runtime.log": {
+      "bytes": 101,
+      "sha256": "2903a23feaea54a44d5b6df77926f46e132a19496a836a62e1a6d417ccb05228"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t10-verified-e2.log": {
+      "bytes": 208,
+      "sha256": "2df40c6e5a830ad61a72823398eb1ac95947e78da221bc9e44f7e7e5af0f7a7f"
+    },
+    "docs/E2/evidence/cpu_2026-11-05/t10-verified-full.log": {
+      "bytes": 533,
+      "sha256": "154ec8ee779f682bf57669a13683588e8ed7ed7b54cfea0d322fcbc01f9d6da1"
+    }
+  }
+}

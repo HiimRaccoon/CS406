@@ -29,3 +29,6 @@ docs/E1-HR/*.md text eol=lf
 docs/E2/*.json text eol=lf
 docs/E2/*.sha256 text eol=lf
 docs/E2/*.md text eol=lf
+
+# Preserve exact raw Windows CPU evidence bytes, including carriage returns.
+docs/E2/evidence/** -text -diff

@@ -166,3 +166,26 @@ def test_prior_uninitialized_or_interrupted_attempt_is_auditable(completed_trial
     if status=='abandoned_request':
         (earlier/'request.json').write_text('{"altered":')
         with pytest.raises(ValueError):validate_completed_run(folder)
+
+
+@pytest.mark.parametrize('mutation',['negative_nll','wrong_support','wrong_confusion','wrong_f1'])
+def test_consistently_rehashed_metrics_still_require_fixed_benchmark(completed_trials,mutation):
+    from src.e2.campaign import validate_completed_run
+    from src.e2.config import read_json,sha256_file
+    from src.e2.checkpoint import atomic_json
+    folder=completed_trials[0];history=read_json(folder/'history.json')
+    for row in history:
+        val=row['validation']
+        if mutation=='negative_nll':val['nll']=-1.
+        if mutation=='wrong_support':val['per_class'][0]['support']+=1
+        if mutation=='wrong_confusion':val['confusion'][0][0]+=1
+        if mutation=='wrong_f1':val['macro_f1_supported']=.8
+    selected={'epoch':1,'macro_f1_supported':history[0]['validation']['macro_f1_supported'],'nll':history[0]['validation']['nll']}
+    atomic_json(folder/'history.json',history)
+    summary=read_json(folder/'run_summary.json');summary['history_sha256']=sha256_file(folder/'history.json');summary['selected']=selected
+    for name in ('best.pt','last.pt'):
+        state=torch.load(folder/name,weights_only=False)
+        state['progress']['history']=history;state['progress']['selected']=selected
+        torch.save(state,folder/name);summary['checkpoint_sha256'][name]=sha256_file(folder/name)
+    atomic_json(folder/'run_summary.json',summary)
+    with pytest.raises(ValueError):validate_completed_run(folder)

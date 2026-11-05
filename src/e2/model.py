@@ -42,7 +42,7 @@ class E2Model(nn.Module):
         local_features = self.encode_view(local.flatten(0, 1)).reshape(len(global_), 4, 768)
         return torch.cat((global_feature, local_features.mean(dim=1)), dim=1)
 
-    def forward(self, images: torch.Tensor) -> torch.Tensor:
+    def forward(self, images: dict) -> torch.Tensor:
         return self.classifier(self.encode(images))
 
 

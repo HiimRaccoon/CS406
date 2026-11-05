@@ -1,0 +1,42 @@
+FF                                                                       [100%]
+================================== FAILURES ===================================
+__ test_lost_authoritative_checkpoint_never_restarts_a_started_run[complete] __
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...66377', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001DED08E4050>
+boundary = 'complete'
+
+    @pytest.mark.parametrize('boundary',['complete','interrupted'])
+    def test_lost_authoritative_checkpoint_never_restarts_a_started_run(run_config,monkeypatch,boundary):
+        module=install_cpu_edges(monkeypatch)
+        folder=Path(run_config['paths']['runs_dir'])/run_config['run_id']
+        if boundary=='complete':module.run(run_config,folder)
+        else:
+            calls=iter([False,True]);module.run(run_config,folder,stop_requested=lambda:next(calls))
+        (folder/'last.pt').unlink()
+>       with pytest.raises((ValueError,FileExistsError)):module.run(run_config,folder)
+E       Failed: DID NOT RAISE (<class 'ValueError'>, <class 'FileExistsError'>)
+
+tests\e2\test_recovery.py:187: Failed
+_ test_lost_authoritative_checkpoint_never_restarts_a_started_run[interrupted] _
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...0c531', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001DED59CFA50>
+boundary = 'interrupted'
+
+    @pytest.mark.parametrize('boundary',['complete','interrupted'])
+    def test_lost_authoritative_checkpoint_never_restarts_a_started_run(run_config,monkeypatch,boundary):
+        module=install_cpu_edges(monkeypatch)
+        folder=Path(run_config['paths']['runs_dir'])/run_config['run_id']
+        if boundary=='complete':module.run(run_config,folder)
+        else:
+            calls=iter([False,True]);module.run(run_config,folder,stop_requested=lambda:next(calls))
+        (folder/'last.pt').unlink()
+>       with pytest.raises((ValueError,FileExistsError)):module.run(run_config,folder)
+E       Failed: DID NOT RAISE (<class 'ValueError'>, <class 'FileExistsError'>)
+
+tests\e2\test_recovery.py:187: Failed
+=========================== short test summary info ===========================
+FAILED tests/e2/test_recovery.py::test_lost_authoritative_checkpoint_never_restarts_a_started_run[complete]
+FAILED tests/e2/test_recovery.py::test_lost_authoritative_checkpoint_never_restarts_a_started_run[interrupted]
+2 failed, 11 deselected in 5.63s

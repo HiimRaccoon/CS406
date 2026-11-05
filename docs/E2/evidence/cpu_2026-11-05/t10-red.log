@@ -1,0 +1,179 @@
+....FFFFFFFFFF                                                           [100%]
+================================== FAILURES ===================================
+________________ test_wrapper_exact_allocation_and_single_run _________________
+
+shell_run = (<function shell_run.<locals>.execute at 0x00000152EE41BA60>, {'budget': {'early_stopping': False, 'epoch_indices': [0...2834', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...})
+
+    def test_wrapper_exact_allocation_and_single_run(shell_run):
+        text = WRAPPER.read_text(encoding="utf-8")
+        for directive in ["partition=normal", "account=uit", "qos=mig2-35", "gres=gpu:2g.35gb:1",
+                          "ntasks=1", "cpus-per-task=4", "mem=16384M", "time=09:00:00"]:
+>           assert f"#SBATCH --{directive}\n" in text
+E           AssertionError: assert '#SBATCH --partition=normal\n' in '#!/usr/bin/env bash\nexit 0\n'
+
+tests\e2\test_entrypoints.py:103: AssertionError
+___ test_wrapper_rejects_wrong_seed_allocation_or_arguments[changes0-args0] ___
+
+shell_run = (<function shell_run.<locals>.execute at 0x00000152EE4842C0>, {'budget': {'early_stopping': False, 'epoch_indices': [0...aa78', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...})
+changes = {'CS406_E2_SEED': '2001'}, args = ()
+
+    @pytest.mark.parametrize("changes,args", [({"CS406_E2_SEED": "2001"}, ()),
+        ({"CS406_E2_SEED": "3406"}, ()), ({"SLURM_CPUS_PER_TASK": "8"}, ()),
+        ({}, ("--test",)), ({}, ("--resume", "best.pt")), ({}, ("--resume", "missing/last.pt"))])
+    def test_wrapper_rejects_wrong_seed_allocation_or_arguments(shell_run, changes, args):
+        execute, _ = shell_run
+        result, captured = execute(*args, changes=changes)
+>       assert result.returncode != 0
+E       AssertionError: assert 0 != 0
+E        +  where 0 = CompletedProcess(args=['C:\\Program Files\\Git\\bin\\bash.exe', 'C:/Users/Windows/Downloads/GeoLocation/scripts/slurm/e2_train.sbatch'], returncode=0, stdout='', stderr='').returncode
+
+tests\e2\test_entrypoints.py:117: AssertionError
+___ test_wrapper_rejects_wrong_seed_allocation_or_arguments[changes1-args1] ___
+
+shell_run = (<function shell_run.<locals>.execute at 0x00000152EE487060>, {'budget': {'early_stopping': False, 'epoch_indices': [0...0f2d', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...})
+changes = {'CS406_E2_SEED': '3406'}, args = ()
+
+    @pytest.mark.parametrize("changes,args", [({"CS406_E2_SEED": "2001"}, ()),
+        ({"CS406_E2_SEED": "3406"}, ()), ({"SLURM_CPUS_PER_TASK": "8"}, ()),
+        ({}, ("--test",)), ({}, ("--resume", "best.pt")), ({}, ("--resume", "missing/last.pt"))])
+    def test_wrapper_rejects_wrong_seed_allocation_or_arguments(shell_run, changes, args):
+        execute, _ = shell_run
+        result, captured = execute(*args, changes=changes)
+>       assert result.returncode != 0
+E       AssertionError: assert 0 != 0
+E        +  where 0 = CompletedProcess(args=['C:\\Program Files\\Git\\bin\\bash.exe', 'C:/Users/Windows/Downloads/GeoLocation/scripts/slurm/e2_train.sbatch'], returncode=0, stdout='', stderr='').returncode
+
+tests\e2\test_entrypoints.py:117: AssertionError
+___ test_wrapper_rejects_wrong_seed_allocation_or_arguments[changes2-args2] ___
+
+shell_run = (<function shell_run.<locals>.execute at 0x00000152EE487E20>, {'budget': {'early_stopping': False, 'epoch_indices': [0...3277', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...})
+changes = {'SLURM_CPUS_PER_TASK': '8'}, args = ()
+
+    @pytest.mark.parametrize("changes,args", [({"CS406_E2_SEED": "2001"}, ()),
+        ({"CS406_E2_SEED": "3406"}, ()), ({"SLURM_CPUS_PER_TASK": "8"}, ()),
+        ({}, ("--test",)), ({}, ("--resume", "best.pt")), ({}, ("--resume", "missing/last.pt"))])
+    def test_wrapper_rejects_wrong_seed_allocation_or_arguments(shell_run, changes, args):
+        execute, _ = shell_run
+        result, captured = execute(*args, changes=changes)
+>       assert result.returncode != 0
+E       AssertionError: assert 0 != 0
+E        +  where 0 = CompletedProcess(args=['C:\\Program Files\\Git\\bin\\bash.exe', 'C:/Users/Windows/Downloads/GeoLocation/scripts/slurm/e2_train.sbatch'], returncode=0, stdout='', stderr='').returncode
+
+tests\e2\test_entrypoints.py:117: AssertionError
+___ test_wrapper_rejects_wrong_seed_allocation_or_arguments[changes3-args3] ___
+
+shell_run = (<function shell_run.<locals>.execute at 0x00000152EE485080>, {'budget': {'early_stopping': False, 'epoch_indices': [0...ffa8', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...})
+changes = {}, args = ('--test',)
+
+    @pytest.mark.parametrize("changes,args", [({"CS406_E2_SEED": "2001"}, ()),
+        ({"CS406_E2_SEED": "3406"}, ()), ({"SLURM_CPUS_PER_TASK": "8"}, ()),
+        ({}, ("--test",)), ({}, ("--resume", "best.pt")), ({}, ("--resume", "missing/last.pt"))])
+    def test_wrapper_rejects_wrong_seed_allocation_or_arguments(shell_run, changes, args):
+        execute, _ = shell_run
+        result, captured = execute(*args, changes=changes)
+>       assert result.returncode != 0
+E       AssertionError: assert 0 != 0
+E        +  where 0 = CompletedProcess(args=['C:\\Program Files\\Git\\bin\\bash.exe', 'C:/Users/Windows/Downloads/GeoLocation/scripts/slurm/e2_train.sbatch', '--test'], returncode=0, stdout='', stderr='').returncode
+
+tests\e2\test_entrypoints.py:117: AssertionError
+___ test_wrapper_rejects_wrong_seed_allocation_or_arguments[changes4-args4] ___
+
+shell_run = (<function shell_run.<locals>.execute at 0x00000152EE484220>, {'budget': {'early_stopping': False, 'epoch_indices': [0...cf9f', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...})
+changes = {}, args = ('--resume', 'best.pt')
+
+    @pytest.mark.parametrize("changes,args", [({"CS406_E2_SEED": "2001"}, ()),
+        ({"CS406_E2_SEED": "3406"}, ()), ({"SLURM_CPUS_PER_TASK": "8"}, ()),
+        ({}, ("--test",)), ({}, ("--resume", "best.pt")), ({}, ("--resume", "missing/last.pt"))])
+    def test_wrapper_rejects_wrong_seed_allocation_or_arguments(shell_run, changes, args):
+        execute, _ = shell_run
+        result, captured = execute(*args, changes=changes)
+>       assert result.returncode != 0
+E       AssertionError: assert 0 != 0
+E        +  where 0 = CompletedProcess(args=['C:\\Program Files\\Git\\bin\\bash.exe', 'C:/Users/Windows/Downloads/GeoLocation/scripts/slurm/e2_train.sbatch', '--resume', 'best.pt'], returncode=0, stdout='', stderr='').returncode
+
+tests\e2\test_entrypoints.py:117: AssertionError
+___ test_wrapper_rejects_wrong_seed_allocation_or_arguments[changes5-args5] ___
+
+shell_run = (<function shell_run.<locals>.execute at 0x00000152EE466B60>, {'budget': {'early_stopping': False, 'epoch_indices': [0...dd5f', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...})
+changes = {}, args = ('--resume', 'missing/last.pt')
+
+    @pytest.mark.parametrize("changes,args", [({"CS406_E2_SEED": "2001"}, ()),
+        ({"CS406_E2_SEED": "3406"}, ()), ({"SLURM_CPUS_PER_TASK": "8"}, ()),
+        ({}, ("--test",)), ({}, ("--resume", "best.pt")), ({}, ("--resume", "missing/last.pt"))])
+    def test_wrapper_rejects_wrong_seed_allocation_or_arguments(shell_run, changes, args):
+        execute, _ = shell_run
+        result, captured = execute(*args, changes=changes)
+>       assert result.returncode != 0
+E       AssertionError: assert 0 != 0
+E        +  where 0 = CompletedProcess(args=['C:\\Program Files\\Git\\bin\\bash.exe', 'C:/Users/Windows/Downloads/GeoLocation/scripts/slurm/e2_train.sbatch', '--resume', 'missing/last.pt'], returncode=0, stdout='', stderr='').returncode
+
+tests\e2\test_entrypoints.py:117: AssertionError
+______________ test_wrapper_resume_requires_own_last_checkpoint _______________
+
+shell_run = (<function shell_run.<locals>.execute at 0x00000152EE485080>, {'budget': {'early_stopping': False, 'epoch_indices': [0...8077', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...})
+
+    def test_wrapper_resume_requires_own_last_checkpoint(shell_run):
+        execute, config = shell_run
+        last = Path(config["paths"]["runs_dir"]) / config["run_id"] / "last.pt"
+        last.parent.mkdir(parents=True)
+        last.touch()  # Shell checks the path; the production runner checks contents.
+        result, captured = execute("--resume", last.as_posix())
+        assert result.returncode == 0, result.stderr
+>       assert captured["argv"][-2:] == ["--resume", last.as_posix()]
+E       TypeError: 'NoneType' object is not subscriptable
+
+tests\e2\test_entrypoints.py:128: TypeError
+__________ test_smoke_evidence_cannot_approve_g2_or_become_official ___________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t10-red/test_smoke_evidence_cannot_app0')
+
+    def test_smoke_evidence_cannot_approve_g2_or_become_official(recipe,tmp_path):
+        from tests.e2.test_gpu_smoke import mechanics_config, g2_candidate
+        before = json.dumps(recipe, sort_keys=True)
+        fixture = mechanics_config(recipe)
+>       assert fixture["kind"] == "e2_target_checkpoint_fixture"
+E       AssertionError: assert 'not_implemented' == 'e2_target_checkpoint_fixture'
+E         
+E         - e2_target_checkpoint_fixture
+E         + not_implemented
+
+tests\e2\test_entrypoints.py:139: AssertionError
+_____ test_target_probe_requires_separate_explicit_receipt_before_any_gpu _____
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000152EE55ABD0>
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t10-red/test_target_probe_requires_sep0')
+
+    def test_target_probe_requires_separate_explicit_receipt_before_any_gpu(recipe,monkeypatch,tmp_path):
+        from tests.e2.test_gpu_smoke import require_target_work
+        from src.e2.config import CONTRACT_SHA256,G1_PATH
+        monkeypatch.delenv('CS406_E2_TARGET_AUTH',raising=False)
+        with pytest.raises(ValueError):require_target_work()
+        monkeypatch.setenv('CS406_E2_TARGET_AUTH',str(G1_PATH))
+        with pytest.raises(ValueError):require_target_work()
+        # A fabricated receipt is confined to this parser fixture; no probe executes.
+        p=tmp_path/'target.json';p.write_text(json.dumps({'gate':'E2-TARGET-AUTH','approved':True,'experiment':'E2',
+            'views':recipe['views'],'contract_sha256':CONTRACT_SHA256,'authorized_tasks':['E2-T11'],'target_gpu_authorized':True}))
+        monkeypatch.setenv('CS406_E2_TARGET_AUTH',str(p))
+>       assert require_target_work()['path']==str(p)
+
+tests\e2\test_entrypoints.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+>   def require_target_work():raise ValueError('Separate target authorization required')
+E   ValueError: Separate target authorization required
+
+tests\e2\test_gpu_smoke.py:4: ValueError
+=========================== short test summary info ===========================
+FAILED tests/e2/test_entrypoints.py::test_wrapper_exact_allocation_and_single_run
+FAILED tests/e2/test_entrypoints.py::test_wrapper_rejects_wrong_seed_allocation_or_arguments[changes0-args0]
+FAILED tests/e2/test_entrypoints.py::test_wrapper_rejects_wrong_seed_allocation_or_arguments[changes1-args1]
+FAILED tests/e2/test_entrypoints.py::test_wrapper_rejects_wrong_seed_allocation_or_arguments[changes2-args2]
+FAILED tests/e2/test_entrypoints.py::test_wrapper_rejects_wrong_seed_allocation_or_arguments[changes3-args3]
+FAILED tests/e2/test_entrypoints.py::test_wrapper_rejects_wrong_seed_allocation_or_arguments[changes4-args4]
+FAILED tests/e2/test_entrypoints.py::test_wrapper_rejects_wrong_seed_allocation_or_arguments[changes5-args5]
+FAILED tests/e2/test_entrypoints.py::test_wrapper_resume_requires_own_last_checkpoint
+FAILED tests/e2/test_entrypoints.py::test_smoke_evidence_cannot_approve_g2_or_become_official
+FAILED tests/e2/test_entrypoints.py::test_target_probe_requires_separate_explicit_receipt_before_any_gpu
+10 failed, 4 passed in 30.27s

@@ -168,7 +168,7 @@ def inspect_target_inputs(config: dict) -> dict:
         raise ValueError('Reviewed Python executable required before target access')
     for key,pinned in [('data_root','dataset'),('weights','pretrained')]:
         if paths[key] != d['paths'][pinned]:
-            raise ValueError('HR paths differ from reviewed target')
+            raise ValueError('E2 paths differ from reviewed target')
     roots = [Path(paths[k]).resolve() for k in ('runs_dir','evidence_root')]
     protected = [ROOT/'runs'/s for s in ('E1','E1-HR','pilot')]
     protected += [ROOT/'reports'/s for s in ('E1','E1-HR','pilot')]
@@ -202,7 +202,7 @@ def inspect_target_inputs(config: dict) -> dict:
             or report.get('environment',{}).get('packages') != packages):
         raise ValueError('Passing frozen conformance for actual root/packages required')
     audit = manifest.verify_images(Path(paths['data_root']))
-    current_hr = _e2_conformance(manifest,config)
+    current_e2 = _e2_conformance(manifest,config)
     actual_runtime = configure_runtime(config['seed'])
     device = device_identity()
     if device['name'] != d['expected_gpu_class']:
@@ -214,7 +214,7 @@ def inspect_target_inputs(config: dict) -> dict:
         'dataset_root':paths['data_root'],'fingerprints':manifest.fingerprints,
         'preprocessing_config_sha256':pre['config_sha256'],'preprocessing_implementation_sha256':pre['implementation_sha256'],
         'pretrained_sha256':recipe['model']['pretrained']['sha256'],'accepted_conformance_sha256':sha256_file(report_path),
-        'e2_preprocessing_conformance':current_hr,'evidence_kind':'official_uit_slurm'},
+        'e2_preprocessing_conformance':current_e2,'evidence_kind':'official_uit_slurm'},
         'audit':{**source['audit'],'acceptance_test_evidence_inventory':acceptance_inventory(recipe),
                  'platform':platform.platform(),'python_executable':sys.executable,
                  'runtime_environment':{k:os.environ.get(k) for k in (*required_env,'NVIDIA_TF32_OVERRIDE')},

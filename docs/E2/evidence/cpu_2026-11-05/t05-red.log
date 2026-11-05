@@ -1,0 +1,60 @@
+FF.......                                                                [100%]
+================================== FAILURES ===================================
+____________ test_one_image_tail_matches_direct_sample_mean_steps _____________
+
+    def test_one_image_tail_matches_direct_sample_mean_steps():
+        from src.e2.engine import train_epoch
+        torch.manual_seed(22);a=Tiny();b=copy.deepcopy(a)
+        oa,ob=[torch.optim.SGD(m.parameters(),lr=.01) for m in (a,b)]
+        loader=DataLoader(tiny_data(3),batch_size=2)
+        total=0
+        for views,y,paths in loader:
+            ob.zero_grad(set_to_none=True);loss=torch.nn.functional.cross_entropy(b(views),y,reduction='sum');total+=loss.item()
+            (loss/len(y)).backward();ob.step()
+>       result=train_epoch(a,loader,oa,None,None,device=torch.device('cpu'),runtime={'dtype':'float32'},accumulation=1,clipping={'enabled':False})
+
+tests\e2\test_engine.py:29: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (Tiny(
+  (net): Sequential(
+    (0): Linear(in_features=4, out_features=8, bias=True)
+    (1): Dropout(p=0.0, inplace=...    fused: None
+    lr: 0.01
+    maximize: False
+    momentum: 0
+    nesterov: False
+    weight_decay: 0
+), None, None)
+kwargs = {'accumulation': 1, 'clipping': {'enabled': False}, 'device': device(type='cpu'), 'runtime': {'dtype': 'float32'}}
+
+>   def train_epoch(*args,**kwargs):raise NotImplementedError('E2 dual-view train loop')
+E   NotImplementedError: E2 dual-view train loop
+
+src\e2\engine.py:4: NotImplementedError
+___________ test_evaluate_preserves_manifest_paths_and_same_logits ____________
+
+    def test_evaluate_preserves_manifest_paths_and_same_logits():
+        from src.e2.engine import evaluate
+        m=Tiny();loader=DataLoader(tiny_data(3),batch_size=2)
+>       result=evaluate(m,loader,device=torch.device('cpu'),runtime={'dtype':'float32'},n_train={i:1 for i in range(124)},labels=[str(i) for i in range(124)],collect_predictions=True)
+
+tests\e2\test_engine.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (Tiny(
+  (net): Sequential(
+    (0): Linear(in_features=4, out_features=8, bias=True)
+    (1): Dropout(p=0.0, inplace=..._features=8, out_features=124, bias=True)
+  )
+), <torch.utils.data.dataloader.DataLoader object at 0x000001CC856AE810>)
+kwargs = {'collect_predictions': True, 'device': device(type='cpu'), 'labels': ['0', '1', '2', '3', '4', '5', ...], 'n_train': {0: 1, 1: 1, 2: 1, 3: 1, ...}, ...}
+
+>   def evaluate(*args,**kwargs):raise NotImplementedError('E2 dual-view evaluation loop')
+E   NotImplementedError: E2 dual-view evaluation loop
+
+src\e2\engine.py:5: NotImplementedError
+=========================== short test summary info ===========================
+FAILED tests/e2/test_engine.py::test_one_image_tail_matches_direct_sample_mean_steps
+FAILED tests/e2/test_engine.py::test_evaluate_preserves_manifest_paths_and_same_logits
+2 failed, 7 passed in 1.06s

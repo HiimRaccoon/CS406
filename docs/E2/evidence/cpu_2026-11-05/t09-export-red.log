@@ -1,0 +1,44 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_____ test_selected_checkpoint_analysis_uses_earlier_weights_and_exports ______
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...388d2', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F906C26490>
+
+    def test_selected_checkpoint_analysis_uses_earlier_weights_and_exports(run_config, monkeypatch):
+        import src.e2.report as report
+        from src.e2.config import read_json, sha256_file
+        module = install_cpu_edges(monkeypatch)
+        setup = module._setup
+        def stable(config, checked):
+            ctx = setup(config, checked)
+            with torch.no_grad():
+                ctx["model"].net[-1].bias.zero_()
+                ctx["model"].net[-1].bias[0] = 3.
+            return ctx
+        monkeypatch.setattr(module, "_setup", stable)
+        folder = Path(run_config["paths"]["runs_dir"]) / run_config["run_id"]
+        summary = module.run(run_config, folder)
+        assert summary["selected"]["epoch"] == 1
+        state = torch.load(folder / "last.pt", weights_only=False)
+        row = {"config": state["config"], "summary": summary, "run_dir": str(folder), "best_sha256": sha256_file(folder / "best.pt")}
+        monkeypatch.setattr(report, "validate_completed_run", lambda _: row)
+        monkeypatch.setattr(report, "_evaluation_context", lambda c: stable(c, summary["identity"]))
+        from .helpers import read_fixture
+        monkeypatch.setattr(report,"read_checkpoint",read_fixture)
+        result = report.evaluate_selected(state["config"], folder)
+        history = read_json(folder / "history.json")
+        assert result["metrics"]["nll"] == pytest.approx(history[0]["validation"]["nll"])
+        assert result["selected_epoch"] == 1 and len(result["metrics"]["predictions"]) == 5
+        assert result["evidence_kind"] == "synthetic_cpu_fixture"
+        for name in ["analysis.json", "overall.csv", "per_class.csv", "buckets.csv", "confusion.csv", "predictions.csv", "most_confused.csv", "learning_curves.csv"]:
+            assert (folder / "validation_analysis" / name).is_file()
+        report._selected_analysis(row)
+        (folder/"validation_analysis/predictions.csv").write_text("altered")
+>       with pytest.raises(ValueError):report._selected_analysis(row)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_report.py:40: Failed
+=========================== short test summary info ===========================
+FAILED tests/e2/test_report.py::test_selected_checkpoint_analysis_uses_earlier_weights_and_exports
+1 failed, 5 deselected in 2.80s

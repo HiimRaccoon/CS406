@@ -208,6 +208,18 @@ def _last_boundary(folder, context):
     return {"completed_epoch": None, "updates": None, "state": "unverified_before_preflight_or_unreadable"}
 
 
+def _started_evidence(folder):
+    """Missing last.pt never licenses a fresh replacement of committed work."""
+    summary=read_json(folder/'run_summary.json') if (folder/'run_summary.json').exists() else {}
+    if summary.get('status')=='complete' or summary.get('completed_epochs',0):return True
+    if (folder/'best.pt').exists():return True
+    if (folder/'history.json').exists() and read_json(folder/'history.json'):return True
+    events=read_json(folder/'events.json') if (folder/'events.json').exists() else []
+    if any(e.get('event') in {'attempt_boundary','epoch_started','training_observed','epoch_committed','complete'} for e in events):return True
+    attempts=folder/'attempts'
+    return attempts.is_dir() and any((p/'start_boundary.json').exists() for p in attempts.iterdir() if p.is_dir())
+
+
 def run(config: dict, run_dir: Path, *, resume: Path | None = None, stop_requested=lambda: False) -> dict:
     config = validate_run(config)
     folder = Path(run_dir).resolve()
@@ -216,7 +228,7 @@ def run(config: dict, run_dir: Path, *, resume: Path | None = None, stop_request
     recovering_initialization = False
     if resume is None:
         if folder.exists():
-            if ((folder / "last.pt").exists() or not (folder / "config_resolved.json").is_file()
+            if (_started_evidence(folder) or (folder / "last.pt").exists() or not (folder / "config_resolved.json").is_file()
                     or read_json(folder / "config_resolved.json") != config):
                 raise FileExistsError("Existing run requires unchanged declaration and explicit last.pt resume")
             recovering_initialization = True

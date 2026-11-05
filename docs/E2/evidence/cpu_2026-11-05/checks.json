@@ -1,0 +1,709 @@
+[
+  {
+    "label": "t01-red",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_config.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t01-red",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "12 failed in 0.08s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t01-red.log"
+  },
+  {
+    "label": "baseline",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests",
+      "-q",
+      "-m",
+      "not gpu",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-baseline",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "290 passed, 3 deselected in 113.53s (0:01:53)",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\baseline.log"
+  },
+  {
+    "label": "t01-green",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_config.py",
+      "tests/e1/test_config.py",
+      "tests/e1hr/test_config.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t01-green",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "42 passed in 0.28s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t01-green.log"
+  },
+  {
+    "label": "t02-red",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_data.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t02-red",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "6 failed in 1.28s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t02-red.log"
+  },
+  {
+    "label": "t02-green",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_data.py",
+      "tests/test_preprocessing.py",
+      "tests/e1/test_data.py",
+      "tests/e1hr/test_data.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t02-green",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "27 passed in 17.76s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t02-green.log"
+  },
+  {
+    "label": "t03-red",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_model.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t03-red",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "5 failed in 1.32s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t03-red.log"
+  },
+  {
+    "label": "t03-green",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_model.py",
+      "tests/e1/test_model.py",
+      "tests/e1hr/test_model.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t03-green",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "16 passed in 4.29s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t03-green.log"
+  },
+  {
+    "label": "t04-red",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_metrics.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t04-red",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "1 failed, 3 passed in 1.61s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t04-red.log"
+  },
+  {
+    "label": "t04-green",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_metrics.py",
+      "tests/e1/test_metrics.py",
+      "tests/e1hr/test_metrics.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t04-green",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "11 passed in 1.96s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t04-green.log"
+  },
+  {
+    "label": "t05-red",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_engine.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t05-red",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "2 failed, 7 passed in 1.06s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t05-red.log"
+  },
+  {
+    "label": "t05-green",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_engine.py",
+      "tests/e1/test_engine.py",
+      "tests/e1hr/test_engine.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t05-green",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "17 passed in 1.18s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t05-green.log"
+  },
+  {
+    "label": "t06-red",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_checkpoint.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t06-red",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "3 failed in 1.15s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t06-red.log"
+  },
+  {
+    "label": "t06-green",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_checkpoint.py",
+      "tests/e1/test_checkpoint.py",
+      "tests/e1hr/test_checkpoint.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t06-green",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "9 passed in 1.65s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t06-green.log"
+  },
+  {
+    "label": "t07-red",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_train.py",
+      "tests/e2/test_runtime.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t07-red",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "7 failed in 1.21s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t07-red.log"
+  },
+  {
+    "label": "t07-green-first",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_train.py",
+      "tests/e2/test_runtime.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t07-green-first",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "1 failed, 6 passed in 7.45s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t07-green-first.log"
+  },
+  {
+    "label": "t07-green",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_train.py",
+      "tests/e2/test_recovery.py",
+      "tests/e2/test_runtime.py",
+      "tests/e1/test_entrypoints.py",
+      "tests/e1/test_recovery.py",
+      "tests/e1hr/test_train.py",
+      "tests/e1hr/test_recovery.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t07-green",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "63 passed in 73.58s (0:01:13)",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t07-green.log"
+  },
+  {
+    "label": "t08-red",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_campaign.py",
+      "tests/e2/test_artifacts.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t08-red",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "12 failed, 6 passed in 12.75s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t08-red.log"
+  },
+  {
+    "label": "t08-green-first",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_campaign.py",
+      "tests/e2/test_artifacts.py",
+      "tests/e2/test_runtime.py",
+      "tests/e1/test_campaign.py",
+      "tests/e1/test_artifacts.py",
+      "tests/e1hr/test_campaign.py",
+      "tests/e1hr/test_artifacts.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t08-green-first",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "1 failed, 54 passed in 29.26s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t08-green-first.log"
+  },
+  {
+    "label": "t08-green",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_campaign.py",
+      "tests/e2/test_artifacts.py",
+      "tests/e2/test_runtime.py",
+      "tests/e1/test_campaign.py",
+      "tests/e1/test_artifacts.py",
+      "tests/e1hr/test_campaign.py",
+      "tests/e1hr/test_artifacts.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t08-green",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "55 passed in 28.82s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t08-green.log"
+  },
+  {
+    "label": "t09-red",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_report.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t09-red",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "6 failed in 5.93s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t09-red.log"
+  },
+  {
+    "label": "t09-green-first",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_report.py",
+      "tests/e1/test_report.py",
+      "tests/e1hr/test_report.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t09-green-first",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "14 passed in 11.52s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t09-green-first.log"
+  },
+  {
+    "label": "t09-export-red",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_report.py",
+      "-k",
+      "selected_checkpoint",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t09-export-red",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "1 failed, 5 deselected in 2.80s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t09-export-red.log"
+  },
+  {
+    "label": "t09-green",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_report.py",
+      "tests/e1/test_report.py",
+      "tests/e1hr/test_report.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t09-green",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "14 passed in 11.71s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t09-green.log"
+  },
+  {
+    "label": "t10-red",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_entrypoints.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-red",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "10 failed, 4 passed in 30.27s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-red.log"
+  },
+  {
+    "label": "t10-entry-green",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_entrypoints.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-entry-green",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "14 passed in 30.65s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-entry-green.log"
+  },
+  {
+    "label": "t10-e2-cpu",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2",
+      "-q",
+      "-m",
+      "not gpu",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-e2-cpu",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "106 passed, 1 deselected in 70.88s (0:01:10)",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-e2-cpu.log"
+  },
+  {
+    "label": "t10-runtime",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_runtime.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-runtime",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "21 passed in 2.18s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-runtime.log"
+  },
+  {
+    "label": "t10-metric-red",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_artifacts.py",
+      "-k",
+      "consistently_rehashed",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-metric-red",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "4 failed, 10 deselected in 6.10s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-metric-red.log"
+  },
+  {
+    "label": "t10-full-cpu",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "-q",
+      "-m",
+      "not gpu",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-full-cpu",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "407 passed, 4 deselected in 193.13s (0:03:13)",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-full-cpu.log"
+  },
+  {
+    "label": "t10-metric-green",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_artifacts.py",
+      "tests/e2/test_campaign.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-metric-green",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "22 passed in 28.97s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-metric-green.log"
+  },
+  {
+    "label": "t10-final-e2",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2",
+      "-q",
+      "-m",
+      "not gpu",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-final-e2",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "121 passed, 1 deselected in 94.91s (0:01:34)",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-final-e2.log"
+  },
+  {
+    "label": "t10-final-full",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "-q",
+      "-m",
+      "not gpu",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-final-full",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "411 passed, 4 deselected in 214.25s (0:03:34)",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-final-full.log"
+  },
+  {
+    "label": "t10-lost-last-red",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_recovery.py",
+      "-k",
+      "lost_authoritative",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-lost-last-red",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "2 failed, 11 deselected in 5.63s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-lost-last-red.log"
+  },
+  {
+    "label": "t10-recovery-green",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_recovery.py",
+      "tests/e2/test_train.py",
+      "tests/e1/test_recovery.py",
+      "tests/e1hr/test_recovery.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-recovery-green",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "39 passed in 43.18s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-recovery-green.log"
+  },
+  {
+    "label": "t10-verified-e2",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2",
+      "-q",
+      "-m",
+      "not gpu",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-verified-e2",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "123 passed, 1 deselected in 99.52s (0:01:39)",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-verified-e2.log"
+  },
+  {
+    "label": "t10-verified-full",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "-q",
+      "-m",
+      "not gpu",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-verified-full",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "413 passed, 4 deselected in 218.39s (0:03:38)",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-verified-full.log"
+  },
+  {
+    "label": "t10-external-input-red",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_report.py",
+      "-k",
+      "repository_aggregate",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-external-input-red",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "1 failed, 6 deselected in 1.75s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-external-input-red.log"
+  },
+  {
+    "label": "t10-external-input-green",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_report.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-external-input-green",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "7 passed in 6.87s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-external-input-green.log"
+  }
+]

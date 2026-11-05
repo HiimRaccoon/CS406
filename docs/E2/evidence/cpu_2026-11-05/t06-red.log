@@ -1,0 +1,66 @@
+FFF                                                                      [100%]
+================================== FAILURES ===================================
+_________ test_discard_restore_and_replay_matches_uninterrupted_state _________
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...146c2', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+
+    def test_discard_restore_and_replay_matches_uninterrupted_state(run_config):
+        from src.e2.checkpoint import capture_state,restore_state
+        from src.e2.engine import train_epoch
+        c,m,o,s,ls=components(run_config)
+        args=dict(model=m,optimizer=o,scheduler=s,scaler=None,loaders=ls)
+        progress={'completed_epoch':0,'updates':0,'history':[],'selected':None,'selected_weights':None}
+        committed=capture_state(progress=progress,**args)
+        def epoch(model,opt,sched,loaders):
+            return train_epoch(model,loaders['train'],opt,sched,None,device=torch.device('cpu'),runtime={'dtype':'float32'},accumulation=1,clipping={'enabled':False})
+        epoch(m,o,s,ls);expected=copy.deepcopy(m.state_dict());rng=torch.get_rng_state().clone();draws=(random.random(),np.random.rand())
+        _,other,oo,ss,ll=components(run_config)
+        restored=restore_state(committed,model=other,optimizer=oo,scheduler=ss,scaler=None,loaders=ll)
+>       assert restored==progress
+E       AssertionError: assert {} == {'completed_e...s': None, ...}
+E         
+E         Right contains 5 more items:
+E         {'completed_epoch': 0,
+E          'history': [],
+E          'selected': None,
+E          'selected_weights': None,
+E          'updates': 0}
+E         Use -v to get more diff
+
+tests\e2\test_checkpoint.py:27: AssertionError
+_____________ test_official_e2_boundary_and_topology_are_required _____________
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...83b00', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t06-red/test_official_e2_boundary_and_0')
+
+    def test_official_e2_boundary_and_topology_are_required(run_config,tmp_path):
+        from src.e2.checkpoint import save_checkpoint
+        c,m,o,s,ls=components(run_config)
+        args=dict(model=m,optimizer=o,scheduler=s,scaler=None,loaders=ls,identity={'scientific_runtime':{'evidence_kind':'official_uit_slurm'},'audit':{}},progress={'completed_epoch':0,'updates':0,'history':[],'selected':None,'selected_weights':None})
+        for mutation in [lambda x:x.update(experiment='E1-HR'),lambda x:x['views'].update(local_count=3),lambda x:x['recipe']['budget'].update(planned_max_updates=32)]:
+            bad=copy.deepcopy(c);mutation(bad)
+>           with pytest.raises(ValueError):save_checkpoint(tmp_path/'last.pt',config=bad,**args)
+E           Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_checkpoint.py:42: Failed
+__________________ test_atomic_failure_retains_previous_last __________________
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...55e27', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t06-red/test_atomic_failure_retains_pr0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001E2114C8BD0>
+
+    def test_atomic_failure_retains_previous_last(run_config,tmp_path,monkeypatch):
+        from src.e2.checkpoint import save_checkpoint,read_checkpoint,restore_checkpoint
+        c,m,o,s,ls=components(run_config);identity={'scientific_runtime':{'evidence_kind':'official_uit_slurm'},'audit':{}}
+        args=dict(model=m,optimizer=o,scheduler=s,scaler=None,loaders=ls,config=c,identity=identity,progress={'completed_epoch':0,'updates':0,'history':[],'selected':None,'selected_weights':None})
+>       path=tmp_path/'last.pt';save_checkpoint(path,**args);assert path.exists()
+E       AssertionError: assert False
+E        +  where False = exists()
+E        +    where exists = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t06-red/test_atomic_failure_retains_pr0/last.pt').exists
+
+tests\e2\test_checkpoint.py:48: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/e2/test_checkpoint.py::test_discard_restore_and_replay_matches_uninterrupted_state
+FAILED tests/e2/test_checkpoint.py::test_official_e2_boundary_and_topology_are_required
+FAILED tests/e2/test_checkpoint.py::test_atomic_failure_retains_previous_last
+3 failed in 1.15s

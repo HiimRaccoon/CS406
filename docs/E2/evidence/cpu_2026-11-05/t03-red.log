@@ -1,0 +1,65 @@
+FFFFF                                                                    [100%]
+================================== FAILURES ===================================
+______________ test_encoder_calls_global_then_batch_major_locals ______________
+
+    def test_encoder_calls_global_then_batch_major_locals():
+        m,v=setup();m(v)
+>       assert [len(x) for x in m.features.calls]==[2,8]
+E       assert [2] == [2, 8]
+E         
+E         Right contains one more item: 8
+E         Use -v to get more diff
+
+tests\e2\test_model.py:25: AssertionError
+________________ test_fused_feature_is_global_then_local_mean _________________
+
+    def test_fused_feature_is_global_then_local_mean():
+        m,v=setup();g=m.encode_view(v['global']);locals_=m.encode_view(v['local'].flatten(0,1)).reshape(2,4,768)
+        fused=m.encode(v)
+>       assert fused.shape==(2,1536)
+E       assert torch.Size([2, 768]) == (2, 1536)
+E         
+E         At index 1 diff: 768 != 1536
+E         Use -v to get more diff
+
+tests\e2\test_model.py:32: AssertionError
+______________ test_all_view_paths_backpropagate_to_one_encoder _______________
+
+    def test_all_view_paths_backpropagate_to_one_encoder():
+        m,v=setup();m(v).square().sum().backward()
+        assert v['global'].grad is not None and torch.isfinite(v['global'].grad).all()
+>       assert v['local'].grad is not None and torch.isfinite(v['local'].grad).all()
+E       assert (None is not None)
+E        +  where None = tensor([[[[[ 3.,  3.,  3.,  3.],\n           [ 3.,  3.,  3.,  3.],\n           [ 3.,  3.,  3.,  3.],\n           [ 3.,  3...        [10., 10., 10., 10.],\n           [10., 10., 10., 10.],\n           [10., 10., 10., 10.]]]]], requires_grad=True).grad
+
+tests\e2\test_model.py:38: AssertionError
+_______ test_head_initialization_uses_fan_in_1536_and_restores_cpu_rng ________
+
+    def test_head_initialization_uses_fan_in_1536_and_restores_cpu_rng():
+        from src.e2.model import E2Model
+        b=convnext_tiny(weights=None,stochastic_depth_prob=.1);outer=torch.get_rng_state().clone()
+        m=E2Model(b,{'method':'linear_default','seed':1001})
+>       assert torch.equal(outer,torch.get_rng_state())
+E       assert False
+E        +  where False = <built-in method equal of type object at 0x00007FFBD1C3B860>(tensor([ 80,  30, 100,  ...,   0,   0,   0], dtype=torch.uint8), tensor([ 80,  30, 100,  ...,   0,   0,   0], dtype=torch.uint8))
+E        +    where <built-in method equal of type object at 0x00007FFBD1C3B860> = torch.equal
+E        +    and   tensor([ 80,  30, 100,  ...,   0,   0,   0], dtype=torch.uint8) = <function get_rng_state at 0x000001D6C9EEA020>()
+E        +      where <function get_rng_state at 0x000001D6C9EEA020> = torch.get_rng_state
+
+tests\e2\test_model.py:46: AssertionError
+_________ test_e2_architecture_parameter_count_matches_design_oracle __________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+
+    def test_e2_architecture_parameter_count_matches_design_oracle(recipe):
+>       from src.e2.model import E2Model,build_optimizer
+E       ImportError: cannot import name 'build_optimizer' from 'src.e2.model' (C:\Users\Windows\Downloads\GeoLocation\src\e2\model.py)
+
+tests\e2\test_model.py:52: ImportError
+=========================== short test summary info ===========================
+FAILED tests/e2/test_model.py::test_encoder_calls_global_then_batch_major_locals
+FAILED tests/e2/test_model.py::test_fused_feature_is_global_then_local_mean
+FAILED tests/e2/test_model.py::test_all_view_paths_backpropagate_to_one_encoder
+FAILED tests/e2/test_model.py::test_head_initialization_uses_fan_in_1536_and_restores_cpu_rng
+FAILED tests/e2/test_model.py::test_e2_architecture_parameter_count_matches_design_oracle
+5 failed in 1.32s

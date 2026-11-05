@@ -1,0 +1,16 @@
+...F...                                                                  [100%]
+================================== FAILURES ===================================
+__ test_preflight_without_execution_approvals_fails_before_model_allocation ___
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...0722d', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001760D5A4390>
+
+    def test_preflight_without_execution_approvals_fails_before_model_allocation(run_config, monkeypatch):
+        import src.e2.train as module
+>       monkeypatch.setattr(module, "build_e1", lambda *a: pytest.fail("model allocated"))
+E       AttributeError: <module 'src.e2.train' from 'C:\\Users\\Windows\\Downloads\\GeoLocation\\src\\e2\\train.py'> has no attribute 'build_e1'
+
+tests\e2\test_train.py:100: AttributeError
+=========================== short test summary info ===========================
+FAILED tests/e2/test_train.py::test_preflight_without_execution_approvals_fails_before_model_allocation
+1 failed, 6 passed in 7.45s

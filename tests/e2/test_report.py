@@ -123,29 +123,55 @@ def test_aggregate_accepts_audit_only_commit_change_but_rejects_runtime_change(r
     with pytest.raises(ValueError):report.aggregate_final(folders,recipe,selection)
 
 
+def comparator_inputs(report,e2,recipe,tmp_path,monkeypatch):
+    """Private I/O-edge doubles; production has no synthetic/hash override."""
+    from src.e2.config import sha256_file
+    from src.e2.checkpoint import atomic_json
+    paths=[];pins={}
+    for name in ('E1','E1-HR'):
+        binding=recipe['reporting']['comparison']['comparators'][name]
+        path=tmp_path/(name+'-synthetic-comparator.json')
+        metrics=copy.deepcopy(e2)
+        metrics.update(kind=binding['aggregate_kind'],contract_sha256=binding['required_contract_sha256'],
+                       evidence_kind='synthetic_cpu_fixture')
+        for row in metrics['per_seed']:
+            for key in report.SCORES:row[key]=.75
+        for key in report.SCORES:metrics['overall'][key]={'mean':.75,'std':0.}
+        atomic_json(path,metrics);paths.append(path)
+        pins[path.resolve()]=binding['required_aggregate_sha256']
+    # Only these two explicit temporary fixture paths represent the already
+    # checked input boundary; contract/source/unknown-file hashes remain real.
+    monkeypatch.setattr(report,'sha256_file',lambda p:pins.get(Path(p).resolve()) or sha256_file(Path(p)))
+    return paths
+
+
 def test_comparator_artifacts_are_explicit_hash_bound_inputs(recipe,tmp_path,monkeypatch):
-    from src.e2.config import ROOT,sha256_file
+    from src.e2.config import sha256_file
     report,folders,selection,mapped=aggregate_fixture(recipe,tmp_path,monkeypatch)
     e2=report.aggregate_final(folders,recipe,selection)
-    # These are supplied fixture paths only; production has no path defaults.
-    e1=ROOT/'src/e1/e1_three_seed_validation_report_v1.json'
-    hr=ROOT/'src/e1hr/final-report-v1/e1hr_three_seed_validation_report_v1.json'
+    e1,hr=comparator_inputs(report,e2,recipe,tmp_path,monkeypatch)
     before=[sha256_file(p) for p in (e1,hr)]
-    result=report.compare_baselines(e2,e1,hr)
+    result=report.compare_references(e2,e1_report_path=e1,e1hr_report_path=hr)
     assert result['comparators']['E1']['role']=='primary_architectural'
     assert result['comparators']['E1-HR']['role']=='contextual_complementary'
-    assert result['comparators']['E1']['overall']['top1']['mean_delta_percentage_points']==pytest.approx((.2-.7550575785869904)*100)
+    assert result['comparators']['E1']['overall']['top1']['mean_delta_percentage_points']==pytest.approx((.2-.75)*100)
     assert [sha256_file(p) for p in (e1,hr)]==before
-    with pytest.raises(ValueError):report.compare_baselines(e2,hr,e1)
+    with pytest.raises(ValueError):report.compare_references(e2,e1_report_path=hr,e1hr_report_path=e1)
     bad=tmp_path/'pilot.json';bad.write_text('{"kind":"pilot"}')
-    with pytest.raises(ValueError):report.compare_baselines(e2,bad,hr)
+    with pytest.raises(ValueError):report.compare_references(e2,e1_report_path=bad,e1hr_report_path=hr)
 
 
 def test_report_labels_primary_and_contextual_comparisons(recipe,tmp_path,monkeypatch):
     report,folders,selection,mapped=aggregate_fixture(recipe,tmp_path,monkeypatch)
-    from src.e2.config import ROOT
-    result=report.compare_baselines(report.aggregate_final(folders,recipe,selection),
-        ROOT/'src/e1/e1_three_seed_validation_report_v1.json',
-        ROOT/'src/e1hr/final-report-v1/e1hr_three_seed_validation_report_v1.json')
+    e2=report.aggregate_final(folders,recipe,selection)
+    e1,hr=comparator_inputs(report,e2,recipe,tmp_path,monkeypatch)
+    result=report.compare_references(e2,e1_report_path=e1,e1hr_report_path=hr)
     assert result['comparators']['E1']['sha256']==recipe['reporting']['comparison']['comparators']['E1']['required_aggregate_sha256']
     assert 'does not isolate local views or resolution' in ' '.join(result['limitations'])
+
+
+def test_comparison_does_not_require_repository_aggregate_files(recipe,tmp_path,monkeypatch):
+    import src.e2.report
+    import src.e2.config as config
+    monkeypatch.setattr(config,'ROOT',tmp_path/'checkout_without_reports')
+    test_comparator_artifacts_are_explicit_hash_bound_inputs(recipe,tmp_path,monkeypatch)

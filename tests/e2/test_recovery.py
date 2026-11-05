@@ -174,3 +174,14 @@ def test_attempt_publication_kill_is_recorded_and_same_run_recovers(run_config,m
     assert abandoned['status']=='terminated_without_outcome'
     assert phase in abandoned['metadata_issues']
     assert (folder/'attempts/000001'/phase).read_text()=='{'
+
+
+@pytest.mark.parametrize('boundary',['complete','interrupted'])
+def test_lost_authoritative_checkpoint_never_restarts_a_started_run(run_config,monkeypatch,boundary):
+    module=install_cpu_edges(monkeypatch)
+    folder=Path(run_config['paths']['runs_dir'])/run_config['run_id']
+    if boundary=='complete':module.run(run_config,folder)
+    else:
+        calls=iter([False,True]);module.run(run_config,folder,stop_requested=lambda:next(calls))
+    (folder/'last.pt').unlink()
+    with pytest.raises((ValueError,FileExistsError)):module.run(run_config,folder)

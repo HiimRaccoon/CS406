@@ -1,0 +1,169 @@
+FFFFFFFFFFFF                                                             [100%]
+================================== FAILURES ===================================
+_____________ test_e2_topology_and_common_controls_are_immutable ______________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+run_config = {}
+
+    def test_e2_topology_and_common_controls_are_immutable(recipe,run_config):
+        from src.e2.config import load_recipe,validate_run
+        assert load_recipe()==recipe
+        c=validate_run(run_config)
+>       assert c['experiment']=='E2' and c['views']['global_wh']==[896,384]
+E       KeyError: 'experiment'
+
+tests\e2\test_config.py:9: KeyError
+________________ test_changed_batch_is_rejected[microbatch-4] _________________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 4, ...}, ...}
+field = 'microbatch', value = 4
+
+    @pytest.mark.parametrize('field,value',[('microbatch',4),('gradient_accumulation',2),('drop_last',True)])
+    def test_changed_batch_is_rejected(recipe,field,value):
+        from src.e2.config import validate_recipe
+        recipe['batch'][field]=value
+>       with pytest.raises(ValueError):validate_recipe(recipe)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_config.py:21: Failed
+___________ test_changed_batch_is_rejected[gradient_accumulation-2] ___________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 2, 'microbatch': 2, ...}, ...}
+field = 'gradient_accumulation', value = 2
+
+    @pytest.mark.parametrize('field,value',[('microbatch',4),('gradient_accumulation',2),('drop_last',True)])
+    def test_changed_batch_is_rejected(recipe,field,value):
+        from src.e2.config import validate_recipe
+        recipe['batch'][field]=value
+>       with pytest.raises(ValueError):validate_recipe(recipe)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_config.py:21: Failed
+_______________ test_changed_batch_is_rejected[drop_last-True] ________________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l... one optimizer/scheduler update per group.', 'drop_last': True, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+field = 'drop_last', value = True
+
+    @pytest.mark.parametrize('field,value',[('microbatch',4),('gradient_accumulation',2),('drop_last',True)])
+    def test_changed_batch_is_rejected(recipe,field,value):
+        from src.e2.config import validate_recipe
+        recipe['batch'][field]=value
+>       with pytest.raises(ValueError):validate_recipe(recipe)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_config.py:21: Failed
+_____ test_rehashed_other_stage_or_topology_is_rejected[experiment-E1-HR] _____
+
+run_config = {'config_sha256': 'a53420b5cd6d0e615a174c19bd1478bade90a75c79915d39cf8fd739c5355a91', 'experiment': 'E1-HR'}
+field = 'experiment', value = 'E1-HR'
+
+    @pytest.mark.parametrize('field,value',[('experiment','E1-HR'),('kind','official_e1_run_config'),('representation_dimension',768),('view_execution','locals_first')])
+    def test_rehashed_other_stage_or_topology_is_rejected(run_config,field,value):
+        from src.e2.config import validate_run,fingerprint
+        run_config[field]=value
+        run_config['config_sha256']=fingerprint({k:v for k,v in run_config.items() if k!='config_sha256'})
+>       with pytest.raises(ValueError):validate_run(run_config)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_config.py:28: Failed
+_ test_rehashed_other_stage_or_topology_is_rejected[kind-official_e1_run_config] _
+
+run_config = {'config_sha256': '0a13f8db9368c4228bce9e6a36fdbb2150a2ff38ec17fb8477c1db307263a408', 'kind': 'official_e1_run_config'}
+field = 'kind', value = 'official_e1_run_config'
+
+    @pytest.mark.parametrize('field,value',[('experiment','E1-HR'),('kind','official_e1_run_config'),('representation_dimension',768),('view_execution','locals_first')])
+    def test_rehashed_other_stage_or_topology_is_rejected(run_config,field,value):
+        from src.e2.config import validate_run,fingerprint
+        run_config[field]=value
+        run_config['config_sha256']=fingerprint({k:v for k,v in run_config.items() if k!='config_sha256'})
+>       with pytest.raises(ValueError):validate_run(run_config)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_config.py:28: Failed
+_ test_rehashed_other_stage_or_topology_is_rejected[representation_dimension-768] _
+
+run_config = {'config_sha256': '08d7554c0008e458ede3c0a648c6d909bcfe9b46dc674a477c5ebc6a8989cc03', 'representation_dimension': 768}
+field = 'representation_dimension', value = 768
+
+    @pytest.mark.parametrize('field,value',[('experiment','E1-HR'),('kind','official_e1_run_config'),('representation_dimension',768),('view_execution','locals_first')])
+    def test_rehashed_other_stage_or_topology_is_rejected(run_config,field,value):
+        from src.e2.config import validate_run,fingerprint
+        run_config[field]=value
+        run_config['config_sha256']=fingerprint({k:v for k,v in run_config.items() if k!='config_sha256'})
+>       with pytest.raises(ValueError):validate_run(run_config)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_config.py:28: Failed
+_ test_rehashed_other_stage_or_topology_is_rejected[view_execution-locals_first] _
+
+run_config = {'config_sha256': 'f9b00d7ed49d5657fa2df573fd26c7bf5cec54d1125cb30c0a37ba13504e2582', 'view_execution': 'locals_first'}
+field = 'view_execution', value = 'locals_first'
+
+    @pytest.mark.parametrize('field,value',[('experiment','E1-HR'),('kind','official_e1_run_config'),('representation_dimension',768),('view_execution','locals_first')])
+    def test_rehashed_other_stage_or_topology_is_rejected(run_config,field,value):
+        from src.e2.config import validate_run,fingerprint
+        run_config[field]=value
+        run_config['config_sha256']=fingerprint({k:v for k,v in run_config.items() if k!='config_sha256'})
+>       with pytest.raises(ValueError):validate_run(run_config)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_config.py:28: Failed
+___________________ test_other_stage_receipts_are_rejected ____________________
+
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t01-red/test_other_stage_receipts_are_0')
+
+    def test_other_stage_receipts_are_rejected(tmp_path):
+        from src.e2.config import require_approval,CONTRACT_SHA256
+        p=tmp_path/'receipt.json'
+        p.write_text(json.dumps({'gate':'HR-G2','approved':True,'experiment':'E1-HR','contract_sha256':CONTRACT_SHA256}))
+>       with pytest.raises(ValueError):require_approval(p,gate='E2-G2',bindings={})
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_config.py:34: Failed
+____________________ test_final_requires_locked_selection _____________________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+run_config = {}
+
+    def test_final_requires_locked_selection(recipe,run_config):
+        from src.e2.config import resolve_run
+>       with pytest.raises(ValueError):resolve_run(recipe,stage='final',lr=1e-4,seed=2001,paths=run_config.get('paths',{}))
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_config.py:38: Failed
+__________ test_acceptance_request_never_passes_official_validation ___________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+run_config = {}
+
+    def test_acceptance_request_never_passes_official_validation(recipe,run_config):
+>       from src.e2.config import validate_run,validate_acceptance_request,acceptance_request
+E       ImportError: cannot import name 'acceptance_request' from 'src.e2.config' (C:\Users\Windows\Downloads\GeoLocation\src\e2\config.py)
+
+tests\e2\test_config.py:41: ImportError
+__________________ test_json_freeze_and_duplicate_key_guards __________________
+
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t01-red/test_json_freeze_and_duplicate0')
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+
+    def test_json_freeze_and_duplicate_key_guards(tmp_path,recipe):
+        from src.e2.config import CONTRACT_PATH,load_recipe,read_json
+        p=tmp_path/'candidate.json';p.write_bytes(CONTRACT_PATH.read_bytes())
+>       with pytest.raises(ValueError):load_recipe(p)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_config.py:52: Failed
+=========================== short test summary info ===========================
+FAILED tests/e2/test_config.py::test_e2_topology_and_common_controls_are_immutable
+FAILED tests/e2/test_config.py::test_changed_batch_is_rejected[microbatch-4]
+FAILED tests/e2/test_config.py::test_changed_batch_is_rejected[gradient_accumulation-2]
+FAILED tests/e2/test_config.py::test_changed_batch_is_rejected[drop_last-True]
+FAILED tests/e2/test_config.py::test_rehashed_other_stage_or_topology_is_rejected[experiment-E1-HR]
+FAILED tests/e2/test_config.py::test_rehashed_other_stage_or_topology_is_rejected[kind-official_e1_run_config]
+FAILED tests/e2/test_config.py::test_rehashed_other_stage_or_topology_is_rejected[representation_dimension-768]
+FAILED tests/e2/test_config.py::test_rehashed_other_stage_or_topology_is_rejected[view_execution-locals_first]
+FAILED tests/e2/test_config.py::test_other_stage_receipts_are_rejected - Fail...
+FAILED tests/e2/test_config.py::test_final_requires_locked_selection - Failed...
+FAILED tests/e2/test_config.py::test_acceptance_request_never_passes_official_validation
+FAILED tests/e2/test_config.py::test_json_freeze_and_duplicate_key_guards - F...
+12 failed in 0.08s

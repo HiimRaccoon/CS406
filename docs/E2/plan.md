@@ -8,7 +8,7 @@
 
 **Tech stack:** Python 3.11.17; Torch 2.8.0+cu128; TorchVision 0.23.0+cu128; deterministic FP32; the remaining software lock in spec Section 8; pytest CPU fixtures and separately opted-in UIT Slurm target acceptance.
 
-**Spec:** [specs.md](specs.md). **Current status:** **E2-G0 PASS**, explicitly approved by the user on 2026-11-05 for **E2-T00b only**; **E2-G1 PASS ? native T01?T10 authorized**. The complete [numeric-contract candidate](e2_numeric_contract_v1.json) is prepared and checked as documentation. The [task ledger](tasks.md) records live status. No sidecar, approval receipt, implementation, CPU/GPU tests, declarations or jobs are authorized or produced by T00b.
+**Spec:** [specs.md](specs.md). **Current status:** E2-G0 and E2-G1 **PASS** by explicit user decisions. The [exact frozen contract](e2_numeric_contract_v1.json), [sidecar](e2_numeric_contract_v1.sha256) and [receipt](e2_g1_approval.json) authorize native T01-T10 implementation/CPU preparation. Actual task evidence is in [implementation_log.md](implementation_log.md). STOP before E2-TARGET-AUTH; no target/GPU, tuning/final, E3 or test-image permission.
 
 ## Global constraints
 
@@ -70,7 +70,7 @@ User-requested corrected spec/plan/ledger preparation (complete)
   -> E3's own specification and gates; final evaluation remains separate
 ```
 
-The user's explicit E2-G0 decision authorizes E2-T00b candidate preparation only, now complete. G1 requires separate review and approval of the exact candidate digest; neither document existence nor a computed checksum confers permission. The prospective G1 implementation scope is E2-T01–T10; actual scope and method must be expressly selected. Native task-by-task execution is recommended because the modules depend closely on the same schemas and identity rules; no execution choice is recorded as accepted. Stop before creating the approved sidecar/receipt or beginning implementation.
+The user separately approved E2-G1 at exact reviewed commit/digest, selected native task-by-task execution and authorized T01-T10 only. The sidecar and G1 receipt record that decision. CPU readiness does not grant target-work authorization; STOP before E2-T11.
 
 E2-G2 accepts the reviewed implementation and actual target identity but does not itself authorize tuning. E2-G3a binds exactly four tuning declarations. E2-G3b binds the completed handoff/selection and exactly three final declarations. Acceptance and test passes never author their own approval. Use explicit user decisions to create digest-bound approved receipts; automated acceptance may emit only an unapproved review candidate.
 
@@ -303,11 +303,11 @@ assert model.classifier.out_features == 124
 
 **Depends:** E2-T01–T09. **Files:** wrapper/runbook, `test_entrypoints.py`, `test_gpu_smoke.py`, CPU readiness/log/ledger. **Consumes:** all completed CPU interfaces. **Produces:** reviewable deployment/acceptance harness; no target execution.
 
-- [ ] RED: test one declaration only, strict unknown options, check-config without allocation, matching exported seed, own existing last.pt only, and rejection of test/search/LR/batch/view overrides. Wrapper exports `PYTHONHASHSEED`, OMP/MKL=2 and CUBLAS config before its first Python process, then validates and uses `srun` for one E2 invocation.
-- [ ] Prepare normal/uit/mig2-35/gpu:2g.35gb:1, one task, four CPUs, 16384 MiB, 09:00:00 wrapper and runbook. Explain signal warning/boundary stop versus forced-kill whole-epoch replay; no guarantee an epoch finishes in the warning interval, auto-resubmission or longer walltime.
-- [ ] Prepare explicit opt-in target acceptance using a separate `e2_target_acceptance_request_v1`/nonofficial evidence root, target-work approval, seed1001/baseLR2.5e-5 and full inherited scheduler horizon. A deterministic three-original-image train-only fixture includes both layouts and a one-image tail; two completed fixture segments allow discard/reconstruct/replay against an uninterrupted reference. These are not official epochs, and their four committed fixture updates do not count toward a run. Capture/restore uses T06's same primitives under a nonofficial fixture envelope; official envelope/count guards are tested separately and never bypassed.
-- [ ] Without opt-in, GPU tests skip and claim no acceptance. With opt-in, missing target authorization/inputs fails rather than skips. The harness checks actual two-call batching, full-size real-weight finite forward/backward, all-CUDA RNG recovery and memory records; it emits only `approved=false` acceptance/G2 review candidates.
-- [ ] GREEN and complete CPU readiness checks, interpreted in the actual local environment:
+- [x] RED: test one declaration only, strict unknown options, check-config without allocation, matching exported seed, own existing last.pt only, and rejection of test/search/LR/batch/view overrides. Wrapper exports `PYTHONHASHSEED`, OMP/MKL=2 and CUBLAS config before its first Python process, then validates and uses `srun` for one E2 invocation.
+- [x] Prepare normal/uit/mig2-35/gpu:2g.35gb:1, one task, four CPUs, 16384 MiB, 09:00:00 wrapper and runbook. Explain signal warning/boundary stop versus forced-kill whole-epoch replay; no guarantee an epoch finishes in the warning interval, auto-resubmission or longer walltime.
+- [x] Prepare explicit opt-in target acceptance using a separate `e2_target_acceptance_request_v1`/nonofficial evidence root, target-work approval, seed1001/baseLR2.5e-5 and full inherited scheduler horizon. A deterministic three-original-image train-only fixture includes both layouts and a one-image tail; two completed fixture segments allow discard/reconstruct/replay against an uninterrupted reference. These are not official epochs, and their four committed fixture updates do not count toward a run. Capture/restore uses T06's same primitives under a nonofficial fixture envelope; official envelope/count guards are tested separately and never bypassed.
+- [x] Without opt-in, GPU tests skip and claim no acceptance. With opt-in, missing target authorization/inputs fails rather than skips. The harness checks actual two-call batching, full-size real-weight finite forward/backward, all-CUDA RNG recovery and memory records; it emits only `approved=false` acceptance/G2 review candidates.
+- [x] GREEN and complete CPU readiness checks, interpreted in the actual local environment:
 
 ```bash
 python -m pytest tests/e2 -q -m "not gpu"
@@ -316,7 +316,7 @@ python -m compileall -q src/e2 tests/e2
 bash -n scripts/slurm/e2_train.sbatch
 ```
 
-- [ ] Require PASS, review source/import closure and protected hashes, record actual CPU environment/limits and skipped GPU scope, then scoped commit. **STOP before E2-T11 until E2-TARGET-AUTH is explicit.**
+- [x] Require PASS, review source/import closure and protected hashes, record actual CPU environment/limits and skipped GPU scope, then scoped commit. **STOP before E2-T11 until E2-TARGET-AUTH is explicit.**
 
 ### E2-T11 — Separately authorized target acceptance
 
@@ -367,8 +367,8 @@ bash -n scripts/slurm/e2_train.sbatch
 | 13: reports, comparisons, E3-compatible handoff | T04/T09/T13/T14 |
 | 14–15: test lock and gate order | All entrypoint/data/report guards and the gate/ledger tables |
 
-Preparation checks are document-only: resolve links, verify task IDs/dependencies/interfaces/coverage and frozen numeric references, check independent arithmetic/oracles, and compare protected files. They do not constitute behavioral RED/GREEN, CPU training, or GPU acceptance. E2-G0 is PASS and E2-T00b candidate preparation is complete. The current package is ready for **E2-G1 review of the exact candidate digest, implementation method and named scope**; it is not frozen or authorized for implementation. No scientific input remains unresolved in preparation; later runtime/acceptance/results remain gated observations.
+T00a/T00b preparation checks were document-only. G1 subsequently froze the exact candidate and authorized native T01-T10. Current CPU results, source closure and protected-input checks are recorded in the implementation log/readiness package. Target acceptance remains a future, separately authorized observation.
 
 ## E2-G1 approval record (2026-11-05)
 
-E2-G1 is **PASS**, explicitly approved by the user for exact contract SHA-256 `ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72` at reviewed commit `c40dd00a22de2d3ef50440440107d66db7b7dc45`. The approved JSON bytes remain unchanged; the exact-byte sidecar and [G1 receipt](e2_g1_approval.json) record the freeze. Native task-by-task **E2-T01?T10 only** is authorized, with CPU RED ? GREEN ? scoped regression and commits. Earlier preparation-status text and frozen candidate snapshots are historical. Target/GPU work, target acceptance, tuning, finals, E3 and test images remain **NOT AUTHORIZED**. STOP after T10.
+E2-G1 is **PASS**, explicitly approved by the user for exact contract SHA-256 `ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72` at reviewed commit `c40dd00a22de2d3ef50440440107d66db7b7dc45`. The approved JSON bytes remain unchanged; the exact-byte sidecar and [G1 receipt](e2_g1_approval.json) record the freeze. Native task-by-task **E2-T01-T10 only** is authorized, with CPU RED -> GREEN -> scoped regression and commits. Earlier preparation-status text and frozen candidate snapshots are historical. Target/GPU work, target acceptance, tuning, finals, E3 and test images remain **NOT AUTHORIZED**. STOP after T10.

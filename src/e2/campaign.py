@@ -126,6 +126,55 @@ def _attempt_inventory(folder: Path, config: dict, events: list[dict]) -> dict:
     return inventory
 
 
+def _validate_metrics(value,manifest):
+    """Check reported F1/coverage against the full confusion matrix and fixed GT."""
+    from .metrics import Metrics124
+    matrix=value['confusion']
+    if (len(matrix)!=124 or any(len(row)!=124 for row in matrix)
+            or any(type(n) is not int or n<0 for row in matrix for n in row)
+            or type(value['nll']) not in {int,float} or not math.isfinite(value['nll']) or value['nll']<0):
+        raise ValueError('Invalid full-split metric matrix or NLL')
+    metric=Metrics124();metric.confusion=torch.tensor(matrix,dtype=torch.int64)
+    support=metric.confusion.sum(1)
+    fixed=torch.bincount(torch.tensor([r.label_id for r in manifest.records('val')]),minlength=124)
+    if not torch.equal(support,fixed):raise ValueError('Confusion GT support differs from fixed validation')
+    metric.n=7497;metric.loss_sum=value['nll']*7497
+    metric.correct_by_label[1]=metric.confusion.diag().clone()
+    expected=metric.compute(manifest.n_train_by_label,manifest.labels)
+    def same(actual,wanted):
+        if wanted is None:return actual is None
+        return type(actual) in {int,float} and math.isfinite(actual) and math.isclose(actual,wanted,rel_tol=1e-12,abs_tol=1e-15)
+    for key in ('samples','output_classes','supported_classes','unsupported_classes'):
+        if value[key]!=expected[key]:raise ValueError('Metric coverage mismatch')
+    for key in ('macro_f1_supported','weighted_f1','top1'):
+        if not same(value[key],expected[key]):raise ValueError('Metrics differ from full confusion matrix')
+    if len(value['per_class'])!=124:raise ValueError('124-class coverage required')
+    for actual,wanted in zip(value['per_class'],expected['per_class']):
+        for key in ('label_id','label','n_train','bucket','support','predicted_count'):
+            if actual[key]!=wanted[key]:raise ValueError('Fixed per-class metadata/count mismatch')
+        for key in ('precision','recall','f1'):
+            if not same(actual[key],wanted[key]):raise ValueError('Per-class metric mismatch')
+    if set(value['buckets'])!=set(expected['buckets']):raise ValueError('Fixed bucket set required')
+    for name,wanted in expected['buckets'].items():
+        actual=value['buckets'][name]
+        for key in ('total_classes','supported_classes','samples'):
+            if actual[key]!=wanted[key]:raise ValueError('Bucket coverage mismatch')
+        for key in ('macro_f1_supported','top1'):
+            if not same(actual[key],wanted[key]):raise ValueError('Bucket full-split metric mismatch')
+        if not actual['samples']:
+            if any(actual[k] is not None for k in ('top1','top3','top5')):raise ValueError('Unsupported bucket metrics must be null')
+        else:
+            if not 0<=actual['top1']<=actual['top3']<=actual['top5']<=1:raise ValueError('Invalid bucket Top-k')
+            for key in ('top3','top5'):
+                count=actual[key]*actual['samples']
+                if not math.isclose(count,round(count),abs_tol=1e-8):raise ValueError('Nonintegral bucket Top-k count')
+    if not 0<=value['top1']<=value['top3']<=value['top5']<=1:raise ValueError('Invalid overall Top-k')
+    for key in ('top3','top5'):
+        weighted=sum(value['buckets'][b][key]*value['buckets'][b]['samples']
+                     for b in ('1-19','20-99','100-499','>=500') if value['buckets'][b]['samples'])/7497
+        if not same(value[key],weighted):raise ValueError('Overall and bucket Top-k differ')
+
+
 def validate_completed_run(run_dir: Path) -> dict:
     from .train import approved_identity
     folder=Path(run_dir).resolve()
@@ -151,6 +200,8 @@ def validate_completed_run(run_dir: Path) -> dict:
         if sha256_file(folder/'history.json')!=summary['history_sha256']:raise ValueError('History hash mismatch')
         history=read_json(folder/'history.json')
         if len(history)!=8:raise ValueError('Missing full history')
+        from .data import FixedManifest
+        manifest=FixedManifest()
         selected=None
         for epoch,row in enumerate(history,1):
             train,val=row['train'],row['validation']
@@ -159,6 +210,7 @@ def validate_completed_run(run_dir: Path) -> dict:
                     or any(type(val[k]) not in {int,float} or not math.isfinite(val[k]) or not 0<=val[k]<=1
                            for k in ('top1','top3','top5','macro_f1_supported','weighted_f1'))):
                 raise ValueError('Invalid/incomplete epoch evidence')
+            _validate_metrics(val,manifest)
             candidate={'epoch':epoch,'macro_f1_supported':val['macro_f1_supported'],'nll':val['nll']}
             if select_checkpoint(candidate,selected):selected=candidate
         if selected!=summary['selected']:raise ValueError('Wrong selected checkpoint metric/epoch')

@@ -93,3 +93,66 @@ def test_current_data_audit_precedes_model_allocation(recipe,tmp_path,monkeypatc
     monkeypatch.setattr(runtime,'FixedManifest',Mini)
     monkeypatch.setattr(runtime,'build_e2',lambda *a,**k:pytest.fail('model before audit'))
     with pytest.raises((ValueError,FileNotFoundError)): runtime.audit_current_images(data)
+
+
+def test_acceptance_inventory_contains_actual_root_conftest_and_helpers(recipe):
+    from src.e2.runtime import acceptance_inventory,ROOT
+    from src.e2.config import sha256_file
+    inventory=acceptance_inventory(recipe)
+    for rel in ('tests/conftest.py','tests/e2/helpers.py','tests/e2/test_gpu_smoke.py'):
+        assert inventory[rel]['sha256']==sha256_file(ROOT/rel)
+        assert inventory[rel]['bytes']==(ROOT/rel).stat().st_size
+        assert rel not in recipe['identity_and_evidence']['source_fingerprint_closure']
+
+
+def test_actual_consumed_imports_fit_explicit_closure(recipe,monkeypatch):
+    import src.e2.runtime as runtime
+    monkeypatch.setattr(runtime,'git_audit',lambda:{'readiness_only':True,'not_target_acceptance':True})
+    source=runtime.source_identity(recipe)
+    assert len(source['scientific_runtime']['consumed_source_files'])==21
+    assert 'src/e2/report.py' not in source['scientific_runtime']['consumed_source_files']
+
+
+@pytest.mark.parametrize('field,value',[('Account','other'),('QOS','other'),('Partition','other'),
+    ('TimeLimit','10:00:00'),('NumTasks','2'),('ReqTRES','gres/gpu:2g.35gb=2')])
+def test_allocation_policy_is_checked_without_gpu(recipe,monkeypatch,field,value):
+    import src.e2.runtime as runtime
+    fields={'Account':'uit','QOS':'mig2-35','Partition':'normal','TimeLimit':'09:00:00',
+            'NumTasks':'1','ReqTRES':'gres/gpu:2g.35gb=1'}
+    monkeypatch.setenv('SLURM_JOB_ID','12345');monkeypatch.setenv('SLURM_CPUS_PER_TASK','4')
+    monkeypatch.setenv('SLURM_MEM_PER_NODE','16384')
+    monkeypatch.setattr(runtime.subprocess,'check_output',lambda *a,**k:' '.join(k+'='+v for k,v in fields.items()))
+    assert runtime._allocation(recipe)['job_id']=='12345'
+    fields[field]=value
+    with pytest.raises(ValueError):runtime._allocation(recipe)
+
+
+@pytest.mark.parametrize('field,value',[('status','failed'),('test_images_opened',1),
+    ('dataset_root','changed'),('image_hash_audit',{'train':34997,'val':1}),('environment',{})])
+def test_stale_conformance_rejected_before_model_allocation(recipe,run_config,tmp_path,monkeypatch,field,value):
+    import src.e2.runtime as runtime
+    from src.e2.config import resolve_run
+    from src.e2.checkpoint import atomic_json
+    d=recipe['deployment'];pre=recipe['preprocessing'];software=recipe['runtime']['software_lock']
+    config=resolve_run(recipe,stage='tuning',lr=1e-4,seed=1001,paths={**run_config['paths'],
+        'data_root':d['paths']['dataset'],'weights':d['paths']['pretrained']})
+    monkeypatch.setattr(runtime.sys,'executable',d['python_executable'])
+    # On Windows abspath adds the drive to the POSIX reviewed interpreter.
+    monkeypatch.setattr(runtime.os.path,'abspath',lambda p:p)
+    for k,v in {'OMP_NUM_THREADS':'2','MKL_NUM_THREADS':'2','CUBLAS_WORKSPACE_CONFIG':':4096:8','PYTHONHASHSEED':'1001'}.items():monkeypatch.setenv(k,v)
+    monkeypatch.delenv('NVIDIA_TF32_OVERRIDE',raising=False)
+    monkeypatch.setattr(runtime,'_software',lambda:software)
+    monkeypatch.setattr(runtime,'_allocation',lambda r:{'fixture':True})
+    monkeypatch.setattr(runtime,'source_identity',lambda r:{'scientific_runtime':{},'audit':{}})
+    class MetadataOnly:
+        fingerprints={k:v['sha256'] for k,v in recipe['data']['artifacts'].items()}
+        def verify_images(self,*a):pytest.fail('audit must follow conformance validation')
+    monkeypatch.setattr(runtime,'FixedManifest',MetadataOnly)
+    monkeypatch.setattr(runtime,'sha256_file',lambda p:pre['implementation_sha256'] if Path(p).suffix=='.py' else recipe['model']['pretrained']['sha256'])
+    monkeypatch.setattr(runtime,'build_e2',lambda *a,**k:pytest.fail('model allocated'))
+    monkeypatch.setattr(runtime,'device_identity',lambda:pytest.fail('device accessed'))
+    report={'status':'pass','test_images_opened':0,'dataset_root':config['paths']['data_root'],
+            'fingerprints':MetadataOnly.fingerprints,'preprocessing_sha256':pre['config_sha256'],
+            'image_hash_audit':{'train':34997,'val':7497},'environment':{'packages':{k:software[k] for k in ('torch','torchvision','Pillow','numpy','pandas','scikit-learn')}}}
+    report[field]=value;atomic_json(Path(config['paths']['conformance_report']),report)
+    with pytest.raises(ValueError,match='conformance'):runtime.inspect_target_inputs(config)

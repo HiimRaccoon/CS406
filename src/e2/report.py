@@ -187,7 +187,7 @@ def render_aggregate(report):
     return "\n".join(lines)
 
 
-def compare_baselines(e2_report: dict, e1_report_path: Path, e1hr_report_path: Path) -> dict:
+def compare_references(e2_report: dict, *, e1_report_path: Path, e1hr_report_path: Path) -> dict:
     """Both comparator paths are explicit execution-environment inputs."""
     recipe=load_recipe()
     if (e2_report.get('kind')!='e2_three_seed_validation_report_v1'
@@ -261,7 +261,7 @@ def main():
     else:
         recipe = load_recipe()
         report = aggregate_final(args.run_dirs, recipe, read_selection(args.selection, recipe))
-        comparison = compare_baselines(report, args.e1_report, args.e1hr_report)
+        comparison = compare_references(report, e1_report_path=args.e1_report, e1hr_report_path=args.e1hr_report)
         atomic_json(args.output, report)
         atomic_text(args.output.with_suffix(".md"), render_aggregate(report))
         atomic_json(args.output.with_name(args.output.stem + "_vs_e1_e1hr.json"), comparison)
