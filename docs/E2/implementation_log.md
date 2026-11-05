@@ -39,3 +39,6 @@ T07: 7 behavioral RED failures; 63 GREEN lifecycle/source/runtime/E1/HR cases pa
 T07 commit: `6b1d79e9dba34be191cfdca40a1de0582efdfcb0`.
 
 T08: 12 RED failures; 55 GREEN campaign/artifact/preflight/E1/HR cases passed; all 24 LR trial permutations agree and selection mandates G3b STOP Protected hashes verified: 266; frozen contract unchanged. No target work.
+T08 commit: `29d857915860c5e2b158420140341b4da01fee80`.
+
+T09: 6 RED failures plus altered-export RED; 14 GREEN reporting/E1/HR cases passed; supplied exact comparator hashes verified read-only and deltas use percentage points Protected hashes verified: 266; frozen contract unchanged. No target work.
