@@ -35,6 +35,14 @@ def test_selected_checkpoint_analysis_uses_earlier_weights_and_exports(run_confi
     assert result["evidence_kind"] == "synthetic_cpu_fixture"
     for name in ["analysis.json", "overall.csv", "per_class.csv", "buckets.csv", "confusion.csv", "predictions.csv", "most_confused.csv", "learning_curves.csv"]:
         assert (folder / "validation_analysis" / name).is_file()
+    from types import SimpleNamespace
+    class SyntheticManifest:
+        labels=[str(i) for i in range(124)]
+        n_train_by_label={i:1 for i in range(124)}
+        def records(self,split):
+            assert split=='val'
+            return [SimpleNamespace(relative_path=f'synthetic/{i}.jpg',label_id=i%3) for i in range(5)]
+    monkeypatch.setattr(report,'FixedManifest',SyntheticManifest)
     report._selected_analysis(row)
     (folder/"validation_analysis/predictions.csv").write_text("altered")
     with pytest.raises(ValueError):report._selected_analysis(row)
@@ -45,6 +53,7 @@ def aggregate_fixture(recipe, tmp_path, monkeypatch):
     from src.e2.checkpoint import atomic_json
     from src.e2.config import CONTRACT_SHA256, sha256_file
     from src.e2.metrics import Metrics124
+    monkeypatch.setattr(report,"_validate_prediction_exports",lambda *a:None)
     selection = {"lr": 1e-4, "selection_fingerprint": "fixture-only"}
     path = tmp_path / "selection.json"
     atomic_json(path, selection)
@@ -175,3 +184,55 @@ def test_comparison_does_not_require_repository_aggregate_files(recipe,tmp_path,
     import src.e2.config as config
     monkeypatch.setattr(config,'ROOT',tmp_path/'checkout_without_reports')
     test_comparator_artifacts_are_explicit_hash_bound_inputs(recipe,tmp_path,monkeypatch)
+
+
+@pytest.fixture
+def full_selected_analysis(run_config,monkeypatch):
+    """Complete fixed-validation metadata and synthetic logits; no images."""
+    import src.e2.report as report
+    from src.e2.config import sha256_file
+    from src.e2.checkpoint import atomic_json
+    from src.e2.data import FixedManifest
+    from src.e2.metrics import Metrics124
+    from .test_engine import Tiny
+    manifest=FixedManifest();records=manifest.records('val')
+    targets=torch.tensor([r.label_id for r in records]);logits=torch.zeros(len(targets),124)
+    logits[torch.arange(len(targets)),targets]=100
+    metric=Metrics124();metric.update(logits,targets,0.)
+    metrics=metric.compute(manifest.n_train_by_label,manifest.labels)
+    metrics['predictions']=[{'relative_path':r.relative_path,'label_id':r.label_id,
+        'predicted_label_id':r.label_id,'top5':[r.label_id]+[i for i in range(124) if i!=r.label_id][:4]} for r in records]
+    folder=Path(run_config['paths']['runs_dir'])/run_config['run_id'];folder.mkdir(parents=True)
+    history=[{'epoch':e,'epoch_seconds':1.,'train':{'loss':0.,'lr_first':1e-4,'lr_last':1e-4},
+              'validation':{k:copy.deepcopy(v) for k,v in metrics.items() if k!='predictions'}} for e in range(1,9)]
+    atomic_json(folder/'history.json',history)
+    model=Tiny();best=folder/'best.pt';torch.save(model.state_dict(),best)
+    identity={'scientific_runtime':{'evidence_kind':'synthetic_cpu_fixture'},'audit':{}}
+    row={'run_dir':str(folder),'config':run_config,'summary':{'selected':{'epoch':1},'identity':identity},
+         'best_sha256':sha256_file(best)}
+    monkeypatch.setattr(report,'validate_completed_run',lambda _:row)
+    monkeypatch.setattr(report,'read_checkpoint',lambda *a,**k:{'role':'best','model':model.state_dict()})
+    monkeypatch.setattr(report,'_evaluation_context',lambda c:{'model':model,'loaders':{'val':None},'device':torch.device('cpu'),
+        'n_train':manifest.n_train_by_label,'labels':manifest.labels,'identity':identity})
+    monkeypatch.setattr(report,'evaluate',lambda *a,**k:copy.deepcopy(metrics))
+    report.evaluate_selected(run_config,folder)
+    assert report._selected_analysis(row)['metrics']['samples']==7497
+    return report,row,folder
+
+
+@pytest.mark.parametrize('mutation',['empty','duplicate','wrong_gt','order','top5']+['csv_'+name for name in ('overall','per_class','buckets','predictions','confusion','most_confused','learning_curves')])
+def test_rehashed_analysis_requires_complete_manifest_predictions(full_selected_analysis,mutation):
+    report,row,folder=full_selected_analysis
+    from src.e2.checkpoint import atomic_json
+    from src.e2.config import read_json,sha256_file
+    path=folder/'validation_analysis/analysis.json';value=read_json(path);predictions=value['metrics']['predictions']
+    if mutation=='empty':value['metrics']['predictions']=[]
+    if mutation=='duplicate':predictions[-1]=copy.deepcopy(predictions[0])
+    if mutation=='wrong_gt':predictions[0]['label_id']=(predictions[0]['label_id']+1)%124
+    if mutation=='order':predictions[0],predictions[1]=predictions[1],predictions[0]
+    if mutation=='top5':predictions[0]['top5']=[predictions[0]['label_id']]*5
+    if mutation.startswith('csv_'):
+        name=mutation[4:]+'.csv';csv_path=folder/'validation_analysis'/name;csv_path.write_text('altered,header\n')
+        value['exports_sha256'][name]=sha256_file(csv_path)
+    atomic_json(path,value)
+    with pytest.raises(ValueError):report._selected_analysis(row)

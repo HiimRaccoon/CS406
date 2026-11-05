@@ -16,12 +16,12 @@ GREEN and scoped unchanged E1/HR/preprocessing regressions are preserved. Initia
 baseline setup failure and intermediate failures remain recorded; no pass was
 inferred from a skipped target check.
 
-The final pre-review observations were 123 E2 CPU cases passed with one GPU case
-deselected, and 413 whole-repository CPU cases passed with four GPU cases
-deselected. An additional seven reporting cases passed after removing test
-fixtures' dependency on repository-relative comparator aggregates. Python
-compileall and Git Bash syntax checking returned exit 0. Final review and any
-subsequent verification are recorded in the implementation log.
+Final observations after the single review fix: **136 E2 CPU cases passed**
+with one GPU case deselected, and **426 whole-repository CPU cases passed**
+with four GPU cases deselected. Python compileall and Git Bash syntax checking
+returned exit 0. The [fresh whole-branch review](final_review.md) found one
+Important reporting gap, reproduced by twelve RED cases and fixed before the
+final complete GREEN suite. There are no deferred Minor findings.
 
 The CPU model check used the actual specified random-weight ConvNeXt-Tiny
 architecture: 190588 classifier and 28010716 total parameters. Full-size

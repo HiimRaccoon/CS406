@@ -8,6 +8,11 @@ import math
 import statistics
 from pathlib import Path
 
+import torch
+
+from .data import FixedManifest
+from .metrics import Metrics124
+
 from .campaign import _verify_selection, read_selection, validate_completed_run
 from .checkpoint import atomic_json, atomic_text, read_checkpoint
 from .config import CONTRACT_SHA256, ROOT, fingerprint, load_recipe, read_json, sha256_file, validate_recipe, scientific_identity, topology
@@ -37,6 +42,62 @@ def _csv(path, rows, fields):
     writer.writeheader()
     writer.writerows(rows)
     atomic_text(path, output.getvalue())
+
+
+def _export_tables(metrics,labels,history):
+    predictions=[{'relative_path':r['relative_path'],'label_id':r['label_id'],'label':labels[r['label_id']],
+                  **{f'top{k+1}_label_id':v for k,v in enumerate(r['top5'])}} for r in metrics['predictions']]
+    confusion=[{'true_label_id':i,**{str(j):n for j,n in enumerate(row)}} for i,row in enumerate(metrics['confusion'])]
+    pairs=[{'true_label_id':i,'predicted_label_id':j,'count':n} for i,row in enumerate(metrics['confusion']) for j,n in enumerate(row) if i!=j and n]
+    pairs.sort(key=lambda r:(-r['count'],r['true_label_id'],r['predicted_label_id']))
+    curves=[{'epoch':r['epoch'],'train_loss':r['train']['loss'],'validation_nll':r['validation']['nll'],
+             **{k:r['validation'][k] for k in SCORES},'lr_first':r['train']['lr_first'],
+             'lr_last':r['train']['lr_last'],'epoch_seconds':r['epoch_seconds']} for r in history]
+    return {
+        'overall.csv':([metrics],[*SCORES,'nll','samples','supported_classes','output_classes']),
+        'per_class.csv':(metrics['per_class'],['label_id','label','n_train','bucket','support','predicted_count','precision','recall','f1']),
+        'buckets.csv':([{'bucket':k,**v} for k,v in metrics['buckets'].items()],['bucket','total_classes','supported_classes','samples','macro_f1_supported','top1','top3','top5']),
+        'predictions.csv':(predictions,['relative_path','label_id','label',*[f'top{k}_label_id' for k in (1,2,3,4,5)]]),
+        'confusion.csv':(confusion,['true_label_id',*map(str,range(124))]),
+        'most_confused.csv':(pairs,['true_label_id','predicted_label_id','count']),
+        'learning_curves.csv':(curves,list(curves[0]))}
+
+
+def _validate_prediction_exports(folder,metrics,history):
+    """Validate full fixed-val evidence using metadata only, before aggregation."""
+    manifest=FixedManifest();records=manifest.records('val');predictions=metrics.get('predictions')
+    if not isinstance(predictions,list) or len(predictions)!=len(records) or metrics['samples']!=len(records):
+        raise ValueError('Complete fixed validation predictions required')
+    targets=[];top=[]
+    for row,record in zip(predictions,records):
+        ranking=row.get('top5')
+        if (row.get('relative_path')!=record.relative_path or row.get('label_id')!=record.label_id
+                or not isinstance(ranking,list) or len(ranking)!=5 or len(set(ranking))!=5
+                or any(type(i) is not int or not 0<=i<124 for i in ranking)
+                or row.get('predicted_label_id')!=ranking[0]):
+            raise ValueError('Prediction membership/order/GT/Top-5 differs from fixed validation')
+        targets.append(record.label_id);top.append(ranking)
+    target=torch.tensor(targets,dtype=torch.int64);ranking=torch.tensor(top,dtype=torch.int64)
+    metric=Metrics124();metric.n=len(records);metric.loss_sum=metrics['nll']*len(records)
+    if not math.isfinite(metric.loss_sum) or metric.loss_sum<0:raise ValueError('Invalid prediction NLL')
+    metric.confusion=torch.bincount(target*124+ranking[:,0],minlength=124**2).reshape(124,124)
+    for k in (1,3,5):
+        hits=(ranking[:,:k]==target[:,None]).any(1)
+        metric.correct_by_label[k]=torch.bincount(target[hits],minlength=124)
+    _same_metrics(metrics,metric.compute(manifest.n_train_by_label,manifest.labels))
+    for name,(rows,fields) in _export_tables(metrics,manifest.labels,history).items():
+        # CSV conversion is the same public wire format; compare all values and
+        # headers to independently validated metrics/history, beyond file hashes.
+        expected=io.StringIO();writer=csv.DictWriter(expected,fieldnames=fields,extrasaction='ignore')
+        writer.writeheader();writer.writerows(rows);expected.seek(0)
+        wanted=csv.DictReader(expected)
+        path=Path(folder)/'validation_analysis'/name
+        if not path.resolve().is_relative_to((Path(folder)/'validation_analysis').resolve()):
+            raise ValueError('Unsafe validation export path')
+        with path.open(encoding='utf8',newline='') as stream:
+            actual=csv.DictReader(stream)
+            if actual.fieldnames!=fields or list(actual)!=list(wanted):
+                raise ValueError('Derived validation CSV content differs: '+name)
 
 
 def _evaluation_context(config):
@@ -72,22 +133,8 @@ def evaluate_selected(config: dict, run_dir: Path) -> dict:
         output.mkdir(exist_ok=True)
         if (output / "analysis.json").exists() and read_json(output / "analysis.json")["best_sha256"] != row["best_sha256"]:
             raise ValueError("Existing analysis belongs to another selected checkpoint")
-        _csv(output / "overall.csv", [metrics], [*SCORES, "nll", "samples", "supported_classes", "output_classes"])
-        _csv(output / "per_class.csv", metrics["per_class"], ["label_id", "label", "n_train", "bucket", "support", "predicted_count", "precision", "recall", "f1"])
-        _csv(output / "buckets.csv", [{"bucket": k, **v} for k, v in metrics["buckets"].items()],
-             ["bucket", "total_classes", "supported_classes", "samples", "macro_f1_supported", "top1", "top3", "top5"])
-        predictions = [{"relative_path": r["relative_path"], "label_id": r["label_id"], "label": context["labels"][r["label_id"]],
-                        **{f"top{k+1}_label_id": i for k, i in enumerate(r["top5"])}} for r in metrics["predictions"]]
-        _csv(output / "predictions.csv", predictions, ["relative_path", "label_id", "label", *[f"top{k}_label_id" for k in (1, 2, 3, 4, 5)]])
-        _csv(output / "confusion.csv", [{"true_label_id": i, **{str(j): n for j, n in enumerate(counts)}} for i, counts in enumerate(metrics["confusion"])],
-             ["true_label_id", *map(str, range(124))])
-        pairs = [{"true_label_id": i, "predicted_label_id": j, "count": n} for i, counts in enumerate(metrics["confusion"]) for j, n in enumerate(counts) if i != j and n]
-        pairs.sort(key=lambda r: (-r["count"], r["true_label_id"], r["predicted_label_id"]))
-        _csv(output / "most_confused.csv", pairs, ["true_label_id", "predicted_label_id", "count"])
-        curves = [{"epoch": r["epoch"], "train_loss": r["train"]["loss"], "validation_nll": r["validation"]["nll"],
-                   **{k: r["validation"][k] for k in SCORES}, "lr_first": r["train"]["lr_first"], "lr_last": r["train"]["lr_last"],
-                   "epoch_seconds": r["epoch_seconds"]} for r in history]
-        _csv(output / "learning_curves.csv", curves, list(curves[0]))
+        for name,(rows,fields) in _export_tables(metrics,context['labels'],history).items():
+            _csv(output/name,rows,fields)
         # Write the lineage-bearing index last, after every derived export succeeds.
         analysis['exports_sha256']={p.name:sha256_file(p) for p in output.iterdir() if p.suffix=='.csv'}
         atomic_json(output / "analysis.json", analysis)
@@ -113,6 +160,7 @@ def _selected_analysis(row):
         raise ValueError('Selected validation export inventory differs')
     history = read_json(folder / "history.json")
     _same_metrics(analysis["metrics"], history[analysis["selected_epoch"] - 1]["validation"])
+    _validate_prediction_exports(folder,analysis["metrics"],history)
     return analysis
 
 

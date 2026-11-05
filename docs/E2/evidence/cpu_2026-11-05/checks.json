@@ -705,5 +705,136 @@
     "exit_code": 0,
     "summary": "7 passed in 6.87s",
     "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\t10-external-input-green.log"
+  },
+  {
+    "label": "branch-final-e2",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2",
+      "-q",
+      "-m",
+      "not gpu",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-branch-final-e2",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "124 passed, 1 deselected in 101.24s (0:01:41)",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\branch-final-e2.log"
+  },
+  {
+    "label": "branch-final-full",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "-q",
+      "-m",
+      "not gpu",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-branch-final-full",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "414 passed, 4 deselected in 220.71s (0:03:40)",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\branch-final-full.log"
+  },
+  {
+    "label": "final-review-red",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_report.py",
+      "-k",
+      "rehashed_analysis",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-final-review-red",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "6 failed, 7 deselected in 8.99s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\final-review-red.log"
+  },
+  {
+    "label": "final-review-all-exports-red",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_report.py",
+      "-k",
+      "rehashed_analysis",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-final-review-all-exports-red",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 1,
+    "summary": "12 failed, 7 deselected in 13.31s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\final-review-all-exports-red.log"
+  },
+  {
+    "label": "final-review-green",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2/test_report.py",
+      "tests/e1/test_report.py",
+      "tests/e1hr/test_report.py",
+      "-q",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-final-review-green",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "27 passed in 37.84s",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\final-review-green.log"
+  },
+  {
+    "label": "final-fixed-e2",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "tests/e2",
+      "-q",
+      "-m",
+      "not gpu",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-final-fixed-e2",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "136 passed, 1 deselected in 127.38s (0:02:07)",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\final-fixed-e2.log"
+  },
+  {
+    "label": "final-fixed-full",
+    "command": [
+      "C:\\Users\\Windows\\Downloads\\GeoLocation\\.venv\\Scripts\\python.exe",
+      "-B",
+      "-m",
+      "pytest",
+      "-q",
+      "-m",
+      "not gpu",
+      "--basetemp=C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-final-fixed-full",
+      "-o",
+      "faulthandler_timeout=60"
+    ],
+    "exit_code": 0,
+    "summary": "426 passed, 4 deselected in 249.37s (0:04:09)",
+    "log": "C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\final-fixed-full.log"
   }
 ]

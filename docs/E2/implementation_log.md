@@ -55,3 +55,14 @@ T10 source closure: all 21 explicitly reviewed files exist and actual transitive
 T10: 10 deployment RED failures plus metric/recovery/portability RED checks; 123 E2 CPU and 413 full CPU cases passed; 4 GPU tests deselected; compileall and bash syntax passed; STOP before target authorization Protected hashes verified: 266; frozen contract unchanged. No target work.
 
 T10: CPU/readiness complete; 123 E2 and 413 repository CPU cases passed; raw Windows evidence preserved byte-for-byte with scoped Git attributes; STOP before E2-TARGET-AUTH Protected hashes verified: 266; frozen contract unchanged. No target work.
+T10 commit: `62d36ec2c00717c8fbb33db95fb098b27cb4c7d2`.
+
+Final whole-branch review: one fresh gpt-6-astra reviewer, read-only range c40dd00a22de2d3ef50440440107d66db7b7dc45..62d36ec2c00717c8fbb33db95fb098b27cb4c7d2. No Critical/Minor findings; one Important finding retained: syntactically rehashed selected analysis could omit or corrupt predictions/CSV contents. One fix pass: six initial reproductions RED, expanded twelve malformed-prediction/all-export cases RED, then 27 reporting/E1/HR cases GREEN. Complete ordered validation membership/GT/Top-5 and confusion/Top-k metrics now validate from metadata; all seven CSV contents validate against analysis/history. Only reporting tooling and E2 test/audit files changed in this pass; no consumed training source or numeric contract changed. No second review was dispatched.
+
+Final: Ruling: actual UIT numerics/memory/signals/recovery remain unobserved because target work is explicitly unauthorized; cost if wrong is a target-specific T11 failure, which requires explicit acceptance rather than a CPU claim.
+Final: Ruling: reviewer did not receive external comparator payloads in the review checkout; earlier author checks verified the supplied real artifact bytes against both pins, and future comparison requires explicit actual paths; cost if unavailable later is blocked comparison/closeout, with no default/substitute.
+Final: no deferred Minor findings.
+
+Final verification: final-fixed-e2 => 136 passed, 1 GPU deselected in 127.38s. final-fixed-full => 426 passed, 4 GPU deselected in 249.37s. Python compileall and Git Bash syntax check returned exit 0. All 266 protected file hashes and the 86335-byte frozen contract are unchanged. Exact actual commands/results and raw output bytes are archived in the CPU evidence inventory. The single Important review finding is fixed with RED-to-GREEN coverage and the complete suite is GREEN.
+
+Bookkeeping observations: the readiness helper initially lacked the root import path and was corrected without scientific changes; initial Git whitespace checking rejected raw Windows carriage-return logs, so E2 evidence-only Git attributes preserve those raw bytes instead of rewriting them. The approved contract and protected scientific files were not affected.
