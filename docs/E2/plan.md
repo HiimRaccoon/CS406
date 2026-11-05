@@ -222,7 +222,7 @@ assert len(targets) == len(paths) == 2
 
 **Depends:** E2-T01/T02. **Files:** E2 model and `test_model.py`. **Consumes:** view dictionary and reviewed initialization/optimizer settings. **Produces:** model/builder/optimizer interfaces above, including `encode(views)` for the future E3 feature definition.
 
-- [ ] RED: add `test_encoder_calls_global_then_batch_major_locals`, `test_fused_feature_is_global_then_local_mean`, `test_all_view_paths_backpropagate_to_one_encoder`, and `test_head_initialization_uses_fan_in_1536_and_restores_cpu_rng`. Use a tiny CPU backbone/spy and markers distinguishing both images and all crops; verify two calls of sizes B and B*4, exact reshape/mean/concatenation, no duplicated encoder parameters, and finite gradients on both paths.
+- [x] RED: add `test_encoder_calls_global_then_batch_major_locals`, `test_fused_feature_is_global_then_local_mean`, `test_all_view_paths_backpropagate_to_one_encoder`, and `test_head_initialization_uses_fan_in_1536_and_restores_cpu_rng`. Use a tiny CPU backbone/spy and markers distinguishing both images and all crops; verify two calls of sizes B and B*4, exact reshape/mean/concatenation, no duplicated encoder parameters, and finite gradients on both paths.
 
 ```python
 assert call_batch_sizes == [2, 8]
@@ -233,10 +233,10 @@ assert model.classifier.in_features == 1536
 assert model.classifier.out_features == 124
 ```
 
-- [ ] Pin exact seed-bound `nn.Linear(1536,124)` initialization inside an isolated CPU RNG context, full trainability, final LayerNorm before averaging, stochastic-depth endpoints, strict offline filename/full hash/load rejection, and complete nonduplicated decay groups. Test different chunking/order is not silently substituted. CPU random-weight fixtures are never real pretrained evidence.
-- [ ] Add `test_e2_architecture_parameter_count_matches_design_oracle` on the actual specified ConvNeXt-Tiny architecture, separately from tiny-backbone spy tests. Verify classifier `1536*124+124 = 190,588` and total **28,010,716** parameters; this mandatory design check catches duplicated backbones, a wrong head or extra projection. It is not an observed official result, and tiny stand-ins are not subject to the full-architecture total.
-- [ ] Run `python -m pytest tests/e2/test_model.py -q` to RED; implement the builder and model without importing pilot/E1/HR recipe validators.
-- [ ] GREEN/regression: rerun it plus `python -m pytest tests/e1/test_model.py tests/e1hr/test_model.py -q`; review source diff/groups/protected hashes, log and commit. Real-weight full-size target evidence belongs to E2-T11.
+- [x] Pin exact seed-bound `nn.Linear(1536,124)` initialization inside an isolated CPU RNG context, full trainability, final LayerNorm before averaging, stochastic-depth endpoints, strict offline filename/full hash/load rejection, and complete nonduplicated decay groups. Test different chunking/order is not silently substituted. CPU random-weight fixtures are never real pretrained evidence.
+- [x] Add `test_e2_architecture_parameter_count_matches_design_oracle` on the actual specified ConvNeXt-Tiny architecture, separately from tiny-backbone spy tests. Verify classifier `1536*124+124 = 190,588` and total **28,010,716** parameters; this mandatory design check catches duplicated backbones, a wrong head or extra projection. It is not an observed official result, and tiny stand-ins are not subject to the full-architecture total.
+- [x] Run `python -m pytest tests/e2/test_model.py -q` to RED; implement the builder and model without importing pilot/E1/HR recipe validators.
+- [x] GREEN/regression: rerun it plus `python -m pytest tests/e1/test_model.py tests/e1hr/test_model.py -q`; review source diff/groups/protected hashes, log and commit. Real-weight full-size target evidence belongs to E2-T11.
 
 ### E2-T04 — Metrics reuse with independent numerical oracles
 
