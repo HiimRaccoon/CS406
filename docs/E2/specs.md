@@ -1,10 +1,10 @@
 # E2 — Shared-Encoder Global/Local Representation
 
-**DRAFT FOR E2-G0 REVIEW — specification and draft plan/task-ledger preparation only. E2-G0 is AWAITING REVIEW; E2-G1 and all E2 implementation/execution gates are NOT APPROVED. Final test remains LOCKED / NOT AUTHORIZED.**
+**E2-G0 APPROVED — corrected specification, plan and task ledger reviewed by the user. E2-T00b numeric-contract candidate preparation only is complete. E2-G1 is NOT APPROVED; implementation and all execution stages remain NOT AUTHORIZED. Final test remains LOCKED / NOT AUTHORIZED.**
 
 Revision date: **2026-11-05**. E1 training/validation is closed. The user has confirmed completion of E1-HR and PASS for HR-G2/HR-G3a/HR-G3b; its three-seed validation reports are available. This specification takes that handoff as given. Earlier preparation-status text in the master/E1-HR documents does not override the current user handoff, and this document does not revise their frozen contracts or approval records.
 
-The current user instructions authorize this E2 specification and the draft [implementation plan](plan.md)/[task ledger](tasks.md). They do not approve E2-G0, freeze an E2 numeric contract, authorize production implementation, permit target/GPU work, launch tuning/final runs, start E3, or unlock test evaluation. An approved earlier experiment does not supply E2 acceptance or execution authorization.
+On 2026-11-05 the user explicitly approved the current corrected E2 specification, [implementation plan](plan.md) and [task ledger](tasks.md) at **E2-G0**, authorizing **E2-T00b only**. The complete [numeric-contract candidate](e2_numeric_contract_v1.json) is prepared for separate E2-G1 review. This approval does not freeze the candidate, create a checksum sidecar or approval receipt, authorize implementation or CPU/GPU tests, permit target work, create tuning/final declarations, launch jobs, start E3, or unlock test evaluation. An approved earlier experiment does not supply E2 acceptance or execution authorization.
 
 ## 1. Research question, scope, and source authority
 
@@ -16,7 +16,7 @@ The current user instructions authorize this E2 specification and the draft [imp
 | E1-HR | Global 1344×576 | 768-dimensional global feature | Linear(768,124), bias=True |
 | E2 | Global **896×384** and **4 local 320×320** | **[global; mean of four locals]**, 1536 dimensions | **Linear(1536,124), bias=True** |
 
-E2 and E1-HR are complementary comparisons. E1-HR measures the resolution-only change; E2 introduces local views, feature fusion, a wider classifier, and additional encoder computation. An E2 gain cannot be attributed exclusively to resolution, local detail, or compute from this comparison alone. Compute matching is not a requirement. Report all five study metrics together; no new single winner metric or minimum improvement threshold is introduced.
+**E1 is E2's primary architectural comparator**, because both use the same global input at 896×384. E2 adds local views, feature fusion, a wider classifier, and encoder computation relative to E1. **E1-HR is a contextual/complementary comparator**: it supplies the study's higher-resolution global-only context. E2 versus E1-HR must not be interpreted as controlled evidence isolating local views or resolution. E2 gains cannot be attributed exclusively to local detail, head capacity, or compute from these comparisons alone. Compute matching is not a requirement. Report all five study metrics together; no new single winner metric or minimum improvement threshold is introduced.
 
 Apply the following authorities to their respective scopes:
 
@@ -133,9 +133,18 @@ seed:   official seed of this run, inside an isolated CPU RNG context
 
 Restore the outer CPU RNG state after head construction/initialization. Do not copy E1's fan-in 768 bound, add a second unreviewed head reset, or reuse classifier state. Full fine-tuning begins at epoch 1. Retain TorchVision 0.23.0's block-index stochastic-depth schedule from 0 to maximum 0.1; evaluation disables stochastic depth. No classifier-only phase, LLRD, local heads, or auxiliary CE.
 
+The following exact parameter counts are **design/acceptance oracles**, not observations or official future results:
+
+| Component | Required oracle |
+|---|---:|
+| Fused classifier `Linear(1536,124,bias=True)` | **190,588** parameters: `1536*124 + 124` |
+| Complete E2 model | **28,010,716** parameters |
+
+E2-T00b must serialize both counts. E2-T03 must verify them on the actual specified architecture, and E2-T11 must verify them on the real pinned-weight target model. A mismatch fails model/acceptance verification and detects duplicated backbones, a wrong head, extra projections, or other unintended parameters; do not adjust the oracle to fit an implementation.
+
 ## 5. Common training controls and exact accounting
 
-These inherited controls are requirements carried forward from the completed methodology, not a new optimization menu. The architecture-specific changes are the five-view representation, fused head/fan-in, and corresponding view execution contract above. Their E2 binding is submitted for E2-G0/G1 review; this draft is not itself a freeze receipt.
+These inherited controls are requirements carried forward from the completed methodology, not a new optimization menu. The architecture-specific changes are the five-view representation, fused head/fan-in, and corresponding view execution contract above. Their E2 binding was reviewed at E2-G0 and is serialized in the candidate for separate E2-G1 digest/freeze review; this specification is not a freeze receipt.
 
 | Control | E2 requirement |
 |---|---|
@@ -227,7 +236,7 @@ Acceptance must establish, on the actual consumed source/runtime/device/data/wei
 
 - Exact input hashes, current root-contained train/validation audit/conformance, real pinned pretrained weights, and the effective FP32/runtime settings before official execution.
 - Frozen preprocessing on real **train-only** representatives of both layouts, shared image jitter, exact local ordering/from-raw construction, and batch shapes **global `[2,3,384,896]`, local `[2,4,3,320,320]`, logits `[2,124]`**. Also verify the retained one-image tail.
-- One shared encoder, per-view final LayerNorm, the local mean, concatenation order, fused feature `[B,1536]`, correct head initialization, complete decay groups, and finite forward/backward through both global and all local paths under one fused CE.
+- One shared encoder, per-view final LayerNorm, the local mean, concatenation order, fused feature `[B,1536]`, correct head initialization, complete decay groups, and finite forward/backward through both global and all local paths under one fused CE. Verify exactly **190,588 classifier parameters and 28,010,716 total E2 parameters** against the Section 4 design/acceptance oracles.
 - Interrupted-boundary/resume equivalence: restore a completed boundary, discard/replay uncommitted epoch work, and match the uninterrupted model, optimizer, scheduler, RNG, loader/order, history, and selected-checkpoint progression on the same deterministic stack. Timing/job audit fields are not numerical-equality targets. Bounded acceptance fixtures remain explicitly nonofficial and receive no official epoch/update credit.
 - Observed allocated/reserved memory and timing with clearly named measurement scope, interruption/failure records, and the acceptance source/harness inventories defined in Section 11.
 
@@ -300,9 +309,18 @@ Use the same definitions as completed E1/E1-HR:
 - Export selected-checkpoint overall metrics, 124-label precision/recall/F1/GT support/predicted counts, coverage, fixed bucket tables, manifest-keyed predictions/Top-k, confusion/most-confused pairs, complete histories/learning curves, and all selection/identity lineage.
 - Require all three complete distinct final seeds under the same locked selection/contract. Aggregate arithmetic mean and **sample standard deviation, ddof=1**, using full machine precision. Display classification percentages and their standard deviations to four decimals, with no pre-aggregation rounding.
 
-Compare E2 against the official [E1 aggregate](../../src/e1/e1_three_seed_validation_report_v1.json) and [E1-HR aggregate](../../src/e1hr/final-report-v1/e1hr_three_seed_validation_report_v1.json), including HR's [readable report](../../src/e1hr/final-report-v1/e1hr_three_seed_validation_report_v1.md) and [E1 comparison](../../src/e1hr/final-report-v1/e1hr_three_seed_validation_report_v1_vs_e1.json) as reference schemas. Bind exact comparator report hashes and verify matching benchmark/metric definitions. Never use pilot metrics or a best comparator seed as the official baseline. Optional paired deltas use matching seed IDs; report percentage-point units and do not claim significance from three seeds alone.
+Use **reviewed official comparator aggregate artifacts materialized/provided in the execution environment**, with explicitly supplied actual paths. Do not assume they exist at repository-relative source/report paths on branch `e2`. Verify their exact file-byte SHA-256 before using them:
 
-Efficiency is secondary if measured: parameter count, FLOPs with explicit input/view assumptions, latency, original-images/s, peak allocated/reserved memory, and clearly separated train-only, validation/checkpoint, attempt, and whole-run timing. Views/s is not original-images/s. Do not infer compute matching or official timing from archived pilot measurements.
+| Official aggregate | Comparator role | Required exact SHA-256 |
+|---|---|---|
+| E1 | **Primary architectural comparator**; same global input 896×384 | `3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e` |
+| E1-HR | **Contextual/complementary comparator** | `9cb44e8aa98d18065402ea3be750586187aeb4b0e4ff23cfa6badfcc484426cf` |
+
+Record the actual supplied paths and verified hashes in reporting provenance; no unprovided path or additional artifact/hash is presumed. Missing artifacts or hash mismatches block the comparison/closeout rather than falling back to a repository path, pilot result, or best comparator seed. Verify the reviewed artifact schemas and matching fixed benchmark/metric definitions. Optional paired deltas join matching seed IDs, use percentage-point units, and do not establish significance from three seeds alone. Label E2-versus-E1 as the primary architectural comparison and E2-versus-E1-HR as contextual; the latter does not isolate local views or resolution.
+
+E2-T00b must serialize **E1 as the primary architectural comparator**, **E1-HR as the contextual/complementary comparator**, and **both exact comparator hashes above** as required scientific/reporting bindings. The future numeric-contract candidate must also serialize the Section 4 parameter-count oracles as JSON integers: classifier **`190588`** and total E2 **`28010716`**. Missing or swapped roles, missing or incorrect hashes, and missing or incorrect counts make the candidate incomplete for E2-G1 review; prose references or report-time defaults do not satisfy this requirement. E2-T09 reporting and E2-T14 closeout must enforce those bindings. Comparator report paths remain explicitly supplied execution-environment inputs, not assumed branch contents or numeric-contract path defaults.
+
+The Section 4 parameter-count checks are mandatory design/acceptance verification, not optional efficiency measurements or future observed results. Other efficiency information is secondary if measured: FLOPs with explicit input/view assumptions, latency, original-images/s, peak allocated/reserved memory, and clearly separated train-only, validation/checkpoint, attempt, and whole-run timing. Views/s is not original-images/s. Do not infer compute matching or official timing from archived pilot measurements.
 
 Document fixed-split geographic/panorama limitations, extreme-tail scarcity, seed/sampling uncertainty, and validation-only scope. E2 need not outperform a comparator to be a valid completed experiment. E2 selected LR, selected epochs, metrics, actual job IDs, checkpoint hashes, and runtime acceptance hashes are **future outputs**, not fields to invent in this draft.
 
@@ -318,8 +336,8 @@ Final-test evaluation may be considered only after **all experiments intended fo
 
 | Gate / stage | Required decision or deliverable | Current state |
 |---|---|---|
-| E2-G0 | Review this E2 specification, inherited controls, five-view execution/head contract and draft plan/ledger; authorize remaining numeric-contract preparation | **AWAITING REVIEW — NOT APPROVED** |
-| Design preparation | Draft [plan](plan.md)/[task ledger](tasks.md), followed by numeric-contract candidate with exact values, source/provenance bindings and numerical oracles | Draft plan/ledger prepared at explicit user request; numeric candidate not started, pending E2-G0 |
+| E2-G0 | Review this E2 specification, inherited controls, five-view execution/head contract and corrected plan/ledger; authorize remaining numeric-contract preparation | **PASS — explicit user approval on 2026-11-05; E2-T00b only** |
+| Design preparation | Corrected [plan](plan.md)/[task ledger](tasks.md), followed by numeric-contract candidate with exact values, source/provenance bindings and numerical oracles | **E2-T00b COMPLETE — CANDIDATE/DOCUMENTATION ONLY**; [candidate JSON](e2_numeric_contract_v1.json) prepared and checked; awaiting E2-G1 |
 | E2-G1 | Review prepared artifacts; approve exact contract digest/freeze, select implementation method, explicitly authorize the named implementation/CPU-preparation scope | **NOT APPROVED** |
 | Implementation / CPU preparation | Complete only the E2-G1-authorized tasks, scoped regressions, and deployment/runbook preparation; stop before target work | Not authorized |
 | E2 target-work authorization | Explicitly permit E2 Slurm/GPU deployment and bounded target acceptance | **NOT GRANTED** |
@@ -331,4 +349,4 @@ Final-test evaluation may be considered only after **all experiments intended fo
 | E2 closeout | Review three completed final runs, selected validation analyses, aggregate/comparisons, lineage/checksum inventory, and handoff to E3 | Not started |
 | Final evaluation | Separate study-wide explicit authorization under Section 14 | **LOCKED / NOT AUTHORIZED** |
 
-No E2 approval receipt, contract checksum sidecar, official declaration, target identity, or result is created by this document. Inherited values are settled references; the E2-specific contract serialization/digest, implementation interfaces, actual accepted identity, and execution observations belong to their later gates. Selected E2 LR/results are campaign outputs, not unresolved defaults. Proceed next only to explicit **E2-G0 specification review**.
+The E2-T00b candidate is **86,335 bytes**, exact SHA-256 **`ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72`**. JSON, inherited controls, numerical arithmetic/oracles, source-reference hashes and comparator bindings were checked as documentation only. No E2 checksum sidecar, approval receipt, official declaration, accepted target identity or result was created. The candidate records the exact pre-status-update G0-reviewed document snapshots; later ledger/status changes do not rewrite that provenance or create a digest cycle. Selected E2 LR/results and accepted runtime hashes remain future outputs. **STOP for explicit E2-G1 review of the exact candidate digest, implementation method and named scope.**

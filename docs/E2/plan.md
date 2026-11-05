@@ -8,7 +8,7 @@
 
 **Tech stack:** Python 3.11.17; Torch 2.8.0+cu128; TorchVision 0.23.0+cu128; deterministic FP32; the remaining software lock in spec Section 8; pytest CPU fixtures and separately opted-in UIT Slurm target acceptance.
 
-**Spec:** [specs.md](specs.md). **Current status:** DRAFT DESIGN, prepared at the user's explicit request; **E2-G0 AWAITING REVIEW, E2-G1 NOT APPROVED**. The [task ledger](tasks.md) records live status. No numeric-contract candidate, approval receipt, production code, CPU training, or target execution is produced by this planning task.
+**Spec:** [specs.md](specs.md). **Current status:** **E2-G0 PASS**, explicitly approved by the user on 2026-11-05 for **E2-T00b only**; **E2-G1 NOT APPROVED**. The complete [numeric-contract candidate](e2_numeric_contract_v1.json) is prepared and checked as documentation. The [task ledger](tasks.md) records live status. No sidecar, approval receipt, implementation, CPU/GPU tests, declarations or jobs are authorized or produced by T00b.
 
 ## Global constraints
 
@@ -26,6 +26,21 @@
 - Only a material target-acceptance failure preventing correct protocol execution can trigger explicit user review of inherited controls. Minor operational failures do not reopen controls; consumed-source fixes still require renewed target acceptance.
 - Final test remains LOCKED through closeout and until study-wide closure, including E3 if retained, and separate explicit evaluation authorization. This plan starts no E3 caching/training.
 
+### Comparator bindings and parameter-count oracles
+
+**E1 is the primary architectural comparator**, sharing E2's global input at 896×384. **E1-HR is a contextual/complementary comparator**. Reporting and closeout must label that hierarchy; E2-versus-E1-HR is not controlled evidence isolating local views or resolution.
+
+Use reviewed official aggregate artifacts materialized/provided in the execution environment and supplied through explicit actual paths. Do not presume a repository-relative report exists on branch `e2`. The required exact file-byte hashes are:
+
+| Comparator | Role | Required SHA-256 |
+|---|---|---|
+| Official E1 aggregate | Primary architectural comparator | `3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e` |
+| Official E1-HR aggregate | Contextual/complementary comparator | `9cb44e8aa98d18065402ea3be750586187aeb4b0e4ff23cfa6badfcc484426cf` |
+
+Verify the supplied bytes against these pins and record actual paths/hashes in reporting provenance. Missing artifacts or mismatches fail comparison/closeout; no repository-path default, substituted artifact, or additional unsupported path/hash is introduced. T00b serializes roles and both exact hashes as required scientific/reporting bindings; T09/T14 enforce them.
+
+The classifier `Linear(1536,124,bias=True)` has a **190,588-parameter** design oracle (`1536*124+124`); expected total E2 parameters are **28,010,716**. These are design/acceptance oracles, not official future observations/results. T00b serializes both counts, T03 checks the actual specified architecture, and T11 verifies the real target model; mismatches fail verification rather than changing the oracle.
+
 ## Review focus
 
 | Failure condition | Required behavior and owning task |
@@ -39,9 +54,9 @@
 ## Approval sequence and scope
 
 ```text
-User-requested draft spec/plan/ledger preparation (current task)
-  -> E2-G0 explicit review
-  -> E2-T00b numeric-contract candidate and complete review package
+User-requested corrected spec/plan/ledger preparation (complete)
+  -> E2-G0 explicit user review (PASS)
+  -> E2-T00b numeric-contract candidate and complete review package (prepared; STOP)
   -> E2-G1 exact-byte freeze + selected method + named implementation permission
   -> E2-T01 ... E2-T10 implementation / CPU / deployment preparation
   -> STOP: separate E2-TARGET-AUTH
@@ -55,7 +70,7 @@ User-requested draft spec/plan/ledger preparation (current task)
   -> E3's own specification and gates; final evaluation remains separate
 ```
 
-Current permission covers these draft documents only. G0 has not been inferred from the request to prepare them. G1 requires the later complete numeric candidate and an explicit approved digest; neither document existence nor a checksum confers permission. The prospective G1 implementation scope is E2-T01–T10; actual scope and method must be expressly selected. Native task-by-task execution is recommended because the modules depend closely on the same schemas and identity rules; no execution choice is recorded as accepted.
+The user's explicit E2-G0 decision authorizes E2-T00b candidate preparation only, now complete. G1 requires separate review and approval of the exact candidate digest; neither document existence nor a computed checksum confers permission. The prospective G1 implementation scope is E2-T01–T10; actual scope and method must be expressly selected. Native task-by-task execution is recommended because the modules depend closely on the same schemas and identity rules; no execution choice is recorded as accepted. Stop before creating the approved sidecar/receipt or beginning implementation.
 
 E2-G2 accepts the reviewed implementation and actual target identity but does not itself authorize tuning. E2-G3a binds exactly four tuning declarations. E2-G3b binds the completed handoff/selection and exactly three final declarations. Acceptance and test passes never author their own approval. Use explicit user decisions to create digest-bound approved receipts; automated acceptance may emit only an unapproved review candidate.
 
@@ -76,7 +91,7 @@ All paths below are planned unless the file already exists. Do not fabricate has
 | `src/e2/checkpoint.py` | State capture/restore primitives and strict atomic E2 checkpoint envelopes | E2-T06 |
 | `src/e2/runtime.py`, `train.py` | Current-input/runtime identity, strict preflight, one-run lifecycle and attempt records | E2-T07 |
 | `src/e2/campaign.py` | Declarations, complete-run evidence validation, locked selection, final declaration preparation | E2-T08 |
-| `src/e2/report.py` | Selected validation exports, aggregate and read-only E1/HR comparisons | E2-T09 |
+| `src/e2/report.py` | Selected validation exports, aggregate, primary E1 and contextual/complementary E1-HR comparisons | E2-T09 |
 | `tests/e2/__init__.py`, `conftest.py`, `test_config.py`, `test_data.py`, `test_model.py`, `test_metrics.py`, `test_engine.py`, `test_checkpoint.py`, `test_train.py`, `test_recovery.py`, `test_campaign.py`, `test_artifacts.py`, `test_report.py` | Synthetic CPU behavioral evidence, isolated from official evidence | E2-T01–T09 |
 | `tests/e2/test_entrypoints.py`, `test_gpu_smoke.py`, `scripts/slurm/e2_train.sbatch`, `docs/E2/runbook.md` | CLI/wrapper checks, single-declaration deployment, separately opted-in acceptance harness | E2-T10/T11 |
 | `docs/E2/implementation_log.md`, `cpu_readiness.json`, `target_acceptance.md`, `tuning_handoff.md`, `closeout_review.md` | Observed task/stage evidence, created when that work occurs | Respective later stages |
@@ -144,6 +159,7 @@ Additional interface requirements:
 - Declarations use `kind=official_e2_run_config_v1`, `experiment=E2`, stage `tuning|final`, seed, LR, run ID `e2-{stage}-lr{lr:.8f}-seed{seed}`, full recipe/budget, contract hash, `views`, `representation_dimension=1536`, `fusion=global_then_mean_local`, `view_execution=global_then_flattened_locals_batch_major`, paths, `scientific_sha256` and `config_sha256`. Final declarations add `selection_sha256`.
 - `views` explicitly stores global/local WH, local count and the frozen local order. `scientific_run_payload` projects immutable scientific run settings including stage/seed/LR/budget/views/fusion/contract. Compute `scientific_sha256` first; `config_sha256` hashes the full declaration excluding only its own hash. Per-attempt audit metadata is outside the immutable declaration, so an allowed docs/test-only commit does not change its digest.
 - Paths explicitly bind data root, weights, run/evidence roots, conformance, acceptance, and stage authorization records; final adds selection. Predetermined receipt paths may precede their creation. Receipts bind declaration digests independently: do not create a declaration↔future-receipt hash cycle. Reject unknown scientific overrides.
+- `compare_references` receives explicit `e1_report_path`/`e1hr_report_path` inputs for reviewed official artifacts provided in the execution environment. It verifies the exact comparator hashes/roles from the reviewed reporting bindings above (later serialized in the E2 contract), not caller-selected expected hashes or assumed repository paths. Report provenance records resolved input paths and verified digests; comparator roles are not interchangeable.
 - Acceptance requests use a distinct `kind=e2_target_acceptance_request_v1`, `stage=acceptance`, the same frozen recipe/contract/topology, seed1001/baseLR2.5e-5, reviewed paths and target-work approval binding, and the bounded fixture policy in T10. `validate_acceptance_request` accepts no official-run claims. This verification LR is not a selected E2 LR; the harness cannot publish an official run. Official `validate_run` and training CLI reject this request kind.
 - Kinds are `official_e2_checkpoint_v1`, `official_e2_run_summary_v1`, `e2_lr_selection_v1`, `e2_selected_validation_analysis_v1`, `e2_three_seed_validation_report_v1`, and `e2_vs_e1_e1hr_validation_comparison_v1`. All carry applicable E2 topology/stage/seed/LR/budget/contract/identity and lineage; aggregates retain all per-seed bindings.
 - Boundary progress has `completed_epoch`, committed `updates`, full `history`, `selected`, and `selected_weights`. Official boundaries require `updates=completed_epoch*17499`, complete validation/history for each committed epoch, and no progress beyond 8. Best is reporting-only; last is the full authoritative resume state.
@@ -162,17 +178,19 @@ CPU tests use temporary output roots and explicitly nonofficial evidence. Do not
 **Status:** COMPLETE — DRAFT DOCUMENTATION ONLY. **Files:** `docs/E2/specs.md`, this plan, `tasks.md`. The spec receives only preparation-status wording/link synchronization; scientific sections remain unchanged.
 
 - [x] Record the requested scope, exact E2 architecture and inherited controls, module interfaces, numerical oracles, dependency order and approval stops.
-- [x] Keep E2-G0 awaiting review; mark no implementation, target work, tuning, finals, or closeout complete. Record the missing numeric candidate as E2-T00b rather than inventing a contract digest.
+- [x] During T00a, kept E2-G0 awaiting review and recorded the numeric candidate as later E2-T00b work. The user subsequently approved G0 explicitly; no implementation, target work, tuning, finals, or closeout is complete.
 - [x] Perform document/link/ID/interface/number checks and compare protected E1/HR/data/preprocessing hashes. These are documentation checks, not model/test execution.
 
 ### E2-T00b — Numeric-contract candidate and G1 review package
 
-**Depends:** explicit E2-G0 approval and authorization of remaining design preparation. **Files:** future `docs/E2/e2_numeric_contract_v1.json` and synchronized design-status entries.
+**Depends:** explicit E2-G0 approval, supplied by the user on 2026-11-05 for T00b only. **Status:** COMPLETE — CANDIDATE/DOCUMENTATION ONLY. **Files:** [e2_numeric_contract_v1.json](e2_numeric_contract_v1.json) and synchronized design-status entries. Candidate: **86,335 bytes**, exact SHA-256 **`ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72`**. All checks below are document/JSON/hash/arithmetic checks; no CPU/GPU tests ran.
 
-- [ ] Serialize every exact spec value, including five-view execution order, fused head fan-in 1536, input fingerprints, batch/update budget, optimizer/groups, scheduler formula, RNG/runtime, selection/reporting, attempts, consumed-source policy, approvals and test prohibition.
-- [ ] Verify inherited fields against the two frozen numeric references; limit E2 changes to its specified topology/head/view behavior and isolated identity. Provenance records exact preparation snapshot paths/bytes/hashes; later ledger/status changes do not mutate a frozen contract.
-- [ ] Parse JSON, check arithmetic/formulas/endpoints and reference hashes, resolve all scientific values, and compute exact candidate file SHA-256. Distinguish future observations from unresolved scientific controls; no selected LR/job/result hashes are filled.
-- [ ] Present the full candidate, plan and ledger for G1 review and method/scope selection. Create no `.sha256` sidecar or approved receipt before explicit approval of the exact digest. Stop before implementation.
+- [x] Serialize every exact spec value, including five-view execution order, fused head fan-in 1536, input fingerprints, batch/update budget, optimizer/groups, scheduler formula, RNG/runtime, selection/reporting, attempts, consumed-source policy, approvals and test prohibition.
+- [x] Include required scientific/reporting bindings for **E1 primary architectural / E1-HR contextual-complementary roles**, exact E1 aggregate SHA-256 `3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e`, exact E1-HR aggregate SHA-256 `9cb44e8aa98d18065402ea3be750586187aeb4b0e4ff23cfa6badfcc484426cf`, and the parameter-count oracles: fused `Linear(1536,124,bias=True)` classifier **190,588**, total E2 **28,010,716**. Comparator artifacts are supplied/materialized at execution; do not invent their physical paths or other hashes.
+- [x] Check candidate completeness explicitly: both comparator roles and exact hashes must be serialized, and the classifier/total parameter oracles must be JSON integers `190588`/`28010716`. Missing or swapped roles, missing or incorrect hashes, or missing or incorrect counts block the E2-G1 review package. Prose references and report-time defaults are insufficient; comparator paths remain explicitly supplied execution-environment inputs without a repository-relative fallback.
+- [x] Verify inherited fields against the two frozen numeric references; limit E2 changes to its specified topology/head/view behavior and isolated identity. Provenance records exact preparation snapshot paths/bytes/hashes; later ledger/status changes do not mutate a frozen contract.
+- [x] Parse JSON, check arithmetic/formulas/endpoints and reference hashes, resolve all scientific values, and compute exact candidate file SHA-256. Distinguish future observations from unresolved scientific controls; no selected LR/job/result hashes are filled.
+- [x] Present the full candidate, plan and ledger for G1 review and method/scope selection. Create no `.sha256` sidecar or approved receipt before explicit approval of the exact digest. Stop before implementation.
 
 ### E2-T01 — E2 configuration, identities, and CPU fixture boundary
 
@@ -216,6 +234,7 @@ assert model.classifier.out_features == 124
 ```
 
 - [ ] Pin exact seed-bound `nn.Linear(1536,124)` initialization inside an isolated CPU RNG context, full trainability, final LayerNorm before averaging, stochastic-depth endpoints, strict offline filename/full hash/load rejection, and complete nonduplicated decay groups. Test different chunking/order is not silently substituted. CPU random-weight fixtures are never real pretrained evidence.
+- [ ] Add `test_e2_architecture_parameter_count_matches_design_oracle` on the actual specified ConvNeXt-Tiny architecture, separately from tiny-backbone spy tests. Verify classifier `1536*124+124 = 190,588` and total **28,010,716** parameters; this mandatory design check catches duplicated backbones, a wrong head or extra projection. It is not an observed official result, and tiny stand-ins are not subject to the full-architecture total.
 - [ ] Run `python -m pytest tests/e2/test_model.py -q` to RED; implement the builder and model without importing pilot/E1/HR recipe validators.
 - [ ] GREEN/regression: rerun it plus `python -m pytest tests/e1/test_model.py tests/e1hr/test_model.py -q`; review source diff/groups/protected hashes, log and commit. Real-weight full-size target evidence belongs to E2-T11.
 
@@ -269,14 +288,15 @@ assert model.classifier.out_features == 124
 - [ ] Run `python -m pytest tests/e2/test_campaign.py tests/e2/test_artifacts.py -q` to RED; implement strict owned parsing/selection. A locked `e2_lr_selection_v1` records `STOP_FOR_USER_E2_G3b_REVIEW` and `final_execution_authorized=false`; no future permission is inferred from a score.
 - [ ] GREEN/regression: rerun those tests and T07 final-preflight cases, then `python -m pytest tests/e1/test_campaign.py tests/e1/test_artifacts.py tests/e1hr/test_campaign.py tests/e1hr/test_artifacts.py -q`; require PASS. Log/protected-hash review, commit. An uncompletable trial stops for review without changing science.
 
-### E2-T09 — Selected validation exports, aggregate and both official comparators
+### E2-T09 — Selected validation exports, aggregate, primary E1 and contextual E1-HR comparisons
 
 **Depends:** E2-T02–T08. **Files:** E2 report and `test_report.py`. **Consumes:** validated complete runs/selection and E2 evaluate/metrics. **Produces:** report APIs/kinds above.
 
 - [ ] RED: test best earlier than last; all metrics/predictions/analysis exports must use that selected checkpoint/history, not a separate per-metric optimum. Export overall/per-class/buckets/predictions/confusion/most-confused pairs/curves with an analysis index published last. Bind E2 view/fusion/source/config/selection/checkpoint/history identity and reject stale inputs.
 - [ ] Require exactly the three complete distinct final seeds under one locked selection. Independent unrounded values `[.1,.2,.3]` give mean=.2, sample std=.1, display `20.0000% +/- 10.0000%`. Preserve null support; reject missing/extra/cherry-picked seeds or ensembles.
-- [ ] Read both official comparator report paths from spec Section 13 without modification, bind their exact hashes/contract identities, and verify benchmark/metric conventions. E1's existing schema derives seeds from `per_seed` and does not require newer HR/E2 top-level fields. Obtain fixed-input semantics from each frozen contract where its report schema references them. Compare shared benchmark/metric definitions, not cross-architecture consumed-source equality. Paired deltas join seed IDs and use percentage-point units.
-- [ ] Run `python -m pytest tests/e2/test_report.py -q` to RED; implement owned report validation and explicit E1/HR comparison. Record validation-only/geographic/extreme-tail/three-seed limitations and measured efficiency scopes; no pilot/best-seed comparator or test evaluator.
+- [ ] Consume reviewed official aggregate artifacts materialized/provided in the execution environment through explicit paths; do not assume repository-relative reports exist. Require E1 SHA-256 `3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e` and E1-HR SHA-256 `9cb44e8aa98d18065402ea3be750586187aeb4b0e4ff23cfa6badfcc484426cf` from the required reporting bindings. Missing inputs, mismatched hashes, or swapped roles fail; record actual paths and verified digests in provenance. Verify contract/benchmark/metric conventions. E1's reviewed schema derives seeds from `per_seed` and does not require newer HR/E2 top-level fields. Obtain fixed-input semantics from each frozen contract where its report schema references them. Compare shared benchmark/metric definitions, not cross-architecture consumed-source equality. Paired deltas join seed IDs and use percentage-point units.
+- [ ] Add `test_comparator_artifacts_are_explicit_hash_bound_inputs` and `test_report_labels_primary_and_contextual_comparisons`. Reports identify **E1 as primary architectural comparator** because global input is 896×384 and **E1-HR as contextual/complementary comparator**; E2-versus-E1-HR must not claim controlled local-view or resolution evidence.
+- [ ] Run `python -m pytest tests/e2/test_report.py -q` to RED; implement owned report validation and the stated comparator hierarchy. Record validation-only/geographic/extreme-tail/three-seed limitations and measured efficiency scopes; no pilot/best-seed comparator or test evaluator.
 - [ ] GREEN/regression: rerun it plus `python -m pytest tests/e1/test_report.py tests/e1hr/test_report.py -q`; require PASS, log/diff/protected-hash review, commit. Preserve the selected 1536-dimensional feature definition for E3, without creating caches.
 
 ### E2-T10 — CPU readiness, single-run Slurm wrapper and acceptance preparation
@@ -303,7 +323,7 @@ bash -n scripts/slurm/e2_train.sbatch
 **Depends:** E2-T10 and E2-TARGET-AUTH. **Files:** new per-attempt E2 acceptance evidence, `target_acceptance.md`, unapproved G2 review candidate and four prepared tuning declarations. **Consumes:** reviewed harness/source/contract, actual Slurm allocation and real inputs. **Produces:** target evidence for G2; not approval or tuning.
 
 - [ ] Inspect actual source/import closure, effective software/FP32 settings, device/driver/allocation, full train/val audit and preprocessing conformance before model allocation. Capture exact consumed-source map plus separate clean Git/harness/evidence audit inventories. E1/HR/pilot evidence alone is insufficient.
-- [ ] Only inside the explicitly authorized Slurm allocation, execute the opt-in `tests/e2/test_gpu_smoke.py` harness prepared at T10. Check both raw layouts, global `[2,3,384,896]`, local `[2,4,3,320,320]`, internal local batch8, logits `[2,124]`, tail and shared-encoder gradient paths. Record actual memory and timing scope.
+- [ ] Only inside the explicitly authorized Slurm allocation, execute the opt-in `tests/e2/test_gpu_smoke.py` harness prepared at T10. Check both raw layouts, global `[2,3,384,896]`, local `[2,4,3,320,320]`, internal local batch8, logits `[2,124]`, tail and shared-encoder gradient paths. Verify the real pinned-weight model has exactly **190,588 classifier parameters and 28,010,716 total E2 parameters** against the design/acceptance oracles; a mismatch fails acceptance and is not a new parameter-count result/default. Record actual memory and timing scope.
 - [ ] Compare the bounded uninterrupted versus discard/restore/replay fixture exactly for model, optimizer, full-horizon scheduler, Python/NumPy/CPU/all-CUDA RNG, loader/order, selected state and fixture history. Wall-clock/audit fields are excluded. Label bounded state reconstruction correctly; it is not an observed full-natural-epoch or OS-kill target claim and cannot pass official campaign validation.
 - [ ] Preserve every acceptance attempt/failure. Repair minor operational issues under unchanged controls; renewed target acceptance follows any consumed-source repair. Return for explicit control review only on a material inability to execute the protocol correctly.
 - [ ] Present CPU/target evidence, the actual scientific/runtime identity and exactly four concrete tuning declarations for E2-G2 review. No self-approved receipt or G3a tuning launch follows a passing smoke.
@@ -329,7 +349,7 @@ bash -n scripts/slurm/e2_train.sbatch
 **Depends:** E2-T13 complete. **Files:** E2 aggregate/comparison, scoped checksum inventory, `closeout_review.md`, ledger.
 
 - [ ] Verify declarations/config/contract/source/runtime/data/preprocessing/weights through full histories/checkpoints, selected analyses, selection and reports. State whether actual binaries were hashed or only supplied checksum references were checked; never invent observations from missing payloads.
-- [ ] Verify all three seeds, unrounded ddof=1 aggregate, both official comparators, per-class/bucket/coverage/prediction/confusion/curve exports, attempt/failure/replay accounting and timing scopes. Inventory exact original bytes and retain limitations.
+- [ ] Verify all three seeds, unrounded ddof=1 aggregate, and the **primary architectural E1 / contextual-complementary E1-HR** comparison hierarchy. Require the reviewed official comparator artifacts provided/materialized in the execution environment, with actual paths inventoried and exact SHA-256 matching the two pins above; no branch-path existence is presumed. Ensure E2-versus-E1-HR is not interpreted as controlled evidence for local views or resolution. Verify per-class/bucket/coverage/prediction/confusion/curve exports, attempt/failure/replay accounting and timing scopes. Inventory exact original bytes and retain limitations.
 - [ ] Present the concrete package for E2-CLOSEOUT review. Close only E2 train/validation on explicit review; E3 and study-wide final evaluation retain separate gates and test remains LOCKED.
 
 ## Coverage, preparation checks, and next review
@@ -347,4 +367,4 @@ bash -n scripts/slurm/e2_train.sbatch
 | 13: reports, comparisons, E3-compatible handoff | T04/T09/T13/T14 |
 | 14–15: test lock and gate order | All entrypoint/data/report guards and the gate/ledger tables |
 
-Preparation checks are document-only: resolve links, verify task IDs/dependencies/interfaces/coverage and frozen numeric references, check independent arithmetic/oracles, and compare protected files. They do not constitute behavioral RED/GREEN, CPU training, or GPU acceptance. The current package is ready for **E2-G0 specification/design review**; it is not a complete G1 freeze package until E2-T00b is prepared and explicitly reviewed.
+Preparation checks are document-only: resolve links, verify task IDs/dependencies/interfaces/coverage and frozen numeric references, check independent arithmetic/oracles, and compare protected files. They do not constitute behavioral RED/GREEN, CPU training, or GPU acceptance. E2-G0 is PASS and E2-T00b candidate preparation is complete. The current package is ready for **E2-G1 review of the exact candidate digest, implementation method and named scope**; it is not frozen or authorized for implementation. No scientific input remains unresolved in preparation; later runtime/acceptance/results remain gated observations.
