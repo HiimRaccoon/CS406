@@ -36,3 +36,6 @@ T06: 3 behavioral RED failures; 9 GREEN checkpoint/E1/HR cases passed; strict of
 T06 commit: `59b92abe6006fe1bcf96c652920d25ef63af8be1`.
 
 T07: 7 behavioral RED failures; 63 GREEN lifecycle/source/runtime/E1/HR cases passed; fixture envelopes remain test-owned; all official receipts bind declaration digests Protected hashes verified: 266; frozen contract unchanged. No target work.
+T07 commit: `6b1d79e9dba34be191cfdca40a1de0582efdfcb0`.
+
+T08: 12 RED failures; 55 GREEN campaign/artifact/preflight/E1/HR cases passed; all 24 LR trial permutations agree and selection mandates G3b STOP Protected hashes verified: 266; frozen contract unchanged. No target work.
