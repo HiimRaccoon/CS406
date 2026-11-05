@@ -261,11 +261,11 @@ assert model.classifier.out_features == 124
 
 **Depends:** E2-T01/T02/T03/T05. **Files:** E2 checkpoint and `test_checkpoint.py`. **Consumes:** validated config/runtime projection and model/optimizer/scheduler/loaders. **Produces:** state primitive and strict envelope interfaces above.
 
-- [ ] RED: add `test_official_e2_boundary_and_topology_are_required`, `test_discard_restore_and_replay_matches_uninterrupted_state`, and `test_atomic_failure_retains_previous_last`. Reject wrong experiment/kind/view execution/head dimension, cross-run seed/LR/config/contract/runtime, best.pt resume, incomplete state, and invalid official epoch/update/history relationships.
-- [ ] Compare tiny CPU dropout fixtures across save → uncommitted work → reconstruction → restore → replay: exact model/optimizer/scheduler/Python/NumPy/CPU RNG/loader/selected weights/progress equality. Mark fixture envelopes nonofficial; strict production boundary accounting remains unchanged. CUDA RNG is additionally proved at T11.
-- [ ] Inject failed last.pt replacement and crashes between authoritative last and derived best/history publication. Prior boundary remains readable; selected weights in last permit reconstruction. Boundary zero contains initial full state; completed-run training extension is rejected.
-- [ ] Run `python -m pytest tests/e2/test_checkpoint.py -q` to RED; implement E2 envelopes around common capture/restore primitives, atomic fsync/replace and single-run identity checks. Primitives expose no CLI permission/budget bypass.
-- [ ] GREEN/regression: rerun it plus `python -m pytest tests/e1/test_checkpoint.py tests/e1hr/test_checkpoint.py -q`; require PASS, log/protected-hash review, commit.
+- [x] RED: add `test_official_e2_boundary_and_topology_are_required`, `test_discard_restore_and_replay_matches_uninterrupted_state`, and `test_atomic_failure_retains_previous_last`. Reject wrong experiment/kind/view execution/head dimension, cross-run seed/LR/config/contract/runtime, best.pt resume, incomplete state, and invalid official epoch/update/history relationships.
+- [x] Compare tiny CPU dropout fixtures across save → uncommitted work → reconstruction → restore → replay: exact model/optimizer/scheduler/Python/NumPy/CPU RNG/loader/selected weights/progress equality. Mark fixture envelopes nonofficial; strict production boundary accounting remains unchanged. CUDA RNG is additionally proved at T11.
+- [x] Inject failed last.pt replacement and crashes between authoritative last and derived best/history publication. Prior boundary remains readable; selected weights in last permit reconstruction. Boundary zero contains initial full state; completed-run training extension is rejected.
+- [x] Run `python -m pytest tests/e2/test_checkpoint.py -q` to RED; implement E2 envelopes around common capture/restore primitives, atomic fsync/replace and single-run identity checks. Primitives expose no CLI permission/budget bypass.
+- [x] GREEN/regression: rerun it plus `python -m pytest tests/e1/test_checkpoint.py tests/e1hr/test_checkpoint.py -q`; require PASS, log/protected-hash review, commit.
 
 ### E2-T07 — Current-target preflight, runtime and one-run/attempt lifecycle
 

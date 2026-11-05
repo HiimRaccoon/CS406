@@ -30,3 +30,6 @@ T04: ranking behavioral RED failed; 11 GREEN metric/E1/HR cases passed Protected
 T04 commit: `89e60c81eb7ec281dbba6a4830a94984b4cb6c78`.
 
 T05: dual-view loop RED failed; 17 GREEN engine/E1/HR cases passed; original-image tail matches direct updates Protected hashes verified: 266; frozen contract unchanged. No target work.
+T05 commit: `f8747f355de11765666a2372ee2059282828ac0f`.
+
+T06: 3 behavioral RED failures; 9 GREEN checkpoint/E1/HR cases passed; strict official envelope separated from replay primitives Protected hashes verified: 266; frozen contract unchanged. No target work.
