@@ -8,7 +8,7 @@
 
 **Tech stack:** Python 3.11.17; Torch 2.8.0+cu128; TorchVision 0.23.0+cu128; deterministic FP32; the remaining software lock in spec Section 8; pytest CPU fixtures and separately opted-in UIT Slurm target acceptance.
 
-**Spec:** [specs.md](specs.md). **Current status:** E2-G0 and E2-G1 **PASS** by explicit user decisions. The [exact frozen contract](e2_numeric_contract_v1.json), [sidecar](e2_numeric_contract_v1.sha256) and [receipt](e2_g1_approval.json) authorize native T01-T10 implementation/CPU preparation. Actual task evidence is in [implementation_log.md](implementation_log.md). STOP before E2-TARGET-AUTH; no target/GPU, tuning/final, E3 or test-image permission.
+**Spec:** [specs.md](specs.md). **Current status:** E2 is CLOSED per the user's 2026-11-10 server-completion confirmation; T11-T14 and G2/G3/closeout are recorded in [the task ledger](tasks.md) and [server closeout record](server_closeout_2026-11-10.md). Server-side receipts and lineage are not mirrored in this checkout. E3-specific execution and final evaluation/test remain separately gated.
 
 ## Global constraints
 
@@ -70,9 +70,9 @@ User-requested corrected spec/plan/ledger preparation (complete)
   -> E3's own specification and gates; final evaluation remains separate
 ```
 
-The user separately approved E2-G1 at exact reviewed commit/digest, selected native task-by-task execution and authorized T01-T10 only. The sidecar and G1 receipt record that decision. CPU readiness does not grant target-work authorization; STOP before E2-T11.
+The user separately approved E2-G1 at the exact reviewed commit/digest, selected native task-by-task execution and authorized T01-T10 only. That historical scope is recorded by the sidecar and G1 receipt. On 2026-11-10, the user confirmed all later E2 server work and gates complete and instructed E2 closeout; see [server closeout record](server_closeout_2026-11-10.md).
 
-E2-G2 accepts the reviewed implementation and actual target identity but does not itself authorize tuning. E2-G3a binds exactly four tuning declarations. E2-G3b binds the completed handoff/selection and exactly three final declarations. Acceptance and test passes never author their own approval. Use explicit user decisions to create digest-bound approved receipts; automated acceptance may emit only an unapproved review candidate.
+E2-G2/G3 and closeout are now recorded complete per the user's server-completion confirmation; their server receipts and run artifacts are not mirrored in this checkout. E3-specific execution and study-wide final evaluation/test remain separate gates.
 
 ## File ownership and reuse boundary
 
@@ -322,35 +322,35 @@ bash -n scripts/slurm/e2_train.sbatch
 
 **Depends:** E2-T10 and E2-TARGET-AUTH. **Files:** new per-attempt E2 acceptance evidence, `target_acceptance.md`, unapproved G2 review candidate and four prepared tuning declarations. **Consumes:** reviewed harness/source/contract, actual Slurm allocation and real inputs. **Produces:** target evidence for G2; not approval or tuning.
 
-- [ ] Inspect actual source/import closure, effective software/FP32 settings, device/driver/allocation, full train/val audit and preprocessing conformance before model allocation. Capture exact consumed-source map plus separate clean Git/harness/evidence audit inventories. E1/HR/pilot evidence alone is insufficient.
-- [ ] Only inside the explicitly authorized Slurm allocation, execute the opt-in `tests/e2/test_gpu_smoke.py` harness prepared at T10. Check both raw layouts, global `[2,3,384,896]`, local `[2,4,3,320,320]`, internal local batch8, logits `[2,124]`, tail and shared-encoder gradient paths. Verify the real pinned-weight model has exactly **190,588 classifier parameters and 28,010,716 total E2 parameters** against the design/acceptance oracles; a mismatch fails acceptance and is not a new parameter-count result/default. Record actual memory and timing scope.
-- [ ] Compare the bounded uninterrupted versus discard/restore/replay fixture exactly for model, optimizer, full-horizon scheduler, Python/NumPy/CPU/all-CUDA RNG, loader/order, selected state and fixture history. Wall-clock/audit fields are excluded. Label bounded state reconstruction correctly; it is not an observed full-natural-epoch or OS-kill target claim and cannot pass official campaign validation.
-- [ ] Preserve every acceptance attempt/failure. Repair minor operational issues under unchanged controls; renewed target acceptance follows any consumed-source repair. Return for explicit control review only on a material inability to execute the protocol correctly.
-- [ ] Present CPU/target evidence, the actual scientific/runtime identity and exactly four concrete tuning declarations for E2-G2 review. No self-approved receipt or G3a tuning launch follows a passing smoke.
+- [x] Inspect actual source/import closure, effective software/FP32 settings, device/driver/allocation, full train/val audit and preprocessing conformance before model allocation. Capture exact consumed-source map plus separate clean Git/harness/evidence audit inventories. E1/HR/pilot evidence alone is insufficient.
+- [x] Only inside the explicitly authorized Slurm allocation, execute the opt-in `tests/e2/test_gpu_smoke.py` harness prepared at T10. Check both raw layouts, global `[2,3,384,896]`, local `[2,4,3,320,320]`, internal local batch8, logits `[2,124]`, tail and shared-encoder gradient paths. Verify the real pinned-weight model has exactly **190,588 classifier parameters and 28,010,716 total E2 parameters** against the design/acceptance oracles; a mismatch fails acceptance and is not a new parameter-count result/default. Record actual memory and timing scope.
+- [x] Compare the bounded uninterrupted versus discard/restore/replay fixture exactly for model, optimizer, full-horizon scheduler, Python/NumPy/CPU/all-CUDA RNG, loader/order, selected state and fixture history. Wall-clock/audit fields are excluded. Label bounded state reconstruction correctly; it is not an observed full-natural-epoch or OS-kill target claim and cannot pass official campaign validation.
+- [x] Preserve every acceptance attempt/failure. Repair minor operational issues under unchanged controls; renewed target acceptance follows any consumed-source repair. Return for explicit control review only on a material inability to execute the protocol correctly.
+- [x] Present CPU/target evidence, the actual scientific/runtime identity and exactly four concrete tuning declarations for E2-G2 review. No self-approved receipt or G3a tuning launch follows a passing smoke.
 
 ### E2-T12 — Four full-budget official LR trials and STOP
 
 **Depends:** E2-T11, explicit E2-G2 PASS and E2-G3a authorization. **Files:** E2 tuning declarations/runs/attempt ledgers, locked selection, `tuning_handoff.md`.
 
-- [ ] Execute exactly the approved four declarations, one per Slurm attempt invocation and multiple same-run attempts if necessary. Keep 09:00:00 per attempt and all original controls/budgets; retain failures/replay work.
-- [ ] Require four valid 8-epoch/8-validation/139992-update outcomes and complete parser lineage under the accepted scientific/runtime identity. Publish every selected checkpoint score/epoch and choose the lowest LR eligible under the global maximum rule.
-- [ ] Lock selection and hand off the full tuning package. **STOP for explicit E2-G3b review.** No selected E2 LR is prefilled here and no final model/job starts automatically.
+- [x] Execute exactly the approved four declarations, one per Slurm attempt invocation and multiple same-run attempts if necessary. Keep 09:00:00 per attempt and all original controls/budgets; retain failures/replay work.
+- [x] Require four valid 8-epoch/8-validation/139992-update outcomes and complete parser lineage under the accepted scientific/runtime identity. Publish every selected checkpoint score/epoch and choose the lowest LR eligible under the global maximum rule.
+- [x] Lock selection and hand off the full tuning package. **STOP for explicit E2-G3b review.** No selected E2 LR is prefilled here and no final model/job starts automatically.
 
 ### E2-T13 — Separately authorized final training and selected validation analysis
 
 **Depends:** complete E2-T12, E2-G3b and still-applicable E2-G2 identity. **Files:** three final declarations/runs/attempt records and selected validation analyses.
 
-- [ ] Bind the locked selection and explicitly approved seeds 2001/3001/4001. Initialize each from the pinned ImageNet file with a fresh fused head, optimizer and scheduler; never inherit tuning/E1/HR/pilot state.
-- [ ] Complete all 8 epochs/8 validations/139992 updates per seed over same-declaration attempts as needed. Preserve best/last, complete histories, environment and attempts/failures, then export selected-checkpoint validation analyses.
-- [ ] Validate all three full budgets/coverage/selection/identity bindings before closeout. Preserve selected model/feature lineage for a future separately authorized E3 stage; test remains locked.
+- [x] Bind the locked selection and explicitly approved seeds 2001/3001/4001. Initialize each from the pinned ImageNet file with a fresh fused head, optimizer and scheduler; never inherit tuning/E1/HR/pilot state.
+- [x] Complete all 8 epochs/8 validations/139992 updates per seed over same-declaration attempts as needed. Preserve best/last, complete histories, environment and attempts/failures, then export selected-checkpoint validation analyses.
+- [x] Validate all three full budgets/coverage/selection/identity bindings before closeout. Preserve selected model/feature lineage for a future separately authorized E3 stage; test remains locked.
 
 ### E2-T14 — Validation closeout and comparison handoff
 
 **Depends:** E2-T13 complete. **Files:** E2 aggregate/comparison, scoped checksum inventory, `closeout_review.md`, ledger.
 
-- [ ] Verify declarations/config/contract/source/runtime/data/preprocessing/weights through full histories/checkpoints, selected analyses, selection and reports. State whether actual binaries were hashed or only supplied checksum references were checked; never invent observations from missing payloads.
-- [ ] Verify all three seeds, unrounded ddof=1 aggregate, and the **primary architectural E1 / contextual-complementary E1-HR** comparison hierarchy. Require the reviewed official comparator artifacts provided/materialized in the execution environment, with actual paths inventoried and exact SHA-256 matching the two pins above; no branch-path existence is presumed. Ensure E2-versus-E1-HR is not interpreted as controlled evidence for local views or resolution. Verify per-class/bucket/coverage/prediction/confusion/curve exports, attempt/failure/replay accounting and timing scopes. Inventory exact original bytes and retain limitations.
-- [ ] Present the concrete package for E2-CLOSEOUT review. Close only E2 train/validation on explicit review; E3 and study-wide final evaluation retain separate gates and test remains LOCKED.
+- [x] Verify declarations/config/contract/source/runtime/data/preprocessing/weights through full histories/checkpoints, selected analyses, selection and reports. State whether actual binaries were hashed or only supplied checksum references were checked; never invent observations from missing payloads.
+- [x] Verify all three seeds, unrounded ddof=1 aggregate, and the **primary architectural E1 / contextual-complementary E1-HR** comparison hierarchy. Require the reviewed official comparator artifacts provided/materialized in the execution environment, with actual paths inventoried and exact SHA-256 matching the two pins above; no branch-path existence is presumed. Ensure E2-versus-E1-HR is not interpreted as controlled evidence for local views or resolution. Verify per-class/bucket/coverage/prediction/confusion/curve exports, attempt/failure/replay accounting and timing scopes. Inventory exact original bytes and retain limitations.
+- [x] Present the concrete package for E2-CLOSEOUT review. Close only E2 train/validation on explicit review; E3 and study-wide final evaluation retain separate gates and test remains LOCKED.
 
 ## Coverage, preparation checks, and next review
 

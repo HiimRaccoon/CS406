@@ -1,10 +1,10 @@
 # E2 — Shared-Encoder Global/Local Representation
 
-**E2-G0/G1 PASS - exact numeric contract frozen; native E2-T01-T10 implementation and CPU/deployment preparation COMPLETE. Target/GPU and later execution stages remain NOT AUTHORIZED. Final test remains LOCKED / NOT AUTHORIZED.**
+**E2 CLOSED (2026-11-10):** T00a-T14 and gates G0/G1/G2/G3a/G3b complete per the user's server-completion confirmation. Server receipts and run lineage are not mirrored in this checkout. See [task ledger](tasks.md) and [server closeout record](server_closeout_2026-11-10.md). E3-specific execution and final evaluation/test remain separate.
 
-Revision date: **2026-11-05**. E1 training/validation is closed. The user has confirmed completion of E1-HR and PASS for HR-G2/HR-G3a/HR-G3b; its three-seed validation reports are available. This specification takes that handoff as given. Earlier preparation-status text in the master/E1-HR documents does not override the current user handoff, and this document does not revise their frozen contracts or approval records.
+Revision date: **2026-11-10**. E1 and E1-HR handoffs remain as previously recorded. E2 closeout was reported by the user from the server; this specification records the transition and does not alter the frozen numeric contract or fabricate server artifact details.
 
-On 2026-11-05 the user approved G0 and subsequently **E2-G1** for reviewed commit `c40dd00a22de2d3ef50440440107d66db7b7dc45` and exact contract digest below. The [frozen contract](e2_numeric_contract_v1.json), [sidecar](e2_numeric_contract_v1.sha256) and [G1 receipt](e2_g1_approval.json) bind native **E2-T01-T10 implementation and CPU preparation only**. Results and task status are recorded in the [implementation log](implementation_log.md) and [task ledger](tasks.md). Target/GPU work, tuning/final execution, E3 and test images remain unauthorized. An earlier experiment does not supply E2 target acceptance.
+Historical G0/G1 record (2026-11-05): the user approved G0 and subsequently E2-G1 for reviewed commit `c40dd00a22de2d3ef50440440107d66db7b7dc45` and the exact contract digest below. That approval authorized T01-T10 preparation only at the time. The user later confirmed all remaining E2 work/gates complete on the server and instructed closeout on 2026-11-10; the current reported state is recorded above and in [the closeout record](server_closeout_2026-11-10.md).
 
 ## 1. Research question, scope, and source authority
 
@@ -340,16 +340,16 @@ Final-test evaluation may be considered only after **all experiments intended fo
 | Design preparation | Corrected [plan](plan.md)/[task ledger](tasks.md), followed by numeric-contract candidate with exact values, source/provenance bindings and numerical oracles | **COMPLETE - exact contract frozen at G1** |
 | E2-G1 | Review prepared artifacts; approve exact contract digest/freeze, select implementation method, explicitly authorize the named implementation/CPU-preparation scope | **PASS - explicit user approval; native T01-T10 only** |
 | Implementation / CPU preparation | Complete only the E2-G1-authorized tasks, scoped regressions, and deployment/runbook preparation; stop before target work | **COMPLETE - T01-T10 CPU/preparation only**; readiness/log/ledger linked below |
-| E2 target-work authorization | Explicitly permit E2 Slurm/GPU deployment and bounded target acceptance | **NOT GRANTED** |
-| E2 target acceptance | Execute Section 9 under that authorization; bind actual consumed source/runtime/device/data/weights and recovery evidence | Not started |
-| E2-G2 | Review CPU/regression and target acceptance, accepted identity, and the concrete four-trial declarations | **NOT APPROVED** |
-| E2-G3a | Explicitly authorize exactly four E2 tuning trials under the reviewed declarations | **NOT GRANTED** |
-| Tuning handoff / STOP | Four valid full-budget outcomes, complete ledger, and locked LR selection; present for user review | Not started |
-| E2-G3b | Review the tuning handoff and explicitly authorize the three declared final-seed runs | **NOT GRANTED** |
-| E2 closeout | Review three completed final runs, selected validation analyses, aggregate/comparisons, lineage/checksum inventory, and handoff to E3 | Not started |
+| E2 target-work authorization | Explicitly permit E2 Slurm/GPU deployment and bounded target acceptance | **COMPLETE / CLOSED per user-reported server completion; receipt not mirrored here** |
+| E2 target acceptance | Execute Section 9 under that authorization; bind actual consumed source/runtime/device/data/weights and recovery evidence | **COMPLETE / CLOSED per user-reported server completion; evidence not mirrored here** |
+| E2-G2 | Review CPU/regression and target acceptance, accepted identity, and the concrete four-trial declarations | **PASS / CLOSED per user-reported server completion; receipt not mirrored here** |
+| E2-G3a | Explicitly authorize exactly four E2 tuning trials under the reviewed declarations | **PASS / CLOSED per user-reported server completion; receipt not mirrored here** |
+| Tuning handoff | Four valid full-budget outcomes, complete ledger, and locked LR selection; present for user review | **COMPLETE / CLOSED per user-reported server completion; package not mirrored here** |
+| E2-G3b | Review the tuning handoff and explicitly authorize the three declared final-seed runs | **PASS / CLOSED per user-reported server completion; receipt not mirrored here** |
+| E2 closeout | Review three completed final runs, selected validation analyses, aggregate/comparisons, lineage/checksum inventory, and handoff to E3 | **COMPLETE / CLOSED per user-reported server completion; inventory not mirrored here** |
 | Final evaluation | Separate study-wide explicit authorization under Section 14 | **LOCKED / NOT AUTHORIZED** |
 
-The exact frozen contract is **86,335 bytes**, SHA-256 **`ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72`**. G1 created only the approved freeze/implementation permission, not an accepted target identity or result. The JSON retains the original G0-reviewed document snapshots; live status updates do not rewrite that provenance. Selected E2 LR/results and accepted target/runtime hashes remain future outputs. **STOP after T10 for separate E2-TARGET-AUTH.**
+The exact frozen contract is **86,335 bytes**, SHA-256 **`ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72`**. G1 created only the approved freeze/implementation permission, not an accepted target identity or result. The JSON retains the original G0-reviewed document snapshots; live status updates do not rewrite that provenance. E2 target, tuning, final-run and closeout work is recorded complete per the user's server-completion confirmation; see [closeout record](server_closeout_2026-11-10.md).
 
 ## E2-G1 approval record (2026-11-05)
 

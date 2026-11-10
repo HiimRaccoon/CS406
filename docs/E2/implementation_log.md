@@ -66,3 +66,8 @@ Final: no deferred Minor findings.
 Final verification: final-fixed-e2 => 136 passed, 1 GPU deselected in 127.38s. final-fixed-full => 426 passed, 4 GPU deselected in 249.37s. Python compileall and Git Bash syntax check returned exit 0. All 266 protected file hashes and the 86335-byte frozen contract are unchanged. Exact actual commands/results and raw output bytes are archived in the CPU evidence inventory. The single Important review finding is fixed with RED-to-GREEN coverage and the complete suite is GREEN.
 
 Bookkeeping observations: the readiness helper initially lacked the root import path and was corrected without scientific changes; initial Git whitespace checking rejected raw Windows carriage-return logs, so E2 evidence-only Git attributes preserve those raw bytes instead of rewriting them. The approved contract and protected scientific files were not affected.
+
+
+## Server completion and E2 closeout (2026-11-10)
+
+The user confirmed that all remaining E2 target, tuning, final-run and closeout work was completed on the server, and instructed closing E2 gates to transition to E3. The task ledger records T11-T14 and G2/G3/closeout complete on that basis. The server receipts, declarations, attempts and checkpoint lineage were not present in this checkout and are not represented as locally verified. See [server closeout record](server_closeout_2026-11-10.md). E3 execution and final evaluation/test remain separately gated.

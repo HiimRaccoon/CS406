@@ -1,9 +1,11 @@
 # E2 deployment and recovery runbook
 
-E2-G1 authorizes native T01-T10 implementation and CPU preparation only. This
-runbook prepares future operations; none of the target commands below was run.
-STOP before E2-TARGET-AUTH. G2, G3a, G3b, E3 and final evaluation remain gated.
-Test images are prohibited throughout E2; metadata is readable.
+Historical operations note: the procedures below describe the formerly gated
+T11-T14 workflow. On 2026-11-10, the user confirmed all E2 server work/gates
+complete and instructed closure. See [server closeout record](server_closeout_2026-11-10.md).
+The corresponding server receipts and run packages are not mirrored here; do
+not treat this historical runbook as evidence that they were locally audited.
+E3-specific execution and final evaluation/test remain separately gated.
 
 Use the exact frozen contract and G1 receipt in this directory. The source
 checkout must be clean. Review the explicit 21-file consumed-source map and
