@@ -19,3 +19,16 @@ scripts/slurm/*.sbatch text eol=lf
 
 # Preserve the original UIT pilot evidence bytes and their recorded checksums.
 reports/pilot/evidence/** -text
+
+# Preserve HR-G1 exact-byte contract and receipt serialization.
+docs/E1-HR/*.json text eol=lf
+docs/E1-HR/*.sha256 text eol=lf
+docs/E1-HR/*.md text eol=lf
+
+# Preserve E2 frozen contract and review/evidence serialization.
+docs/E2/*.json text eol=lf
+docs/E2/*.sha256 text eol=lf
+docs/E2/*.md text eol=lf
+
+# Preserve exact raw Windows CPU evidence bytes, including carriage returns.
+docs/E2/evidence/** -text -diff

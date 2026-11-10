@@ -1,0 +1,38 @@
+{
+  "gate": "HR-G1",
+  "approved": true,
+  "client_date": "2026-11-02",
+  "experiment": "E1-HR",
+  "resolution_wh": [
+    1344,
+    576
+  ],
+  "contract_id": "e1hr_numeric_contract_v1",
+  "contract_sha256": "e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d",
+  "authorized_tasks": [
+    "HR-T01",
+    "HR-T02",
+    "HR-T03",
+    "HR-T04",
+    "HR-T05",
+    "HR-T06",
+    "HR-T07",
+    "HR-T08",
+    "HR-T09",
+    "HR-T10"
+  ],
+  "execution_method": "native_task_by_task",
+  "method_provenance": "User explicitly authorizes task-by-task implementation using the reviewed plan; native inline execution follows executing-plans.",
+  "target_gpu_authorized": false,
+  "target_acceptance_authorized": false,
+  "HR_G2_approved": false,
+  "official_tuning_authorized": false,
+  "HR_G3a_approved": false,
+  "HR_G3b_approved": false,
+  "final_training_authorized": false,
+  "test_access_authorized": false,
+  "stop_after": "HR-T10 CPU/regression/deployment preparation; hand off for separate HR target-work authorization",
+  "approval_source": "Explicit user HR-G1 approval in this session for the exact contract digest and HR-T01 through HR-T10 only",
+  "approved_design_commit": "5367ba16923450037b445d9366df87e5d86ac389",
+  "provenance_policy": "Frozen contract preparation-reference hashes remain unchanged; subsequent status-document edits do not rewrite the approved contract."
+}

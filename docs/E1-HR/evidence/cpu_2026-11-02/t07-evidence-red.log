@@ -1,0 +1,28 @@
+...F...                                                                  [100%]
+================================== FAILURES ===================================
+___________ test_preflight_rejects_rehashed_e1_acceptance_evidence ____________
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...8a', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t07-evidence-red/test_preflight_rejects_rehashe0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001B048436150>
+
+    def test_preflight_rejects_rehashed_e1_acceptance_evidence(run_config,tmp_path,monkeypatch):
+        import src.e1hr.train as train
+        from src.e1hr.config import CONTRACT_SHA256,sha256_file
+        from src.e1hr.checkpoint import atomic_json
+        identity={'scientific_runtime':{'source':'fixture'},'audit':{'clean_git_commit':'a'*40}}
+        evidence=tmp_path/'evidence.json';atomic_json(evidence,{'status':'pass','kind':'e1_t10_gpu_smoke','identity':identity})
+        p=Path(run_config['paths']['acceptance_record'])
+        atomic_json(p,{'gate':'HR-G2','approved':True,'experiment':'E1-HR','resolution_wh':[1344,576],'contract_sha256':CONTRACT_SHA256,
+                      'identity':identity,'acceptance_evidence':str(evidence),'acceptance_evidence_sha256':sha256_file(evidence)})
+        atomic_json(Path(run_config['paths']['authorization_record']),{'gate':'HR-G3a','approved':True,'experiment':'E1-HR','resolution_wh':[1344,576],
+                   'contract_sha256':CONTRACT_SHA256,'acceptance_sha256':sha256_file(p),
+                   'run_ids':[f'e1hr-tuning-lr{lr:.8f}-seed1001' for lr in run_config['recipe']['campaign']['lr_candidates']]})
+        monkeypatch.setattr(train,'inspect_target_inputs',lambda c:identity)
+>       with pytest.raises(ValueError): train.preflight(run_config)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e1hr\test_runtime.py:72: Failed
+=========================== short test summary info ===========================
+FAILED tests/e1hr/test_runtime.py::test_preflight_rejects_rehashed_e1_acceptance_evidence
+1 failed, 6 passed in 1.30s

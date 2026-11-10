@@ -1,0 +1,508 @@
+FFF.FFFFF..F...FFF                                                       [100%]
+================================== FAILURES ===================================
+________ test_tuning_declarations_are_exactly_four_and_create_no_jobs _________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_tuning_declarations_are_e0')
+
+    def test_tuning_declarations_are_exactly_four_and_create_no_jobs(recipe, tmp_path):
+        from src.e2.campaign import plan_tuning, write_declarations
+        paths = {"data_root": str(tmp_path), "weights": str(tmp_path / "weights"), "runs_dir": str(tmp_path / "runs"), "acceptance_record": str(tmp_path / "g2.json"), "authorization_record": str(tmp_path / "g3a.json"), "evidence_root": str(tmp_path / "evidence"), "conformance_report": str(tmp_path / "conformance.json")}
+        declarations = plan_tuning(recipe, paths)
+>       assert [d["lr"] for d in declarations] == [2.5e-5, 5e-5, 1e-4, 2e-4]
+E       assert [] == [2.5e-05, 5e-....0001, 0.0002]
+E         
+E         Right contains 4 more items, first extra item: 2.5e-05
+E         Use -v to get more diff
+
+tests\e2\test_campaign.py:34: AssertionError
+_____ test_global_maximum_tie_is_order_independent_and_final_seeds_fresh ______
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_global_maximum_tie_is_ord0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002B0BB34BBD0>
+
+    def test_global_maximum_tie_is_order_independent_and_final_seeds_fresh(recipe, tmp_path, monkeypatch):
+        module, paths, records, mapped = install_trial_edge(monkeypatch, recipe, tmp_path)
+        selection = module.select_lr(recipe, records)
+>       assert selection["lr"] == 5e-5
+E       assert None == 5e-05
+
+tests\e2\test_campaign.py:47: AssertionError
+____________ test_missing_duplicate_or_extra_trials_stop_selection ____________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_missing_duplicate_or_extr0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002B0BB42A4D0>
+
+    def test_missing_duplicate_or_extra_trials_stop_selection(recipe, tmp_path, monkeypatch):
+        module, paths, records, mapped = install_trial_edge(monkeypatch, recipe, tmp_path)
+        for bad in [records[:3], records+[records[0]], [records[0]]*4]:
+>           with pytest.raises(ValueError):
+E           Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_campaign.py:66: Failed
+_ test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection[completed_epochs-7] _
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...c7bf1', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_forged_complete_prefix_or0')
+field = 'completed_epochs', value = 7
+
+    @pytest.mark.parametrize("field,value", [("completed_epochs", 7), ("validations", 7), ("optimizer_updates", 52497), ("seed", 2001)])
+    def test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection(run_config, tmp_path, field, value):
+        from src.e2.campaign import validate_completed_run
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import resolve_run, CONTRACT_SHA256
+        c = resolve_run(run_config["recipe"], stage="tuning", lr=1e-4, seed=1001,
+                        paths={**run_config["paths"], "runs_dir": str(tmp_path)})
+        folder = tmp_path / c["run_id"]
+        folder.mkdir()
+        atomic_json(folder / "config_resolved.json", c)
+        summary = {"kind": "official_e2_run_summary_v1", "status": "complete", "evidence_kind": "official_uit_slurm",
+                   "test_images_opened": 0, "contract_sha256": CONTRACT_SHA256, "identity": {}, "experiment": "E2", "views": c["views"],"representation_dimension":1536,"fusion":"global_then_mean_local","view_execution":"global_then_flattened_locals_batch_major", "budget": c["budget"],
+                   **{k: c[k] for k in ("run_id", "stage", "seed", "lr", "config_sha256")},
+                   "planned_epochs": 8, "completed_epochs": 8, "validations": 8, "optimizer_updates": 139992,
+                   "planned_optimizer_updates": 139992, "termination_reason": "eight_epoch_budget_complete"}
+        summary[field] = value
+        atomic_json(folder / "run_summary.json", summary)
+        with pytest.raises(ValueError, match="identity|budget"):
+>           validate_completed_run(folder)
+
+tests\e2\test_campaign.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+a = (WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_forged_complete_prefix_or0/e2-tuning-lr0.00010000-seed1001'),)
+k = {}
+
+>   def validate_completed_run(*a,**k):raise ValueError('Complete E2 evidence required')
+E   ValueError: Complete E2 evidence required
+
+src\e2\campaign.py:4: ValueError
+
+During handling of the above exception, another exception occurred:
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...c7bf1', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_forged_complete_prefix_or0')
+field = 'completed_epochs', value = 7
+
+    @pytest.mark.parametrize("field,value", [("completed_epochs", 7), ("validations", 7), ("optimizer_updates", 52497), ("seed", 2001)])
+    def test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection(run_config, tmp_path, field, value):
+        from src.e2.campaign import validate_completed_run
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import resolve_run, CONTRACT_SHA256
+        c = resolve_run(run_config["recipe"], stage="tuning", lr=1e-4, seed=1001,
+                        paths={**run_config["paths"], "runs_dir": str(tmp_path)})
+        folder = tmp_path / c["run_id"]
+        folder.mkdir()
+        atomic_json(folder / "config_resolved.json", c)
+        summary = {"kind": "official_e2_run_summary_v1", "status": "complete", "evidence_kind": "official_uit_slurm",
+                   "test_images_opened": 0, "contract_sha256": CONTRACT_SHA256, "identity": {}, "experiment": "E2", "views": c["views"],"representation_dimension":1536,"fusion":"global_then_mean_local","view_execution":"global_then_flattened_locals_batch_major", "budget": c["budget"],
+                   **{k: c[k] for k in ("run_id", "stage", "seed", "lr", "config_sha256")},
+                   "planned_epochs": 8, "completed_epochs": 8, "validations": 8, "optimizer_updates": 139992,
+                   "planned_optimizer_updates": 139992, "termination_reason": "eight_epoch_budget_complete"}
+        summary[field] = value
+        atomic_json(folder / "run_summary.json", summary)
+>       with pytest.raises(ValueError, match="identity|budget"):
+E       AssertionError: Regex pattern did not match.
+E        Regex: 'identity|budget'
+E        Input: 'Complete E2 evidence required'
+
+tests\e2\test_campaign.py:96: AssertionError
+_ test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection[validations-7] _
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...7602c', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_forged_complete_prefix_or1')
+field = 'validations', value = 7
+
+    @pytest.mark.parametrize("field,value", [("completed_epochs", 7), ("validations", 7), ("optimizer_updates", 52497), ("seed", 2001)])
+    def test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection(run_config, tmp_path, field, value):
+        from src.e2.campaign import validate_completed_run
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import resolve_run, CONTRACT_SHA256
+        c = resolve_run(run_config["recipe"], stage="tuning", lr=1e-4, seed=1001,
+                        paths={**run_config["paths"], "runs_dir": str(tmp_path)})
+        folder = tmp_path / c["run_id"]
+        folder.mkdir()
+        atomic_json(folder / "config_resolved.json", c)
+        summary = {"kind": "official_e2_run_summary_v1", "status": "complete", "evidence_kind": "official_uit_slurm",
+                   "test_images_opened": 0, "contract_sha256": CONTRACT_SHA256, "identity": {}, "experiment": "E2", "views": c["views"],"representation_dimension":1536,"fusion":"global_then_mean_local","view_execution":"global_then_flattened_locals_batch_major", "budget": c["budget"],
+                   **{k: c[k] for k in ("run_id", "stage", "seed", "lr", "config_sha256")},
+                   "planned_epochs": 8, "completed_epochs": 8, "validations": 8, "optimizer_updates": 139992,
+                   "planned_optimizer_updates": 139992, "termination_reason": "eight_epoch_budget_complete"}
+        summary[field] = value
+        atomic_json(folder / "run_summary.json", summary)
+        with pytest.raises(ValueError, match="identity|budget"):
+>           validate_completed_run(folder)
+
+tests\e2\test_campaign.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+a = (WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_forged_complete_prefix_or1/e2-tuning-lr0.00010000-seed1001'),)
+k = {}
+
+>   def validate_completed_run(*a,**k):raise ValueError('Complete E2 evidence required')
+E   ValueError: Complete E2 evidence required
+
+src\e2\campaign.py:4: ValueError
+
+During handling of the above exception, another exception occurred:
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...7602c', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_forged_complete_prefix_or1')
+field = 'validations', value = 7
+
+    @pytest.mark.parametrize("field,value", [("completed_epochs", 7), ("validations", 7), ("optimizer_updates", 52497), ("seed", 2001)])
+    def test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection(run_config, tmp_path, field, value):
+        from src.e2.campaign import validate_completed_run
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import resolve_run, CONTRACT_SHA256
+        c = resolve_run(run_config["recipe"], stage="tuning", lr=1e-4, seed=1001,
+                        paths={**run_config["paths"], "runs_dir": str(tmp_path)})
+        folder = tmp_path / c["run_id"]
+        folder.mkdir()
+        atomic_json(folder / "config_resolved.json", c)
+        summary = {"kind": "official_e2_run_summary_v1", "status": "complete", "evidence_kind": "official_uit_slurm",
+                   "test_images_opened": 0, "contract_sha256": CONTRACT_SHA256, "identity": {}, "experiment": "E2", "views": c["views"],"representation_dimension":1536,"fusion":"global_then_mean_local","view_execution":"global_then_flattened_locals_batch_major", "budget": c["budget"],
+                   **{k: c[k] for k in ("run_id", "stage", "seed", "lr", "config_sha256")},
+                   "planned_epochs": 8, "completed_epochs": 8, "validations": 8, "optimizer_updates": 139992,
+                   "planned_optimizer_updates": 139992, "termination_reason": "eight_epoch_budget_complete"}
+        summary[field] = value
+        atomic_json(folder / "run_summary.json", summary)
+>       with pytest.raises(ValueError, match="identity|budget"):
+E       AssertionError: Regex pattern did not match.
+E        Regex: 'identity|budget'
+E        Input: 'Complete E2 evidence required'
+
+tests\e2\test_campaign.py:96: AssertionError
+_ test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection[optimizer_updates-52497] _
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...c97f6', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_forged_complete_prefix_or2')
+field = 'optimizer_updates', value = 52497
+
+    @pytest.mark.parametrize("field,value", [("completed_epochs", 7), ("validations", 7), ("optimizer_updates", 52497), ("seed", 2001)])
+    def test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection(run_config, tmp_path, field, value):
+        from src.e2.campaign import validate_completed_run
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import resolve_run, CONTRACT_SHA256
+        c = resolve_run(run_config["recipe"], stage="tuning", lr=1e-4, seed=1001,
+                        paths={**run_config["paths"], "runs_dir": str(tmp_path)})
+        folder = tmp_path / c["run_id"]
+        folder.mkdir()
+        atomic_json(folder / "config_resolved.json", c)
+        summary = {"kind": "official_e2_run_summary_v1", "status": "complete", "evidence_kind": "official_uit_slurm",
+                   "test_images_opened": 0, "contract_sha256": CONTRACT_SHA256, "identity": {}, "experiment": "E2", "views": c["views"],"representation_dimension":1536,"fusion":"global_then_mean_local","view_execution":"global_then_flattened_locals_batch_major", "budget": c["budget"],
+                   **{k: c[k] for k in ("run_id", "stage", "seed", "lr", "config_sha256")},
+                   "planned_epochs": 8, "completed_epochs": 8, "validations": 8, "optimizer_updates": 139992,
+                   "planned_optimizer_updates": 139992, "termination_reason": "eight_epoch_budget_complete"}
+        summary[field] = value
+        atomic_json(folder / "run_summary.json", summary)
+        with pytest.raises(ValueError, match="identity|budget"):
+>           validate_completed_run(folder)
+
+tests\e2\test_campaign.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+a = (WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_forged_complete_prefix_or2/e2-tuning-lr0.00010000-seed1001'),)
+k = {}
+
+>   def validate_completed_run(*a,**k):raise ValueError('Complete E2 evidence required')
+E   ValueError: Complete E2 evidence required
+
+src\e2\campaign.py:4: ValueError
+
+During handling of the above exception, another exception occurred:
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...c97f6', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_forged_complete_prefix_or2')
+field = 'optimizer_updates', value = 52497
+
+    @pytest.mark.parametrize("field,value", [("completed_epochs", 7), ("validations", 7), ("optimizer_updates", 52497), ("seed", 2001)])
+    def test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection(run_config, tmp_path, field, value):
+        from src.e2.campaign import validate_completed_run
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import resolve_run, CONTRACT_SHA256
+        c = resolve_run(run_config["recipe"], stage="tuning", lr=1e-4, seed=1001,
+                        paths={**run_config["paths"], "runs_dir": str(tmp_path)})
+        folder = tmp_path / c["run_id"]
+        folder.mkdir()
+        atomic_json(folder / "config_resolved.json", c)
+        summary = {"kind": "official_e2_run_summary_v1", "status": "complete", "evidence_kind": "official_uit_slurm",
+                   "test_images_opened": 0, "contract_sha256": CONTRACT_SHA256, "identity": {}, "experiment": "E2", "views": c["views"],"representation_dimension":1536,"fusion":"global_then_mean_local","view_execution":"global_then_flattened_locals_batch_major", "budget": c["budget"],
+                   **{k: c[k] for k in ("run_id", "stage", "seed", "lr", "config_sha256")},
+                   "planned_epochs": 8, "completed_epochs": 8, "validations": 8, "optimizer_updates": 139992,
+                   "planned_optimizer_updates": 139992, "termination_reason": "eight_epoch_budget_complete"}
+        summary[field] = value
+        atomic_json(folder / "run_summary.json", summary)
+>       with pytest.raises(ValueError, match="identity|budget"):
+E       AssertionError: Regex pattern did not match.
+E        Regex: 'identity|budget'
+E        Input: 'Complete E2 evidence required'
+
+tests\e2\test_campaign.py:96: AssertionError
+_ test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection[seed-2001] _
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...afdde', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_forged_complete_prefix_or3')
+field = 'seed', value = 2001
+
+    @pytest.mark.parametrize("field,value", [("completed_epochs", 7), ("validations", 7), ("optimizer_updates", 52497), ("seed", 2001)])
+    def test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection(run_config, tmp_path, field, value):
+        from src.e2.campaign import validate_completed_run
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import resolve_run, CONTRACT_SHA256
+        c = resolve_run(run_config["recipe"], stage="tuning", lr=1e-4, seed=1001,
+                        paths={**run_config["paths"], "runs_dir": str(tmp_path)})
+        folder = tmp_path / c["run_id"]
+        folder.mkdir()
+        atomic_json(folder / "config_resolved.json", c)
+        summary = {"kind": "official_e2_run_summary_v1", "status": "complete", "evidence_kind": "official_uit_slurm",
+                   "test_images_opened": 0, "contract_sha256": CONTRACT_SHA256, "identity": {}, "experiment": "E2", "views": c["views"],"representation_dimension":1536,"fusion":"global_then_mean_local","view_execution":"global_then_flattened_locals_batch_major", "budget": c["budget"],
+                   **{k: c[k] for k in ("run_id", "stage", "seed", "lr", "config_sha256")},
+                   "planned_epochs": 8, "completed_epochs": 8, "validations": 8, "optimizer_updates": 139992,
+                   "planned_optimizer_updates": 139992, "termination_reason": "eight_epoch_budget_complete"}
+        summary[field] = value
+        atomic_json(folder / "run_summary.json", summary)
+        with pytest.raises(ValueError, match="identity|budget"):
+>           validate_completed_run(folder)
+
+tests\e2\test_campaign.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+a = (WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_forged_complete_prefix_or3/e2-tuning-lr0.00010000-seed1001'),)
+k = {}
+
+>   def validate_completed_run(*a,**k):raise ValueError('Complete E2 evidence required')
+E   ValueError: Complete E2 evidence required
+
+src\e2\campaign.py:4: ValueError
+
+During handling of the above exception, another exception occurred:
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...afdde', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_forged_complete_prefix_or3')
+field = 'seed', value = 2001
+
+    @pytest.mark.parametrize("field,value", [("completed_epochs", 7), ("validations", 7), ("optimizer_updates", 52497), ("seed", 2001)])
+    def test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection(run_config, tmp_path, field, value):
+        from src.e2.campaign import validate_completed_run
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import resolve_run, CONTRACT_SHA256
+        c = resolve_run(run_config["recipe"], stage="tuning", lr=1e-4, seed=1001,
+                        paths={**run_config["paths"], "runs_dir": str(tmp_path)})
+        folder = tmp_path / c["run_id"]
+        folder.mkdir()
+        atomic_json(folder / "config_resolved.json", c)
+        summary = {"kind": "official_e2_run_summary_v1", "status": "complete", "evidence_kind": "official_uit_slurm",
+                   "test_images_opened": 0, "contract_sha256": CONTRACT_SHA256, "identity": {}, "experiment": "E2", "views": c["views"],"representation_dimension":1536,"fusion":"global_then_mean_local","view_execution":"global_then_flattened_locals_batch_major", "budget": c["budget"],
+                   **{k: c[k] for k in ("run_id", "stage", "seed", "lr", "config_sha256")},
+                   "planned_epochs": 8, "completed_epochs": 8, "validations": 8, "optimizer_updates": 139992,
+                   "planned_optimizer_updates": 139992, "termination_reason": "eight_epoch_budget_complete"}
+        summary[field] = value
+        atomic_json(folder / "run_summary.json", summary)
+>       with pytest.raises(ValueError, match="identity|budget"):
+E       AssertionError: Regex pattern did not match.
+E        Regex: 'identity|budget'
+E        Input: 'Complete E2 evidence required'
+
+tests\e2\test_campaign.py:96: AssertionError
+____________________ test_full_parser_and_locked_selection ____________________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+completed_trials = [WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_full_parser_and_locked_se0/simulate.../GeoLocation/.tools/e2/pytest-t08-red/test_full_parser_and_locked_se0/simulated-runs/e2-tuning-lr0.00020000-seed1001')]
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_full_parser_and_locked_se0')
+
+    def test_full_parser_and_locked_selection(recipe,completed_trials,tmp_path):
+        from src.e2.campaign import validate_completed_run,select_lr,write_selection,read_selection
+>       for folder in completed_trials: assert validate_completed_run(folder)['summary']['completed_epochs']==8
+
+tests\e2\test_artifacts.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+a = (WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_full_parser_and_locked_se0/simulated-runs/e2-tuning-lr0.00002500-seed1001'),)
+k = {}
+
+>   def validate_completed_run(*a,**k):raise ValueError('Complete E2 evidence required')
+E   ValueError: Complete E2 evidence required
+
+src\e2\campaign.py:4: ValueError
+____________ test_docs_only_commit_audit_is_not_campaign_identity _____________
+
+completed_trials = [WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_docs_only_commit_audit_is0/simulate.../GeoLocation/.tools/e2/pytest-t08-red/test_docs_only_commit_audit_is0/simulated-runs/e2-tuning-lr0.00020000-seed1001')]
+
+    def test_docs_only_commit_audit_is_not_campaign_identity(completed_trials):
+        from src.e2.campaign import validate_completed_run
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import read_json
+        folder=completed_trials[0];summary=read_json(folder/'run_summary.json')
+        summary['identity']['audit']['clean_git_commit']='b'*40;atomic_json(folder/'run_summary.json',summary)
+>       assert validate_completed_run(folder)['summary']['completed_epochs']==8
+
+tests\e2\test_artifacts.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+a = (WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_docs_only_commit_audit_is0/simulated-runs/e2-tuning-lr0.00002500-seed1001'),)
+k = {}
+
+>   def validate_completed_run(*a,**k):raise ValueError('Complete E2 evidence required')
+E   ValueError: Complete E2 evidence required
+
+src\e2\campaign.py:4: ValueError
+_ test_prior_uninitialized_or_interrupted_attempt_is_auditable[failed_preflight] _
+
+completed_trials = [WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_prior_uninitialized_or_in0/simulate.../GeoLocation/.tools/e2/pytest-t08-red/test_prior_uninitialized_or_in0/simulated-runs/e2-tuning-lr0.00020000-seed1001')]
+status = 'failed_preflight'
+
+    @pytest.mark.parametrize('status',['failed_preflight','abandoned_request','abandoned_outcome'])
+    def test_prior_uninitialized_or_interrupted_attempt_is_auditable(completed_trials,status):
+        from src.e2.campaign import validate_completed_run
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import read_json,sha256_file
+        from src.e2.train import read_attempt_metadata
+        folder=completed_trials[0];config=read_json(folder/'config_resolved.json')
+        earlier=folder/'attempts/000000';earlier.mkdir()
+        binding={k:config[k] for k in ('run_id','config_sha256','contract_sha256')}
+        atomic_json(earlier/'request.json',binding)
+        prefix=[]
+        if status=='failed_preflight':
+            atomic_json(earlier/'outcome.json',{'status':'failed','last_committed_epoch':None,'last_committed_updates':None})
+            prefix=[{'event':'created','attempt_id':'000000'},{'event':'failure','attempt_id':'000000'}]
+        else:
+            if status=='abandoned_request':
+                (earlier/'request.json').write_text('{')
+            else:
+                atomic_json(earlier/'environment.json',{'observed_allocation':'synthetic'})
+                atomic_json(earlier/'start_boundary.json',{'completed_epoch':0,'updates':0})
+                (earlier/'outcome.json').write_text('{')
+                prefix=[{'event':'created','attempt_id':'000000'},
+                        {'event':'attempt_environment','attempt_id':'000000','environment_path':'attempts/000000/environment.json',
+                         'environment_sha256':sha256_file(earlier/'environment.json')},
+                        {'event':'attempt_boundary','attempt_id':'000000','completed_epoch':0,'updates':0}]
+            records={name:read_attempt_metadata(earlier/name) for name in
+                     ('request.json','environment.json','start_boundary.json','outcome.json')}
+            issues={name:record[1] for name,record in records.items() if record[1] is not None}
+            atomic_json(earlier/'abandoned.json',{**binding,'status':'terminated_without_outcome','metadata_issues':issues})
+            prefix.append({'event':'attempt_abandoned','attempt_id':'000000','metadata_issues':issues})
+        atomic_json(folder/'events.json',prefix+read_json(folder/'events.json'))
+>       assert validate_completed_run(folder)['summary']['completed_epochs']==8
+
+tests\e2\test_artifacts.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+a = (WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_prior_uninitialized_or_in0/simulated-runs/e2-tuning-lr0.00002500-seed1001'),)
+k = {}
+
+>   def validate_completed_run(*a,**k):raise ValueError('Complete E2 evidence required')
+E   ValueError: Complete E2 evidence required
+
+src\e2\campaign.py:4: ValueError
+_ test_prior_uninitialized_or_interrupted_attempt_is_auditable[abandoned_request] _
+
+completed_trials = [WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_prior_uninitialized_or_in1/simulate.../GeoLocation/.tools/e2/pytest-t08-red/test_prior_uninitialized_or_in1/simulated-runs/e2-tuning-lr0.00020000-seed1001')]
+status = 'abandoned_request'
+
+    @pytest.mark.parametrize('status',['failed_preflight','abandoned_request','abandoned_outcome'])
+    def test_prior_uninitialized_or_interrupted_attempt_is_auditable(completed_trials,status):
+        from src.e2.campaign import validate_completed_run
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import read_json,sha256_file
+        from src.e2.train import read_attempt_metadata
+        folder=completed_trials[0];config=read_json(folder/'config_resolved.json')
+        earlier=folder/'attempts/000000';earlier.mkdir()
+        binding={k:config[k] for k in ('run_id','config_sha256','contract_sha256')}
+        atomic_json(earlier/'request.json',binding)
+        prefix=[]
+        if status=='failed_preflight':
+            atomic_json(earlier/'outcome.json',{'status':'failed','last_committed_epoch':None,'last_committed_updates':None})
+            prefix=[{'event':'created','attempt_id':'000000'},{'event':'failure','attempt_id':'000000'}]
+        else:
+            if status=='abandoned_request':
+                (earlier/'request.json').write_text('{')
+            else:
+                atomic_json(earlier/'environment.json',{'observed_allocation':'synthetic'})
+                atomic_json(earlier/'start_boundary.json',{'completed_epoch':0,'updates':0})
+                (earlier/'outcome.json').write_text('{')
+                prefix=[{'event':'created','attempt_id':'000000'},
+                        {'event':'attempt_environment','attempt_id':'000000','environment_path':'attempts/000000/environment.json',
+                         'environment_sha256':sha256_file(earlier/'environment.json')},
+                        {'event':'attempt_boundary','attempt_id':'000000','completed_epoch':0,'updates':0}]
+            records={name:read_attempt_metadata(earlier/name) for name in
+                     ('request.json','environment.json','start_boundary.json','outcome.json')}
+            issues={name:record[1] for name,record in records.items() if record[1] is not None}
+            atomic_json(earlier/'abandoned.json',{**binding,'status':'terminated_without_outcome','metadata_issues':issues})
+            prefix.append({'event':'attempt_abandoned','attempt_id':'000000','metadata_issues':issues})
+        atomic_json(folder/'events.json',prefix+read_json(folder/'events.json'))
+>       assert validate_completed_run(folder)['summary']['completed_epochs']==8
+
+tests\e2\test_artifacts.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+a = (WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_prior_uninitialized_or_in1/simulated-runs/e2-tuning-lr0.00002500-seed1001'),)
+k = {}
+
+>   def validate_completed_run(*a,**k):raise ValueError('Complete E2 evidence required')
+E   ValueError: Complete E2 evidence required
+
+src\e2\campaign.py:4: ValueError
+_ test_prior_uninitialized_or_interrupted_attempt_is_auditable[abandoned_outcome] _
+
+completed_trials = [WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_prior_uninitialized_or_in2/simulate.../GeoLocation/.tools/e2/pytest-t08-red/test_prior_uninitialized_or_in2/simulated-runs/e2-tuning-lr0.00020000-seed1001')]
+status = 'abandoned_outcome'
+
+    @pytest.mark.parametrize('status',['failed_preflight','abandoned_request','abandoned_outcome'])
+    def test_prior_uninitialized_or_interrupted_attempt_is_auditable(completed_trials,status):
+        from src.e2.campaign import validate_completed_run
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import read_json,sha256_file
+        from src.e2.train import read_attempt_metadata
+        folder=completed_trials[0];config=read_json(folder/'config_resolved.json')
+        earlier=folder/'attempts/000000';earlier.mkdir()
+        binding={k:config[k] for k in ('run_id','config_sha256','contract_sha256')}
+        atomic_json(earlier/'request.json',binding)
+        prefix=[]
+        if status=='failed_preflight':
+            atomic_json(earlier/'outcome.json',{'status':'failed','last_committed_epoch':None,'last_committed_updates':None})
+            prefix=[{'event':'created','attempt_id':'000000'},{'event':'failure','attempt_id':'000000'}]
+        else:
+            if status=='abandoned_request':
+                (earlier/'request.json').write_text('{')
+            else:
+                atomic_json(earlier/'environment.json',{'observed_allocation':'synthetic'})
+                atomic_json(earlier/'start_boundary.json',{'completed_epoch':0,'updates':0})
+                (earlier/'outcome.json').write_text('{')
+                prefix=[{'event':'created','attempt_id':'000000'},
+                        {'event':'attempt_environment','attempt_id':'000000','environment_path':'attempts/000000/environment.json',
+                         'environment_sha256':sha256_file(earlier/'environment.json')},
+                        {'event':'attempt_boundary','attempt_id':'000000','completed_epoch':0,'updates':0}]
+            records={name:read_attempt_metadata(earlier/name) for name in
+                     ('request.json','environment.json','start_boundary.json','outcome.json')}
+            issues={name:record[1] for name,record in records.items() if record[1] is not None}
+            atomic_json(earlier/'abandoned.json',{**binding,'status':'terminated_without_outcome','metadata_issues':issues})
+            prefix.append({'event':'attempt_abandoned','attempt_id':'000000','metadata_issues':issues})
+        atomic_json(folder/'events.json',prefix+read_json(folder/'events.json'))
+>       assert validate_completed_run(folder)['summary']['completed_epochs']==8
+
+tests\e2\test_artifacts.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+a = (WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-red/test_prior_uninitialized_or_in2/simulated-runs/e2-tuning-lr0.00002500-seed1001'),)
+k = {}
+
+>   def validate_completed_run(*a,**k):raise ValueError('Complete E2 evidence required')
+E   ValueError: Complete E2 evidence required
+
+src\e2\campaign.py:4: ValueError
+=========================== short test summary info ===========================
+FAILED tests/e2/test_campaign.py::test_tuning_declarations_are_exactly_four_and_create_no_jobs
+FAILED tests/e2/test_campaign.py::test_global_maximum_tie_is_order_independent_and_final_seeds_fresh
+FAILED tests/e2/test_campaign.py::test_missing_duplicate_or_extra_trials_stop_selection
+FAILED tests/e2/test_campaign.py::test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection[completed_epochs-7]
+FAILED tests/e2/test_campaign.py::test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection[validations-7]
+FAILED tests/e2/test_campaign.py::test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection[optimizer_updates-52497]
+FAILED tests/e2/test_campaign.py::test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection[seed-2001]
+FAILED tests/e2/test_artifacts.py::test_full_parser_and_locked_selection - Va...
+FAILED tests/e2/test_artifacts.py::test_docs_only_commit_audit_is_not_campaign_identity
+FAILED tests/e2/test_artifacts.py::test_prior_uninitialized_or_interrupted_attempt_is_auditable[failed_preflight]
+FAILED tests/e2/test_artifacts.py::test_prior_uninitialized_or_interrupted_attempt_is_auditable[abandoned_request]
+FAILED tests/e2/test_artifacts.py::test_prior_uninitialized_or_interrupted_attempt_is_auditable[abandoned_outcome]
+12 failed, 6 passed in 12.75s

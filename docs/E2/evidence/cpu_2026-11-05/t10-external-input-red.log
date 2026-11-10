@@ -1,0 +1,42 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_________ test_comparison_does_not_require_repository_aggregate_files _________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t10-external-input-red/test_comparison_does_not_requi0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002674396B950>
+
+    def test_comparison_does_not_require_repository_aggregate_files(recipe,tmp_path,monkeypatch):
+        import src.e2.report
+        import src.e2.config as config
+        monkeypatch.setattr(config,'ROOT',tmp_path/'checkout_without_reports')
+>       test_comparator_artifacts_are_explicit_hash_bound_inputs(recipe,tmp_path,monkeypatch)
+
+tests\e2\test_report.py:158: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\e2\test_report.py:133: in test_comparator_artifacts_are_explicit_hash_bound_inputs
+    before=[sha256_file(p) for p in (e1,hr)]
+tests\e2\test_report.py:133: in <listcomp>
+    before=[sha256_file(p) for p in (e1,hr)]
+src\e2\config.py:18: in sha256_file
+    with Path(path).open("rb") as stream:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t10-external-input-red/test_comparison_does_not_requi0/checkout_without_reports/src/e1/e1_three_seed_validation_report_v1.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e2\\pytest-t10-external-input-red\\test_comparison_does_not_requi0\\checkout_without_reports\\src\\e1\\e1_three_seed_validation_report_v1.json'
+
+.tools\python\cpython-3.11-windows-x86_64-none\Lib\pathlib.py:1044: FileNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/e2/test_report.py::test_comparison_does_not_require_repository_aggregate_files
+1 failed, 6 deselected in 1.75s

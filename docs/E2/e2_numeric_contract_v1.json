@@ -1,0 +1,1855 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "e2_numeric_contract_v1",
+  "client_date": "2026-11-05",
+  "artifact_role": "complete_numeric_training_contract_candidate_for_E2_G1_review",
+  "status": "CANDIDATE_NOT_FROZEN_NOT_EXECUTION_AUTHORIZATION",
+  "scope": {
+    "experiment": "E2",
+    "scientific_question": "Does one shared ConvNeXt-Tiny encoder combining global context with four deterministic local views improve country/territory classification on the same fixed benchmark?",
+    "implementation_package": "src/e2/",
+    "test_package": "tests/e2/",
+    "python_module_prefix": "src.e2",
+    "scientific_authority": "Current corrected docs/E2/specs.md, plan.md and tasks.md explicitly approved at E2-G0 for E2-T00b preparation only",
+    "inheritance_references": [
+      {
+        "path": "docs/E1/e1_numeric_contract_v1.json",
+        "sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143",
+        "role": "Frozen common numerical controls; R1-R9 and completed baseline methodology",
+        "modifiable": false
+      },
+      {
+        "path": "docs/E1-HR/e1hr_numeric_contract_v1.json",
+        "sha256": "e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d",
+        "role": "Stage isolation, consumed-source identity, approval and completed-epoch recovery conventions; no E2 execution authority",
+        "modifiable": false
+      }
+    ],
+    "architecture_changes_from_e1": [
+      "Four deterministic local views in addition to unchanged 896x384 global input",
+      "One shared parameter set with global-first then batch-major flattened-local execution",
+      "Per-view final LayerNorm before arithmetic local mean",
+      "Concatenate global first and local mean second to 1536 dimensions",
+      "Linear(1536,124,bias=True), fan-in 1536 initialization"
+    ],
+    "bounded_reuse": {
+      "unchanged_runtime_symbols": {
+        "src.e1.engine": [
+          "UpdateScheduler",
+          "select_checkpoint",
+          "NumericalFailure"
+        ],
+        "src.e1.metrics": [
+          "Metrics124",
+          "rank_logits"
+        ]
+      },
+      "frozen_preprocessor": "src.preprocessing.geoguessr_v1.Preprocessor",
+      "e2_owned": [
+        "Configuration/declaration and acceptance-request validation",
+        "Fixed-manifest and five-view data/loaders/transfer",
+        "Model/optimizer construction",
+        "Multi-view train/evaluate loops",
+        "Checkpoint envelopes and shared state primitives",
+        "Runtime and source-closure checks",
+        "One-run/attempt lifecycle",
+        "Campaign/selection validation",
+        "Selected validation reports and comparisons"
+      ],
+      "forbidden": [
+        "Re-export single-tensor E1/E1-HR train_epoch/evaluate for E2",
+        "Use E1/E1-HR validators as E2 validators or monkeypatch their production globals",
+        "Runtime imports from src.pilot",
+        "Modify completed E1/E1-HR scientific files or frozen preprocessing",
+        "Generic permanent training framework"
+      ]
+    },
+    "excluded_work": [
+      "Separate encoders",
+      "Random/content-adaptive crops or crop rejection",
+      "Alternative local counts/resolutions/geometry",
+      "Local positional embeddings",
+      "Weighted/learned fusion",
+      "Extra normalization/projection/fusion MLP/attention",
+      "Auxiliary local heads/losses",
+      "Balancing/class weights",
+      "Strong augmentation",
+      "LLRD or classifier-only phase",
+      "Extra LR candidates/seeds",
+      "P1-v2 or a new optimization pilot",
+      "E3 caching/head reset/retraining/cRT or numeric protocol",
+      "Test images/evaluator/test-derived selection"
+    ],
+    "comparative_interpretation": {
+      "primary": "E1, same global 896x384 input; E2 also changes head capacity and encoder computation",
+      "contextual": "E1-HR, higher-resolution global-only context; does not isolate local views or resolution",
+      "attribute_gain_exclusively_to_local_detail_head_capacity_or_compute": false,
+      "compute_matching_required": false,
+      "new_single_winner_metric": false,
+      "minimum_improvement_threshold": false,
+      "outperformance_required_for_valid_completion": false
+    }
+  },
+  "views": {
+    "global_wh": [
+      896,
+      384
+    ],
+    "local_wh": [
+      320,
+      320
+    ],
+    "local_count": 4,
+    "local_order": [
+      "left",
+      "middle_left",
+      "middle_right",
+      "right_raised"
+    ],
+    "per_image_global_chw": [
+      3,
+      384,
+      896
+    ],
+    "per_image_local_kchw": [
+      4,
+      3,
+      320,
+      320
+    ],
+    "source": "One footer-cropped, scene-jittered, UI-mean-filled raw float32 tensor per original image; construct all views before normalization",
+    "local_rectangles_authority": "configs/preprocessing/geoguessr_v1.json: layouts.<decoded_raw_wh>.local_crops_xywh; exact frozen config, not a second coordinate implementation",
+    "fusion": "global_then_mean_local",
+    "representation_dimension": 1536,
+    "encoder_feature_dimension": 768,
+    "view_execution": "global_then_flattened_locals_batch_major",
+    "encoder_calls_per_microbatch": 2,
+    "local_batch_order": "Image 0 config-ordered crops 0..3, then image 1 crops 0..3, and so on",
+    "full_microbatch_shapes": {
+      "global": [
+        2,
+        3,
+        384,
+        896
+      ],
+      "local": [
+        2,
+        4,
+        3,
+        320,
+        320
+      ],
+      "local_encoder_input": [
+        8,
+        3,
+        320,
+        320
+      ],
+      "fused": [
+        2,
+        1536
+      ],
+      "logits": [
+        2,
+        124
+      ]
+    },
+    "tail_microbatch_shapes": {
+      "global": [
+        1,
+        3,
+        384,
+        896
+      ],
+      "local": [
+        1,
+        4,
+        3,
+        320,
+        320
+      ],
+      "local_encoder_input": [
+        4,
+        3,
+        320,
+        320
+      ],
+      "fused": [
+        1,
+        1536
+      ],
+      "logits": [
+        1,
+        124
+      ]
+    }
+  },
+  "data": {
+    "split_version": "baseline124-v1",
+    "artifacts_directory": "artifacts/baseline124",
+    "source_repository": "https://github.com/HiimRaccoon/cs406-geoguessr",
+    "source_commit": "33cb29d72974f1677efab0f56ed92360e5a9f712",
+    "artifacts": {
+      "manifest.csv": {
+        "bytes": 7519661,
+        "sha256": "9cbd8b70e8522b5aa4a20fba4fa7b2ecea855cf377f98e41ebb162a07f8a8040",
+        "source_git_blob_sha": "1aff247439aadcc88e2c47cd54051a0da9219442"
+      },
+      "summary.json": {
+        "bytes": 994,
+        "sha256": "cf3dcf909aefd17c531cd115d6c30e54bbeb3dbd13962f974317ccde8a2f3e4b",
+        "source_git_blob_sha": "0f0b628d441c8af20d50e3dcf77c18ca31e37b0e"
+      },
+      "labels.json": {
+        "bytes": 1927,
+        "sha256": "5f7e8f5810e9ac8c43c1c22b2e4febe2e7a6174629b9031d3e943fce511832aa",
+        "source_git_blob_sha": "386afe34c64087123f160c564a8095af6e47058a"
+      },
+      "class_support.csv": {
+        "bytes": 6308,
+        "sha256": "ff46f4074464644f573b4ca64eb61320a61a8cc3daed3a3886a350cbc3c6fb75",
+        "source_git_blob_sha": "43c8d6dec70742d592990057ab66e66bec0c345d"
+      }
+    },
+    "split_counts": {
+      "train": 34997,
+      "val": 7497,
+      "test": 7502
+    },
+    "supported_labels": {
+      "train": 124,
+      "val": 106,
+      "test": 111
+    },
+    "num_output_labels": 124,
+    "label_id_definition": "Index in the immutable labels.json ordered list, 0 through 123",
+    "historical_split_seed": 406,
+    "regenerate_membership": false,
+    "reorder_labels": false,
+    "image_access": {
+      "allowed_splits": [
+        "train",
+        "val"
+      ],
+      "test": "Metadata only; reject every test-image access before opening files throughout all E2 stages",
+      "invalid_samples": "fail and record; never skip or replace",
+      "path_policy": "Resolve manifest-relative paths inside configured dataset root; reject escapes and label mismatches"
+    },
+    "audit": {
+      "train_images": 34997,
+      "validation_images": 7497,
+      "test_images": 0,
+      "policy": "Current full 34997-train/7497-val byte-hash and root-containment audit plus preprocessing conformance for actual root/content/packages before model allocation. Keep data immutable; refresh integrity in official preflight and repeat relevant conformance when root/content/packages change. E1/E1-HR/pilot evidence alone cannot replace E2 acceptance."
+    },
+    "raw_images": 49997,
+    "unique_fixed_images": 49996,
+    "removed_byte_duplicates": 1,
+    "geographic_panorama_independence_verified": false
+  },
+  "preprocessing": {
+    "id": "geoguessr-ui-global-local-v1",
+    "config_path": "configs/preprocessing/geoguessr_v1.json",
+    "config_sha256": "4f49dd41738168cfc65d4322fbe1b659ef5595229bb487ad86dd671a26a8903f",
+    "implementation_path": "src/preprocessing/geoguessr_v1.py",
+    "implementation_sha256": "4d1dea328f69c1c7e1fa4f333c7276de0c3bc81b322db40dc33530969357e666",
+    "reuse_unchanged": true,
+    "view": "global_and_four_locals",
+    "output_wh": [
+      896,
+      384
+    ],
+    "output_chw": [
+      3,
+      384,
+      896
+    ],
+    "raw_layouts_wh": [
+      [
+        1536,
+        662
+      ],
+      [
+        1030,
+        703
+      ]
+    ],
+    "footer_crop_bottom_px": 14,
+    "geometry_ui_and_resize_authority": "Use frozen config/module unchanged, including per-layout integer local_crops_xywh. Never recompute rectangles from relative centers, rescale templates, crop resized global/padded canvas, requantize through uint8, re-mask resized boundaries, or substitute weights.transforms()/PIL/System.Drawing resize.",
+    "arithmetic": {
+      "device": "cpu",
+      "dtype": "float32",
+      "input_range": [
+        0,
+        1
+      ],
+      "resize": "tensor bilinear",
+      "antialias": true,
+      "rounding": "floor(value+0.5)",
+      "fill": "exact float32 ImageNet mean",
+      "normalization_mean": [
+        0.485,
+        0.456,
+        0.406
+      ],
+      "normalization_std": [
+        0.229,
+        0.224,
+        0.225
+      ],
+      "inplace": false,
+      "letterbox": "scale=min(target_w/source_w,target_h/source_h); content_w=min(target_w,max(1,floor(source_w*scale+0.5))); content_h analogously; left=(target_w-content_w)//2, top=(target_h-content_h)//2; remainder right/bottom; pad after resize; normalize last",
+      "pil_to_tensor": "torchvision.transforms.functional.pil_to_tensor(rgb).to(torch.float32).div(255.0)",
+      "max_size": null,
+      "intermediate_uint8_requantization": false,
+      "post_resize_mask_reapplication": false,
+      "edge_policy": "Preserve antialiased scene/UI boundaries; exact float32 ImageNet-mean fill before normalization; never rounded uint8 colors"
+    },
+    "augmentation": {
+      "train_enabled": true,
+      "brightness_amplitude": 0.1,
+      "contrast_amplitude": 0.1,
+      "factor_interval": [
+        0.9,
+        1.1
+      ],
+      "independent_draws": true,
+      "draws_per_original_image": 2,
+      "draw_order": [
+        "brightness",
+        "contrast"
+      ],
+      "application": "Draw one independent brightness/contrast pair per original image in [0.9,1.1]; apply brightness then contrast to valid scene pixels in shared raw float32 tensor, excluding static UI from statistics; fill UI afterward with exact mean; all five views inherit the same pair",
+      "validation_enabled": false,
+      "other_augmentation": "disabled",
+      "photometric_formulas": {
+        "scope": "Valid scene pixels after footer crop, before UI mean fill; UI excluded from statistics",
+        "brightness": "clamp(image*b,0,1)",
+        "contrast_grayscale_weights": [
+          0.2989,
+          0.587,
+          0.114
+        ],
+        "contrast": "gray_mean = mean(sum(brightness_adjusted_scene * grayscale_weights, channel), valid_pixels); clamp(c*image+(1-c)*gray_mean,0,1)",
+        "fill": "Fill UI with exact ImageNet float32 mean after photometric changes; preserve padding"
+      },
+      "shared_across_all_views": true,
+      "independent_per_view_jitter": false,
+      "forbidden": [
+        "Flips",
+        "Random crops",
+        "RandAugment",
+        "Random Erasing",
+        "Mixup/CutMix",
+        "Label smoothing",
+        "Test-time augmentation",
+        "weights.transforms()"
+      ]
+    },
+    "experiment_mode": "e2",
+    "constructor": "Preprocessor(experiment=\"e2\", global_wh=(896,384))",
+    "global_source": "Construct global directly from the same processed raw float tensor as all four local crops",
+    "decode": {
+      "backend": "Pillow.Image.open(...).convert(\"RGB\")",
+      "apply_exif_transpose": false,
+      "unknown_layout": "raise; never rescale UI templates",
+      "corrupt_image": "raise; never skip or replace"
+    },
+    "local_output_wh": [
+      320,
+      320
+    ],
+    "local_output_kchw": [
+      4,
+      3,
+      320,
+      320
+    ],
+    "local_count": 4,
+    "local_order": [
+      "left",
+      "middle_left",
+      "middle_right",
+      "right_raised"
+    ],
+    "local_source": "Extract each config-ordered rectangle directly from the same processed raw float32 tensor; square tensor bilinear antialiased resize to 320x320; normalize after construction",
+    "layout_geometry_reference": {
+      "1536x662": {
+        "decoded_raw_wh": [
+          1536,
+          662
+        ],
+        "processed_wh": [
+          1536,
+          648
+        ],
+        "raw_local_crop_wh": [
+          384,
+          384
+        ],
+        "global_letterbox_content_wh": [
+          896,
+          378
+        ],
+        "global_letterbox_padding_ltrb": [
+          0,
+          3,
+          0,
+          3
+        ]
+      },
+      "1030x703": {
+        "decoded_raw_wh": [
+          1030,
+          703
+        ],
+        "processed_wh": [
+          1030,
+          689
+        ],
+        "raw_local_crop_wh": [
+          402,
+          402
+        ],
+        "global_letterbox_content_wh": [
+          574,
+          384
+        ],
+        "global_letterbox_padding_ltrb": [
+          161,
+          0,
+          161,
+          0
+        ]
+      }
+    },
+    "config_sidecar": {
+      "path": "configs/preprocessing/geoguessr_v1.sha256",
+      "bytes": 84,
+      "sha256": "752db1ce69ce0a0fab3c12a04ce3e953efd6019d1f8860123f1df824809c48ba",
+      "runtime_read_required": true
+    }
+  },
+  "model": {
+    "architecture": "torchvision ConvNeXt-Tiny",
+    "representation_dimension": 1536,
+    "output_logits": 124,
+    "preserve_pretrained": [
+      "feature extractor",
+      "global average pooling",
+      "final LayerNorm"
+    ],
+    "classifier": {
+      "type": "Linear",
+      "in_features": 1536,
+      "out_features": 124,
+      "bias": true
+    },
+    "full_fine_tuning_from_epoch": 1,
+    "maximum_stochastic_depth": 0.1,
+    "stochastic_depth_schedule": "TorchVision 0.23.0 block-index linear schedule from 0 to 0.1",
+    "evaluation": "model.eval(); stochastic depth disabled",
+    "pretrained": {
+      "enum": "torchvision.models.ConvNeXt_Tiny_Weights.IMAGENET1K_V1",
+      "filename": "convnext_tiny-983f1562.pth",
+      "sha256": "983f1562536e84ff750a1576fb08e54de751dbf2e17c0d8a4a13704341fdcd3d",
+      "verification": "Require exact filename, existence, and full digest before strict state loading",
+      "automatic_download": false,
+      "starting_state": "Fresh pinned ImageNet weights, new fused head, optimizer and full-horizon scheduler for every E2 tuning trial and final seed. E1/E1-HR/pilot/other-LR/selected-tuning checkpoints forbidden as initialization; only a later attempt of the same declared run restores its own last.pt.",
+      "strict_state_loading": true,
+      "loading_order": "Verify exact filename/existence/full SHA-256, strict-load original ImageNet ConvNeXt-Tiny, retain features/pooling/final LayerNorm and replace only ImageNet Linear with fused E2 classifier; no download/substitute/non-strict partial load"
+    },
+    "global_input_nchw": [
+      "B",
+      3,
+      384,
+      896
+    ],
+    "local_input_nkchw": [
+      "B",
+      4,
+      3,
+      320,
+      320
+    ],
+    "shared_encoder_parameter_sets": 1,
+    "encoder_feature_dimension": 768,
+    "view_encoding": "f_theta(v) = flatten(final_LayerNorm(global_average_pool(ConvNeXt_Tiny_features(v)))); preserve pretrained per-view final LayerNorm before local averaging",
+    "fusion": {
+      "global": "G=f_theta(global), shape [B,768]",
+      "locals": "L_all=f_theta(local.flatten(0,1)).reshape(B,4,768)",
+      "local_aggregation": "Arithmetic mean over dimension 1, exactly four locals",
+      "concatenation": "[G;mean(L_all)], global first, local mean second, dimension 1536",
+      "logits": "One Linear(1536,124,bias=True) output of 124 raw logits",
+      "post_fusion_normalization_or_projection": false
+    },
+    "execution": {
+      "view_execution": "global_then_flattened_locals_batch_major",
+      "call_order": [
+        "global",
+        "all_batch_major_flattened_locals"
+      ],
+      "encoder_calls_per_microbatch": 2,
+      "local_encoder_batch": "B*4",
+      "per_crop_loop_or_chunking_substitution": false,
+      "stochastic_depth_rng": "TorchVision training RNG consumed by this exact call order/batch shape; different chunking/order is not an interchangeable official implementation"
+    },
+    "gradients": {
+      "global_path_trainable": true,
+      "all_four_local_paths_trainable": true,
+      "mean_differentiable": true,
+      "detach_freeze_or_no_grad_during_training": false,
+      "evaluation": "model.eval() with no gradient recording"
+    },
+    "parameter_count_oracles": {
+      "classifier": 190588,
+      "total": 28010716,
+      "classifier_formula": "1536*124+124",
+      "role": "Mandatory design/acceptance oracles, not observed or official future results",
+      "serialize_in_task": "E2-T00b",
+      "verify_tasks": [
+        "E2-T03 actual specified architecture",
+        "E2-T11 real pinned-weight target model"
+      ],
+      "mismatch_policy": "Fail model/acceptance verification; never change the oracle to fit duplicated backbones, wrong head or extra projections"
+    }
+  },
+  "campaign": {
+    "lr_candidates": [
+      2.5e-05,
+      5e-05,
+      0.0001,
+      0.0002
+    ],
+    "tuning_seed": 1001,
+    "final_seeds": [
+      2001,
+      3001,
+      4001
+    ],
+    "forbidden_training_seeds": [
+      3406,
+      406
+    ],
+    "all_four_training_ids_distinct": true,
+    "tuning_trials": 4,
+    "tuning_seeds_per_candidate": 1,
+    "final_runs": 3,
+    "selection": {
+      "metric": "selected_checkpoint_supported_validation_macro_f1",
+      "tolerance": 1e-06,
+      "reference": "Global maximum M over all four valid completed trial selected-checkpoint scores",
+      "eligible": "M-score <= 1e-6",
+      "tie_break": "lowest_base_lr",
+      "use_nll_or_trial_order": false,
+      "require_all_four_full_budget_valid_outcomes": true,
+      "selected_lr_policy": "Derived only from all four valid full-budget E2 selected-checkpoint scores; unknown until E2 selection is locked. E1 1e-4, E1-HR 5e-5 and pilot diagnostic LR are history, not E2 defaults."
+    },
+    "failure_policy": {
+      "operational_interruption": "Retain attempt records and resume the same immutable declared run from its own last.pt at boundary zero or a completed epoch, replaying an uncommitted epoch from its beginning without changing budget",
+      "invalid_or_uncompletable_candidate": "Stop and return for explicit user review; do not ignore, replace, or select from a subset",
+      "records": "Retain every failure/interruption/replay and reviewed retry with E2 identity and lineage; no silent fresh replacement",
+      "new_or_replacement_lr": false,
+      "validation_based_grid_refinement": false
+    },
+    "stage_authorization": {
+      "tuning": "Explicit E2-G3a only after E2-G1, separately authorized E2 target acceptance and E2-G2; exactly four declaration digests/run IDs",
+      "post_selection": "STOP with all four full-budget outcomes, histories, selected checkpoints, failures/retries, attempt ledger and locked selection for E2-G3b review",
+      "final": "Separate explicit E2-G3b after full tuning handoff; bind G2 receipt, exact locked selection bytes and exactly three final declarations/seeds",
+      "automatic_tuning_to_final_launch": false,
+      "declarations_submit_jobs": false
+    },
+    "independent_e2_tuning": true,
+    "inherit_comparator_or_pilot_selected_lr": false,
+    "checkpoint_and_lr_rules_are_distinct": true,
+    "same_numeric_seeds_across_architectures": "Enable paired reporting; do not imply identical classifier weights, stochastic-depth draws or learning dynamics"
+  },
+  "batch": {
+    "original_images_per_effective_batch": 2,
+    "microbatch": 2,
+    "gradient_accumulation": 1,
+    "drop_last": false,
+    "train_sampling": "Natural shuffled permutation without replacement; every unique train image exactly once per completed epoch",
+    "validation_sampling": "All validation images in fixed manifest order, no shuffle or augmentation",
+    "microbatches_per_epoch": 17499,
+    "updates_per_epoch": 17499,
+    "tail_microbatch_images": 1,
+    "accumulation_loss": "For actual group size D original images, sum fused unweighted CE and divide by D; at retained tail D=1. Never divide by five or apply per-view losses; one optimizer/scheduler update per group.",
+    "sample_unit": "One original image with five views and one label; views never count as independent samples or updates"
+  },
+  "loss": {
+    "name": "standard_unweighted_cross_entropy",
+    "label_smoothing": 0,
+    "class_weights": {
+      "enabled": false
+    },
+    "balanced_sampling": false,
+    "loss_reporting": "Sample means over all split images, never unweighted averages of batch means",
+    "application": "One standard unweighted cross-entropy after global/local fusion per original image; no auxiliary local CE"
+  },
+  "optimizer": {
+    "name": "AdamW",
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "head_lr_multiplier": 1,
+    "llrd": false,
+    "gradient_clipping": {
+      "enabled": false
+    },
+    "groups": {
+      "conv_and_linear_weights": {
+        "weight_decay": 0.05
+      },
+      "biases": {
+        "weight_decay": 0.0
+      },
+      "layernorm_parameters": {
+        "weight_decay": 0.0
+      },
+      "convnext_layer_scale_parameters": {
+        "weight_decay": 0.0
+      }
+    },
+    "group_validation": "Enumerate actual parameter names; every trainable tensor appears exactly once; fail unexpected categories, duplicates or omissions; all groups share candidate base LR and schedule",
+    "numerical_failure": "Nonfinite logits/loss/unscaled gradients or OOM fails and is recorded; no silent batch/update skip or LR/batch/resolution/runtime substitution"
+  },
+  "budget": {
+    "max_epochs": 8,
+    "epoch_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "reported_epoch_numbers": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "full_validations": 8,
+    "validation_every_completed_epoch": true,
+    "early_stopping": false,
+    "planned_max_updates": 139992,
+    "success": "Exactly eight completed training epochs and eight complete validations; never a shortened successful run",
+    "resume_budget_extension": false
+  },
+  "scheduler": {
+    "name": "linear_warmup_then_update_cosine",
+    "unit": "optimizer_updates",
+    "planned_updates": 139992,
+    "warmup_updates": 1000,
+    "warmup_start_factor": 0.1,
+    "cosine_floor_lr": 1e-06,
+    "update_index": "u is the zero-based optimizer update being executed, 0 <= u < N; L is the candidate base LR, W=1000, N=139992, f=1e-6",
+    "warmup_formula": "L * (0.1 + 0.9 * u / W), for u < W",
+    "cosine_formula": "f + (L-f)/2 * (1 + cos(pi * (u-W)/(N-W-1))), for u >= W",
+    "application": "Apply LR(u) before optimizer update u; advance completed-update state only after the update; validation does not advance scheduler",
+    "endpoints": {
+      "first_update_index": 0,
+      "first_lr": "0.1 * L",
+      "first_cosine_update_index": 1000,
+      "first_cosine_lr": "L",
+      "final_update_index": 139991,
+      "final_lr": 1e-06,
+      "final_floor_equality": "Exact at final update; no remaining scheduler update is executed afterward"
+    },
+    "restoration": "Restore the same completed-update position and immutable full horizon/parameters; do not reset warmup or change horizon based on selected checkpoint; reject over-budget updates"
+  },
+  "initialization": {
+    "method": "linear_default",
+    "weight": "kaiming_uniform_(a=sqrt(5))",
+    "bias": "uniform(-1/sqrt(1536), +1/sqrt(1536))",
+    "seed": "official training seed for this run",
+    "rng_context": "Construct and initialize the new Linear(1536,124,bias=True) once inside an isolated CPU RNG context seeded by the official run seed; restore outer CPU RNG; no second head reset or copied classifier state",
+    "framework": "torch 2.8.0+cu128",
+    "fan_in": 1536
+  },
+  "rng": {
+    "global_python": "random.seed(training_seed)",
+    "global_numpy": "numpy.random.seed(training_seed % 2**32)",
+    "global_torch": "torch.manual_seed(training_seed) and torch.cuda.manual_seed_all(training_seed)",
+    "derived_seed": {
+      "encoding": "UTF-8 of pipe-separated str values: str(training_seed) followed by each key part, joined with |",
+      "digest": "SHA-256",
+      "take_first_bytes": 8,
+      "byte_order": "little",
+      "modulus": 9223372036854775807,
+      "builtin_python_hash": false,
+      "architecture_key_added": false,
+      "e2_or_view_key_added": false
+    },
+    "epoch_order": {
+      "key": [
+        "training_seed",
+        "zero_based_epoch",
+        "order"
+      ],
+      "generator": "Fresh CPU torch.Generator seeded with derived_seed; torch.randperm(dataset_length)",
+      "persistent_workers": "Carry epoch with every sampled index; never depend on a mutable parent-only epoch"
+    },
+    "augmentation": {
+      "key": [
+        "training_seed",
+        "zero_based_epoch",
+        "manifest_relative_path",
+        "jitter"
+      ],
+      "generator": "Fresh CPU torch.Generator seeded with derived_seed",
+      "draws": "Two sequential torch.rand scalar draws, brightness then contrast, each mapped by 1-amplitude+2*amplitude*draw"
+    },
+    "loaders": {
+      "train_key": [
+        "training_seed",
+        "loader",
+        "train"
+      ],
+      "validation_key": [
+        "training_seed",
+        "loader",
+        "val"
+      ],
+      "generator": "Separate CPU torch.Generator per split; state saved/restored",
+      "worker_python_numpy_seed": "torch.initial_seed() % 2**32; seed Python and NumPy in worker initialization; torch worker seed comes from DataLoader generator"
+    },
+    "process_start": "Export PYTHONHASHSEED=str(official_run_seed) before every Python process, including declaration checks; never copy pilot 3406",
+    "checkpoint_state": [
+      "Python random",
+      "NumPy",
+      "torch CPU",
+      "all CUDA RNGs",
+      "train and validation loader generator states",
+      "epoch/order and selected-checkpoint/history progress"
+    ],
+    "partial_epoch": "Discard uncommitted epoch; restore previous committed last.pt and replay that epoch from its beginning; replay is operational work and never extra completed budget",
+    "persistent_worker_resume": "Reconstruct fresh workers using original bootstrap state while restoring/preserving committed logical loader generator state; restarting workers must not consume an additional logical loader draw versus uninterrupted persistent workers",
+    "model_stochastic_depth": {
+      "view_execution": "global_then_flattened_locals_batch_major",
+      "all_relevant_torch_rng_states_saved_and_restored": true
+    }
+  },
+  "runtime": {
+    "device": "cuda",
+    "dtype": "float32",
+    "amp": {
+      "enabled": false
+    },
+    "grad_scaler": {
+      "enabled": false
+    },
+    "tf32_matmul": false,
+    "tf32_cudnn": false,
+    "torch_compile": {
+      "enabled": false
+    },
+    "float32_matmul_precision": "highest",
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": false,
+    "num_workers": 2,
+    "pin_memory": true,
+    "persistent_workers": true,
+    "prefetch_factor": 2,
+    "cpu_threads": 2,
+    "environment": {
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "PYTHONHASHSEED": "str(official_training_seed), exported before Python process startup"
+    },
+    "tf32_environment_overrides": "Reject any effective environment override that enables TF32; record actual effective Torch settings, not requested values alone",
+    "software_lock": {
+      "python": "3.11.17",
+      "torch": "2.8.0+cu128",
+      "torchvision": "0.23.0+cu128",
+      "Pillow": "11.3.0",
+      "numpy": "2.1.3",
+      "pandas": "2.2.3",
+      "scikit-learn": "1.6.1",
+      "cuda": "12.8",
+      "cudnn": 91002
+    },
+    "execution_identity": "Compare identity.scientific_runtime consumed-source hashes, E2 contract, software/effective runtime/device/driver/allocation policy, data/root/fixed inputs/preprocessing/weights/conformance bindings across acceptance/runs/resume. Keep actual clean Git commit, cleanliness, harness inventory, job IDs and MIG UUIDs as separate audit metadata. Clean docs/test-only commits remain eligible with unchanged scientific bindings; every consumed-file change needs renewed E2 target acceptance. Immutable config/receipt/evidence/checkpoint lineage remains mandatory.",
+    "pilot_driver_reference": "580.126.20; historical supporting evidence, not an unconditional exact-driver lock",
+    "local_validation": "E2-T00b performs document/JSON/hash/arithmetic checks only; no CPU/GPU tests or model execution. Later CPU fixtures are nonofficial, never target acceptance."
+  },
+  "deployment": {
+    "scheduler": "Slurm",
+    "partition": "normal",
+    "gres": "gpu:2g.35gb:1",
+    "ntasks": 1,
+    "cpus_per_task": 4,
+    "ram_gib": 16,
+    "slurm_mem_mib": 16384,
+    "job_walltime": "09:00:00",
+    "job_walltime_seconds": 32400,
+    "expected_gpu_class": "NVIDIA H200 MIG 2g.35gb",
+    "specific_mig_uuid_required": false,
+    "gpu_work": "Only inside separately and explicitly authorized E2 UIT Slurm allocation; G0/T00b/G1 CPU preparation does not grant target work",
+    "paths": {
+      "dataset": "/datastore/binhvp/BuiTrongTan/CS406/data/geoguessr",
+      "pretrained": "/datastore/binhvp/BuiTrongTan/CS406/pretrained/convnext_tiny-983f1562.pth"
+    },
+    "walltime_resume": "09:00:00 limits one operational attempt for one declared run; multiple same-run attempts may be needed. No horizon reset, warmup reset, budget extension, automatic resubmission or longer walltime is authorized.",
+    "account": "uit",
+    "qos": "mig2-35",
+    "python_executable": "/datastore/binhvp/BuiTrongTan/CS406/envs/cs406/bin/python",
+    "e2_output_path_policy": {
+      "required": "Explicit reviewed E2 run/evidence roots in later declarations; separate from E1/E1-HR/pilot",
+      "example_relative_roots": {
+        "runs": "runs/E2",
+        "evidence": "reports/E2"
+      },
+      "examples_are_execution_defaults": false,
+      "exact_paths_bound_at": "Later reviewed declarations; no output root exists or is authorized by this candidate"
+    },
+    "historical_pilot_timing": {
+      "role": "Feasibility/operational planning only, not official E2 timing, execution threshold or convergence proof",
+      "p0_full_train_epoch_seconds": 4321.364694572054,
+      "p0_scope": "Train batches including loader/transfer/numerical checks; excludes validation/checkpoint I/O",
+      "eight_epoch_train_only_extrapolation_hours": 9.603032654604563,
+      "p1_scope": "Train and validation per epoch, measured before subsequent checkpoint/history writes",
+      "eight_epochs_fit_one_nine_hour_attempt_established": false
+    }
+  },
+  "target_acceptance": {
+    "separate_explicit_target_authorization_required": true,
+    "task": "E2-T11",
+    "e1_e1hr_or_pilot_acceptance_substitution": false,
+    "request": {
+      "kind": "e2_target_acceptance_request_v1",
+      "experiment": "E2",
+      "stage": "acceptance",
+      "seed": 1001,
+      "base_lr": 2.5e-05,
+      "lr_role": "Bounded verification only, not selected E2 LR or a tuning candidate result",
+      "recipe_and_topology": "Same frozen E2 recipe/contract, full-size views, FP32 controls and full 139992-update scheduler horizon",
+      "paths": "Reviewed data/weights/evidence/conformance and target-work approval inputs",
+      "official_run_claims_allowed": false,
+      "official_validate_run_or_training_cli_accepts_request": false
+    },
+    "before_model_allocation": [
+      "Verify current exact consumed scientific/runtime files and import closure",
+      "Verify fixed artifact bytes/hashes, label/support/membership consistency and root-contained paths",
+      "Audit all 34997 train and 7497 validation image byte hashes without test bytes; current root/content/package conformance",
+      "Verify exact real pinned offline pretrained file",
+      "Record actual software/effective FP32 settings, device/driver/allocation, clean Git commit and separate harness inventory"
+    ],
+    "train_only_fixture": {
+      "original_images": 3,
+      "covers_both_raw_layouts": true,
+      "microbatch": 2,
+      "drop_last": false,
+      "batch_original_images": [
+        2,
+        1
+      ],
+      "full_microbatch_shapes": {
+        "global": [
+          2,
+          3,
+          384,
+          896
+        ],
+        "local": [
+          2,
+          4,
+          3,
+          320,
+          320
+        ],
+        "local_encoder_input": [
+          8,
+          3,
+          320,
+          320
+        ],
+        "fused": [
+          2,
+          1536
+        ],
+        "logits": [
+          2,
+          124
+        ]
+      },
+      "tail_microbatch_shapes": {
+        "global": [
+          1,
+          3,
+          384,
+          896
+        ],
+        "local": [
+          1,
+          4,
+          3,
+          320,
+          320
+        ],
+        "local_encoder_input": [
+          4,
+          3,
+          320,
+          320
+        ],
+        "fused": [
+          1,
+          1536
+        ],
+        "logits": [
+          1,
+          124
+        ]
+      },
+      "fixture_segments": 2,
+      "updates_per_segment": 2,
+      "committed_fixture_updates": 4,
+      "official_epoch_credit": 0,
+      "official_update_credit": 0,
+      "policy": "Two bounded completed mechanics segments allow uninterrupted versus discard/reconstruct/restore/replay comparison; retain uncommitted segment work for replay. These are not full natural epochs or official validation scores."
+    },
+    "required_model_checks": [
+      "One shared encoder parameter set",
+      "Pretrained final LayerNorm applied per view before local mean",
+      "Global encoder call before exactly one batch-major B*4 local call",
+      "Exact local ordering and same-raw shared jitter/from-raw construction",
+      "Global-first concatenation and fused 1536-dimensional representation",
+      "Fan-in 1536 seed-bound head initialization with restored outer CPU RNG",
+      "Complete nonduplicated optimizer parameter groups",
+      "Finite logits, fused original-image CE and gradients through global and all local paths",
+      "Actual classifier and total parameter counts match 190588 and 28010716"
+    ],
+    "parameter_count_oracles": {
+      "classifier": 190588,
+      "total": 28010716,
+      "role": "Required expected design values; observed count verification must be collected at authorized acceptance"
+    },
+    "state_recovery": {
+      "primitives": "Same E2 capture_state/restore_state primitives as production under distinct nonofficial fixture envelope; never weaken official boundary/count validation",
+      "procedure": "Save completed boundary; perform uncommitted work; discard model/optimizer/workers; reconstruct and restore same fixture last.pt; replay uncommitted segment",
+      "equal_state": [
+        "model",
+        "optimizer",
+        "full scheduler position/horizon",
+        "inactive scaler policy",
+        "Python RNG",
+        "NumPy RNG",
+        "Torch CPU RNG",
+        "all CUDA RNGs",
+        "train and val loader generators",
+        "epoch/order progression",
+        "history",
+        "selected metadata and selected weights"
+      ],
+      "exclude_from_numerical_equality": [
+        "wall-clock timing",
+        "job/attempt audit fields"
+      ],
+      "scope": "Bounded deterministic-stack state reconstruction; no full-natural-epoch or OS-kill target equivalence claim"
+    },
+    "measurements": [
+      "Peak allocated bytes",
+      "Peak reserved bytes",
+      "Timing with explicit measurement scope",
+      "Every failure/interruption and reviewed retry"
+    ],
+    "inventories": "Exact immutable scientific consumed-source map separately from acceptance/test/helper/evidence audit inventory; actual clean Git audit metadata",
+    "score_or_pilot_throughput_threshold": false,
+    "automatic_batch_precision_chunking_optimizer_search": false,
+    "without_opt_in": "GPU harness remains unexecuted/skipped; never acceptance evidence",
+    "with_opt_in": "Missing authorization/target inputs fails, not skips",
+    "outputs": "Immutable acceptance evidence/inventories and approved=false E2-G2 review candidate plus later concrete tuning declarations for review; never self-approval or automatic tuning",
+    "preparation_authorizes_execution": false
+  },
+  "checkpoint": {
+    "metric": "supported_validation_macro_f1",
+    "tolerance": 1e-06,
+    "tie_break": "earlier",
+    "rule": "Select first completed epoch initially; replace only when current_metric - selected_metric > tau, where tau = 1e-6; retain earlier checkpoint otherwise; NLL cannot break ties",
+    "roles": {
+      "best.pt": "Selected checkpoint for validation reporting",
+      "last.pt": "Atomic full-state committed boundary for same-run resume; never resume from best.pt"
+    },
+    "boundaries": "Boundary zero and completed-epoch boundaries only. An epoch is committed after its full training and full validation, with counters/history/selection and full state atomically in last.pt. No partial/minibatch training commit. An attempt terminating during an epoch discards it and replays it from its beginning from the previous committed last.pt.",
+    "identity": "Explicit E2 experiment/views/fusion/view execution/stage/seed/LR/original budget, E2 config/contract hashes, fixed data/preprocessing/pretrained fingerprints and accepted identity.scientific_runtime. Reject E1/E1-HR/pilot/other-run kinds and changed consumed source/runtime; compare scientific projection while retaining separate clean commit/tooling audit records.",
+    "safety": "Atomic replacement and one writer per immutable run directory; failed writes retain prior committed boundary; no overwrite with a new trial",
+    "reports": "Every per-run metric uses the same selected E2 checkpoint even if last.pt is later; final initialization is fresh ImageNet, never selected tuning/E1/E1-HR/pilot state.",
+    "kind": "official_e2_checkpoint_v1",
+    "publication_recovery": "last.pt is authoritative and carries selected_weights plus selection/history; reconstruct derived best.pt/history after interrupted publication without advancing training beyond the committed boundary or epoch eight",
+    "state_contents": [
+      "model",
+      "optimizer",
+      "full scheduler state and original horizon",
+      "inactive scaler policy",
+      "Python/NumPy/CPU/all-CUDA RNG",
+      "both loader generators",
+      "epoch/order progression",
+      "full history",
+      "selected epoch/score/metadata",
+      "selected_weights",
+      "immutable full declaration/config hash",
+      "scientific/runtime identity and separate audit"
+    ],
+    "official_boundary_accounting": "updates = completed_epoch * 17499; completed_epoch integer 0..8; exactly completed_epoch fully validated ordered history rows; boundary zero has no selected state; reject beyond 8/139992",
+    "authoritative_resume_role": "Same declared run directory/last.pt only; best.pt is reporting-only"
+  },
+  "attempts": {
+    "runs_per_job_attempt": 1,
+    "multiple_attempts_per_run": true,
+    "attempt_walltime": "09:00:00",
+    "attempt_walltime_seconds": 32400,
+    "declaration_immutable_across_attempts": true,
+    "resume_checkpoint": "Same declared run directory/last.pt only",
+    "committed_training_boundary": "completed_epoch_after_full_validation",
+    "initial_boundary_zero": true,
+    "partial_epoch_policy": "Restore the previous committed last.pt and replay the entire uncommitted epoch from its beginning; discard partial work",
+    "budget": "Original eight epochs/eight full validations/139992 completed optimizer updates across all attempts; replays never count twice",
+    "scheduler_reset": false,
+    "scheduler_horizon_change": false,
+    "completed_budget_extension": false,
+    "silent_fresh_replacement": false,
+    "resume_from_best": false,
+    "single_writer": true,
+    "atomic_failed_write": "Retain previous readable committed boundary",
+    "records": [
+      "immutable request/config binding",
+      "actual attempt job/allocation/environment",
+      "start committed epoch/update boundary",
+      "interruptions/failures/outcomes",
+      "reviewed retries",
+      "observed replay work with timing scope",
+      "unknown uncommitted work explicitly marked unknown"
+    ],
+    "retry_policy": "Review recorded outcome and preserve same declaration/identity/budget; no automatic resubmission or longer walltime choice",
+    "scientific_control_review": "Minor operational failures do not reopen controls; only material E2 target-acceptance failure preventing correct protocol execution may trigger explicit user review, which itself does not approve a change",
+    "complete_run_policy": "A complete run cannot be rerun/extended as extra training; an epoch-eight committed boundary may recover terminal publication without further updates"
+  },
+  "scientific_control_change_policy": {
+    "controls_are_requirements_not_proposals": true,
+    "review_trigger": "Only a material E2 target-acceptance failure preventing correct execution of the specified protocol may trigger explicit user review of an inherited control",
+    "minor_operational_failures_reopen_controls": false,
+    "automatic_fallback": false,
+    "review_itself_approves_change": false,
+    "user_review_required_for_any_change": true,
+    "forbidden_justifications": [
+      "Implementation convenience",
+      "Spare memory",
+      "Elapsed walltime",
+      "Observed validation scores"
+    ]
+  },
+  "reporting": {
+    "topk": [
+      1,
+      3,
+      5
+    ],
+    "ranking": "Descending original logits; exactly tied logits ordered by ascending label_id; never alter logits",
+    "rank_outputs": 124,
+    "macro_f1": "Average full-split per-class F1 over GT-supported classes only",
+    "unsupported_f1": "null; excluded from supported macro average",
+    "weighted_f1": "Weight full-split per-class F1 by evaluation GT support",
+    "nll": "Sample-mean unweighted CE; diagnostic only",
+    "frequency_buckets_train_images": [
+      [
+        1,
+        19
+      ],
+      [
+        20,
+        99
+      ],
+      [
+        100,
+        499
+      ],
+      [
+        500,
+        "unbounded"
+      ]
+    ],
+    "extreme_tail_subset_train_images": [
+      1,
+      2
+    ],
+    "bucket_f1": "Average supported bucket member per-class F1 computed on entire evaluation split, retaining cross-bucket false positives",
+    "bucket_topk": "GT-conditioned bucket samples ranked across all 124 outputs; no-support bucket metrics are null",
+    "aggregation": {
+      "seeds": [
+        2001,
+        3001,
+        4001
+      ],
+      "mean": "arithmetic",
+      "std": "sample",
+      "ddof": 1,
+      "require_all_three_complete_distinct_final_seeds": true,
+      "same_locked_selection_and_contract": true,
+      "ensemble": false
+    },
+    "machine_precision": "Preserve full floating-point values in JSON/CSV; do not round before aggregate calculations",
+    "human_display": {
+      "classification_metrics": "percentages",
+      "decimal_places": 4,
+      "std": "Same percentage units and four decimals as mean"
+    },
+    "outputs": [
+      "selected-checkpoint overall metrics",
+      "124-label per-class metrics",
+      "fixed frequency buckets including 1-2 subset",
+      "manifest-keyed validation predictions with Top-k",
+      "confusion matrix and most-confused pairs",
+      "full histories and learning curves",
+      "per-final-seed metrics and mean/sample std",
+      "source/config/checkpoint lineage and failure/retry inventory"
+    ],
+    "pilot_metrics": "Diagnostic only; no official score acceptance threshold or evidence substitution",
+    "final_test_access": "LOCKED / NOT AUTHORIZED throughout all E2 preparation/implementation/acceptance/tuning/final training/validation/closeout; metadata only, reject images before opening; no test evaluator",
+    "validation_supported_classes": 106,
+    "supported_zero_true_positives_f1": 0,
+    "zero_support_bucket_metrics": "null",
+    "same_selected_checkpoint_for_all_metrics": true,
+    "per_class_fields": [
+      "label_id",
+      "label",
+      "n_train",
+      "bucket",
+      "support",
+      "predicted_count",
+      "precision",
+      "recall",
+      "f1"
+    ],
+    "final_evaluation_gate": "All intended comparison experiments, including E3 if retained, must freeze protocols/checkpoints and close intended train/validation work, then separate explicit user final-evaluation authorization; no E2 gate/closeout grants it",
+    "main_metrics": [
+      "top1",
+      "top3",
+      "top5",
+      "macro_f1_supported",
+      "weighted_f1"
+    ],
+    "nll_role": "Diagnostic sample-mean CE; never checkpoint/LR tie-break",
+    "comparison": {
+      "required_scientific_reporting_bindings": true,
+      "comparators": {
+        "E1": {
+          "role": "primary_architectural",
+          "role_description": "Primary architectural comparator; same global input 896x384",
+          "required_aggregate_sha256": "3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e",
+          "required_contract_sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143",
+          "aggregate_kind": "e1_three_seed_validation_report_v1",
+          "explicit_path_input": "e1_report_path"
+        },
+        "E1-HR": {
+          "role": "contextual_complementary",
+          "role_description": "Contextual/complementary higher-resolution global-only comparator; does not isolate local views or resolution",
+          "required_aggregate_sha256": "9cb44e8aa98d18065402ea3be750586187aeb4b0e4ff23cfa6badfcc484426cf",
+          "required_contract_sha256": "e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d",
+          "aggregate_kind": "e1hr_three_seed_validation_report_v1",
+          "explicit_path_input": "e1hr_report_path"
+        }
+      },
+      "path_policy": "Reviewed official aggregates materialized/provided in the execution environment with explicit actual paths; no repository-relative default, existence assumption, pilot/best-seed substitute or caller-selected expected digest",
+      "verification": "Verify exact file bytes against both pins, actual reviewed schemas, matching fixed benchmark/metric definitions, 124-label/support/bucket metadata, exact three seeds and ddof=1; record resolved actual paths and verified hashes in reporting provenance",
+      "schema_compatibility": "E1 seed IDs derive from per_seed; do not require newer HR/E2 top-level fields; obtain benchmark/metric semantics from referenced frozen contracts, not cross-architecture consumed-source equality",
+      "missing_or_mismatched_artifact": "Block comparison/closeout; no fallback",
+      "swapped_roles": "Reject",
+      "paired_deltas": "Optional join by matching seed IDs, expressed in percentage points; three seeds do not establish significance",
+      "exclusive_causal_claims": false,
+      "enforcement_tasks": [
+        "E2-T09",
+        "E2-T14"
+      ]
+    },
+    "parameter_oracle_binding": "model.parameter_count_oracles.classifier=190588 and total=28010716 are required JSON integer design/acceptance bindings, never official future observations",
+    "efficiency": {
+      "secondary_measured_information_only": true,
+      "throughput_unit": "original_images_per_second",
+      "separate_scopes": [
+        "train_only",
+        "validation",
+        "checkpoint_report_IO",
+        "job_attempt_including_replay",
+        "whole_run_across_attempts"
+      ],
+      "memory": [
+        "peak_allocated_bytes",
+        "peak_reserved_bytes"
+      ],
+      "compute_matching_claim": false,
+      "pilot_timing_is_official_timing": false,
+      "views_per_second_is_original_images_per_second": false
+    },
+    "limitations": [
+      "Fixed split does not establish geographic/panorama independence",
+      "Extreme-tail sample support is scarce",
+      "Three-seed variation does not eliminate seed/sampling uncertainty or establish significance",
+      "Validation-only results; final test locked"
+    ],
+    "historical_test_statement": "The old pipeline historically inspected/evaluated test; current lock does not erase that history or justify claiming test was never seen"
+  },
+  "identity_and_evidence": {
+    "experiment": "E2",
+    "run_id_template": "e2-{stage}-lr{lr:.8f}-seed{seed}",
+    "declaration_kind": "official_e2_run_config_v1",
+    "checkpoint_kind": "official_e2_checkpoint_v1",
+    "summary_kind": "official_e2_run_summary_v1",
+    "selection_kind": "e2_lr_selection_v1",
+    "analysis_kind": "e2_selected_validation_analysis_v1",
+    "aggregate_kind": "e2_three_seed_validation_report_v1",
+    "source_fingerprint_closure": [
+      "src/__init__.py",
+      "src/e2/__init__.py",
+      "src/e2/config.py",
+      "src/e2/data.py",
+      "src/e2/model.py",
+      "src/e2/metrics.py",
+      "src/e2/engine.py",
+      "src/e2/checkpoint.py",
+      "src/e2/runtime.py",
+      "src/e2/train.py",
+      "src/e2/campaign.py",
+      "src/e1/__init__.py",
+      "src/e1/engine.py",
+      "src/e1/metrics.py",
+      "src/preprocessing/__init__.py",
+      "src/preprocessing/geoguessr_v1.py",
+      "configs/preprocessing/geoguessr_v1.json",
+      "configs/preprocessing/geoguessr_v1.sha256",
+      "requirements.txt",
+      "pyproject.toml",
+      "scripts/slurm/e2_train.sbatch"
+    ],
+    "source_record": "Record actual exact repository-relative consumed path to exact-byte SHA-256 map and canonical fingerprint at authorized acceptance. Planned closure below has no fabricated future E2 hashes. Clean commit/cleanliness, acceptance/test inventory and operational identifiers are separate audit metadata at acceptance and every official attempt.",
+    "canonical_fingerprint": "SHA-256 of UTF-8 json.dumps(value,sort_keys=True,ensure_ascii=True,allow_nan=False); distinct from exact-byte file SHA-256",
+    "receipts": {
+      "E2-G1": "Separate explicit approval of exact candidate digest, plan/ledger, chosen implementation method and named implementation/CPU-preparation scope; only then create exact-byte sidecar and digest-bound receipt",
+      "target_work": "Separate explicit E2 Slurm/GPU authorization for bounded E2-T11 acceptance before target work",
+      "E2-G2": "Explicit review of CPU/regression and actual E2 target acceptance, accepted identity.scientific_runtime, exact evidence/receipt hashes and four concrete tuning declarations; not tuning permission",
+      "E2-G3a": "Separate explicit tuning authorization binding applicable G2 receipt and exactly four tuning declaration digests/run IDs",
+      "E2-G3b": "Separate explicit review of complete tuning handoff, applicable G2, locked-selection exact bytes and exactly three final declaration digests/run IDs",
+      "E2-CLOSEOUT": "Explicit review of completed finals/selected analyses/aggregate/hash-bound primary and contextual comparisons/lineage/inventories; E2 train/validation only",
+      "FINAL-EVALUATION": "Separate study-wide authorization including E3 closure if retained; no E2 approval substitutes"
+    },
+    "preserved_artifacts": [
+      "Immutable declarations/config_resolved.json",
+      "Model/head initialization and exhaustive optimizer-group metadata",
+      "Eight-epoch history.json and metrics.csv",
+      "best.pt and authoritative last.pt",
+      "Full run summaries",
+      "All immutable attempt environments/outcomes/events/failures/retries/replay work",
+      "Four-trial ledger and locked E2 LR selection",
+      "Selected validation analyses/exports",
+      "Three-seed aggregate and primary E1/contextual E1-HR comparisons",
+      "Scoped exact-byte checksum inventories and separate reporting-tool audit"
+    ],
+    "lineage_validation": "Validate declaration <-> config <-> summary <-> all eight history rows <-> best/last selected weights <-> locked selection <-> selected analysis <-> aggregate/report; reject wrong E2 topology/stage/seed/LR/budget/consumed-source/runtime/input/receipt/evidence lineage. Compare scientific_runtime projections, record audit differences separately. Never trust caller-supplied scores or a superficial rehash of incorrect content.",
+    "required_bindings": [
+      "experiment",
+      "global_wh",
+      "local_wh",
+      "local_count",
+      "local_order",
+      "view_execution",
+      "fusion",
+      "representation_dimension",
+      "stage",
+      "seed",
+      "lr",
+      "original_epoch_update_budget",
+      "E2 contract digest",
+      "accepted scientific_runtime identity",
+      "fixed data/label/preprocessing/pretrained fingerprints",
+      "declaration/config/checkpoint/history/selection/report lineage",
+      "test_images_opened=0"
+    ],
+    "run_configuration_fields": [
+      "kind",
+      "experiment",
+      "recipe",
+      "contract_sha256",
+      "stage",
+      "seed",
+      "lr",
+      "budget",
+      "run_id",
+      "paths",
+      "views",
+      "representation_dimension",
+      "fusion",
+      "view_execution",
+      "scientific_sha256",
+      "config_sha256"
+    ],
+    "final_extra_fields": [
+      "selection_sha256"
+    ],
+    "report_binding_policy": "Each E2 per-run report retains topology, stage/seed/LR/full budget/contract/accepted identity and selected checkpoint/history/config lineage; aggregate retains all three per-seed bindings and one locked selection. Reporting-tool inventory stays separate from consumed training identity unless actually imported by training.",
+    "required_test_images_opened": 0,
+    "source_fingerprint_policy": {
+      "definition": "SHA-256 of canonical JSON for the explicit repository-relative path -> exact-byte SHA-256 map, using canonical_fingerprint serialization",
+      "wildcards_allowed": false,
+      "package_markers": "Normal imports execute listed src, src.e2, src.e1 and src.preprocessing package markers; include their exact bytes",
+      "campaign_consumption": "E2 final preflight consumes src/e2/campaign.py selection validator",
+      "actual_import_review": "Before acceptance review actual transitive imports/consumed files, explicitly add necessary extra paths through review, reject missing/unlisted consumption; no source-directory wildcards or silent omissions",
+      "consumed_file_change_requires_renewed_target_acceptance": true,
+      "reporting_only_source": "src/e2/report.py is reporting audit tooling, outside training closure unless actually imported by training",
+      "separate_integrity_bindings": "E2 numeric contract, fixed data/labels, weights, accepted conformance/acceptance evidence and approval receipts retain separate exact bindings regardless of source-map membership",
+      "source_map_is_observed_in_this_candidate": false
+    },
+    "acceptance_test_evidence_inventory": {
+      "role": "Exact-hash audit inventory, separate from the scientific/runtime fingerprint; capture actual files when implemented, never fabricate hashes for nonexistent files",
+      "harness_files": [
+        "tests/conftest.py",
+        "tests/e2/conftest.py",
+        "tests/e2/test_config.py",
+        "tests/e2/test_data.py",
+        "tests/e2/test_model.py",
+        "tests/e2/test_metrics.py",
+        "tests/e2/test_engine.py",
+        "tests/e2/test_checkpoint.py",
+        "tests/e2/test_train.py",
+        "tests/e2/test_recovery.py",
+        "tests/e2/test_campaign.py",
+        "tests/e2/test_artifacts.py",
+        "tests/e2/test_report.py",
+        "tests/e2/test_entrypoints.py",
+        "tests/e2/test_gpu_smoke.py"
+      ],
+      "optional_package_markers_if_present": [
+        "tests/__init__.py",
+        "tests/e2/__init__.py"
+      ],
+      "additional_files": "Enumerate every actually consumed acceptance-only helper and output by exact path/bytes/SHA-256/role at acceptance; future planned paths have no fabricated hashes",
+      "entry_fields": [
+        "path",
+        "bytes",
+        "sha256",
+        "role"
+      ],
+      "snapshot_policy": "Preserve immutable inventory/evidence for each acceptance attempt; later edits do not rewrite earlier proof",
+      "part_of_scientific_runtime_fingerprint": false,
+      "unrelated_test_edit_requires_renewed_target_acceptance": false,
+      "proof_validity_policy": "A test-only correction affecting validity of an acceptance proof requires evidence review; unrelated test edits do not automatically invalidate accepted scientific/runtime identity"
+    },
+    "scientific_identity_equality": {
+      "projection": "identity.scientific_runtime",
+      "equality_bindings": [
+        "consumed_source_files",
+        "consumed_source_sha256",
+        "contract_sha256",
+        "software",
+        "effective_runtime",
+        "device_and_driver",
+        "reviewed_allocation_policy",
+        "dataset_root",
+        "fixed_split_label_fingerprints",
+        "preprocessing_config_and_implementation_fingerprints",
+        "pretrained_sha256",
+        "accepted_conformance_sha256"
+      ],
+      "separate_mandatory_lineage_checks": [
+        "Immutable declaration/full config identity",
+        "E2-G2 receipt and accepted evidence exact hashes",
+        "E2-G3a or E2-G3b stage authorization",
+        "Same-run checkpoint/history/selection lineage"
+      ],
+      "audit_metadata_excluded_from_equality": [
+        "clean_git_commit",
+        "git_cleanliness_observation",
+        "acceptance_test_evidence_inventory",
+        "reporting_tool_inventory",
+        "job_id",
+        "allocation_instance",
+        "MIG_UUID"
+      ],
+      "clean_git_requirement": "Require and record an actual clean checkout at acceptance and each official attempt; cleanliness is mandatory, but the commit SHA need not match acceptance",
+      "docs_only_or_test_only_clean_commit_invalidates_acceptance": false,
+      "unchanged_identity_condition": "Every consumed-file hash and all other reviewed scientific/runtime bindings must remain equal; full config, receipts and evidence still validate",
+      "consumed_file_change": "Reject before model allocation and require renewed target acceptance; no scientific control is changed by this policy",
+      "comparison_sites": [
+        "acceptance-to-official preflight",
+        "same-run checkpoint restore",
+        "completed-run campaign validation",
+        "selection and final-report lineage"
+      ]
+    },
+    "acceptance_request_kind": "e2_target_acceptance_request_v1",
+    "comparison_kind": "e2_vs_e1_e1hr_validation_comparison_v1",
+    "other_stage_or_pilot_artifact_relabeling": false,
+    "topology_bindings": {
+      "global_wh": [
+        896,
+        384
+      ],
+      "local_wh": [
+        320,
+        320
+      ],
+      "local_count": 4,
+      "local_order": [
+        "left",
+        "middle_left",
+        "middle_right",
+        "right_raised"
+      ],
+      "fusion": "global_then_mean_local",
+      "representation_dimension": 1536,
+      "view_execution": "global_then_flattened_locals_batch_major"
+    },
+    "declaration_hash_policy": "Compute scientific_sha256 over immutable scientific_run_payload including stage/seed/LR/budget/topology/fusion/contract; config_sha256 over full declaration excluding only its own field. Per-attempt audit metadata stays outside immutable declaration. Approval receipts independently bind declaration digests; no future-receipt/declaration hash cycle.",
+    "declaration_paths": {
+      "required_explicit_inputs": [
+        "data_root",
+        "weights",
+        "runs_dir",
+        "conformance_report",
+        "acceptance_record",
+        "authorization_record"
+      ],
+      "evidence_root": "Explicit separate reviewed E2 evidence root bound in declarations",
+      "final_adds": [
+        "selection"
+      ],
+      "predetermined_receipt_paths_can_precede_creation": true,
+      "unknown_scientific_overrides": "Reject"
+    }
+  },
+  "implementation_constraints": {
+    "future_packages": [
+      "src/e2/",
+      "tests/e2/"
+    ],
+    "data_item": "(views,label_id,manifest_relative_path); views has exactly global and local tensors",
+    "batch_transfer": "E2 move_views checks FP32 shapes, matching original-image B and keys; explicitly transfers both global and local tensors to device",
+    "epoch_loops": "Own dictionary-view train/evaluate loops with original-image loss denominators, tail shapes and manifest-keyed prediction paths; no re-export of single-tensor loops",
+    "state_primitives": [
+      "capture_state",
+      "restore_state"
+    ],
+    "official_state_envelopes": "Strict E2 kind/config/topology/budget/identity envelope wraps primitives; bounded acceptance uses distinct nonofficial envelope and receives no official credit",
+    "preflight": "Validate declaration/G1 and applicable G2/G3a or G3b/selection before official allocation; acceptance inspection uses distinct authorized request without requiring future G2/G3 approvals",
+    "cli": "python -m src.e2.train --config PATH [--check-config | --resume SAME_RUN/last.pt]",
+    "check_config": "Validate recipe/declaration/G1 without model/GPU allocation; identify missing later gates without claiming execution preflight passed",
+    "forbidden_cli_features": [
+      "Approval bypass",
+      "Test/search options",
+      "Recipe/scientific overrides",
+      "Production synthetic fixture switch",
+      "Reduced official resolution/budget",
+      "Automatic launch/resubmission"
+    ],
+    "verification_later": "CPU verification and completed-stage scoped regression precede separately authorized target work; RED/GREEN and model/CPU/GPU tests are not part of T00b"
+  },
+  "e3_compatibility": {
+    "feature_dimension": 1536,
+    "feature_definition": "Pre-classifier [global; arithmetic mean of four local f_theta features]; per-view pretrained final LayerNorm and view ordering unchanged",
+    "preserve": "Each selected final-seed E2 checkpoint and exact lineage",
+    "future_mode": "Deterministic evaluation-mode features; jitter and stochastic depth disabled, representation frozen with no gradient updates",
+    "authorized_now": false,
+    "excluded_now": [
+      "Feature cache",
+      "Head reset/retraining",
+      "cRT jobs",
+      "E3 numeric protocol"
+    ]
+  },
+  "final_test_prohibition": {
+    "status": "LOCKED / NOT AUTHORIZED",
+    "allowed": "Membership/counts/support metadata only",
+    "reject_before_opening": true,
+    "image_bytes_previews_predictions_or_test_derived_selection": false,
+    "evaluator_in_e2": false,
+    "applies_through": [
+      "Specification/planning/T00b",
+      "Implementation/CPU preparation",
+      "Target acceptance",
+      "LR tuning",
+      "Final training",
+      "Validation analysis",
+      "Closeout"
+    ],
+    "unlock_condition": "All intended comparison experiments, including E3 if retained, freeze protocols/checkpoints and close intended train/validation work, then separate explicit user final-evaluation authorization",
+    "e1hr_completion_or_e2_gate_or_closeout_unlocks": false,
+    "historical_test_inspection": "Old pipeline inspection/evaluation is acknowledged; do not call test never previously seen"
+  },
+  "approval_snapshot_at_preparation": {
+    "snapshot_role": "Historical preparation status recorded from explicit user G0/T00b instruction; not an execution approval receipt",
+    "E2-G0": "PASS; explicit user approval of current corrected specification/plan/ledger on 2026-11-05",
+    "authorized_tasks": [
+      "E2-T00b"
+    ],
+    "E2-T00b": "Complete candidate preparation submitted for E2-G1 review; documentation/JSON/hash/arithmetic only",
+    "E2-G1": "NOT APPROVED",
+    "implementation_method": "Not selected; user must choose at E2-G1",
+    "implementation_cpu_preparation_authorized": false,
+    "target_gpu_work_authorized": false,
+    "target_acceptance": "NOT STARTED / NOT AUTHORIZED",
+    "E2-G2": "NOT APPROVED",
+    "E2-G3a": "NOT GRANTED",
+    "E2-G3b": "NOT GRANTED",
+    "tuning_authorized": false,
+    "final_training_authorized": false,
+    "E3_authorized": false,
+    "final_test_evaluation": "LOCKED / NOT AUTHORIZED",
+    "approval_binding": "Only later explicit E2-G1 approval of this exact JSON digest can authorize freeze, sidecar, receipt and named implementation scope; parsing/hashing/candidate existence grants no permission",
+    "checksum_policy": {
+      "algorithm": "SHA-256",
+      "scope": "Exact UTF-8 LF JSON file bytes with final LF",
+      "future_sidecar_path": "docs/E2/e2_numeric_contract_v1.sha256",
+      "sidecar_format": "<64 lowercase hex>  e2_numeric_contract_v1.json followed by LF",
+      "sidecar_creation": "Only after explicit E2-G1 approval of exact digest; not created by E2-T00b",
+      "future_g1_receipt_path": "docs/E2/e2_g1_approval.json",
+      "g1_receipt_creation": "Only following explicit E2-G1 decision; no receipt created by this candidate",
+      "embed_own_checksum": false
+    },
+    "gate_flow": [
+      "User-approved E2-G0",
+      "E2-T00b candidate and STOP for G1 review",
+      "E2-G1 exact-byte freeze/method/named scope",
+      "E2-T01-T10 authorized implementation/CPU/deployment preparation",
+      "STOP for separate E2-TARGET-AUTH",
+      "E2-T11 target acceptance",
+      "E2-G2 readiness/identity/declarations review",
+      "Separate E2-G3a tuning authorization",
+      "E2-T12 four complete trials and locked selection",
+      "STOP for E2-G3b review",
+      "E2-T13 exactly three fresh final-seed runs",
+      "E2-T14/E2-CLOSEOUT review",
+      "Separate E3 gates and study-wide final evaluation"
+    ]
+  },
+  "provenance": {
+    "numeric_authority": "Current user explicitly approves corrected E2 specification/plan/ledger at E2-G0 and authorizes E2-T00b only; common controls inherited from exact frozen E1 contract and reviewed R1-R9, with HR stage-isolation/identity/recovery conventions",
+    "recorded_client_date": "2026-11-05",
+    "preparation_checkout": {
+      "path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot",
+      "branch": "e2",
+      "git_commit": "3343cd55ecc18140a86b19c0fbe45fd2a12fe909",
+      "git_clean": false,
+      "dirty_scope_at_start": [
+        "docs/E2/specs.md",
+        "docs/E2/plan.md",
+        "docs/E2/tasks.md"
+      ],
+      "role": "Observed documentation-preparation provenance only; never an accepted scientific/runtime identity or future clean-run observation"
+    },
+    "user_g0_decision": {
+      "source": "Explicit user message in this conversation, 2026-11-05",
+      "decision": "E2-G0 APPROVED; reviewed corrected specification, plan and task ledger approved; authorize E2-T00b only",
+      "authorized_work": [
+        "Prepare complete numeric-contract candidate",
+        "Document-only JSON/inheritance/hash/arithmetic consistency validation",
+        "Compute and report exact candidate SHA-256",
+        "STOP for E2-G1 review"
+      ],
+      "explicit_exclusions": [
+        "Approved .sha256 sidecar",
+        "e2_g1_approval.json",
+        "Production code",
+        "CPU/GPU tests",
+        "Tuning/final declarations",
+        "Jobs",
+        "Test images",
+        "E3"
+      ],
+      "reviewed_document_snapshots": [
+        {
+          "path": "docs/E2/specs.md",
+          "bytes": 43054,
+          "sha256": "86a57e9c694581bb7a24c336baf9afb327a860a718b97e756c58b4f6a28b46d5"
+        },
+        {
+          "path": "docs/E2/plan.md",
+          "bytes": 52476,
+          "sha256": "a5f1fb57fe6845e42e52b15ab7b09646fa6bc6ec25067d75ab742a99137fad50"
+        },
+        {
+          "path": "docs/E2/tasks.md",
+          "bytes": 17690,
+          "sha256": "fbbb3572d2546d0fbeb65da1101c505bab41eee28aa4ba45c1841440df030296"
+        }
+      ]
+    },
+    "e1hr_handoff": "User confirms E1-HR completion and HR-G2/HR-G3a/HR-G3b PASS; accepted as stage handoff without demanding proof again. Older master/HR preparation snapshots do not negate that handoff and are not modified.",
+    "source_evidence": [
+      {
+        "path": "docs/E2/specs.md",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/docs/E2/specs.md",
+        "bytes": 43054,
+        "sha256": "86a57e9c694581bb7a24c336baf9afb327a860a718b97e756c58b4f6a28b46d5",
+        "role": "Exact corrected scientific specification snapshot approved by user at E2-G0, before G0/T00b progress-status update"
+      },
+      {
+        "path": "docs/E2/plan.md",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/docs/E2/plan.md",
+        "bytes": 52476,
+        "sha256": "a5f1fb57fe6845e42e52b15ab7b09646fa6bc6ec25067d75ab742a99137fad50",
+        "role": "Exact corrected implementation-plan snapshot approved at E2-G0; T00b/interface/oracle and planned-source policy, before progress update"
+      },
+      {
+        "path": "docs/E2/tasks.md",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/docs/E2/tasks.md",
+        "bytes": 17690,
+        "sha256": "fbbb3572d2546d0fbeb65da1101c505bab41eee28aa4ba45c1841440df030296",
+        "role": "Exact corrected task-ledger snapshot approved at E2-G0, before progress update"
+      },
+      {
+        "path": "docs/master_spec.md",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/docs/master_spec.md",
+        "bytes": 27380,
+        "sha256": "70ffa4af09a57bb101efabde3cc3c56c646a8d6e7015943212c0927e67e6f16b",
+        "role": "Roadmap/scientific design reference; older status/numeric registers do not override current E2 or completed methodology"
+      },
+      {
+        "path": "docs/grillme.md",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/docs/grillme.md",
+        "bytes": 27346,
+        "sha256": "0248c19ef9a92e8a28724c0c6c31467079777b1dff489a886408e779821e6e5b",
+        "role": "Shared encoder, deterministic local geometry, fusion and equal independent campaign design reference"
+      },
+      {
+        "path": "docs/E1/e1_numeric_contract_v1.json",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/docs/E1/e1_numeric_contract_v1.json",
+        "bytes": 31796,
+        "sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143",
+        "role": "Exact frozen inherited numerical reference; read-only"
+      },
+      {
+        "path": "docs/E1/e1_numeric_contract_v1.sha256",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/docs/E1/e1_numeric_contract_v1.sha256",
+        "bytes": 94,
+        "sha256": "d7644d4d4d0a1c7c4ec0ba67e14cdbd9965fd60fad24281a39b215e53057af1c",
+        "role": "Frozen E1 contract sidecar; read-only"
+      },
+      {
+        "path": "docs/E1/t00_review.md",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/docs/E1/t00_review.md",
+        "bytes": 12741,
+        "sha256": "794e758b0a77d2bf475127686537a76ca18ca9310e59bf96b10c6834fe3eb7d3",
+        "role": "Reviewed R1-R9 source of common numeric controls"
+      },
+      {
+        "path": "docs/E1/closeout_review.md",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/docs/E1/closeout_review.md",
+        "bytes": 8603,
+        "sha256": "a9e304cf9db33e27d30583b613e209ae399036f6694bc7744b73622ac6ac1510",
+        "role": "Completed E1 baseline/methodology and evidence-scope reference"
+      },
+      {
+        "path": "docs/E1/closeout_inventory.json",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/docs/E1/closeout_inventory.json",
+        "bytes": 11039,
+        "sha256": "94218a96c2e9570ce59d079a9238a57ddc4058c985c5e1766ed9c04e9cab5dc6",
+        "role": "E1 documentation audit inventory, not new binary checkpoint verification"
+      },
+      {
+        "path": "docs/E1-HR/e1hr_numeric_contract_v1.json",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/docs/E1-HR/e1hr_numeric_contract_v1.json",
+        "bytes": 50562,
+        "sha256": "e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d",
+        "role": "Exact frozen stage-isolation, identity and recovery reference; read-only"
+      },
+      {
+        "path": "docs/E1-HR/e1hr_numeric_contract_v1.sha256",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/docs/E1-HR/e1hr_numeric_contract_v1.sha256",
+        "bytes": 96,
+        "sha256": "e4654e021723bdf60bdb679ca604a5f943a725210f340551c8fac219c605e72f",
+        "role": "Frozen HR contract sidecar; read-only"
+      },
+      {
+        "path": "docs/E1-HR/plan.md",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/docs/E1-HR/plan.md",
+        "bytes": 43583,
+        "sha256": "b14587ce8a2f35c95e887f8cad79514013ffa12e1d594ebccba1e5b3a9a0926b",
+        "role": "Reviewed isolation/source-closure and per-attempt recovery conventions; historical status does not override user HR completion handoff"
+      },
+      {
+        "path": "docs/E1-HR/runbook.md",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/docs/E1-HR/runbook.md",
+        "bytes": 12536,
+        "sha256": "c1f7ce8c8493c67b903adb6ae479a6f43fb44179f5172cb5d6e487b95a126ffa",
+        "role": "Technical deployment/recovery conventions only, no E2 permission"
+      },
+      {
+        "path": "docs/preprocessing_v1.md",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/docs/preprocessing_v1.md",
+        "bytes": 7952,
+        "sha256": "9725bc7463906a8e140c7a37cbb28e35ad777e0b061f4da3263fa3ad39dc8216",
+        "role": "Frozen preprocessing authority"
+      },
+      {
+        "path": "configs/preprocessing/geoguessr_v1.json",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/configs/preprocessing/geoguessr_v1.json",
+        "bytes": 10069,
+        "sha256": "4f49dd41738168cfc65d4322fbe1b659ef5595229bb487ad86dd671a26a8903f",
+        "role": "Frozen geometry/UI/resize/normalization source"
+      },
+      {
+        "path": "configs/preprocessing/geoguessr_v1.sha256",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/configs/preprocessing/geoguessr_v1.sha256",
+        "bytes": 84,
+        "sha256": "752db1ce69ce0a0fab3c12a04ce3e953efd6019d1f8860123f1df824809c48ba",
+        "role": "Runtime-read frozen preprocessing checksum sidecar"
+      },
+      {
+        "path": "src/preprocessing/geoguessr_v1.py",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/src/preprocessing/geoguessr_v1.py",
+        "bytes": 4924,
+        "sha256": "4d1dea328f69c1c7e1fa4f333c7276de0c3bc81b322db40dc33530969357e666",
+        "role": "Frozen reusable raw-to-five-view implementation; read-only"
+      },
+      {
+        "path": "artifacts/baseline124/provenance.json",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/artifacts/baseline124/provenance.json",
+        "bytes": 1321,
+        "sha256": "eb569adb68b1fe56dbf7052e6bf3de22f2007f3a0aed857293dc48270659f0fb",
+        "role": "Fixed split source commit and exact artifact byte/hash provenance"
+      },
+      {
+        "path": "src/e1/engine.py",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/src/e1/engine.py",
+        "bytes": 7387,
+        "sha256": "5a1787d852e6012410f97fd0e9031d4a2ef18b74e81b195ced37068adcd8d693",
+        "role": "Unchanged numerical scheduler/comparator/failure mechanics reference; not single-tensor loop reuse"
+      },
+      {
+        "path": "src/e1/metrics.py",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/src/e1/metrics.py",
+        "bytes": 4050,
+        "sha256": "3b1709b7813d26ee1fdc0516d6c47d1d5aef2782d04ed334c4d1d07fdce61448",
+        "role": "Unchanged full-split metrics/ranking reference"
+      },
+      {
+        "path": "src/pilot/models.py",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/src/pilot/models.py",
+        "bytes": 5085,
+        "sha256": "ae50dd41b33367cdae38ed8994fbbc8ced47ea10096afeca495c28d941f2aab6",
+        "role": "Diagnostic two-call batching reference only; no production runtime dependency"
+      },
+      {
+        "path": "reports/pilot/pilot_results.md",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/reports/pilot/pilot_results.md",
+        "bytes": 16075,
+        "sha256": "6fbe188eca8fadae97890b5c8114ba55e8532cbea66950d90b62382bbdba3e70",
+        "role": "Archived feasibility/timing context only; no official E2 scores/acceptance"
+      },
+      {
+        "path": "reports/pilot/evidence/uit_2026-10-31/p0/e2/config_resolved.json",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/reports/pilot/evidence/uit_2026-10-31/p0/e2/config_resolved.json",
+        "bytes": 2208,
+        "sha256": "6819da15171d70b9907eb26206a2b43010b5fcffdab804ae893d0eeaedb1b253",
+        "role": "Archived E2 diagnostic feasibility declaration"
+      },
+      {
+        "path": "reports/pilot/evidence/uit_2026-10-31/p0/e2/run_summary.json",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/reports/pilot/evidence/uit_2026-10-31/p0/e2/run_summary.json",
+        "bytes": 8865,
+        "sha256": "301cba3d0d76840702311b83ed395baa52fbfc6e31823c5b534f744997582603",
+        "role": "Archived E2 train-only timing reference"
+      },
+      {
+        "path": "reports/pilot/evidence/uit_2026-10-31/p1/e2/config_resolved.json",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/reports/pilot/evidence/uit_2026-10-31/p1/e2/config_resolved.json",
+        "bytes": 2481,
+        "sha256": "df66bb10fa315df5f976c74b83c1ee7932c4e5855bead7ec5e5424f49409a5c3",
+        "role": "Archived three-epoch diagnostic policy, not official E2 schedule/LR/seed"
+      },
+      {
+        "path": "reports/pilot/evidence/uit_2026-10-31/p1/e2/history.json",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/reports/pilot/evidence/uit_2026-10-31/p1/e2/history.json",
+        "bytes": 77152,
+        "sha256": "26127a71f1ca55d7a79b598e1360c6e00c4b8afebe9a387903df7f92ddaa1a8a",
+        "role": "Archived E2 timing/history context only"
+      },
+      {
+        "path": "reports/pilot/evidence/uit_2026-10-31/p1/e2/run_summary.json",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/reports/pilot/evidence/uit_2026-10-31/p1/e2/run_summary.json",
+        "bytes": 1674,
+        "sha256": "3f62bc2b322ecbec75dbb029f0a63283c62639f5a87c43fbd306c5da82d2c7fc",
+        "role": "Archived diagnostic completion, not official E2 outcome"
+      },
+      {
+        "path": "requirements.txt",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/requirements.txt",
+        "bytes": 191,
+        "sha256": "2b21d7c94e7dd31d8abbef8e0392ad0325db71eeee49bfa8beb0825aa7f99cc4",
+        "role": "Current dependency source preparation snapshot, not actual target software observation"
+      },
+      {
+        "path": "pyproject.toml",
+        "materialized_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/.tools/publish-pilot/pyproject.toml",
+        "bytes": 270,
+        "sha256": "aa1a9177445ab29cfe2de16ed6d0c2f05f7884f02706254c38c321ae2ce59d0d",
+        "role": "Current package/dependency source preparation snapshot, not target acceptance"
+      }
+    ],
+    "provided_comparator_preparation_observations": [
+      {
+        "experiment": "E1",
+        "actual_supplied_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/src/e1/e1_three_seed_validation_report_v1.json",
+        "bytes": 53691,
+        "sha256": "3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e",
+        "role": "Materialized read-only reviewed official comparator observed during preparation; absolute local path is provenance, not an execution default or branch-content assumption"
+      },
+      {
+        "experiment": "E1-HR",
+        "actual_supplied_preparation_path": "C:/Users/Windows/Downloads/GeoLocation/src/e1hr/final-report-v1/e1hr_three_seed_validation_report_v1.json",
+        "bytes": 117318,
+        "sha256": "9cb44e8aa98d18065402ea3be750586187aeb4b0e4ff23cfa6badfcc484426cf",
+        "role": "Materialized read-only reviewed official comparator observed during preparation; absolute local path is provenance, not an execution default or branch-content assumption"
+      }
+    ],
+    "snapshot_semantics": "These exact path/byte/hash records identify pre-progress-update preparation inputs, including the three corrected E2 documents just approved at G0. Later gate/task/ledger/handoff edits can change live documentation bytes without mutating this candidate after digest presentation or a later frozen contract. No circular candidate-document digest dependency: candidate own digest is external and never embedded. Preparation input hashes are not future accepted runtime hashes.",
+    "numeric_value_rationales": {
+      "topology_fusion_execution_head": "E2 spec Sections 1/3/4; one shared encoder, 896x384 + 4x320x320, two-call batch-major order, per-view final LayerNorm, mean then concat, fan-in 1536 and mandatory counts",
+      "data_preprocessing": "E2 spec Sections 2/3; byte-for-byte split and frozen preprocessing config/module/sidecar; no sample/split/geometry changes",
+      "common_optimizer_batch_budget_schedule_rng_runtime": "E2 spec Sections 5-8 inherits settled E1 R1-R9 controls; no pilot numeric promotion or reopened optimization choices",
+      "campaign_selection": "E2 spec Section 7; independent four-trial campaign, distinct chronological checkpoint/global-maximum LR comparators, fresh final seeds and mandatory STOP",
+      "target_attempts_identity": "E2 spec Sections 9-12 and reviewed plan; own authorized acceptance, exact source projection versus audit, one run per nine-hour attempt, completed-boundary full-state replay",
+      "comparators_oracles_reporting": "E2 spec Sections 4/13; primary E1/contextual E1-HR roles, both exact required hashes, JSON integer counts, ddof=1/full precision/percentage-point deltas, explicit actual-path inputs",
+      "gates_test_e3": "Current explicit user G0/T00b-only instruction and E2 spec Sections 14/15; no G1/freeze/implementation/execution, study-wide test lock and E3 compatibility only"
+    },
+    "measurement_scope": "Only existing document/metadata/file bytes were read for candidate preparation; no dataset images, weights/model allocation, CPU/GPU tests, declaration creation, training or Slurm execution"
+  },
+  "input_completeness": {
+    "unresolved_frozen_scientific_fields": [],
+    "required_serialized_bindings": {
+      "comparator_roles_and_both_exact_hashes": "reporting.comparison.comparators",
+      "parameter_oracles": "model.parameter_count_oracles.classifier=190588 and total=28010716, JSON integers",
+      "missing_swapped_or_incorrect_binding": "Incomplete E2-G1 package; prose references/report-time defaults insufficient"
+    },
+    "pending_g1_decisions": [
+      "Explicit review/approval of exact candidate file SHA-256",
+      "Approve exact-byte freeze and only then sidecar/digest-bound G1 receipt",
+      "Select implementation method and explicitly name authorized implementation/CPU-preparation tasks"
+    ],
+    "later_required_observations_or_outputs": [
+      "Actual accepted E2 consumed-source file hashes/fingerprint",
+      "Current target software/effective runtime/device/driver/allocation and clean Git audit",
+      "Current train/val image audit/conformance bindings and target acceptance evidence/inventory hashes",
+      "Actual execution-environment E2 output and provided comparator paths",
+      "Digest-bound stage approval receipts and later run declarations",
+      "E2 selected LR and complete four-trial ledger",
+      "Actual attempt/job IDs and failure/replay records",
+      "Selected epoch/checkpoint/history/selection hashes",
+      "Per-seed and aggregate measured validation metrics",
+      "Closeout inventories"
+    ],
+    "later_outputs_policy": "Future observations/outputs are not scientific defaults; do not invent/prepopulate accepted source maps, result hashes, selected LR, selected epochs, jobs or metrics; collect only at the authorized stage",
+    "execution_authorized_by_this_candidate": false
+  },
+  "record_semantics": "All scientific settings, shapes, expected counts, required zero-test-access values and later verification requirements are design obligations. Parameter counts are mandatory oracles, not observed official results. Preparation provenance records only actual existing input bytes. This candidate is not frozen, is not a receipt, does not include its own SHA-256, and grants no implementation, testing, target, tuning, final, E3 or test-image authorization."
+}

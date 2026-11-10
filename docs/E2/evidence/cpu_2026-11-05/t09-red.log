@@ -1,0 +1,122 @@
+FFFFFF                                                                   [100%]
+================================== FAILURES ===================================
+_____ test_selected_checkpoint_analysis_uses_earlier_weights_and_exports ______
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...a6dfc', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000025131F4DA10>
+
+    def test_selected_checkpoint_analysis_uses_earlier_weights_and_exports(run_config, monkeypatch):
+        import src.e2.report as report
+        from src.e2.config import read_json, sha256_file
+        module = install_cpu_edges(monkeypatch)
+        setup = module._setup
+        def stable(config, checked):
+            ctx = setup(config, checked)
+            with torch.no_grad():
+                ctx["model"].net[-1].bias.zero_()
+                ctx["model"].net[-1].bias[0] = 3.
+            return ctx
+        monkeypatch.setattr(module, "_setup", stable)
+        folder = Path(run_config["paths"]["runs_dir"]) / run_config["run_id"]
+        summary = module.run(run_config, folder)
+        assert summary["selected"]["epoch"] == 1
+        state = torch.load(folder / "last.pt", weights_only=False)
+        row = {"config": state["config"], "summary": summary, "run_dir": str(folder), "best_sha256": sha256_file(folder / "best.pt")}
+        monkeypatch.setattr(report, "validate_completed_run", lambda _: row)
+        monkeypatch.setattr(report, "_evaluation_context", lambda c: stable(c, summary["identity"]))
+        from .helpers import read_fixture
+        monkeypatch.setattr(report,"read_checkpoint",read_fixture)
+        result = report.evaluate_selected(state["config"], folder)
+        history = read_json(folder / "history.json")
+>       assert result["metrics"]["nll"] == pytest.approx(history[0]["validation"]["nll"])
+E       KeyError: 'metrics'
+
+tests\e2\test_report.py:33: KeyError
+__________ test_three_seed_sample_std_without_rounding_or_ensembling __________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t09-red/test_three_seed_sample_std_wit0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000251370B7CD0>
+
+    def test_three_seed_sample_std_without_rounding_or_ensembling(recipe, tmp_path, monkeypatch):
+        report, folders, selection, mapped = aggregate_fixture(recipe, tmp_path, monkeypatch)
+        r = report.aggregate_final(folders, recipe, selection)
+>       assert r["overall"]["top1"]["mean"] == .2
+E       KeyError: 'overall'
+
+tests\e2\test_report.py:83: KeyError
+___________ test_analysis_with_wrong_checkpoint_lineage_is_rejected ___________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t09-red/test_analysis_with_wrong_check0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000251370FA950>
+
+    def test_analysis_with_wrong_checkpoint_lineage_is_rejected(recipe, tmp_path, monkeypatch):
+        report, folders, selection, mapped = aggregate_fixture(recipe, tmp_path, monkeypatch)
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import read_json
+        p = folders[0] / "validation_analysis/analysis.json"
+        analysis = read_json(p)
+        analysis["best_sha256"] = "wrong"
+        atomic_json(p, analysis)
+>       with pytest.raises(ValueError):
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_report.py:105: Failed
+_ test_aggregate_accepts_audit_only_commit_change_but_rejects_runtime_change __
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t09-red/test_aggregate_accepts_audit_o0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000251369B4F10>
+
+    def test_aggregate_accepts_audit_only_commit_change_but_rejects_runtime_change(recipe,tmp_path,monkeypatch):
+        report,folders,selection,mapped=aggregate_fixture(recipe,tmp_path,monkeypatch)
+        row=mapped[str(folders[-1].resolve())]
+        row['summary']['identity']['audit']['clean_git_commit']='b'*40
+>       assert report.aggregate_final(folders,recipe,selection)['ddof']==1
+E       KeyError: 'ddof'
+
+tests\e2\test_report.py:113: KeyError
+__________ test_comparator_artifacts_are_explicit_hash_bound_inputs ___________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t09-red/test_comparator_artifacts_are_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000251368F9910>
+
+    def test_comparator_artifacts_are_explicit_hash_bound_inputs(recipe,tmp_path,monkeypatch):
+        from src.e2.config import ROOT,sha256_file
+        report,folders,selection,mapped=aggregate_fixture(recipe,tmp_path,monkeypatch)
+        e2=report.aggregate_final(folders,recipe,selection)
+        # These are supplied fixture paths only; production has no path defaults.
+        e1=ROOT/'src/e1/e1_three_seed_validation_report_v1.json'
+        hr=ROOT/'src/e1hr/final-report-v1/e1hr_three_seed_validation_report_v1.json'
+        before=[sha256_file(p) for p in (e1,hr)]
+        result=report.compare_baselines(e2,e1,hr)
+>       assert result['comparators']['E1']['role']=='primary_architectural'
+E       KeyError: 'comparators'
+
+tests\e2\test_report.py:127: KeyError
+____________ test_report_labels_primary_and_contextual_comparisons ____________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t09-red/test_report_labels_primary_and0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000025137055C50>
+
+    def test_report_labels_primary_and_contextual_comparisons(recipe,tmp_path,monkeypatch):
+        report,folders,selection,mapped=aggregate_fixture(recipe,tmp_path,monkeypatch)
+        from src.e2.config import ROOT
+        result=report.compare_baselines(report.aggregate_final(folders,recipe,selection),
+            ROOT/'src/e1/e1_three_seed_validation_report_v1.json',
+            ROOT/'src/e1hr/final-report-v1/e1hr_three_seed_validation_report_v1.json')
+>       assert result['comparators']['E1']['sha256']==recipe['reporting']['comparison']['comparators']['E1']['required_aggregate_sha256']
+E       KeyError: 'comparators'
+
+tests\e2\test_report.py:142: KeyError
+=========================== short test summary info ===========================
+FAILED tests/e2/test_report.py::test_selected_checkpoint_analysis_uses_earlier_weights_and_exports
+FAILED tests/e2/test_report.py::test_three_seed_sample_std_without_rounding_or_ensembling
+FAILED tests/e2/test_report.py::test_analysis_with_wrong_checkpoint_lineage_is_rejected
+FAILED tests/e2/test_report.py::test_aggregate_accepts_audit_only_commit_change_but_rejects_runtime_change
+FAILED tests/e2/test_report.py::test_comparator_artifacts_are_explicit_hash_bound_inputs
+FAILED tests/e2/test_report.py::test_report_labels_primary_and_contextual_comparisons
+6 failed in 5.93s

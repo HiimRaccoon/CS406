@@ -1,0 +1,138 @@
+..F.F.....F................                                              [100%]
+================================== FAILURES ===================================
+_______ test_terminal_publication_crash_recovers_without_training_more ________
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...a9', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024B96270750>
+
+    def test_terminal_publication_crash_recovers_without_training_more(run_config, monkeypatch):
+        module = install_cpu_edges(monkeypatch)
+        event = module._event
+        class HardKill(BaseException):
+            pass
+        def interrupted(folder, name, **kw):
+            if name == "complete":
+                raise HardKill("kill at terminal publication")
+            return event(folder, name, **kw)
+        monkeypatch.setattr(module, "_event", interrupted)
+        folder = Path(run_config["paths"]["runs_dir"]) / run_config["run_id"]
+        with pytest.raises(HardKill):
+            module.run(run_config, folder)
+        assert torch.load(folder / "last.pt", weights_only=False)["progress"]["completed_epoch"] == 8
+        monkeypatch.setattr(module, "_event", event)
+        monkeypatch.setattr(module, "train_epoch", lambda *a, **k: pytest.fail("trained after eight committed epochs"))
+>       result = module.run(run_config, folder, resume=folder / "last.pt")
+
+tests\e1hr\test_recovery.py:53: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\e1hr\train.py:242: in run
+    state = read_checkpoint(resume, config=config, identity=accepted_resume)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-review-green/test_terminal_publication_cras0/runs/e1hr-tuning-lr0.00010000-seed1001/last.pt')
+
+    def read_checkpoint(path: Path, *, config: dict, identity: dict) -> dict:
+        # Only trusted local official artifacts are deserialized; pretrained loading uses weights_only=True.
+        state = torch.load(path, map_location="cpu", weights_only=False)
+        required = {"kind", "experiment", "resolution_wh", "role", "model", "optimizer", "scheduler", "scaler", "config", "config_sha256", "identity", "progress", "rng", "loader_rng"}
+        try:
+            if (set(state) != required or state["kind"] != "official_e1hr_checkpoint_v1" or state["role"] not in {"best", "last"}
+                    or state["experiment"] != "E1-HR" or state["resolution_wh"] != [1344, 576]
+                    or state["config_sha256"] != fingerprint(config) or fingerprint(state["config"]) != fingerprint(config)
+                    or scientific_identity(state["identity"]) != scientific_identity(identity)):
+>               raise ValueError("Checkpoint identity/config/kind mismatch")
+E               ValueError: Checkpoint identity/config/kind mismatch
+
+src\e1hr\checkpoint.py:112: ValueError
+_________ test_attempt_allocations_and_replayed_training_are_retained _________
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...dd', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024B96A26790>
+
+    def test_attempt_allocations_and_replayed_training_are_retained(run_config, monkeypatch):
+        module = install_cpu_edges(monkeypatch)
+        setup, evaluate = module._setup, module.evaluate
+        attempts = []
+        def allocated(c, checked):
+            context = setup(c, checked)
+            attempts.append(len(attempts) + 1)
+            context["environment"] = {"allocation": {"job_id": attempts[-1]}}
+            return context
+        monkeypatch.setattr(module, "_setup", allocated)
+        monkeypatch.setattr(module, "evaluate", lambda *a, **k: (_ for _ in ()).throw(RuntimeError("validation failure after training")))
+        folder = Path(run_config["paths"]["runs_dir"]) / run_config["run_id"]
+        with pytest.raises(RuntimeError):
+            module.run(run_config, folder)
+        monkeypatch.setattr(module, "evaluate", evaluate)
+>       module.run(run_config, folder, resume=folder / "last.pt")
+
+tests\e1hr\test_recovery.py:106: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\e1hr\train.py:242: in run
+    state = read_checkpoint(resume, config=config, identity=accepted_resume)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-review-green/test_attempt_allocations_and_r0/runs/e1hr-tuning-lr0.00010000-seed1001/last.pt')
+
+    def read_checkpoint(path: Path, *, config: dict, identity: dict) -> dict:
+        # Only trusted local official artifacts are deserialized; pretrained loading uses weights_only=True.
+        state = torch.load(path, map_location="cpu", weights_only=False)
+        required = {"kind", "experiment", "resolution_wh", "role", "model", "optimizer", "scheduler", "scaler", "config", "config_sha256", "identity", "progress", "rng", "loader_rng"}
+        try:
+            if (set(state) != required or state["kind"] != "official_e1hr_checkpoint_v1" or state["role"] not in {"best", "last"}
+                    or state["experiment"] != "E1-HR" or state["resolution_wh"] != [1344, 576]
+                    or state["config_sha256"] != fingerprint(config) or fingerprint(state["config"]) != fingerprint(config)
+                    or scientific_identity(state["identity"]) != scientific_identity(identity)):
+>               raise ValueError("Checkpoint identity/config/kind mismatch")
+E               ValueError: Checkpoint identity/config/kind mismatch
+
+src\e1hr\checkpoint.py:112: ValueError
+_ test_attempt_publication_kill_is_recorded_and_same_run_recovers[outcome.json] _
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...50', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024B96A68510>
+phase = 'outcome.json'
+
+    @pytest.mark.parametrize('phase',['request.json','environment.json','outcome.json'])
+    def test_attempt_publication_kill_is_recorded_and_same_run_recovers(run_config,monkeypatch,phase):
+        module=install_cpu_edges(monkeypatch)
+        real=module._attempt_snapshot
+        class Kill(BaseException):pass
+        def partial(path,value):
+            if Path(path).name==phase:
+                Path(path).write_text('{')
+                raise Kill('injected interrupted legacy publication')
+            return real(path,value)
+        monkeypatch.setattr(module,'_attempt_snapshot',partial)
+        folder=Path(run_config['paths']['runs_dir'])/run_config['run_id']
+        with pytest.raises(Kill):module.run(run_config,folder)
+        monkeypatch.setattr(module,'_attempt_snapshot',real)
+        resume=folder/'last.pt' if (folder/'last.pt').exists() else None
+>       assert module.run(run_config,folder,resume=resume)['status']=='complete'
+
+tests\e1hr\test_recovery.py:172: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\e1hr\train.py:242: in run
+    state = read_checkpoint(resume, config=config, identity=accepted_resume)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-review-green/test_attempt_publication_kill_2/runs/e1hr-tuning-lr0.00010000-seed1001/last.pt')
+
+    def read_checkpoint(path: Path, *, config: dict, identity: dict) -> dict:
+        # Only trusted local official artifacts are deserialized; pretrained loading uses weights_only=True.
+        state = torch.load(path, map_location="cpu", weights_only=False)
+        required = {"kind", "experiment", "resolution_wh", "role", "model", "optimizer", "scheduler", "scaler", "config", "config_sha256", "identity", "progress", "rng", "loader_rng"}
+        try:
+            if (set(state) != required or state["kind"] != "official_e1hr_checkpoint_v1" or state["role"] not in {"best", "last"}
+                    or state["experiment"] != "E1-HR" or state["resolution_wh"] != [1344, 576]
+                    or state["config_sha256"] != fingerprint(config) or fingerprint(state["config"]) != fingerprint(config)
+                    or scientific_identity(state["identity"]) != scientific_identity(identity)):
+>               raise ValueError("Checkpoint identity/config/kind mismatch")
+E               ValueError: Checkpoint identity/config/kind mismatch
+
+src\e1hr\checkpoint.py:112: ValueError
+=========================== short test summary info ===========================
+FAILED tests/e1hr/test_recovery.py::test_terminal_publication_crash_recovers_without_training_more
+FAILED tests/e1hr/test_recovery.py::test_attempt_allocations_and_replayed_training_are_retained
+FAILED tests/e1hr/test_recovery.py::test_attempt_publication_kill_is_recorded_and_same_run_recovers[outcome.json]
+3 failed, 24 passed in 18.10s

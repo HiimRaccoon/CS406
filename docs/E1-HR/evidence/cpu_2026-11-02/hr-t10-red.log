@@ -1,0 +1,61 @@
+....F......FF                                                            [100%]
+================================== FAILURES ===================================
+________________ test_wrapper_exact_allocation_and_single_run _________________
+
+shell_run = (<function shell_run.<locals>.execute at 0x000001AC16B2ECA0>, {'budget': {'early_stopping': False, 'epoch_indices': [0...9', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...})
+
+    def test_wrapper_exact_allocation_and_single_run(shell_run):
+>       text = WRAPPER.read_text(encoding="utf-8")
+
+tests\e1hr\test_entrypoints.py:100: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.tools\python\cpython-3.11-windows-x86_64-none\Lib\pathlib.py:1058: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/scripts/slurm/e1hr_train.sbatch')
+mode = 'r', buffering = -1, encoding = 'utf-8', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Windows\\Downloads\\GeoLocation\\scripts\\slurm\\e1hr_train.sbatch'
+
+.tools\python\cpython-3.11-windows-x86_64-none\Lib\pathlib.py:1044: FileNotFoundError
+______________ test_wrapper_resume_requires_own_last_checkpoint _______________
+
+shell_run = (<function shell_run.<locals>.execute at 0x000001AC16BD1120>, {'budget': {'early_stopping': False, 'epoch_indices': [0...1', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...})
+
+    def test_wrapper_resume_requires_own_last_checkpoint(shell_run):
+        execute, config = shell_run
+        last = Path(config["paths"]["runs_dir"]) / config["run_id"] / "last.pt"
+        last.parent.mkdir(parents=True)
+        last.touch()  # Shell checks the path; the production runner checks contents.
+        result, captured = execute("--resume", last.as_posix())
+>       assert result.returncode == 0, result.stderr
+E       AssertionError: /usr/bin/bash: C:/Users/Windows/Downloads/GeoLocation/scripts/slurm/e1hr_train.sbatch: No such file or directory
+E         
+E       assert 127 == 0
+E        +  where 127 = CompletedProcess(args=['C:\\Program Files\\Git\\bin\\bash.exe', 'C:/Users/Windows/Downloads/GeoLocation/scripts/slurm/...r='/usr/bin/bash: C:/Users/Windows/Downloads/GeoLocation/scripts/slurm/e1hr_train.sbatch: No such file or directory\n').returncode
+
+tests\e1hr\test_entrypoints.py:127: AssertionError
+__________ test_smoke_evidence_cannot_approve_g2_or_become_official ___________
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+
+    def test_smoke_evidence_cannot_approve_g2_or_become_official(recipe):
+>       from tests.e1hr.test_gpu_smoke import mechanics_config, g2_candidate
+E       ModuleNotFoundError: No module named 'tests.e1hr.test_gpu_smoke'
+
+tests\e1hr\test_entrypoints.py:136: ModuleNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/e1hr/test_entrypoints.py::test_wrapper_exact_allocation_and_single_run
+FAILED tests/e1hr/test_entrypoints.py::test_wrapper_resume_requires_own_last_checkpoint
+FAILED tests/e1hr/test_entrypoints.py::test_smoke_evidence_cannot_approve_g2_or_become_official
+3 failed, 10 passed in 23.08s

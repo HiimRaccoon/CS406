@@ -1,0 +1,80 @@
+.F.FF                                                                    [100%]
+================================== FAILURES ===================================
+__________ test_three_seed_sample_std_without_rounding_or_ensembling __________
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t09-red/test_three_seed_sample_std_wit0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002048FD01D50>
+
+    def test_three_seed_sample_std_without_rounding_or_ensembling(recipe, tmp_path, monkeypatch):
+        report, folders, selection, mapped = aggregate_fixture(recipe, tmp_path, monkeypatch)
+        r = report.aggregate_final(folders, recipe, selection)
+        assert r["overall"]["top1"]["mean"] == .2
+        assert r["overall"]["top1"]["std"] == pytest.approx(.1)
+        assert r["ddof"] == 1
+>       assert r['kind']=='e1hr_three_seed_validation_report_v1'
+E       AssertionError: assert 'e1_three_see...ion_report_v1' == 'e1hr_three_s...ion_report_v1'
+E         
+E         - e1hr_three_seed_validation_report_v1
+E         ?   --
+E         + e1_three_seed_validation_report_v1
+
+tests\e1hr\test_report.py:82: AssertionError
+_ test_aggregate_accepts_audit_only_commit_change_but_rejects_runtime_change __
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t09-red/test_aggregate_accepts_audit_o0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000020494730150>
+
+    def test_aggregate_accepts_audit_only_commit_change_but_rejects_runtime_change(recipe,tmp_path,monkeypatch):
+        report,folders,selection,mapped=aggregate_fixture(recipe,tmp_path,monkeypatch)
+        row=mapped[str(folders[-1].resolve())]
+        row['summary']['identity']['audit']['clean_git_commit']='b'*40
+>       assert report.aggregate_final(folders,recipe,selection)['ddof']==1
+
+tests\e1hr\test_report.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+run_dirs = [WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t09-red/test_aggregate_accepts_audit_o0/2001')... WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t09-red/test_aggregate_accepts_audit_o0/4001')]
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+selection = {'lr': 0.0001, 'selection_fingerprint': 'fixture-only'}
+
+    def aggregate_final(run_dirs: list[Path], recipe: dict, selection: dict) -> dict:
+        recipe = validate_recipe(recipe)
+        _verify_selection(recipe, selection)
+        if len(run_dirs) != 3 or len({str(Path(p).resolve()) for p in run_dirs}) != 3:
+            raise ValueError("Exactly three distinct complete final runs required")
+        rows = [validate_completed_run(p) for p in run_dirs]
+        rows.sort(key=lambda r: r["config"]["seed"])
+        if {r["config"]["seed"] for r in rows} != {2001, 3001, 4001}:
+            raise ValueError("Final seeds must be distinct and exclude tuning")
+        for row in rows:
+            c = row["config"]
+            if (c["stage"] != "final" or c["lr"] != selection["lr"] or c["contract_sha256"] != CONTRACT_SHA256
+                    or sha256_file(Path(c["paths"]["selection"])) != c["selection_sha256"]
+                    or read_selection(Path(c["paths"]["selection"]), recipe) != selection
+                    or row["summary"]["identity"] != rows[0]["summary"]["identity"]):
+>               raise ValueError("Final records do not share the frozen selection/recipe/accepted identity")
+E               ValueError: Final records do not share the frozen selection/recipe/accepted identity
+
+src\e1hr\report.py:123: ValueError
+_________ test_comparison_uses_exact_official_e1_aggregate_read_only __________
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t09-red/test_comparison_uses_exact_off0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002049479A2D0>
+
+    def test_comparison_uses_exact_official_e1_aggregate_read_only(recipe,tmp_path,monkeypatch):
+        from src.e1hr.config import ROOT,sha256_file
+        report,folders,selection,mapped=aggregate_fixture(recipe,tmp_path,monkeypatch)
+        hr=report.aggregate_final(folders,recipe,selection)
+        path=ROOT/'src/e1/e1_three_seed_validation_report_v1.json';before=sha256_file(path)
+>       comparison=report.compare_e1(hr,path)
+E       AttributeError: module 'src.e1hr.report' has no attribute 'compare_e1'
+
+tests\e1hr\test_report.py:119: AttributeError
+=========================== short test summary info ===========================
+FAILED tests/e1hr/test_report.py::test_three_seed_sample_std_without_rounding_or_ensembling
+FAILED tests/e1hr/test_report.py::test_aggregate_accepts_audit_only_commit_change_but_rejects_runtime_change
+FAILED tests/e1hr/test_report.py::test_comparison_uses_exact_official_e1_aggregate_read_only
+3 failed, 2 passed in 2.68s

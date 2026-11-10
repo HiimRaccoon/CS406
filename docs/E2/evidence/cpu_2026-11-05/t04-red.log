@@ -1,0 +1,18 @@
+.F..                                                                     [100%]
+================================== FAILURES ===================================
+______ test_exact_ties_are_stable_across_chunks_and_do_not_change_logits ______
+
+    def test_exact_ties_are_stable_across_chunks_and_do_not_change_logits():
+        from src.e2.metrics import Metrics124, rank_logits
+        x = torch.zeros(1, 124)
+        original = x.clone()
+>       assert rank_logits(x)[0, :5].tolist() == [0, 1, 2, 3, 4]
+E       assert [0, 0, 0, 0, 0] == [0, 1, 2, 3, 4]
+E         
+E         At index 1 diff: 0 != 1
+E         Use -v to get more diff
+
+tests\e2\test_metrics.py:28: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/e2/test_metrics.py::test_exact_ties_are_stable_across_chunks_and_do_not_change_logits
+1 failed, 3 passed in 1.61s

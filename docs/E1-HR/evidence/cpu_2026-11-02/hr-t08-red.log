@@ -1,0 +1,165 @@
+FFFFFFFFFFFF                                                             [100%]
+================================== FAILURES ===================================
+________ test_tuning_declarations_are_exactly_four_and_create_no_jobs _________
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t08-red/test_tuning_declarations_are_e0')
+
+    def test_tuning_declarations_are_exactly_four_and_create_no_jobs(recipe, tmp_path):
+>       from src.e1hr.campaign import plan_tuning, write_declarations
+E       ModuleNotFoundError: No module named 'src.e1hr.campaign'
+
+tests\e1hr\test_campaign.py:31: ModuleNotFoundError
+_____ test_global_maximum_tie_is_order_independent_and_final_seeds_fresh ______
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t08-red/test_global_maximum_tie_is_ord0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001C1616A6B90>
+
+    def test_global_maximum_tie_is_order_independent_and_final_seeds_fresh(recipe, tmp_path, monkeypatch):
+>       module, paths, records, mapped = install_trial_edge(monkeypatch, recipe, tmp_path)
+
+tests\e1hr\test_campaign.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001C1616A6B90>
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t08-red/test_global_maximum_tie_is_ord0')
+scores = None
+
+    def install_trial_edge(monkeypatch, recipe, tmp_path, scores=None):
+>       import src.e1hr.campaign as module
+E       ModuleNotFoundError: No module named 'src.e1hr.campaign'
+
+tests\e1hr\test_campaign.py:8: ModuleNotFoundError
+____________ test_missing_duplicate_or_extra_trials_stop_selection ____________
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t08-red/test_missing_duplicate_or_extr0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001C1616D6350>
+
+    def test_missing_duplicate_or_extra_trials_stop_selection(recipe, tmp_path, monkeypatch):
+>       module, paths, records, mapped = install_trial_edge(monkeypatch, recipe, tmp_path)
+
+tests\e1hr\test_campaign.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001C1616D6350>
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t08-red/test_missing_duplicate_or_extr0')
+scores = None
+
+    def install_trial_edge(monkeypatch, recipe, tmp_path, scores=None):
+>       import src.e1hr.campaign as module
+E       ModuleNotFoundError: No module named 'src.e1hr.campaign'
+
+tests\e1hr\test_campaign.py:8: ModuleNotFoundError
+___________ test_synthetic_and_incomplete_evidence_is_not_promoted ____________
+
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t08-red/test_synthetic_and_incomplete_0')
+
+    def test_synthetic_and_incomplete_evidence_is_not_promoted(tmp_path):
+>       from src.e1hr.campaign import validate_completed_run
+E       ModuleNotFoundError: No module named 'src.e1hr.campaign'
+
+tests\e1hr\test_campaign.py:71: ModuleNotFoundError
+_ test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection[completed_epochs-7] _
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...f3', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t08-red/test_forged_complete_prefix_or0')
+field = 'completed_epochs', value = 7
+
+    @pytest.mark.parametrize("field,value", [("completed_epochs", 7), ("validations", 7), ("optimizer_updates", 52497), ("seed", 2001)])
+    def test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection(run_config, tmp_path, field, value):
+>       from src.e1hr.campaign import validate_completed_run
+E       ModuleNotFoundError: No module named 'src.e1hr.campaign'
+
+tests\e1hr\test_campaign.py:81: ModuleNotFoundError
+_ test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection[validations-7] _
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...d7', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t08-red/test_forged_complete_prefix_or1')
+field = 'validations', value = 7
+
+    @pytest.mark.parametrize("field,value", [("completed_epochs", 7), ("validations", 7), ("optimizer_updates", 52497), ("seed", 2001)])
+    def test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection(run_config, tmp_path, field, value):
+>       from src.e1hr.campaign import validate_completed_run
+E       ModuleNotFoundError: No module named 'src.e1hr.campaign'
+
+tests\e1hr\test_campaign.py:81: ModuleNotFoundError
+_ test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection[optimizer_updates-52497] _
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...58', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t08-red/test_forged_complete_prefix_or2')
+field = 'optimizer_updates', value = 52497
+
+    @pytest.mark.parametrize("field,value", [("completed_epochs", 7), ("validations", 7), ("optimizer_updates", 52497), ("seed", 2001)])
+    def test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection(run_config, tmp_path, field, value):
+>       from src.e1hr.campaign import validate_completed_run
+E       ModuleNotFoundError: No module named 'src.e1hr.campaign'
+
+tests\e1hr\test_campaign.py:81: ModuleNotFoundError
+_ test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection[seed-2001] _
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...81', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t08-red/test_forged_complete_prefix_or3')
+field = 'seed', value = 2001
+
+    @pytest.mark.parametrize("field,value", [("completed_epochs", 7), ("validations", 7), ("optimizer_updates", 52497), ("seed", 2001)])
+    def test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection(run_config, tmp_path, field, value):
+>       from src.e1hr.campaign import validate_completed_run
+E       ModuleNotFoundError: No module named 'src.e1hr.campaign'
+
+tests\e1hr\test_campaign.py:81: ModuleNotFoundError
+____________________ test_full_parser_and_locked_selection ____________________
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+completed_trials = [WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t08-red/test_full_parser_and_locked_se0/simula...Location/.tools/e1hr/pytest-t08-red/test_full_parser_and_locked_se0/simulated-runs/e1hr-tuning-lr0.00020000-seed1001')]
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t08-red/test_full_parser_and_locked_se0')
+
+    def test_full_parser_and_locked_selection(recipe,completed_trials,tmp_path):
+>       from src.e1hr.campaign import validate_completed_run,select_lr,write_selection,read_selection
+E       ModuleNotFoundError: No module named 'src.e1hr.campaign'
+
+tests\e1hr\test_artifacts.py:80: ModuleNotFoundError
+_______ test_rehashed_short_history_and_wrong_selected_weights_rejected _______
+
+completed_trials = [WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t08-red/test_rehashed_short_history_an0/simula...Location/.tools/e1hr/pytest-t08-red/test_rehashed_short_history_an0/simulated-runs/e1hr-tuning-lr0.00020000-seed1001')]
+
+    def test_rehashed_short_history_and_wrong_selected_weights_rejected(completed_trials):
+>       from src.e1hr.campaign import validate_completed_run
+E       ModuleNotFoundError: No module named 'src.e1hr.campaign'
+
+tests\e1hr\test_artifacts.py:89: ModuleNotFoundError
+___________________ test_attempt_evidence_mutation_rejected ___________________
+
+completed_trials = [WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t08-red/test_attempt_evidence_mutation0/simula...Location/.tools/e1hr/pytest-t08-red/test_attempt_evidence_mutation0/simulated-runs/e1hr-tuning-lr0.00020000-seed1001')]
+
+    def test_attempt_evidence_mutation_rejected(completed_trials):
+>       from src.e1hr.campaign import validate_completed_run
+E       ModuleNotFoundError: No module named 'src.e1hr.campaign'
+
+tests\e1hr\test_artifacts.py:103: ModuleNotFoundError
+____________ test_docs_only_commit_audit_is_not_campaign_identity _____________
+
+completed_trials = [WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t08-red/test_docs_only_commit_audit_is0/simula...Location/.tools/e1hr/pytest-t08-red/test_docs_only_commit_audit_is0/simulated-runs/e1hr-tuning-lr0.00020000-seed1001')]
+
+    def test_docs_only_commit_audit_is_not_campaign_identity(completed_trials):
+>       from src.e1hr.campaign import validate_completed_run
+E       ModuleNotFoundError: No module named 'src.e1hr.campaign'
+
+tests\e1hr\test_artifacts.py:109: ModuleNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/e1hr/test_campaign.py::test_tuning_declarations_are_exactly_four_and_create_no_jobs
+FAILED tests/e1hr/test_campaign.py::test_global_maximum_tie_is_order_independent_and_final_seeds_fresh
+FAILED tests/e1hr/test_campaign.py::test_missing_duplicate_or_extra_trials_stop_selection
+FAILED tests/e1hr/test_campaign.py::test_synthetic_and_incomplete_evidence_is_not_promoted
+FAILED tests/e1hr/test_campaign.py::test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection[completed_epochs-7]
+FAILED tests/e1hr/test_campaign.py::test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection[validations-7]
+FAILED tests/e1hr/test_campaign.py::test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection[optimizer_updates-52497]
+FAILED tests/e1hr/test_campaign.py::test_forged_complete_prefix_or_wrong_seed_cannot_reach_selection[seed-2001]
+FAILED tests/e1hr/test_artifacts.py::test_full_parser_and_locked_selection - ...
+FAILED tests/e1hr/test_artifacts.py::test_rehashed_short_history_and_wrong_selected_weights_rejected
+FAILED tests/e1hr/test_artifacts.py::test_attempt_evidence_mutation_rejected
+FAILED tests/e1hr/test_artifacts.py::test_docs_only_commit_audit_is_not_campaign_identity
+12 failed in 4.33s

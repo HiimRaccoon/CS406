@@ -1,0 +1,28 @@
+FFF                                                                      [100%]
+================================== FAILURES ===================================
+____ test_cross_bucket_f1_retains_false_positives_and_unsupported_outputs _____
+
+    def test_cross_bucket_f1_retains_false_positives_and_unsupported_outputs():
+>       from src.e1hr.metrics import Metrics124
+E       ModuleNotFoundError: No module named 'src.e1hr.metrics'
+
+tests\e1hr\test_metrics.py:6: ModuleNotFoundError
+______ test_exact_ties_are_stable_across_chunks_and_do_not_change_logits ______
+
+    def test_exact_ties_are_stable_across_chunks_and_do_not_change_logits():
+>       from src.e1hr.metrics import Metrics124, rank_logits
+E       ModuleNotFoundError: No module named 'src.e1hr.metrics'
+
+tests\e1hr\test_metrics.py:25: ModuleNotFoundError
+_________________ test_invalid_and_empty_metrics_are_rejected _________________
+
+    def test_invalid_and_empty_metrics_are_rejected():
+>       from src.e1hr.metrics import Metrics124
+E       ModuleNotFoundError: No module named 'src.e1hr.metrics'
+
+tests\e1hr\test_metrics.py:41: ModuleNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/e1hr/test_metrics.py::test_cross_bucket_f1_retains_false_positives_and_unsupported_outputs
+FAILED tests/e1hr/test_metrics.py::test_exact_ties_are_stable_across_chunks_and_do_not_change_logits
+FAILED tests/e1hr/test_metrics.py::test_invalid_and_empty_metrics_are_rejected
+3 failed in 0.03s

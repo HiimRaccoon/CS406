@@ -1,0 +1,304 @@
+FFFFFFFFFFFF                                                             [100%]
+================================== FAILURES ===================================
+____ test_rehashed_analysis_requires_complete_manifest_predictions[empty] _____
+
+full_selected_analysis = (<module 'src.e2.report' from 'C:\\Users\\Windows\\Downloads\\GeoLocation\\src\\e2\\report.py'>, {'best_sha256': '2690...n/.tools/e2/pytest-final-review-all-exports-red/test_rehashed_analysis_require0/runs/e2-tuning-lr0.00010000-seed1001'))
+mutation = 'empty'
+
+    @pytest.mark.parametrize('mutation',['empty','duplicate','wrong_gt','order','top5']+['csv_'+name for name in ('overall','per_class','buckets','predictions','confusion','most_confused','learning_curves')])
+    def test_rehashed_analysis_requires_complete_manifest_predictions(full_selected_analysis,mutation):
+        report,row,folder=full_selected_analysis
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import read_json,sha256_file
+        path=folder/'validation_analysis/analysis.json';value=read_json(path);predictions=value['metrics']['predictions']
+        if mutation=='empty':value['metrics']['predictions']=[]
+        if mutation=='duplicate':predictions[-1]=copy.deepcopy(predictions[0])
+        if mutation=='wrong_gt':predictions[0]['label_id']=(predictions[0]['label_id']+1)%124
+        if mutation=='order':predictions[0],predictions[1]=predictions[1],predictions[0]
+        if mutation=='top5':predictions[0]['top5']=[predictions[0]['label_id']]*5
+        if mutation.startswith('csv_'):
+            name=mutation[4:]+'.csv';csv_path=folder/'validation_analysis'/name;csv_path.write_text('altered,header\n')
+            value['exports_sha256'][name]=sha256_file(csv_path)
+        atomic_json(path,value)
+>       with pytest.raises(ValueError):report._selected_analysis(row)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_report.py:229: Failed
+__ test_rehashed_analysis_requires_complete_manifest_predictions[duplicate] ___
+
+full_selected_analysis = (<module 'src.e2.report' from 'C:\\Users\\Windows\\Downloads\\GeoLocation\\src\\e2\\report.py'>, {'best_sha256': '006a...n/.tools/e2/pytest-final-review-all-exports-red/test_rehashed_analysis_require1/runs/e2-tuning-lr0.00010000-seed1001'))
+mutation = 'duplicate'
+
+    @pytest.mark.parametrize('mutation',['empty','duplicate','wrong_gt','order','top5']+['csv_'+name for name in ('overall','per_class','buckets','predictions','confusion','most_confused','learning_curves')])
+    def test_rehashed_analysis_requires_complete_manifest_predictions(full_selected_analysis,mutation):
+        report,row,folder=full_selected_analysis
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import read_json,sha256_file
+        path=folder/'validation_analysis/analysis.json';value=read_json(path);predictions=value['metrics']['predictions']
+        if mutation=='empty':value['metrics']['predictions']=[]
+        if mutation=='duplicate':predictions[-1]=copy.deepcopy(predictions[0])
+        if mutation=='wrong_gt':predictions[0]['label_id']=(predictions[0]['label_id']+1)%124
+        if mutation=='order':predictions[0],predictions[1]=predictions[1],predictions[0]
+        if mutation=='top5':predictions[0]['top5']=[predictions[0]['label_id']]*5
+        if mutation.startswith('csv_'):
+            name=mutation[4:]+'.csv';csv_path=folder/'validation_analysis'/name;csv_path.write_text('altered,header\n')
+            value['exports_sha256'][name]=sha256_file(csv_path)
+        atomic_json(path,value)
+>       with pytest.raises(ValueError):report._selected_analysis(row)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_report.py:229: Failed
+___ test_rehashed_analysis_requires_complete_manifest_predictions[wrong_gt] ___
+
+full_selected_analysis = (<module 'src.e2.report' from 'C:\\Users\\Windows\\Downloads\\GeoLocation\\src\\e2\\report.py'>, {'best_sha256': 'a003...n/.tools/e2/pytest-final-review-all-exports-red/test_rehashed_analysis_require2/runs/e2-tuning-lr0.00010000-seed1001'))
+mutation = 'wrong_gt'
+
+    @pytest.mark.parametrize('mutation',['empty','duplicate','wrong_gt','order','top5']+['csv_'+name for name in ('overall','per_class','buckets','predictions','confusion','most_confused','learning_curves')])
+    def test_rehashed_analysis_requires_complete_manifest_predictions(full_selected_analysis,mutation):
+        report,row,folder=full_selected_analysis
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import read_json,sha256_file
+        path=folder/'validation_analysis/analysis.json';value=read_json(path);predictions=value['metrics']['predictions']
+        if mutation=='empty':value['metrics']['predictions']=[]
+        if mutation=='duplicate':predictions[-1]=copy.deepcopy(predictions[0])
+        if mutation=='wrong_gt':predictions[0]['label_id']=(predictions[0]['label_id']+1)%124
+        if mutation=='order':predictions[0],predictions[1]=predictions[1],predictions[0]
+        if mutation=='top5':predictions[0]['top5']=[predictions[0]['label_id']]*5
+        if mutation.startswith('csv_'):
+            name=mutation[4:]+'.csv';csv_path=folder/'validation_analysis'/name;csv_path.write_text('altered,header\n')
+            value['exports_sha256'][name]=sha256_file(csv_path)
+        atomic_json(path,value)
+>       with pytest.raises(ValueError):report._selected_analysis(row)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_report.py:229: Failed
+____ test_rehashed_analysis_requires_complete_manifest_predictions[order] _____
+
+full_selected_analysis = (<module 'src.e2.report' from 'C:\\Users\\Windows\\Downloads\\GeoLocation\\src\\e2\\report.py'>, {'best_sha256': 'ff6d...n/.tools/e2/pytest-final-review-all-exports-red/test_rehashed_analysis_require3/runs/e2-tuning-lr0.00010000-seed1001'))
+mutation = 'order'
+
+    @pytest.mark.parametrize('mutation',['empty','duplicate','wrong_gt','order','top5']+['csv_'+name for name in ('overall','per_class','buckets','predictions','confusion','most_confused','learning_curves')])
+    def test_rehashed_analysis_requires_complete_manifest_predictions(full_selected_analysis,mutation):
+        report,row,folder=full_selected_analysis
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import read_json,sha256_file
+        path=folder/'validation_analysis/analysis.json';value=read_json(path);predictions=value['metrics']['predictions']
+        if mutation=='empty':value['metrics']['predictions']=[]
+        if mutation=='duplicate':predictions[-1]=copy.deepcopy(predictions[0])
+        if mutation=='wrong_gt':predictions[0]['label_id']=(predictions[0]['label_id']+1)%124
+        if mutation=='order':predictions[0],predictions[1]=predictions[1],predictions[0]
+        if mutation=='top5':predictions[0]['top5']=[predictions[0]['label_id']]*5
+        if mutation.startswith('csv_'):
+            name=mutation[4:]+'.csv';csv_path=folder/'validation_analysis'/name;csv_path.write_text('altered,header\n')
+            value['exports_sha256'][name]=sha256_file(csv_path)
+        atomic_json(path,value)
+>       with pytest.raises(ValueError):report._selected_analysis(row)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_report.py:229: Failed
+_____ test_rehashed_analysis_requires_complete_manifest_predictions[top5] _____
+
+full_selected_analysis = (<module 'src.e2.report' from 'C:\\Users\\Windows\\Downloads\\GeoLocation\\src\\e2\\report.py'>, {'best_sha256': '8286...n/.tools/e2/pytest-final-review-all-exports-red/test_rehashed_analysis_require4/runs/e2-tuning-lr0.00010000-seed1001'))
+mutation = 'top5'
+
+    @pytest.mark.parametrize('mutation',['empty','duplicate','wrong_gt','order','top5']+['csv_'+name for name in ('overall','per_class','buckets','predictions','confusion','most_confused','learning_curves')])
+    def test_rehashed_analysis_requires_complete_manifest_predictions(full_selected_analysis,mutation):
+        report,row,folder=full_selected_analysis
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import read_json,sha256_file
+        path=folder/'validation_analysis/analysis.json';value=read_json(path);predictions=value['metrics']['predictions']
+        if mutation=='empty':value['metrics']['predictions']=[]
+        if mutation=='duplicate':predictions[-1]=copy.deepcopy(predictions[0])
+        if mutation=='wrong_gt':predictions[0]['label_id']=(predictions[0]['label_id']+1)%124
+        if mutation=='order':predictions[0],predictions[1]=predictions[1],predictions[0]
+        if mutation=='top5':predictions[0]['top5']=[predictions[0]['label_id']]*5
+        if mutation.startswith('csv_'):
+            name=mutation[4:]+'.csv';csv_path=folder/'validation_analysis'/name;csv_path.write_text('altered,header\n')
+            value['exports_sha256'][name]=sha256_file(csv_path)
+        atomic_json(path,value)
+>       with pytest.raises(ValueError):report._selected_analysis(row)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_report.py:229: Failed
+_ test_rehashed_analysis_requires_complete_manifest_predictions[csv_overall] __
+
+full_selected_analysis = (<module 'src.e2.report' from 'C:\\Users\\Windows\\Downloads\\GeoLocation\\src\\e2\\report.py'>, {'best_sha256': '7c1d...n/.tools/e2/pytest-final-review-all-exports-red/test_rehashed_analysis_require5/runs/e2-tuning-lr0.00010000-seed1001'))
+mutation = 'csv_overall'
+
+    @pytest.mark.parametrize('mutation',['empty','duplicate','wrong_gt','order','top5']+['csv_'+name for name in ('overall','per_class','buckets','predictions','confusion','most_confused','learning_curves')])
+    def test_rehashed_analysis_requires_complete_manifest_predictions(full_selected_analysis,mutation):
+        report,row,folder=full_selected_analysis
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import read_json,sha256_file
+        path=folder/'validation_analysis/analysis.json';value=read_json(path);predictions=value['metrics']['predictions']
+        if mutation=='empty':value['metrics']['predictions']=[]
+        if mutation=='duplicate':predictions[-1]=copy.deepcopy(predictions[0])
+        if mutation=='wrong_gt':predictions[0]['label_id']=(predictions[0]['label_id']+1)%124
+        if mutation=='order':predictions[0],predictions[1]=predictions[1],predictions[0]
+        if mutation=='top5':predictions[0]['top5']=[predictions[0]['label_id']]*5
+        if mutation.startswith('csv_'):
+            name=mutation[4:]+'.csv';csv_path=folder/'validation_analysis'/name;csv_path.write_text('altered,header\n')
+            value['exports_sha256'][name]=sha256_file(csv_path)
+        atomic_json(path,value)
+>       with pytest.raises(ValueError):report._selected_analysis(row)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_report.py:229: Failed
+_ test_rehashed_analysis_requires_complete_manifest_predictions[csv_per_class] _
+
+full_selected_analysis = (<module 'src.e2.report' from 'C:\\Users\\Windows\\Downloads\\GeoLocation\\src\\e2\\report.py'>, {'best_sha256': '67d5...n/.tools/e2/pytest-final-review-all-exports-red/test_rehashed_analysis_require6/runs/e2-tuning-lr0.00010000-seed1001'))
+mutation = 'csv_per_class'
+
+    @pytest.mark.parametrize('mutation',['empty','duplicate','wrong_gt','order','top5']+['csv_'+name for name in ('overall','per_class','buckets','predictions','confusion','most_confused','learning_curves')])
+    def test_rehashed_analysis_requires_complete_manifest_predictions(full_selected_analysis,mutation):
+        report,row,folder=full_selected_analysis
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import read_json,sha256_file
+        path=folder/'validation_analysis/analysis.json';value=read_json(path);predictions=value['metrics']['predictions']
+        if mutation=='empty':value['metrics']['predictions']=[]
+        if mutation=='duplicate':predictions[-1]=copy.deepcopy(predictions[0])
+        if mutation=='wrong_gt':predictions[0]['label_id']=(predictions[0]['label_id']+1)%124
+        if mutation=='order':predictions[0],predictions[1]=predictions[1],predictions[0]
+        if mutation=='top5':predictions[0]['top5']=[predictions[0]['label_id']]*5
+        if mutation.startswith('csv_'):
+            name=mutation[4:]+'.csv';csv_path=folder/'validation_analysis'/name;csv_path.write_text('altered,header\n')
+            value['exports_sha256'][name]=sha256_file(csv_path)
+        atomic_json(path,value)
+>       with pytest.raises(ValueError):report._selected_analysis(row)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_report.py:229: Failed
+_ test_rehashed_analysis_requires_complete_manifest_predictions[csv_buckets] __
+
+full_selected_analysis = (<module 'src.e2.report' from 'C:\\Users\\Windows\\Downloads\\GeoLocation\\src\\e2\\report.py'>, {'best_sha256': '4af1...n/.tools/e2/pytest-final-review-all-exports-red/test_rehashed_analysis_require7/runs/e2-tuning-lr0.00010000-seed1001'))
+mutation = 'csv_buckets'
+
+    @pytest.mark.parametrize('mutation',['empty','duplicate','wrong_gt','order','top5']+['csv_'+name for name in ('overall','per_class','buckets','predictions','confusion','most_confused','learning_curves')])
+    def test_rehashed_analysis_requires_complete_manifest_predictions(full_selected_analysis,mutation):
+        report,row,folder=full_selected_analysis
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import read_json,sha256_file
+        path=folder/'validation_analysis/analysis.json';value=read_json(path);predictions=value['metrics']['predictions']
+        if mutation=='empty':value['metrics']['predictions']=[]
+        if mutation=='duplicate':predictions[-1]=copy.deepcopy(predictions[0])
+        if mutation=='wrong_gt':predictions[0]['label_id']=(predictions[0]['label_id']+1)%124
+        if mutation=='order':predictions[0],predictions[1]=predictions[1],predictions[0]
+        if mutation=='top5':predictions[0]['top5']=[predictions[0]['label_id']]*5
+        if mutation.startswith('csv_'):
+            name=mutation[4:]+'.csv';csv_path=folder/'validation_analysis'/name;csv_path.write_text('altered,header\n')
+            value['exports_sha256'][name]=sha256_file(csv_path)
+        atomic_json(path,value)
+>       with pytest.raises(ValueError):report._selected_analysis(row)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_report.py:229: Failed
+_ test_rehashed_analysis_requires_complete_manifest_predictions[csv_predictions] _
+
+full_selected_analysis = (<module 'src.e2.report' from 'C:\\Users\\Windows\\Downloads\\GeoLocation\\src\\e2\\report.py'>, {'best_sha256': 'c6b6...n/.tools/e2/pytest-final-review-all-exports-red/test_rehashed_analysis_require8/runs/e2-tuning-lr0.00010000-seed1001'))
+mutation = 'csv_predictions'
+
+    @pytest.mark.parametrize('mutation',['empty','duplicate','wrong_gt','order','top5']+['csv_'+name for name in ('overall','per_class','buckets','predictions','confusion','most_confused','learning_curves')])
+    def test_rehashed_analysis_requires_complete_manifest_predictions(full_selected_analysis,mutation):
+        report,row,folder=full_selected_analysis
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import read_json,sha256_file
+        path=folder/'validation_analysis/analysis.json';value=read_json(path);predictions=value['metrics']['predictions']
+        if mutation=='empty':value['metrics']['predictions']=[]
+        if mutation=='duplicate':predictions[-1]=copy.deepcopy(predictions[0])
+        if mutation=='wrong_gt':predictions[0]['label_id']=(predictions[0]['label_id']+1)%124
+        if mutation=='order':predictions[0],predictions[1]=predictions[1],predictions[0]
+        if mutation=='top5':predictions[0]['top5']=[predictions[0]['label_id']]*5
+        if mutation.startswith('csv_'):
+            name=mutation[4:]+'.csv';csv_path=folder/'validation_analysis'/name;csv_path.write_text('altered,header\n')
+            value['exports_sha256'][name]=sha256_file(csv_path)
+        atomic_json(path,value)
+>       with pytest.raises(ValueError):report._selected_analysis(row)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_report.py:229: Failed
+_ test_rehashed_analysis_requires_complete_manifest_predictions[csv_confusion] _
+
+full_selected_analysis = (<module 'src.e2.report' from 'C:\\Users\\Windows\\Downloads\\GeoLocation\\src\\e2\\report.py'>, {'best_sha256': 'f73b...n/.tools/e2/pytest-final-review-all-exports-red/test_rehashed_analysis_require9/runs/e2-tuning-lr0.00010000-seed1001'))
+mutation = 'csv_confusion'
+
+    @pytest.mark.parametrize('mutation',['empty','duplicate','wrong_gt','order','top5']+['csv_'+name for name in ('overall','per_class','buckets','predictions','confusion','most_confused','learning_curves')])
+    def test_rehashed_analysis_requires_complete_manifest_predictions(full_selected_analysis,mutation):
+        report,row,folder=full_selected_analysis
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import read_json,sha256_file
+        path=folder/'validation_analysis/analysis.json';value=read_json(path);predictions=value['metrics']['predictions']
+        if mutation=='empty':value['metrics']['predictions']=[]
+        if mutation=='duplicate':predictions[-1]=copy.deepcopy(predictions[0])
+        if mutation=='wrong_gt':predictions[0]['label_id']=(predictions[0]['label_id']+1)%124
+        if mutation=='order':predictions[0],predictions[1]=predictions[1],predictions[0]
+        if mutation=='top5':predictions[0]['top5']=[predictions[0]['label_id']]*5
+        if mutation.startswith('csv_'):
+            name=mutation[4:]+'.csv';csv_path=folder/'validation_analysis'/name;csv_path.write_text('altered,header\n')
+            value['exports_sha256'][name]=sha256_file(csv_path)
+        atomic_json(path,value)
+>       with pytest.raises(ValueError):report._selected_analysis(row)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_report.py:229: Failed
+_ test_rehashed_analysis_requires_complete_manifest_predictions[csv_most_confused] _
+
+full_selected_analysis = (<module 'src.e2.report' from 'C:\\Users\\Windows\\Downloads\\GeoLocation\\src\\e2\\report.py'>, {'best_sha256': 'f295.../.tools/e2/pytest-final-review-all-exports-red/test_rehashed_analysis_require10/runs/e2-tuning-lr0.00010000-seed1001'))
+mutation = 'csv_most_confused'
+
+    @pytest.mark.parametrize('mutation',['empty','duplicate','wrong_gt','order','top5']+['csv_'+name for name in ('overall','per_class','buckets','predictions','confusion','most_confused','learning_curves')])
+    def test_rehashed_analysis_requires_complete_manifest_predictions(full_selected_analysis,mutation):
+        report,row,folder=full_selected_analysis
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import read_json,sha256_file
+        path=folder/'validation_analysis/analysis.json';value=read_json(path);predictions=value['metrics']['predictions']
+        if mutation=='empty':value['metrics']['predictions']=[]
+        if mutation=='duplicate':predictions[-1]=copy.deepcopy(predictions[0])
+        if mutation=='wrong_gt':predictions[0]['label_id']=(predictions[0]['label_id']+1)%124
+        if mutation=='order':predictions[0],predictions[1]=predictions[1],predictions[0]
+        if mutation=='top5':predictions[0]['top5']=[predictions[0]['label_id']]*5
+        if mutation.startswith('csv_'):
+            name=mutation[4:]+'.csv';csv_path=folder/'validation_analysis'/name;csv_path.write_text('altered,header\n')
+            value['exports_sha256'][name]=sha256_file(csv_path)
+        atomic_json(path,value)
+>       with pytest.raises(ValueError):report._selected_analysis(row)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_report.py:229: Failed
+_ test_rehashed_analysis_requires_complete_manifest_predictions[csv_learning_curves] _
+
+full_selected_analysis = (<module 'src.e2.report' from 'C:\\Users\\Windows\\Downloads\\GeoLocation\\src\\e2\\report.py'>, {'best_sha256': 'e676.../.tools/e2/pytest-final-review-all-exports-red/test_rehashed_analysis_require11/runs/e2-tuning-lr0.00010000-seed1001'))
+mutation = 'csv_learning_curves'
+
+    @pytest.mark.parametrize('mutation',['empty','duplicate','wrong_gt','order','top5']+['csv_'+name for name in ('overall','per_class','buckets','predictions','confusion','most_confused','learning_curves')])
+    def test_rehashed_analysis_requires_complete_manifest_predictions(full_selected_analysis,mutation):
+        report,row,folder=full_selected_analysis
+        from src.e2.checkpoint import atomic_json
+        from src.e2.config import read_json,sha256_file
+        path=folder/'validation_analysis/analysis.json';value=read_json(path);predictions=value['metrics']['predictions']
+        if mutation=='empty':value['metrics']['predictions']=[]
+        if mutation=='duplicate':predictions[-1]=copy.deepcopy(predictions[0])
+        if mutation=='wrong_gt':predictions[0]['label_id']=(predictions[0]['label_id']+1)%124
+        if mutation=='order':predictions[0],predictions[1]=predictions[1],predictions[0]
+        if mutation=='top5':predictions[0]['top5']=[predictions[0]['label_id']]*5
+        if mutation.startswith('csv_'):
+            name=mutation[4:]+'.csv';csv_path=folder/'validation_analysis'/name;csv_path.write_text('altered,header\n')
+            value['exports_sha256'][name]=sha256_file(csv_path)
+        atomic_json(path,value)
+>       with pytest.raises(ValueError):report._selected_analysis(row)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_report.py:229: Failed
+=========================== short test summary info ===========================
+FAILED tests/e2/test_report.py::test_rehashed_analysis_requires_complete_manifest_predictions[empty]
+FAILED tests/e2/test_report.py::test_rehashed_analysis_requires_complete_manifest_predictions[duplicate]
+FAILED tests/e2/test_report.py::test_rehashed_analysis_requires_complete_manifest_predictions[wrong_gt]
+FAILED tests/e2/test_report.py::test_rehashed_analysis_requires_complete_manifest_predictions[order]
+FAILED tests/e2/test_report.py::test_rehashed_analysis_requires_complete_manifest_predictions[top5]
+FAILED tests/e2/test_report.py::test_rehashed_analysis_requires_complete_manifest_predictions[csv_overall]
+FAILED tests/e2/test_report.py::test_rehashed_analysis_requires_complete_manifest_predictions[csv_per_class]
+FAILED tests/e2/test_report.py::test_rehashed_analysis_requires_complete_manifest_predictions[csv_buckets]
+FAILED tests/e2/test_report.py::test_rehashed_analysis_requires_complete_manifest_predictions[csv_predictions]
+FAILED tests/e2/test_report.py::test_rehashed_analysis_requires_complete_manifest_predictions[csv_confusion]
+FAILED tests/e2/test_report.py::test_rehashed_analysis_requires_complete_manifest_predictions[csv_most_confused]
+FAILED tests/e2/test_report.py::test_rehashed_analysis_requires_complete_manifest_predictions[csv_learning_curves]
+12 failed, 7 deselected in 13.31s

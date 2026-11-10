@@ -1,0 +1,57 @@
+.............................................................F.......... [ 24%]
+........................................................................ [ 49%]
+........................................................................ [ 74%]
+........................................................................ [ 99%]
+..                                                                       [100%]
+================================== FAILURES ===================================
+_ test_unstarted_run_recovers_same_declaration_without_erasing_failure[boundary_zero] _
+
+run_config = {'config_sha256': '0853e8a5f74ce1c2159f359e0dcd0e4a6897cba650b8895383cb5832eca8685a', 'contract_sha256': 'c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143', 'kind': 'official_e1_run_config', 'lr': 0.0001, ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000023C6F4EBE90>
+failure = 'boundary_zero'
+
+    @pytest.mark.parametrize("failure", ["preflight", "boundary_zero"])
+    def test_unstarted_run_recovers_same_declaration_without_erasing_failure(run_config, monkeypatch, failure):
+        module = install_cpu_edges(monkeypatch)
+        name = "preflight" if failure == "preflight" else "save_checkpoint"
+        original = getattr(module, name)
+        def broken(*a, **kw):
+            raise RuntimeError("injected failure before committed boundary zero")
+        monkeypatch.setattr(module, name, broken)
+        folder = Path(run_config["paths"]["runs_dir"]) / run_config["run_id"]
+        with pytest.raises(RuntimeError):
+            module.run(run_config, folder)
+        assert not (folder / "last.pt").exists()
+        monkeypatch.setattr(module, name, original)
+        # Same declaration may initialize again only because no training boundary ever existed.
+>       result = module.run(run_config, folder)
+
+tests\e1\test_recovery.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\e1\train.py:343: in run
+    _event(folder, "epoch_committed", attempt_id=attempt.name, epoch=epoch + 1, updates=progress["updates"])
+src\e1\train.py:197: in _event
+    atomic_json(path, events)
+src\e1\checkpoint.py:37: in atomic_json
+    _atomic(path, write)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-review-full/test_unstarted_run_recovers_sa1/runs/tuning-lr0.00010000-seed1001/events.json')
+writer = <function atomic_json.<locals>.write at 0x0000023C6F596200>
+
+    def _atomic(path: Path, writer) -> None:
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        fd, temporary = tempfile.mkstemp(prefix=path.name + ".", suffix=".tmp", dir=path.parent)
+        os.close(fd)
+        try:
+            writer(Path(temporary))
+            with open(temporary, "r+b") as stream:
+                os.fsync(stream.fileno())
+>           os.replace(temporary, path)
+E           PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e1hr\\pytest-review-full\\test_unstarted_run_recovers_sa1\\runs\\tuning-lr0.00010000-seed1001\\events.json.jzzcmmhf.tmp' -> 'C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e1hr\\pytest-review-full\\test_unstarted_run_recovers_sa1\\runs\\tuning-lr0.00010000-seed1001\\events.json'
+
+src\e1\checkpoint.py:26: PermissionError
+=========================== short test summary info ===========================
+FAILED tests/e1/test_recovery.py::test_unstarted_run_recovers_same_declaration_without_erasing_failure[boundary_zero]
+1 failed, 289 passed, 3 deselected in 113.96s (0:01:53)

@@ -1,0 +1,45 @@
+F......................................................                  [100%]
+================================== FAILURES ===================================
+________ test_tuning_declarations_are_exactly_four_and_create_no_jobs _________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-green-first/test_tuning_declarations_are_e0')
+
+    def test_tuning_declarations_are_exactly_four_and_create_no_jobs(recipe, tmp_path):
+        from src.e2.campaign import plan_tuning, write_declarations
+        paths = {"data_root": str(tmp_path), "weights": str(tmp_path / "weights"), "runs_dir": str(tmp_path / "runs"), "acceptance_record": str(tmp_path / "g2.json"), "authorization_record": str(tmp_path / "g3a.json"), "evidence_root": str(tmp_path / "evidence"), "conformance_report": str(tmp_path / "conformance.json")}
+        declarations = plan_tuning(recipe, paths)
+        assert [d["lr"] for d in declarations] == [2.5e-5, 5e-5, 1e-4, 2e-4]
+        assert {d["seed"] for d in declarations} == {1001}
+        assert not (tmp_path / "runs").exists()
+        output = tmp_path / "declarations"
+>       write_declarations(output, declarations)
+
+tests\e2\test_campaign.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+output = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t08-green-first/test_tuning_declarations_are_e0/declarations')
+declarations = [{'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8...ef6c', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}]
+
+    def write_declarations(output: Path, declarations: list[dict]) -> None:
+        declarations=[validate_run(c) for c in declarations]
+        if not declarations or len({c['run_id'] for c in declarations})!=len(declarations):
+            raise ValueError('Unique E2 declarations required')
+        stage=declarations[0]['stage']
+        if any(c['stage']!=stage for c in declarations) or len(declarations)!=(4 if stage=='tuning' else 3):
+            raise ValueError('Exactly four tuning or three final declarations required')
+        if stage=='tuning' and {c['lr'] for c in declarations}!={2.5e-5,5e-5,1e-4,2e-4}:
+            raise ValueError('Wrong E2 candidate set')
+        if stage=='final' and ({c['seed'] for c in declarations}!={2001,3001,4001} or len({c['lr'] for c in declarations})!=1):
+            raise ValueError('Wrong final seed/LR set')
+        output=Path(output);output.mkdir(parents=True,exist_ok=False)
+        for c in declarations:_write_new(output/(c['run_id']+'.json'),c)
+>       _write_new(output/'ledger.json',{'kind':'e2_campaign_declarations_v1',**topology(recipe),
+            'contract_sha256':CONTRACT_SHA256,'stage':stage,'status':'declared_not_executed','execution_authorized':False,
+            'runs':[{'run_id':c['run_id'],'config_sha256':c['config_sha256']} for c in declarations]})
+E       NameError: name 'recipe' is not defined
+
+src\e2\campaign.py:42: NameError
+=========================== short test summary info ===========================
+FAILED tests/e2/test_campaign.py::test_tuning_declarations_are_exactly_four_and_create_no_jobs
+1 failed, 54 passed in 29.26s

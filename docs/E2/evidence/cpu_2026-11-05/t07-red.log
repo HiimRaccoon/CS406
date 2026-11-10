@@ -1,0 +1,147 @@
+FFFFFFF                                                                  [100%]
+================================== FAILURES ===================================
+_____ test_flat_and_decreasing_scores_still_finish_all_eight_epochs[0.0] ______
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...a8bc2', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000280B895E6D0>
+slope = 0.0
+
+    @pytest.mark.parametrize("slope", [0., .01])
+    def test_flat_and_decreasing_scores_still_finish_all_eight_epochs(run_config, monkeypatch, slope):
+        module = install_cpu_edges(monkeypatch)
+        real = module.evaluate
+        calls = []
+        def decreasing(*a, **kw):
+            metrics = real(*a, **kw)
+            calls.append(len(calls)+1)
+            metrics["macro_f1_supported"] = .5 - slope*len(calls)
+            return metrics
+        monkeypatch.setattr(module, "evaluate", decreasing)
+        folder = __import__('pathlib').Path(run_config["paths"]["runs_dir"]) / run_config["run_id"]
+        result = module.run(run_config, folder)
+>       assert result["status"] == "complete" and result["completed_epochs"] == result["validations"] == 8
+E       AssertionError: assert ('not_implemented' == 'complete'
+E         
+E         - complete
+E         + not_implemented)
+
+tests\e2\test_train.py:56: AssertionError
+_____ test_flat_and_decreasing_scores_still_finish_all_eight_epochs[0.01] _____
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...5f1c3', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000280BD380B50>
+slope = 0.01
+
+    @pytest.mark.parametrize("slope", [0., .01])
+    def test_flat_and_decreasing_scores_still_finish_all_eight_epochs(run_config, monkeypatch, slope):
+        module = install_cpu_edges(monkeypatch)
+        real = module.evaluate
+        calls = []
+        def decreasing(*a, **kw):
+            metrics = real(*a, **kw)
+            calls.append(len(calls)+1)
+            metrics["macro_f1_supported"] = .5 - slope*len(calls)
+            return metrics
+        monkeypatch.setattr(module, "evaluate", decreasing)
+        folder = __import__('pathlib').Path(run_config["paths"]["runs_dir"]) / run_config["run_id"]
+        result = module.run(run_config, folder)
+>       assert result["status"] == "complete" and result["completed_epochs"] == result["validations"] == 8
+E       AssertionError: assert ('not_implemented' == 'complete'
+E         
+E         - complete
+E         + not_implemented)
+
+tests\e2\test_train.py:56: AssertionError
+________ test_epoch_zero_and_partial_epoch_replay_match_uninterrupted _________
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...da7c2', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000280BD3B8710>
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t07-red/test_epoch_zero_and_partial_ep0')
+
+    def test_epoch_zero_and_partial_epoch_replay_match_uninterrupted(run_config, monkeypatch, tmp_path):
+        module = install_cpu_edges(monkeypatch)
+        from src.e2.config import resolve_run
+        recipe = run_config["recipe"]
+        configs = [resolve_run(recipe, stage="tuning", lr=1e-4, seed=1001,
+                               paths={**run_config["paths"], "runs_dir": str(tmp_path / name)}) for name in ("full", "replay")]
+        full, interrupted = [__import__('pathlib').Path(c["paths"]["runs_dir"]) / c["run_id"] for c in configs]
+        module.run(configs[0], full)
+        original = module.train_epoch
+        def broken(*a, **kw):
+            original(*a, **kw)
+            raise RuntimeError("injected partial-epoch failure after work")
+        monkeypatch.setattr(module, "train_epoch", broken)
+>       with pytest.raises(RuntimeError):
+E       Failed: DID NOT RAISE <class 'RuntimeError'>
+
+tests\e2\test_train.py:82: Failed
+__ test_preflight_without_execution_approvals_fails_before_model_allocation ___
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...2ecab', 'contract_sha256': 'ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72', 'experiment': 'E2', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000280BD3860D0>
+
+    def test_preflight_without_execution_approvals_fails_before_model_allocation(run_config, monkeypatch):
+        import src.e2.train as module
+>       monkeypatch.setattr(module, "build_e1", lambda *a: pytest.fail("model allocated"))
+E       AttributeError: <module 'src.e2.train' from 'C:\\Users\\Windows\\Downloads\\GeoLocation\\src\\e2\\train.py'> has no attribute 'build_e1'
+
+tests\e2\test_train.py:100: AttributeError
+_____________________ test_run_lock_rejects_second_writer _____________________
+
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t07-red/test_run_lock_rejects_second_w0')
+
+    def test_run_lock_rejects_second_writer(tmp_path):
+>       from src.e2.train import run_lock
+E       ImportError: cannot import name 'run_lock' from 'src.e2.train' (C:\Users\Windows\Downloads\GeoLocation\src\e2\train.py)
+
+tests\e2\test_train.py:106: ImportError
+_ test_source_fingerprint_ignores_clean_docs_tests_commit_but_tracks_consumed_files _
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t07-red/test_source_fingerprint_ignore0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000280BD386090>
+
+    def test_source_fingerprint_ignores_clean_docs_tests_commit_but_tracks_consumed_files(recipe,tmp_path,monkeypatch):
+        import src.e2.runtime as runtime
+        for rel in recipe['identity_and_evidence']['source_fingerprint_closure']:
+            p=tmp_path/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_text('# fixture\n')
+        monkeypatch.setattr(runtime,'ROOT',tmp_path)
+        commit={'value':'a'*40}
+        monkeypatch.setattr(runtime,'git_audit',lambda:{'clean_git_commit':commit['value'],'git_clean':True})
+        first=runtime.source_identity(recipe)
+        (tmp_path/'docs').mkdir();(tmp_path/'docs/note.md').write_text('new docs')
+        (tmp_path/'tests').mkdir();(tmp_path/'tests/probe.py').write_text('new tests')
+        commit['value']='b'*40
+        second=runtime.source_identity(recipe)
+        assert first['scientific_runtime']==second['scientific_runtime']
+>       assert first['audit']!=second['audit']
+E       assert {} != {}
+
+tests\e2\test_runtime.py:19: AssertionError
+______________ test_new_unreviewed_transitive_import_is_rejected ______________
+
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t07-red/test_new_unreviewed_transitive0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000280BD420150>
+
+    def test_new_unreviewed_transitive_import_is_rejected(recipe,tmp_path,monkeypatch):
+        import src.e2.runtime as runtime
+        for rel in recipe['identity_and_evidence']['source_fingerprint_closure']:
+            p=tmp_path/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_text('# fixture\n')
+        (tmp_path/'src/e2/train.py').write_text('from .unreviewed import train\n')
+        (tmp_path/'src/e2/unreviewed.py').write_text('# helper\n')
+        monkeypatch.setattr(runtime,'ROOT',tmp_path)
+        monkeypatch.setattr(runtime,'git_audit',lambda:{'clean_git_commit':'a'*40,'git_clean':True})
+>       with pytest.raises(ValueError,match='closure'): runtime.source_identity(recipe)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e2\test_runtime.py:31: Failed
+=========================== short test summary info ===========================
+FAILED tests/e2/test_train.py::test_flat_and_decreasing_scores_still_finish_all_eight_epochs[0.0]
+FAILED tests/e2/test_train.py::test_flat_and_decreasing_scores_still_finish_all_eight_epochs[0.01]
+FAILED tests/e2/test_train.py::test_epoch_zero_and_partial_epoch_replay_match_uninterrupted
+FAILED tests/e2/test_train.py::test_preflight_without_execution_approvals_fails_before_model_allocation
+FAILED tests/e2/test_train.py::test_run_lock_rejects_second_writer - ImportEr...
+FAILED tests/e2/test_runtime.py::test_source_fingerprint_ignores_clean_docs_tests_commit_but_tracks_consumed_files
+FAILED tests/e2/test_runtime.py::test_new_unreviewed_transitive_import_is_rejected
+7 failed in 1.21s

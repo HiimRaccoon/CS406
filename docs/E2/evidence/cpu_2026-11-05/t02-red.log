@@ -1,0 +1,105 @@
+FFFFFF                                                                   [100%]
+================================== FAILURES ===================================
+_____ test_both_layouts_global_and_locals_match_frozen_preprocessor[wh0] ______
+
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t02-red/test_both_layouts_global_and_l0')
+wh = (1536, 662)
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+
+    @pytest.mark.parametrize('wh',[(1536,662),(1030,703)])
+    def test_both_layouts_global_and_locals_match_frozen_preprocessor(tmp_path,wh,recipe):
+        d,image=fixture_dataset(tmp_path,wh,recipe)
+        views,y,path=d[0]
+>       assert set(views)=={'global','local'}
+E       AssertionError: assert set() == {'global', 'local'}
+E         
+E         Extra items in the right set:
+E         'local'
+E         'global'
+E         Use -v to get more diff
+
+tests\e2\test_data.py:24: AssertionError
+_____ test_both_layouts_global_and_locals_match_frozen_preprocessor[wh1] ______
+
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t02-red/test_both_layouts_global_and_l1')
+wh = (1030, 703)
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+
+    @pytest.mark.parametrize('wh',[(1536,662),(1030,703)])
+    def test_both_layouts_global_and_locals_match_frozen_preprocessor(tmp_path,wh,recipe):
+        d,image=fixture_dataset(tmp_path,wh,recipe)
+        views,y,path=d[0]
+>       assert set(views)=={'global','local'}
+E       AssertionError: assert set() == {'global', 'local'}
+E         
+E         Extra items in the right set:
+E         'local'
+E         'global'
+E         Use -v to get more diff
+
+tests\e2\test_data.py:24: AssertionError
+_________________ test_one_jitter_pair_is_shared_by_all_views _________________
+
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t02-red/test_one_jitter_pair_is_shared0')
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+
+    def test_one_jitter_pair_is_shared_by_all_views(tmp_path,recipe):
+>       from src.e2.data import derived_seed
+E       ImportError: cannot import name 'derived_seed' from 'src.e2.data' (C:\Users\Windows\Downloads\GeoLocation\src\e2\data.py)
+
+tests\e2\test_data.py:30: ImportError
+___________ test_collation_and_transfer_preserve_original_images[1] ___________
+
+batch = 1
+
+    @pytest.mark.parametrize('batch',[1,2])
+    def test_collation_and_transfer_preserve_original_images(batch):
+        from src.e2.data import move_views
+        views={'global':torch.randn(batch,3,384,896),'local':torch.randn(batch,4,3,320,320)}
+        moved=move_views(views,device=torch.device('cpu'),batch_size=batch)
+>       assert set(moved)==set(views)
+E       AssertionError: assert set() == {'global', 'local'}
+E         
+E         Extra items in the right set:
+E         'local'
+E         'global'
+E         Use -v to get more diff
+
+tests\e2\test_data.py:47: AssertionError
+___________ test_collation_and_transfer_preserve_original_images[2] ___________
+
+batch = 2
+
+    @pytest.mark.parametrize('batch',[1,2])
+    def test_collation_and_transfer_preserve_original_images(batch):
+        from src.e2.data import move_views
+        views={'global':torch.randn(batch,3,384,896),'local':torch.randn(batch,4,3,320,320)}
+        moved=move_views(views,device=torch.device('cpu'),batch_size=batch)
+>       assert set(moved)==set(views)
+E       AssertionError: assert set() == {'global', 'local'}
+E         
+E         Extra items in the right set:
+E         'local'
+E         'global'
+E         Use -v to get more diff
+
+tests\e2\test_data.py:47: AssertionError
+____________ test_test_rejected_before_open_and_metadata_is_fixed _____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002091ADF8110>
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e2/pytest-t02-red/test_test_rejected_before_open0')
+recipe = {'approval_snapshot_at_preparation': {'E2-G0': 'PASS; explicit user approval of current corrected specification/plan/l...one optimizer/scheduler update per group.', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+
+    def test_test_rejected_before_open_and_metadata_is_fixed(monkeypatch,tmp_path,recipe):
+>       from src.e2.data import E2Dataset,FixedManifest
+E       ImportError: cannot import name 'FixedManifest' from 'src.e2.data' (C:\Users\Windows\Downloads\GeoLocation\src\e2\data.py)
+
+tests\e2\test_data.py:53: ImportError
+=========================== short test summary info ===========================
+FAILED tests/e2/test_data.py::test_both_layouts_global_and_locals_match_frozen_preprocessor[wh0]
+FAILED tests/e2/test_data.py::test_both_layouts_global_and_locals_match_frozen_preprocessor[wh1]
+FAILED tests/e2/test_data.py::test_one_jitter_pair_is_shared_by_all_views - I...
+FAILED tests/e2/test_data.py::test_collation_and_transfer_preserve_original_images[1]
+FAILED tests/e2/test_data.py::test_collation_and_transfer_preserve_original_images[2]
+FAILED tests/e2/test_data.py::test_test_rejected_before_open_and_metadata_is_fixed
+6 failed in 1.28s

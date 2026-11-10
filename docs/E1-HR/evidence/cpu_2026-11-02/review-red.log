@@ -1,0 +1,216 @@
+......FFFFF....FFF...F.....                                              [100%]
+================================== FAILURES ===================================
+_______ test_wrong_resume_is_rejected_before_target_inspection_or_model _______
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...2e', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000016086E14DD0>
+
+    def test_wrong_resume_is_rejected_before_target_inspection_or_model(run_config,monkeypatch):
+        module=install_cpu_edges(monkeypatch)
+        folder=Path(run_config['paths']['runs_dir'])/run_config['run_id']
+        calls=iter([False,True]);module.run(run_config,folder,stop_requested=lambda:next(calls))
+        path=folder/'last.pt';state=torch.load(path,weights_only=False)
+        state['kind']='official_e1_checkpoint_v1';torch.save(state,path)
+        identity={'scientific_runtime':{'evidence_kind':'synthetic_cpu_fixture'},'audit':{'clean_git_commit':'a'*40}}
+        monkeypatch.setattr(module,'approved_identity',lambda c:identity)
+        monkeypatch.setattr(module,'preflight',lambda c:pytest.fail('target inspection before wrong-resume rejection'))
+        monkeypatch.setattr(module,'_setup',lambda *a:pytest.fail('GPU model before wrong-resume rejection'))
+        with pytest.raises(ValueError,match='mismatch'):
+>           module.run(run_config,folder,resume=path)
+
+tests\e1hr\test_recovery.py:140: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\e1hr\train.py:196: in run
+    checked = preflight(config)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+c = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...2e', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+
+>   monkeypatch.setattr(module,'preflight',lambda c:pytest.fail('target inspection before wrong-resume rejection'))
+E   Failed: target inspection before wrong-resume rejection
+
+tests\e1hr\test_recovery.py:137: Failed
+___ test_attempt_snapshot_never_exposes_partial_final_and_never_overwrites ____
+
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-review-red/test_attempt_snapshot_never_ex0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000160823D1610>
+
+    def test_attempt_snapshot_never_exposes_partial_final_and_never_overwrites(tmp_path,monkeypatch):
+        import src.e1hr.train as module
+        path=tmp_path/'outcome.json'
+        class Kill(BaseException):pass
+        def interrupted(_):raise Kill('killed before durable publication')
+        monkeypatch.setattr(module.os,'fsync',interrupted)
+        with pytest.raises(Kill):module._attempt_snapshot(path,{'status':'complete'})
+>       assert not path.exists()
+E       AssertionError: assert not True
+E        +  where True = exists()
+E        +    where exists = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-review-red/test_attempt_snapshot_never_ex0/outcome.json').exists
+
+tests\e1hr\test_recovery.py:150: AssertionError
+_ test_attempt_publication_kill_is_recorded_and_same_run_recovers[request.json] _
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...36', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000016086EB6F10>
+phase = 'request.json'
+
+    @pytest.mark.parametrize('phase',['request.json','environment.json','outcome.json'])
+    def test_attempt_publication_kill_is_recorded_and_same_run_recovers(run_config,monkeypatch,phase):
+        module=install_cpu_edges(monkeypatch)
+        real=module._attempt_snapshot
+        class Kill(BaseException):pass
+        def partial(path,value):
+            if Path(path).name==phase:
+                Path(path).write_text('{')
+                raise Kill('injected interrupted legacy publication')
+            return real(path,value)
+        monkeypatch.setattr(module,'_attempt_snapshot',partial)
+        folder=Path(run_config['paths']['runs_dir'])/run_config['run_id']
+        with pytest.raises(Kill):module.run(run_config,folder)
+        monkeypatch.setattr(module,'_attempt_snapshot',real)
+        resume=folder/'last.pt' if (folder/'last.pt').exists() else None
+        assert module.run(run_config,folder,resume=resume)['status']=='complete'
+        abandoned=json.loads((folder/'attempts/000001/abandoned.json').read_text())
+        assert abandoned['status']=='terminated_without_outcome'
+>       assert phase in abandoned['metadata_issues']
+E       KeyError: 'metadata_issues'
+
+tests\e1hr\test_recovery.py:175: KeyError
+_ test_attempt_publication_kill_is_recorded_and_same_run_recovers[environment.json] _
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...6b', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000160875AFC90>
+phase = 'environment.json'
+
+    @pytest.mark.parametrize('phase',['request.json','environment.json','outcome.json'])
+    def test_attempt_publication_kill_is_recorded_and_same_run_recovers(run_config,monkeypatch,phase):
+        module=install_cpu_edges(monkeypatch)
+        real=module._attempt_snapshot
+        class Kill(BaseException):pass
+        def partial(path,value):
+            if Path(path).name==phase:
+                Path(path).write_text('{')
+                raise Kill('injected interrupted legacy publication')
+            return real(path,value)
+        monkeypatch.setattr(module,'_attempt_snapshot',partial)
+        folder=Path(run_config['paths']['runs_dir'])/run_config['run_id']
+        with pytest.raises(Kill):module.run(run_config,folder)
+        monkeypatch.setattr(module,'_attempt_snapshot',real)
+        resume=folder/'last.pt' if (folder/'last.pt').exists() else None
+        assert module.run(run_config,folder,resume=resume)['status']=='complete'
+        abandoned=json.loads((folder/'attempts/000001/abandoned.json').read_text())
+        assert abandoned['status']=='terminated_without_outcome'
+>       assert phase in abandoned['metadata_issues']
+E       KeyError: 'metadata_issues'
+
+tests\e1hr\test_recovery.py:175: KeyError
+_ test_attempt_publication_kill_is_recorded_and_same_run_recovers[outcome.json] _
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...e3', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000016086EB5D90>
+phase = 'outcome.json'
+
+    @pytest.mark.parametrize('phase',['request.json','environment.json','outcome.json'])
+    def test_attempt_publication_kill_is_recorded_and_same_run_recovers(run_config,monkeypatch,phase):
+        module=install_cpu_edges(monkeypatch)
+        real=module._attempt_snapshot
+        class Kill(BaseException):pass
+        def partial(path,value):
+            if Path(path).name==phase:
+                Path(path).write_text('{')
+                raise Kill('injected interrupted legacy publication')
+            return real(path,value)
+        monkeypatch.setattr(module,'_attempt_snapshot',partial)
+        folder=Path(run_config['paths']['runs_dir'])/run_config['run_id']
+        with pytest.raises(Kill):module.run(run_config,folder)
+        monkeypatch.setattr(module,'_attempt_snapshot',real)
+        resume=folder/'last.pt' if (folder/'last.pt').exists() else None
+        assert module.run(run_config,folder,resume=resume)['status']=='complete'
+>       abandoned=json.loads((folder/'attempts/000001/abandoned.json').read_text())
+
+tests\e1hr\test_recovery.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.tools\python\cpython-3.11-windows-x86_64-none\Lib\pathlib.py:1058: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-review-red/test_attempt_publication_kill_2/runs/e1hr-tuning-lr0.00010000-seed1001/attempts/000001/abandoned.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e1hr\\pytest-review-red\\test_attempt_publication_kill_2\\runs\\e1hr-tuning-lr0.00010000-seed1001\\attempts\\000001\\abandoned.json'
+
+.tools\python\cpython-3.11-windows-x86_64-none\Lib\pathlib.py:1044: FileNotFoundError
+____ test_completed_attempt_requires_initialized_records[environment.json] ____
+
+completed_trials = [WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-review-red/test_completed_attempt_require0/sim...ation/.tools/e1hr/pytest-review-red/test_completed_attempt_require0/simulated-runs/e1hr-tuning-lr0.00020000-seed1001')]
+missing = 'environment.json'
+
+    @pytest.mark.parametrize('missing',['environment.json','start_boundary.json'])
+    def test_completed_attempt_requires_initialized_records(completed_trials,missing):
+        from src.e1hr.campaign import validate_completed_run
+        (completed_trials[0]/'attempts/000001'/missing).unlink()
+>       with pytest.raises(ValueError):validate_completed_run(completed_trials[0])
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e1hr\test_artifacts.py:121: Failed
+__ test_completed_attempt_requires_initialized_records[start_boundary.json] ___
+
+completed_trials = [WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-review-red/test_completed_attempt_require1/sim...ation/.tools/e1hr/pytest-review-red/test_completed_attempt_require1/simulated-runs/e1hr-tuning-lr0.00020000-seed1001')]
+missing = 'start_boundary.json'
+
+    @pytest.mark.parametrize('missing',['environment.json','start_boundary.json'])
+    def test_completed_attempt_requires_initialized_records(completed_trials,missing):
+        from src.e1hr.campaign import validate_completed_run
+        (completed_trials[0]/'attempts/000001'/missing).unlink()
+>       with pytest.raises(ValueError):validate_completed_run(completed_trials[0])
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e1hr\test_artifacts.py:121: Failed
+____________ test_attempt_event_cannot_reference_missing_directory ____________
+
+completed_trials = [WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-review-red/test_attempt_event_cannot_refe0/sim...ation/.tools/e1hr/pytest-review-red/test_attempt_event_cannot_refe0/simulated-runs/e1hr-tuning-lr0.00020000-seed1001')]
+
+    def test_attempt_event_cannot_reference_missing_directory(completed_trials):
+        from src.e1hr.campaign import validate_completed_run
+        from src.e1hr.checkpoint import atomic_json
+        from src.e1hr.config import read_json
+        folder=completed_trials[0];events=read_json(folder/'events.json')
+        events.insert(0,{'event':'created','attempt_id':'000000'})
+        atomic_json(folder/'events.json',events)
+>       with pytest.raises(ValueError):validate_completed_run(folder)
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+tests\e1hr\test_artifacts.py:131: Failed
+__________ test_acceptance_inventory_includes_executed_root_conftest __________
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+
+    def test_acceptance_inventory_includes_executed_root_conftest(recipe):
+        import hashlib
+        from src.e1hr.runtime import acceptance_inventory,ROOT
+        inventory=acceptance_inventory(recipe)
+        raw=(ROOT/'tests/conftest.py').read_bytes()
+>       assert inventory['tests/conftest.py']['bytes']==len(raw)
+E       KeyError: 'tests/conftest.py'
+
+tests\e1hr\test_runtime.py:54: KeyError
+=========================== short test summary info ===========================
+FAILED tests/e1hr/test_recovery.py::test_wrong_resume_is_rejected_before_target_inspection_or_model
+FAILED tests/e1hr/test_recovery.py::test_attempt_snapshot_never_exposes_partial_final_and_never_overwrites
+FAILED tests/e1hr/test_recovery.py::test_attempt_publication_kill_is_recorded_and_same_run_recovers[request.json]
+FAILED tests/e1hr/test_recovery.py::test_attempt_publication_kill_is_recorded_and_same_run_recovers[environment.json]
+FAILED tests/e1hr/test_recovery.py::test_attempt_publication_kill_is_recorded_and_same_run_recovers[outcome.json]
+FAILED tests/e1hr/test_artifacts.py::test_completed_attempt_requires_initialized_records[environment.json]
+FAILED tests/e1hr/test_artifacts.py::test_completed_attempt_requires_initialized_records[start_boundary.json]
+FAILED tests/e1hr/test_artifacts.py::test_attempt_event_cannot_reference_missing_directory
+FAILED tests/e1hr/test_runtime.py::test_acceptance_inventory_includes_executed_root_conftest
+9 failed, 18 passed in 20.13s

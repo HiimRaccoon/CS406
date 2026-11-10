@@ -1,0 +1,264 @@
+FFFFFFFF.FFFFFFFF                                                        [100%]
+================================== FAILURES ===================================
+_____ test_flat_and_decreasing_scores_still_finish_all_eight_epochs[0.0] ______
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...1f', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F31D6D50>
+slope = 0.0
+
+    @pytest.mark.parametrize("slope", [0., .01])
+    def test_flat_and_decreasing_scores_still_finish_all_eight_epochs(run_config, monkeypatch, slope):
+>       module = install_cpu_edges(monkeypatch)
+
+tests\e1hr\test_train.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F31D6D50>
+
+    def install_cpu_edges(monkeypatch):
+>       import src.e1hr.train as module
+E       ModuleNotFoundError: No module named 'src.e1hr.train'
+
+tests\e1hr\test_train.py:12: ModuleNotFoundError
+_____ test_flat_and_decreasing_scores_still_finish_all_eight_epochs[0.01] _____
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...89', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F31D7A50>
+slope = 0.01
+
+    @pytest.mark.parametrize("slope", [0., .01])
+    def test_flat_and_decreasing_scores_still_finish_all_eight_epochs(run_config, monkeypatch, slope):
+>       module = install_cpu_edges(monkeypatch)
+
+tests\e1hr\test_train.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F31D7A50>
+
+    def install_cpu_edges(monkeypatch):
+>       import src.e1hr.train as module
+E       ModuleNotFoundError: No module named 'src.e1hr.train'
+
+tests\e1hr\test_train.py:12: ModuleNotFoundError
+________ test_epoch_zero_and_partial_epoch_replay_match_uninterrupted _________
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...8a', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F3177350>
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t07-red/test_epoch_zero_and_partial_ep0')
+
+    def test_epoch_zero_and_partial_epoch_replay_match_uninterrupted(run_config, monkeypatch, tmp_path):
+>       module = install_cpu_edges(monkeypatch)
+
+tests\e1hr\test_train.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F3177350>
+
+    def install_cpu_edges(monkeypatch):
+>       import src.e1hr.train as module
+E       ModuleNotFoundError: No module named 'src.e1hr.train'
+
+tests\e1hr\test_train.py:12: ModuleNotFoundError
+__ test_preflight_without_execution_approvals_fails_before_model_allocation ___
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...5b', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F32B7790>
+
+    def test_preflight_without_execution_approvals_fails_before_model_allocation(run_config, monkeypatch):
+>       import src.e1hr.train as module
+E       ModuleNotFoundError: No module named 'src.e1hr.train'
+
+tests\e1hr\test_train.py:89: ModuleNotFoundError
+_____________________ test_run_lock_rejects_second_writer _____________________
+
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t07-red/test_run_lock_rejects_second_w0')
+
+    def test_run_lock_rejects_second_writer(tmp_path):
+>       from src.e1hr.train import run_lock
+E       ModuleNotFoundError: No module named 'src.e1hr.train'
+
+tests\e1hr\test_train.py:96: ModuleNotFoundError
+_ test_unstarted_run_recovers_same_declaration_without_erasing_failure[preflight] _
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...50', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F32A1A50>
+failure = 'preflight'
+
+    @pytest.mark.parametrize("failure", ["preflight", "boundary_zero"])
+    def test_unstarted_run_recovers_same_declaration_without_erasing_failure(run_config, monkeypatch, failure):
+>       module = install_cpu_edges(monkeypatch)
+
+tests\e1hr\test_recovery.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F32A1A50>
+
+    def install_cpu_edges(monkeypatch):
+>       import src.e1hr.train as module
+E       ModuleNotFoundError: No module named 'src.e1hr.train'
+
+tests\e1hr\test_train.py:12: ModuleNotFoundError
+_ test_unstarted_run_recovers_same_declaration_without_erasing_failure[boundary_zero] _
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...fd', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F3231C50>
+failure = 'boundary_zero'
+
+    @pytest.mark.parametrize("failure", ["preflight", "boundary_zero"])
+    def test_unstarted_run_recovers_same_declaration_without_erasing_failure(run_config, monkeypatch, failure):
+>       module = install_cpu_edges(monkeypatch)
+
+tests\e1hr\test_recovery.py:19: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F3231C50>
+
+    def install_cpu_edges(monkeypatch):
+>       import src.e1hr.train as module
+E       ModuleNotFoundError: No module named 'src.e1hr.train'
+
+tests\e1hr\test_train.py:12: ModuleNotFoundError
+_______ test_terminal_publication_crash_recovers_without_training_more ________
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...9b', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F32BB5D0>
+
+    def test_terminal_publication_crash_recovers_without_training_more(run_config, monkeypatch):
+>       module = install_cpu_edges(monkeypatch)
+
+tests\e1hr\test_recovery.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F32BB5D0>
+
+    def install_cpu_edges(monkeypatch):
+>       import src.e1hr.train as module
+E       ModuleNotFoundError: No module named 'src.e1hr.train'
+
+tests\e1hr\test_train.py:12: ModuleNotFoundError
+_________ test_attempt_allocations_and_replayed_training_are_retained _________
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...44', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F32A0E50>
+
+    def test_attempt_allocations_and_replayed_training_are_retained(run_config, monkeypatch):
+>       module = install_cpu_edges(monkeypatch)
+
+tests\e1hr\test_recovery.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F32A0E50>
+
+    def install_cpu_edges(monkeypatch):
+>       import src.e1hr.train as module
+E       ModuleNotFoundError: No module named 'src.e1hr.train'
+
+tests\e1hr\test_train.py:12: ModuleNotFoundError
+____ test_corrupt_resume_is_recorded_as_failure_without_masking_load_error ____
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...85', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F7BF04D0>
+
+    def test_corrupt_resume_is_recorded_as_failure_without_masking_load_error(run_config, monkeypatch):
+>       module = install_cpu_edges(monkeypatch)
+
+tests\e1hr\test_recovery.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F7BF04D0>
+
+    def install_cpu_edges(monkeypatch):
+>       import src.e1hr.train as module
+E       ModuleNotFoundError: No module named 'src.e1hr.train'
+
+tests\e1hr\test_train.py:12: ModuleNotFoundError
+_ test_source_fingerprint_ignores_clean_docs_tests_commit_but_tracks_consumed_files _
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t07-red/test_source_fingerprint_ignore0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F7C55410>
+
+    def test_source_fingerprint_ignores_clean_docs_tests_commit_but_tracks_consumed_files(recipe,tmp_path,monkeypatch):
+>       import src.e1hr.runtime as runtime
+E       ModuleNotFoundError: No module named 'src.e1hr.runtime'
+
+tests\e1hr\test_runtime.py:10: ModuleNotFoundError
+______________ test_new_unreviewed_transitive_import_is_rejected ______________
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t07-red/test_new_unreviewed_transitive0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F7C40C90>
+
+    def test_new_unreviewed_transitive_import_is_rejected(recipe,tmp_path,monkeypatch):
+>       import src.e1hr.runtime as runtime
+E       ModuleNotFoundError: No module named 'src.e1hr.runtime'
+
+tests\e1hr\test_runtime.py:28: ModuleNotFoundError
+_____ test_official_preflight_compares_projection_without_commit_equality _____
+
+run_config = {'budget': {'early_stopping': False, 'epoch_indices': [0, 1, 2, 3, 4, 5, ...], 'full_validations': 8, 'max_epochs': 8,...18', 'contract_sha256': 'e23fa67e1f41c7bea43446e44961a215ca488aac72ae21f5e56395e097c0a35d', 'experiment': 'E1-HR', ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t07-red/test_official_preflight_compar0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F42E7B90>
+
+    def test_official_preflight_compares_projection_without_commit_equality(run_config,tmp_path,monkeypatch):
+>       import src.e1hr.train as train
+E       ModuleNotFoundError: No module named 'src.e1hr.train'
+
+tests\e1hr\test_runtime.py:39: ModuleNotFoundError
+_________ test_current_data_audit_precedes_model_allocation[changed] __________
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t07-red/test_current_data_audit_preced0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F7CC7CD0>
+change = 'changed'
+
+    @pytest.mark.parametrize('change',['changed','missing','escaped'])
+    def test_current_data_audit_precedes_model_allocation(recipe,tmp_path,monkeypatch,change):
+>       import src.e1hr.runtime as runtime
+E       ModuleNotFoundError: No module named 'src.e1hr.runtime'
+
+tests\e1hr\test_runtime.py:59: ModuleNotFoundError
+_________ test_current_data_audit_precedes_model_allocation[missing] __________
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t07-red/test_current_data_audit_preced1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F7CD8050>
+change = 'missing'
+
+    @pytest.mark.parametrize('change',['changed','missing','escaped'])
+    def test_current_data_audit_precedes_model_allocation(recipe,tmp_path,monkeypatch,change):
+>       import src.e1hr.runtime as runtime
+E       ModuleNotFoundError: No module named 'src.e1hr.runtime'
+
+tests\e1hr\test_runtime.py:59: ModuleNotFoundError
+_________ test_current_data_audit_precedes_model_allocation[escaped] __________
+
+recipe = {'approval_snapshot_at_preparation': {'HR-G0': 'PASS; explicit user confirmation in current session', 'HR-G1': 'AWAITI...izer/scheduler update per completed group', 'drop_last': False, 'gradient_accumulation': 1, 'microbatch': 2, ...}, ...}
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-t07-red/test_current_data_audit_preced2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000243F7CDB790>
+change = 'escaped'
+
+    @pytest.mark.parametrize('change',['changed','missing','escaped'])
+    def test_current_data_audit_precedes_model_allocation(recipe,tmp_path,monkeypatch,change):
+>       import src.e1hr.runtime as runtime
+E       ModuleNotFoundError: No module named 'src.e1hr.runtime'
+
+tests\e1hr\test_runtime.py:59: ModuleNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/e1hr/test_train.py::test_flat_and_decreasing_scores_still_finish_all_eight_epochs[0.0]
+FAILED tests/e1hr/test_train.py::test_flat_and_decreasing_scores_still_finish_all_eight_epochs[0.01]
+FAILED tests/e1hr/test_train.py::test_epoch_zero_and_partial_epoch_replay_match_uninterrupted
+FAILED tests/e1hr/test_train.py::test_preflight_without_execution_approvals_fails_before_model_allocation
+FAILED tests/e1hr/test_train.py::test_run_lock_rejects_second_writer - Module...
+FAILED tests/e1hr/test_recovery.py::test_unstarted_run_recovers_same_declaration_without_erasing_failure[preflight]
+FAILED tests/e1hr/test_recovery.py::test_unstarted_run_recovers_same_declaration_without_erasing_failure[boundary_zero]
+FAILED tests/e1hr/test_recovery.py::test_terminal_publication_crash_recovers_without_training_more
+FAILED tests/e1hr/test_recovery.py::test_attempt_allocations_and_replayed_training_are_retained
+FAILED tests/e1hr/test_recovery.py::test_corrupt_resume_is_recorded_as_failure_without_masking_load_error
+FAILED tests/e1hr/test_runtime.py::test_source_fingerprint_ignores_clean_docs_tests_commit_but_tracks_consumed_files
+FAILED tests/e1hr/test_runtime.py::test_new_unreviewed_transitive_import_is_rejected
+FAILED tests/e1hr/test_runtime.py::test_official_preflight_compares_projection_without_commit_equality
+FAILED tests/e1hr/test_runtime.py::test_current_data_audit_precedes_model_allocation[changed]
+FAILED tests/e1hr/test_runtime.py::test_current_data_audit_precedes_model_allocation[missing]
+FAILED tests/e1hr/test_runtime.py::test_current_data_audit_precedes_model_allocation[escaped]
+16 failed, 1 passed in 4.20s

@@ -1,0 +1,40 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+____ test_transient_windows_sharing_error_retries_same_atomic_replacement _____
+
+tmp_path = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-sharing-red/test_transient_windows_sharing0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000018C4B3AA890>
+
+    def test_transient_windows_sharing_error_retries_same_atomic_replacement(tmp_path,monkeypatch):
+        import src.e1hr.checkpoint as checkpoint
+        p=tmp_path/'record.json';checkpoint.atomic_json(p,{'boundary':0})
+        replace=checkpoint.os.replace;calls=[]
+        def sharing(source,target):
+            calls.append(1)
+            if len(calls)<3:
+                exc=PermissionError('temporary Windows sharing denial');exc.winerror=32;raise exc
+            replace(source,target)
+        monkeypatch.setattr(checkpoint.os,'replace',sharing)
+>       checkpoint.atomic_json(p,{'boundary':1})
+
+tests\e1hr\test_checkpoint.py:119: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src\e1hr\checkpoint.py:37: in atomic_json
+    _atomic(path, write)
+src\e1hr\checkpoint.py:26: in _atomic
+    os.replace(temporary, path)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = 'C:\\Users\\Windows\\Downloads\\GeoLocation\\.tools\\e1hr\\pytest-sharing-red\\test_transient_windows_sharing0\\record.json.ck8hbz6x.tmp'
+target = WindowsPath('C:/Users/Windows/Downloads/GeoLocation/.tools/e1hr/pytest-sharing-red/test_transient_windows_sharing0/record.json')
+
+    def sharing(source,target):
+        calls.append(1)
+        if len(calls)<3:
+>           exc=PermissionError('temporary Windows sharing denial');exc.winerror=32;raise exc
+E           PermissionError: temporary Windows sharing denial
+
+tests\e1hr\test_checkpoint.py:116: PermissionError
+=========================== short test summary info ===========================
+FAILED tests/e1hr/test_checkpoint.py::test_transient_windows_sharing_error_retries_same_atomic_replacement
+1 failed in 0.05s
