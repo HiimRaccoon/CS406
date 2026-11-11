@@ -24,3 +24,5 @@ T05: complete — RED: three missing paired-head/optimizer behaviors; GREEN: E3 
 T06: complete — RED: two missing metric behaviors; GREEN: E3 and unchanged E1/E2 metrics, 9 passed; independent tie/F1/cross-bucket/NLL and fixed extreme-tail coverage oracles. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
 
 T07: complete — RED: three missing head engine behaviors; GREEN: E3 engine/metrics and unchanged E1/E2 engine regressions, 18 passed; direct 4+1 sample-mean tail oracle, schedule endpoints/interior/exhaustion and nonfinite no-update. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
+
+T08: complete — RED: three missing capture/replay/last-state behaviors; GREEN: E3 checkpoint/engine plus E1/E2 checkpoint regressions, 11 passed; safe tensor/primitives full state and derived publication repair. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
