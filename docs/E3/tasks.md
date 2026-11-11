@@ -74,7 +74,7 @@ One common official protocol is already fixed, not a pending choice. Do not fill
 | E3-T00b | E3-G0 | Source registry/report checks, finite cache/replay/pilot/common-protocol candidates, explicit RNG/runtime/recovery policy, record schemas and prospective roots | **CANDIDATE PREPARED — AWAITING G1 REVIEW; SOURCE HANDOFF STILL PENDING** |
 | E3-T01 | E3-G1 | E3 schemas/common-protocol/stage-permission guards and private CPU fixtures | **NOT STARTED — GATED** |
 | E3-T02 | T01 | Fixed metadata/preprocessing and strict selected-source adapters/freeze | **COMPLETE — CPU EVIDENCE ONLY** |
-| E3-T03 | T01/T02 | Immutable cache construction/validation and original-head replay mechanics | **NOT STARTED — GATED** |
+| E3-T03 | T01/T02 | Immutable cache construction/validation and original-head replay mechanics | **COMPLETE — CPU EVIDENCE ONLY** |
 | E3-T04 | T01/T03 | Natural/cRT samplers and deterministic resumable draw state | **NOT STARTED — GATED** |
 | E3-T05 | T01/T03 | Paired linear heads, init hashes and approved common optimizer | **NOT STARTED — GATED** |
 | E3-T06 | T01/T02 | Narrow metric reuse with independent exact bucket/ranking oracles | **NOT STARTED — GATED** |

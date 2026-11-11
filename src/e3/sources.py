@@ -99,4 +99,5 @@ def load_frozen_source(entry: dict, *, contract: dict, device):
         source = cls(backbone, {"method": "linear_default", "seed": entry["source_seed"]})
     source.load_state_dict(state["model"], strict=True)
     frozen = FrozenSource(source, family=entry["family"]).to(device)
+    frozen.source_binding = dict(entry)
     return frozen, verification

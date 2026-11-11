@@ -12,3 +12,7 @@ Pre-flight shared interfaces: T01 schemas/payload bindings -> T02/T03/T09; T02 f
 T01: complete. Behavioral RED: tests/e3/test_config.py (5 failures, unimplemented strict/profile/permission functions). GREEN: E3 plus unchanged E1/E2 config tests, 32 passed. Added pinned JSON Schema validator in requirements-e3.txt; package installation is CPU preparation, not target-stack acceptance.
 
 T02: complete — RED: five missing source/data behaviors; GREEN: source/preprocessing/E1/E2 model regressions, 20 passed; baseline 426 passed, 4 GPU deselected after workspace basetemp. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
+
+Correction after T02: IDE root lacked the checkout .gitattributes; mirroring a new E3 file replaced inherited rules. Restored all pre-E3 rules from the parent commit and appended only E3 exact-byte rules before further staging.
+
+T03: complete — RED: five absent cache/replay/publication behaviors; GREEN: cache/source/preprocessing regressions, 13 passed; committed chunks are normalized schema records and only index publication marks complete. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.

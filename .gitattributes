@@ -1,3 +1,38 @@
+# Preserve the exact source bytes used by fixed-split fingerprints.
+artifacts/baseline124/manifest.csv -text
+artifacts/baseline124/summary.json -text
+artifacts/baseline124/labels.json -text
+artifacts/baseline124/class_support.csv -text
+
+# Keep versioned specification and checksum bytes stable across platforms.
+configs/preprocessing/*.json text eol=lf
+configs/preprocessing/*.sha256 text eol=lf
+docs/E1/*.json text eol=lf
+docs/E1/*.sha256 text eol=lf
+docs/*.md text eol=lf
+docs/E1/*.md text eol=lf
+reports/preprocessing_qa_v1/*.json text eol=lf
+src/**/*.py text eol=lf
+tests/*.py text eol=lf
+configs/pilot/*.json text eol=lf
+scripts/slurm/*.sbatch text eol=lf
+
+# Preserve the original UIT pilot evidence bytes and their recorded checksums.
+reports/pilot/evidence/** -text
+
+# Preserve HR-G1 exact-byte contract and receipt serialization.
+docs/E1-HR/*.json text eol=lf
+docs/E1-HR/*.sha256 text eol=lf
+docs/E1-HR/*.md text eol=lf
+
+# Preserve E2 frozen contract and review/evidence serialization.
+docs/E2/*.json text eol=lf
+docs/E2/*.sha256 text eol=lf
+docs/E2/*.md text eol=lf
+
+# Preserve exact raw Windows CPU evidence bytes, including carriage returns.
+docs/E2/evidence/** -text -diff
+
 # E3 approval pins identify exact bytes on every platform.
 docs/E3/*.json text eol=lf
 docs/E3/schemas/*.json text eol=lf
