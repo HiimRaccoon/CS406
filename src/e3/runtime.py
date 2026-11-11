@@ -28,6 +28,11 @@ def code_inventory() -> dict:
         relative = path.relative_to(ROOT).as_posix()
         if relative in files: continue
         files[relative] = sha256_file(path)
+        # Python executes each parent package initializer before the leaf module.
+        # Include and traverse those imports as part of the same consumed closure.
+        for parent in path.relative_to(ROOT).parents:
+            initializer=ROOT/parent/"__init__.py"
+            if parent.parts and initializer.is_file(): pending.append(initializer)
         package = relative[:-3].split("/")[:-1]
         for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
             modules = []
@@ -41,7 +46,8 @@ def code_inventory() -> dict:
                 if module and module[0] == "src":
                     dependency = ROOT.joinpath(*module).with_suffix(".py")
                     if dependency.is_file(): pending.append(dependency)
-    files["requirements-e3.txt"] = sha256_file(ROOT/"requirements-e3.txt")
+    for relative in ("requirements-e3.txt","scripts/slurm/e3_extract.sbatch","scripts/slurm/e3_head.sbatch"):
+        files[relative] = sha256_file(ROOT/relative)
     return {"kind":"e3_consumed_source_inventory_v1","files":dict(sorted(files.items()))}
 
 

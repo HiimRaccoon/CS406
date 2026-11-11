@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader,TensorDataset,Subset
 
 from .cache import _build_payloads,compare_replay
 from .checkpoint import capture_head_state,restore_head_state
-from .config import ROOT,DIMENSIONS,contained,fingerprint,payload,policy,read_json,sha256_file,validate_record
+from .config import ROOT,DIMENSIONS,contained,fingerprint,payload,policy,read_json,schemas,sha256_file,validate_record
 from .data import FixedManifest,ImageRows,seed_worker
 from .engine import _train_batches,make_head_scheduler
 from .io import atomic_json,atomic_write,writer_lock
@@ -80,6 +80,19 @@ def _head_recovery_fixture(*, device):
 def run_acceptance(request, *, output: Path, gpu: bool=False) -> dict:
     if not gpu:
         return {"kind":"e3_unexecuted_target_check_v1","executed":False,"g2_accepted":False,"reason":"Explicit GPU opt-in absent"}
+    # Validate the prospective evidence envelope before any target side effects.
+    # G1 approved a 384-presentation fixture and an incompatible 48-row schema.
+    # Neither changing the reviewed fixture nor rewriting approved bytes is safe.
+    scope=policy()["bounded_acceptance"]
+    evidence=schemas()["$defs"]["source_acceptance_evidence"]["properties"]
+    for field,required in (
+        ("source_presentations",scope["maximum_source_original_image_presentations"]),
+        ("head_fixture_updates",scope["head_fixtures"]["maximum_updates_including_replay"]),
+        ("head_fixture_presentations",scope["head_fixtures"]["maximum_feature_presentations_including_replay"]),
+    ):
+        if evidence[field]["maximum"]<required:
+            raise ValueError(f"Bounded acceptance requires an explicitly approved schema amendment: {field} "
+                             f"policy cap {required} exceeds evidence schema cap {evidence[field]['maximum']}")
     checked=preflight(request,operation="bounded_acceptance"); declaration=checked["declaration"]
     destination=contained(ROOT,declaration["output_root"])
     if Path(output).resolve()!=destination: raise ValueError("Output differs from approved bounded declaration")

@@ -37,3 +37,19 @@ def test_scientific_closure_excludes_operational_git_commit_and_rejects_code_cha
     verify_code_inventory(dict(inventory,audit_git_commit="another-docs-only-commit"))
     bad=copy.deepcopy(inventory); bad["files"]["src/e3/engine.py"]="0"*64
     with pytest.raises(ValueError): verify_code_inventory(bad)
+
+
+def test_consumed_closure_binds_imported_package_initializers_and_launchers(monkeypatch):
+    from src.e3 import runtime
+    from src.e3.config import ROOT
+    inventory=runtime.code_inventory()
+    required={"src/__init__.py","src/e3/__init__.py","src/e1/__init__.py",
+              "src/e2/__init__.py","src/preprocessing/__init__.py",
+              "scripts/slurm/e3_extract.sbatch","scripts/slurm/e3_head.sbatch"}
+    assert required <= inventory["files"].keys()
+    original=runtime.sha256_file
+    for relative in required:
+        monkeypatch.setattr(runtime,"sha256_file",lambda path,relative=relative:
+            "0"*64 if path==ROOT/relative else original(path))
+        with pytest.raises(ValueError,match="closure changed"):
+            runtime.verify_code_inventory(inventory)

@@ -17,14 +17,18 @@
     "jsonschema": "4.25.1"
   },
   "verification": {
-    "E3": "54 passed",
-    "repository_before_last_two_guard_tests": "478 passed, 4 GPU deselected",
+    "E3": "56 passed within final repository run",
     "compileall": "PASS",
     "bash_syntax": "PASS (actual Git Bash)",
-    "schema_metaschema": "PASS draft 2020-12"
+    "schema_metaschema": "PASS draft 2020-12",
+    "repository": "482 passed, 4 GPU deselected in 251.42s",
+    "command": ".venv/Scripts/python.exe -m pytest -q -m \"not gpu\" --basetemp=.tools/pytest-e3-final-fixes",
+    "log": ".tools/e3_final_fixes.log (local ignored execution log)",
+    "protected_files_unchanged": 239,
+    "approved_snapshots_exact": 8
   },
-  "declared_code_inventory_sha256": "a650f639a59a8053953dd35bab56b5db6a6369b46e6c959eb2f9aa0702ec2e31",
-  "code_inventory_scope": "Conservative local source/import closure and exact dependency requirement bytes; no target consumption/acceptance claimed",
+  "declared_code_inventory_sha256": "0941d57931b87ef1927ff7fef5f2168d07cb0ea811f10aa90d58e46ce4ef69dc",
+  "code_inventory_scope": "Conservative local transitive imports including executed package initializers, E3 launcher bytes and dependency requirement bytes; no target acceptance claimed",
   "harness_inventory": {
     "tests/e3/helpers.py": "45fc02b5bbb7ba30053b34d089209cd145b9dd0c2a21b8b9dbeec5f22d124c7b",
     "tests/e3/test_cache.py": "19f4d444478f901093f36e6673c36bff3a1eaa067b90309fa411e85fb667bd82",
@@ -32,18 +36,18 @@
     "tests/e3/test_checkpoint.py": "8b31562ce5b65fa032f8685c59deaf592ed2905236f14eea5dff7720f34bd836",
     "tests/e3/test_config.py": "b76bedd15af7e5fa85fd0500a46defc9f610cd7a1ea0a4ec495cb3eee6927a40",
     "tests/e3/test_engine.py": "ec73ee443bad590ab75555ed0f13ad2f96ab309df98e6567cf5932388b29732b",
-    "tests/e3/test_entrypoints.py": "9a87f25e00b34a2379f691cb62a4e78a2e7dbacf099bb611f57e9df94accf9e0",
+    "tests/e3/test_entrypoints.py": "6232f78484ef9aea45078de54805480c570178ae22ed6e9bed173ba55692c980",
     "tests/e3/test_metrics.py": "4fc41e38a886c848bdc449d1f3f2f430ed7e2b10524fa253d95fb4cd221358f8",
     "tests/e3/test_model.py": "f8f25696099bb3ff658e1ec675344ec94c0c3b860248bb89e15cb8d4fa7da224",
     "tests/e3/test_report.py": "8c05b1b0d544a917df9ad76dafb6f42b3ea70c9d83eb671bacc6b19ead0d713d",
-    "tests/e3/test_runtime.py": "73a753f3e49e7b5f52f0181a3530b9a29ef055b8c479da74c36b660a56048545",
+    "tests/e3/test_runtime.py": "6d7958f7261b1db151ad06e8a405710eb2f9194c8a81836daee588e170362add",
     "tests/e3/test_sampling.py": "b0497f2e11b7da9261ecc07834e8e7e5e639db70333af8191ed64a057ee70a0d",
     "tests/e3/test_sources.py": "3cac337e8f31491f813a97e15998c83049d04d447a20e072c1b02d2ee4734b01",
     "tests/e3/test_train.py": "1cf2b68e4e0bc457fb25c45157b00c74e01a0d4c55ffa05cfd6fe75647b81090",
     "tests/e3/__init__.py": "f6c7c6f6c17036e8a817612022804f4fd45f7945f0bf5fee4e0385359cc6dfa5",
     "scripts/slurm/e3_extract.sbatch": "42dcc3b79991e779d3ad246ec6b356d02dbbcf153c3217f527178de775ccdc28",
     "scripts/slurm/e3_head.sbatch": "d5c49c85f72d915c49c37905b3cd6025563adaa9c75eb919d4c768f65b2b2b46",
-    "src/e3/acceptance.py": "3ce24bcbe2f432c51d1d83dfd0ea3c60f3398306d78dd64d0280beea80214b9c"
+    "src/e3/acceptance.py": "b07451aef745257e8c872dc2749b9a2a5e9e43caa14b76d34de8b93cb658aa66"
   },
   "head_fixture": {
     "updates": 32,
@@ -52,9 +56,21 @@
     "logical_state_equal": true
   },
   "remaining_blockers": [
+    "Explicit reviewed amendment: pinned source evidence schema maximum 48 conflicts with policy cap 384; target execution fails before allocation",
     "E3-TARGET-AUTH",
     "six actual selected binaries/full source evidence",
     "current root/content/software-bound train-validation audit",
     "actual target/device/driver/runtime/recovery acceptance"
-  ]
+  ],
+  "independent_review": {
+    "baseline": "05334cb43f769a05aca88aefe26d33bd78a0e553",
+    "reviewed_head": "b216367",
+    "critical": 0,
+    "important": 2,
+    "minor": 0,
+    "fixes": "Early incompatible-schema rejection and complete import/launcher closure; both RED then GREEN",
+    "target_schema_conflict_resolved": false,
+    "report": "docs/E3/evidence/final_review.md",
+    "fix_regression": "Both RED then GREEN; final repository regression passed"
+  }
 }

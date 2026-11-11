@@ -64,3 +64,5 @@ The bounded recovery harness uses private full-dimension heads and synthetic fea
 ## Stop boundary
 
 T12 readiness is CPU/deployment preparation only. Present the verified source/input inventory and exact bounded request for E3-TARGET-AUTH before running T13. No G2 receipt, bulk cache, pilot result, final winner or test evaluation is produced by T01–T12.
+
+Final review blocker: the exact approved schema source_acceptance_evidence.source_presentations has maximum 48, whereas the approved bounded policy permits 384. GPU opt-in now rejects that incompatible envelope before target preflight, image access or allocation. An explicitly reviewed schema amendment and updated exact-byte bindings are required before T13; neither authorization alone nor reducing/relabeling the recorded work resolves this conflict. Approved G1 subject bytes remain unchanged.

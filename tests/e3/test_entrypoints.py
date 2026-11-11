@@ -31,6 +31,19 @@ def test_gpu_opt_in_with_missing_permission_is_failure(tmp_path):
     with pytest.raises(ValueError): run_acceptance({},output=tmp_path,gpu=True)
 
 
+def test_incompatible_approved_evidence_cap_blocks_before_target_work(tmp_path, monkeypatch):
+    from src.e3 import acceptance
+    from src.e3.config import policy, schemas
+    cap=policy()["bounded_acceptance"]["maximum_source_original_image_presentations"]
+    evidence_cap=schemas()["$defs"]["source_acceptance_evidence"]["properties"]["source_presentations"]["maximum"]
+    assert cap==384 and evidence_cap==48
+    def forbidden(*args, **kwargs):
+        pytest.fail("Target preflight/allocation must not run with incompatible approved evidence schema")
+    monkeypatch.setattr(acceptance,"preflight",forbidden)
+    with pytest.raises(ValueError, match="approved schema amendment"):
+        acceptance.run_acceptance({},output=tmp_path,gpu=True)
+
+
 def test_wrapper_syntax_and_rejects_unreviewed_seed_before_python(tmp_path):
     import os
     bash=Path("C:/Program Files/Git/bin/bash.exe")

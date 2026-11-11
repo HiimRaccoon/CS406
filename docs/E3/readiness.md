@@ -5,8 +5,8 @@ E3-G1 is approved for T01–T12 implementation via inline/native `executing-plan
 Observed on the local Windows CPU environment, 2026-11-11:
 
 - Baseline with a workspace-owned pytest temporary directory: 426 passed, 4 GPU tests deselected.
-- E3 tests after CLI, recovery and input-format hardening: 54 passed.
-- Repository CPU regression before the last two exact-byte/attempt-accounting tests: 478 passed, 4 GPU tests deselected. Final branch verification follows independent review.
+- E3 tests including both final review regressions: 56 passed as part of the final repository suite.
+- Final repository CPU regression after independent review fixes: 482 passed, 4 GPU tests deselected (251.42 seconds).
 - `compileall` for `src/e3` and `tests/e3`: passed.
 - Actual Git Bash syntax checks for both E3 Slurm wrappers: passed. Behavioral wrapper tests checked seed rejection and environment exports before the first interpreter.
 - The pinned record schema passed JSON Schema draft 2020-12 metaschema validation. All eight approved preparation snapshots matched their recorded exact bytes/hashes.
@@ -19,3 +19,5 @@ The local schema dependencies are pinned separately in `requirements-e3.txt` and
 No actual selected source binary or dataset image was loaded during this preparation. No target acceptance, bulk cache, pilot, official head training, HEAD-FREEZE or test evaluation was executed. T13 remains blocked by E3-TARGET-AUTH and materialization of the six actual selected binaries/full source evidence/current bound data audit. CPU preparation and an unexecuted target check do not satisfy G2.
 
 See `runbook.md` for explicit inventories, receipt roles, CLI commands, wrappers and recovery. See `implementation_log.md` for task evidence, rulings and the final review/verification record.
+
+Independent review completed: no Critical or Minor findings; two Important findings were addressed with observed failing-then-passing regressions. The consumed closure now includes package ancestor initializers and both E3 launchers. The schema/policy source-presentation conflict (48 versus 384) is rejected before target work and remains a T13 blocker requiring explicit reviewed amendment. See evidence/final_review.md.

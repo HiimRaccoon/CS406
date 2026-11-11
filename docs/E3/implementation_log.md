@@ -4,10 +4,10 @@ Plan: docs/E3/plan.md; baseline commit: 05334cb43f769a05aca88aefe26d33bd78a0e553
 
 2026-11-11: User explicitly approved E3-G1 and T01-T12 implementation in src/e3. Method: executing-plans inline/native. Exact pre-implementation bytes retained in artifacts/E3/approvals/v1/E3-G1/approved_bytes; candidate files remain historical, non-executable snapshots. TARGET-AUTH/G2/cache/pilot/final/test gates remain unapproved.
 
-Ruling: use the existing separate checkout .tools/publish-pilot on e3 for scoped commits and mirror source/tests into the IDE workspace; no extra worktree needed.
-Ruling: preserve approved candidate bytes and their historical G0 fields; current authorization is recorded by G1 receipt and task ledger, avoiding a self-referential rehash of approved bytes.
+Ruling: use the existing separate checkout .tools/publish-pilot on e3 for scoped commits and mirror source/tests into the IDE workspace; no extra worktree needed. Cost if wrong: IDE and checkout could drift; scoped mirrors are compared before completion.
+Ruling: preserve approved candidate bytes and their historical G0 fields; current authorization is recorded by G1 receipt and task ledger, avoiding a self-referential rehash of approved bytes. Cost if wrong: readers must use the external current receipt/ledger instead of treating historical candidate fields as current permission.
 
-Pre-flight shared interfaces: T01 schemas/payload bindings -> T02/T03/T09; T02 fixed rows/source identity -> T03; T03 cache rows -> T04/T07/T11; T04 sampler state -> T08; T05 exact paired state -> T07/T08/T10; T06 metrics -> T07/T11; T07 counters/scheduler -> T08/T09/T10; T08 atomic boundary -> T09/T10; T09 stage wrappers -> T10/T12; T10 completed-run parser -> T11. Ruling: declarations use approved normalized schemas; execution wrappers alone join declaration hashes and operation receipts; pre-target inputs do not require evidence they will produce.
+Pre-flight shared interfaces: T01 schemas/payload bindings -> T02/T03/T09; T02 fixed rows/source identity -> T03; T03 cache rows -> T04/T07/T11; T04 sampler state -> T08; T05 exact paired state -> T07/T08/T10; T06 metrics -> T07/T11; T07 counters/scheduler -> T08/T09/T10; T08 atomic boundary -> T09/T10; T09 stage wrappers -> T10/T12; T10 completed-run parser -> T11. Ruling: declarations use approved normalized schemas; execution wrappers alone join declaration hashes and operation receipts; pre-target inputs do not require evidence they will produce. Cost if wrong: all execution callers must use the reviewed wrapper/binding chain; declarations alone never grant permission.
 
 T01: complete. Behavioral RED: tests/e3/test_config.py (5 failures, unimplemented strict/profile/permission functions). GREEN: E3 plus unchanged E1/E2 config tests, 32 passed. Added pinned JSON Schema validator in requirements-e3.txt; package installation is CPU preparation, not target-stack acceptance.
 
@@ -40,3 +40,15 @@ T12: complete — RED: CLI, GPU opt-in and wrapper guards; GREEN: E3 54 passed, 
 Correction: PowerShell stdin converted non-ASCII literal characters in early bookkeeping scripts. Corrected the exact user approval quote using Unicode escapes and rebound only its receipt evidence hash; all approved subject/snapshot bytes remain unchanged. Current task header/handoff now records G1 approval and T01-T12 CPU implementation accurately.
 
 Ruling T12: use Git Bash on Windows for shell syntax/behavior checks. The target harness consumes an explicitly bound existing train/validation audit and opens only two train fixtures. Private CPU recovery uses a two-update fixture boundary within the reviewed 32-update cap; production head commits remain whole windows. Cost if wrong: audit materialization and the bounded fixture need correction at TARGET-AUTH.
+
+Final review: first reviewer did not start because of model quota; replacement fresh-context reviewer completed against b216367 versus 05334cb. No Critical or Minor findings. Two Important findings: incompatible source-acceptance evidence envelope; incomplete consumed-source closure. Actual target behavior/performance and scientific outcomes declined because not authorized.
+
+Final: fixed late schema failure by a metadata-only guard before any target work: test_incompatible_approved_evidence_cap_blocks_before_target_work RED -> GREEN. The underlying reviewed schema conflict remains a T13 blocker, not an accepted target result.
+
+Final: fixed omitted executable package initializers and launchers: test_consumed_closure_binds_imported_package_initializers_and_launchers RED -> GREEN; recursively inspect initializer imports and bind both E3 Slurm wrappers. Refresh declared inventory after final code changes.
+
+Final: Ruling: preserve the exact G1-approved schema and policy despite their conflicting source-presentation bounds (48 versus 384), and fail before target side effects pending an explicitly reviewed amendment. Neither falsify counts nor silently shrink the fixture. Cost if wrong: T13 cannot run until schema and exact-byte bindings are reviewed again.
+
+Final: both Important findings covered by observed RED -> GREEN regressions; whole suite 482 passed, 4 GPU deselected in 251.42s. E3 cases 56. compileall, Git Bash syntax, draft-2020-12 metaschema, all eight approved snapshots and all 239 protected files passed. No Minor findings deferred. Declared inventory refreshed; actual target and scientific outcomes remain unexecuted.
+
+Final: complete — Independent review fixes verified; 482 passed, 4 GPU deselected; schema conflict remains explicit T13 blocker. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
