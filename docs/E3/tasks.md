@@ -1,8 +1,8 @@
 # E3 Task Ledger
 
-Updated: **2026-11-11 (Asia/Saigon)**. **E3-G0 PASS — documentation/design preparation only: plan/tasks and E3-T00b preparation. E3-G1, implementation, cache extraction, pilot execution and official head runs remain NOT AUTHORIZED. Final test remains LOCKED / NOT AUTHORIZED.**
+Updated: **2026-11-11 (Asia/Saigon)**. **E3-G1 PASS - T01-T12 implementation, nonofficial CPU tests and deployment preparation via executing-plans inline/native, explicitly approved by the user. Target acceptance, cache extraction, pilot and official head runs remain NOT AUTHORIZED. Final test remains LOCKED / NOT AUTHORIZED.**
 
-Authority: [specs.md](specs.md) defines the scientific design, and [plan.md](plan.md) defines proposed files/interfaces, behavioral checks and task dependencies. This ledger records current scoped gate/task status. G0 permits plan/tasks and T00b design preparation only; the earlier publication of documentation on branch `e3` was separately requested and grants no implementation or execution permission.
+Authority: [specs.md](specs.md) defines the scientific design, and [plan.md](plan.md) defines proposed files/interfaces, behavioral checks and task dependencies. This ledger records current scoped gate/task status. G0 permitted plan/tasks and T00b design preparation. The later explicit user E3-G1 decision now authorizes T01-T12 via inline/native execution; approved original bytes and the scoped receipt are retained in artifacts/E3/approvals/v1/E3-G1. Later execution remains separately gated.
 
 The approved planning input was the revised spec snapshot with exact file SHA-256 **`2bb83aba8a1d1aa14dedbde747359facf1ada6ac410610a523065c2c6dd8a132`**. This identifies the pre-correction planning snapshot, not the current corrected file digest or an E3 numeric-contract freeze. Current G0 status is synchronized in the spec and this ledger; the wording/link corrections do not extend that approval. E1/E1-HR/E2 completion, source evidence and frozen scientific values remain unchanged.
 
@@ -35,7 +35,7 @@ The approved planning input was the revised spec snapshot with exact file SHA-25
 | Gate | State | Required binding / permitted scope |
 |---|---|---|
 | E3-G0 | **PASS — documentation/design preparation only** | Plan/tasks and E3-T00b source-manifest/cache-pilot-candidate preparation only. No numeric freeze, E3-G1, implementation, caching, pilot, official head-run or test authorization |
-| E3-G1 | **PASS ? T01-T12 IMPLEMENTATION/CPU PREPARATION ONLY** | Explicit user approval; inline/native executing-plans; approved exact bytes and receipt in artifacts/E3/approvals/v1/E3-G1. No target/cache/pilot/final/test operation authorized |
+| E3-G1 | **PASS - T01-T12 IMPLEMENTATION/CPU PREPARATION ONLY** | Explicit user approval; inline/native executing-plans; approved exact bytes and receipt in artifacts/E3/approvals/v1/E3-G1. No target/cache/pilot/final/test operation authorized |
 | E3-TARGET-AUTH | **NOT GRANTED** | Explicit bounded target acceptance of selected-source loading, feature extraction/runtime and deterministic recovery; standalone-head fixtures only, no full-model training or bulk cache |
 | E3-G2 | **NOT GRANTED** | User accepts actual bounded evidence, six-source handoff, scientific/runtime identity and cache declarations; no E1/E2 reopening or automatic extraction |
 | E3-CACHE-AUTH | **NOT GRANTED** | Bind six sources and explicit full train/val extraction/original-head val replay scope |
@@ -72,18 +72,18 @@ One common official protocol is already fixed, not a pending choice. Do not fill
 |---|---|---|---|
 | E3-T00a | User's spec acceptance/design-publish instruction | This plan/ledger; scoped G0 record; scientific spec retained | **COMPLETE — DOCUMENTATION ONLY** |
 | E3-T00b | E3-G0 | Source registry/report checks, finite cache/replay/pilot/common-protocol candidates, explicit RNG/runtime/recovery policy, record schemas and prospective roots | **CANDIDATE PREPARED — AWAITING G1 REVIEW; SOURCE HANDOFF STILL PENDING** |
-| E3-T01 | E3-G1 | E3 schemas/common-protocol/stage-permission guards and private CPU fixtures | **NOT STARTED — GATED** |
-| E3-T02 | T01 | Fixed metadata/preprocessing and strict selected-source adapters/freeze | **COMPLETE — CPU EVIDENCE ONLY** |
-| E3-T03 | T01/T02 | Immutable cache construction/validation and original-head replay mechanics | **COMPLETE — CPU EVIDENCE ONLY** |
-| E3-T04 | T01/T03 | Natural/cRT samplers and deterministic resumable draw state | **COMPLETE — CPU EVIDENCE ONLY** |
-| E3-T05 | T01/T03 | Paired linear heads, init hashes and approved common optimizer | **COMPLETE — CPU EVIDENCE ONLY** |
-| E3-T06 | T01/T02 | Narrow metric reuse with independent exact bucket/ranking oracles | **COMPLETE — CPU EVIDENCE ONLY** |
-| E3-T07 | T03/T04/T05/T06 | Head-only engine, sample-weighted tails/common schedule/full budget/comparator | **COMPLETE — CPU EVIDENCE ONLY** |
-| E3-T08 | T01/T04/T05/T07 | Atomic head checkpoints and deterministic committed-boundary replay | **COMPLETE — CPU EVIDENCE ONLY** |
-| E3-T09 | T01-T08 | E3 stage preflight/runtime, one-run lifecycle and attempt records | **COMPLETE — CPU EVIDENCE ONLY** |
-| E3-T10 | T01/T09 | Bounded common-protocol pilot selection, strict complete-run parser and twelve final declarations | **COMPLETE — CPU EVIDENCE ONLY** |
-| E3-T11 | T02/T03/T06/T10 | Complete selected exports, six-arm aggregate and PRIMARY/SECONDARY/EXPLORATORY report | **COMPLETE — CPU EVIDENCE ONLY** |
-| E3-T12 | T01-T11 | CPU/deployment readiness and opt-in bounded acceptance harness | **COMPLETE — CPU EVIDENCE ONLY** |
+| E3-T01 | E3-G1 | E3 schemas/common-protocol/stage-permission guards and private CPU fixtures | **COMPLETE - CPU EVIDENCE ONLY** |
+| E3-T02 | T01 | Fixed metadata/preprocessing and strict selected-source adapters/freeze | **COMPLETE - CPU EVIDENCE ONLY** |
+| E3-T03 | T01/T02 | Immutable cache construction/validation and original-head replay mechanics | **COMPLETE - CPU EVIDENCE ONLY** |
+| E3-T04 | T01/T03 | Natural/cRT samplers and deterministic resumable draw state | **COMPLETE - CPU EVIDENCE ONLY** |
+| E3-T05 | T01/T03 | Paired linear heads, init hashes and approved common optimizer | **COMPLETE - CPU EVIDENCE ONLY** |
+| E3-T06 | T01/T02 | Narrow metric reuse with independent exact bucket/ranking oracles | **COMPLETE - CPU EVIDENCE ONLY** |
+| E3-T07 | T03/T04/T05/T06 | Head-only engine, sample-weighted tails/common schedule/full budget/comparator | **COMPLETE - CPU EVIDENCE ONLY** |
+| E3-T08 | T01/T04/T05/T07 | Atomic head checkpoints and deterministic committed-boundary replay | **COMPLETE - CPU EVIDENCE ONLY** |
+| E3-T09 | T01-T08 | E3 stage preflight/runtime, one-run lifecycle and attempt records | **COMPLETE - CPU EVIDENCE ONLY** |
+| E3-T10 | T01/T09 | Bounded common-protocol pilot selection, strict complete-run parser and twelve final declarations | **COMPLETE - CPU EVIDENCE ONLY** |
+| E3-T11 | T02/T03/T06/T10 | Complete selected exports, six-arm aggregate and PRIMARY/SECONDARY/EXPLORATORY report | **COMPLETE - CPU EVIDENCE ONLY** |
+| E3-T12 | T01-T11 | CPU/deployment readiness and opt-in bounded acceptance harness | **COMPLETE - CPU EVIDENCE ONLY** |
 | E3-T13 | T12 + TARGET-AUTH | Actual bounded source/extraction/runtime/recovery evidence and unapproved G2 candidate | **NOT STARTED — GATED** |
 | E3-T14 | T13 + G2 + CACHE-AUTH | Six complete caches/twelve split payloads, original-head full-val replay; CACHE-ACCEPT handoff | **NOT STARTED — GATED** |
 | E3-T15 | T14 + CACHE-ACCEPT + PILOT-AUTH | Bounded pilot outcomes and one common final protocol candidate; mandatory review stop | **NOT STARTED — GATED** |
@@ -91,7 +91,7 @@ One common official protocol is already fixed, not a pending choice. Do not fill
 | E3-T17 | T16 + FINAL-AUTH + applicable accepted identities | Twelve full-budget head runs and selected-val analyses; six original references retained | **NOT STARTED — GATED** |
 | E3-T18 | T17 | Full lineage/export/paired-aggregate/inventory review and E3-CLOSEOUT handoff | **NOT STARTED — GATED** |
 
-Every production task T01 onward requires G1, even where its immediate dependencies name earlier tasks only. T00b preparation grants no implementation permission. The future implementation method is not selected by this documentation task or the publication branch name.
+Every production task T01 onward requires G1, even where its immediate dependencies name earlier tasks only. T00b preparation grants no implementation permission. The later user G1 decision selects inline/native executing-plans for T01-T12; the publication branch itself grants no permission.
 
 ## Completion evidence to record later
 
@@ -113,12 +113,12 @@ Every production task T01 onward requires G1, even where its immediate dependenc
 
 ### T01-T12 — Implementation and preparation
 
-- [ ] Each task completes its plan checklist with behavioral RED/GREEN commands, relevant unchanged regressions, protected-byte review and scoped evidence/commit.
-- [ ] T02/T03 prove exact frozen features, both layouts, source-seed/cache identity, original-head replay and complete train/val order; no test access, transform or mixed cache.
-- [ ] T04/T05/T07 prove natural versus class-then-image uniform sampling, paired actual initialization, ONE common profile, presentation-weighted tails and full budget/selection.
-- [ ] T08/T09 prove exact cRT draw/RNG/state replay, atomic authoritative recovery, stage guards before access/allocation and no source-encoder gradients/training.
-- [ ] T10/T11 reject incomplete/rehashed wrong lineage, hidden family-specific profiles and missing arms/seeds; prove paired-delta ddof=1, exact metrics/buckets and ranked comparison hierarchy.
-- [ ] T12 records actual complete CPU/compile/wrapper results and separate actual source/harness inventories; unexecuted target checks remain explicitly unexecuted. Stop before TARGET-AUTH.
+- [x] Each task completes its plan checklist with behavioral RED/GREEN commands, relevant unchanged regressions, protected-byte review and scoped evidence/commit.
+- [x] T02/T03 CPU fixtures and metadata guards prove exact frozen feature mechanics, both layouts, source-seed/cache identity, original-head replay and complete train/val order; no test access, transform or mixed cache.
+- [x] T04/T05/T07 prove natural versus class-then-image uniform sampling, paired actual initialization, ONE common profile, presentation-weighted tails and full budget/selection.
+- [x] T08/T09 prove exact cRT draw/RNG/state replay, atomic authoritative recovery, stage guards before access/allocation and no source-encoder gradients/training.
+- [x] T10/T11 reject incomplete/rehashed wrong lineage, hidden family-specific profiles and missing arms/seeds; prove paired-delta ddof=1, exact metrics/buckets and ranked comparison hierarchy.
+- [x] T12 records actual complete CPU/compile/wrapper results and separate actual source/harness inventories; unexecuted target checks remain explicitly unexecuted. Stop before target execution pending TARGET-AUTH. Actual source/cache/replay observations remain T13/T14 work.
 
 ### T13-T18 — Separately authorized execution
 
@@ -132,7 +132,7 @@ Every production task T01 onward requires G1, even where its immediate dependenc
 
 ## T00b candidate package for G1 review
 
-These artifacts are **review candidates only**, not approved execution inputs:
+These exact T00b bytes were approved at G1 as implementation inputs; they remain **non-executable design artifacts**, with no official final protocol winner:
 
 | Artifact | Role |
 |---|---|
@@ -142,10 +142,10 @@ These artifacts are **review candidates only**, not approved execution inputs:
 | [e3_record_schemas_v1.json](schemas/e3_record_schemas_v1.json) | Normalized candidate/runtime record schemas; schema definition grants no receipt |
 | [e3_t00b_preparation_evidence_v1.json](e3_t00b_preparation_evidence_v1.json) | Non-binding local observations, verification scope and preparation byte/hash inventory |
 
-New numeric policies are proposed under the current T00b request, not inherited or already approved. G1 still needs explicit review. No sidecar/receipt, code, cache, model execution, pilot or official head run is created by preparation. Source handoff and generated/runtime observations remain separately gated.
+G1 approved these finite candidates for T01-T12 implementation/CPU preparation. Original candidate bytes retain their pre-approval fields; the external G1 receipt and this ledger record current scope. No G2/cache/pilot/final approval or actual cache/model/pilot/head execution is implied. Source handoff and generated/runtime observations remain separately gated.
 
 ## Evidence and current handoff
 
 Future entries record actual task ID, files, command/outcome, environment, fixture-versus-target scope, path/hash inventory, commit and remaining authorization dependencies. Failed/partial/replayed work cannot count as a successful completed budget. Source/cache/head binary checks must say whether actual bytes or only supplied checksum references were inspected.
 
-Current completion is **T00a documentation and T00b candidate preparation only**. The finite candidate package is prepared for G1 review; G0 still authorizes documentation/design preparation only. G1 approval, implementation-method selection, actual source handoff/target evidence and every later execution remain pending. No E3 code/cache/pilot/head training or final-test access has occurred under this ledger.
+Current implementation is **T01-T12 complete with nonofficial CPU/metadata evidence**, following explicit E3-G1 approval via executing-plans inline/native. See implementation_log.md, readiness.md and runbook.md for exact scope and final review. Next stop: materialize/review source inputs and obtain E3-TARGET-AUTH before T13. No actual selected source binary/dataset image loading, target acceptance, bulk cache, pilot, official head training or final-test access occurred during T01-T12.

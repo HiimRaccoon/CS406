@@ -4,7 +4,7 @@
   "status": "APPROVED",
   "date": "2026-11-11",
   "timezone": "Asia/Saigon",
-  "user_instruction": "approve E3-G1, ti?n h?nh imple task T01-T12 v?o src/e3 ?i",
+  "user_instruction": "approve E3-G1, ti\u1ebfn h\u00e0nh imple task T01-T12 v\u00e0o src/e3 \u0111i",
   "method": "executing-plans (inline/native)",
   "named_scope": "E3-T01 through E3-T12 implementation, nonofficial CPU tests and deployment preparation",
   "approved_subjects": [

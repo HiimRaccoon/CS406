@@ -4,7 +4,7 @@
   "status": "APPROVED",
   "approved_by": "user",
   "approval_evidence_path": "artifacts/E3/approvals/v1/E3-G1/user_decision.json",
-  "approval_evidence_sha256": "171e026f363eb19e20e0cab8165a24e4cfd4b944ab3e0c3f6ae74b0ec405af0b",
+  "approval_evidence_sha256": "f247849dd27c6220f41f7b35c831d00e617eab8865db9db27b826b7127adabee",
   "approved_subjects": [
     {
       "role": "docs/E3/specs.md",
