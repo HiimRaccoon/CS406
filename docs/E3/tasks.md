@@ -81,7 +81,7 @@ One common official protocol is already fixed, not a pending choice. Do not fill
 | E3-T07 | T03/T04/T05/T06 | Head-only engine, sample-weighted tails/common schedule/full budget/comparator | **COMPLETE — CPU EVIDENCE ONLY** |
 | E3-T08 | T01/T04/T05/T07 | Atomic head checkpoints and deterministic committed-boundary replay | **COMPLETE — CPU EVIDENCE ONLY** |
 | E3-T09 | T01-T08 | E3 stage preflight/runtime, one-run lifecycle and attempt records | **COMPLETE — CPU EVIDENCE ONLY** |
-| E3-T10 | T01/T09 | Bounded common-protocol pilot selection, strict complete-run parser and twelve final declarations | **NOT STARTED — GATED** |
+| E3-T10 | T01/T09 | Bounded common-protocol pilot selection, strict complete-run parser and twelve final declarations | **COMPLETE — CPU EVIDENCE ONLY** |
 | E3-T11 | T02/T03/T06/T10 | Complete selected exports, six-arm aggregate and PRIMARY/SECONDARY/EXPLORATORY report | **NOT STARTED — GATED** |
 | E3-T12 | T01-T11 | CPU/deployment readiness and opt-in bounded acceptance harness | **NOT STARTED — GATED** |
 | E3-T13 | T12 + TARGET-AUTH | Actual bounded source/extraction/runtime/recovery evidence and unapproved G2 candidate | **NOT STARTED — GATED** |

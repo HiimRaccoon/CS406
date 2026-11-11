@@ -30,3 +30,5 @@ T08: complete — RED: three missing capture/replay/last-state behaviors; GREEN:
 Ruling T09: approved schemas bind several downstream artifacts by SHA without a locator. Add an explicit ExecutionContext(request, inventory_path) and input inventory bound by the same operation receipt; keep normalized scientific schemas and approved candidate bytes unchanged. Missing/changed inventory fails before allocation. Cost if wrong: deployment needs a reviewed inventory in addition to its declaration/wrapper.
 
 T09: complete — RED: five absent preflight/lifecycle behaviors; GREEN: E3 runtime/train/checkpoint and unchanged E2 runtime regressions, 29 passed; no pre-target G2 cycle, full-budget declining-F1 lifecycle and terminal no-update recovery. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
+
+T10: complete — RED: four missing campaign guards; GREEN: campaign/preflight/lifecycle, 10 passed; global maximum anchored LR tie, all eight trials, positive twelve-declaration matrix and pair-drift rejection; no jobs submitted. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
