@@ -2489,13 +2489,13 @@
     "reference_files": [
       {
         "path": "docs/E3/specs.md",
-        "bytes": 55584,
-        "sha256": "dda15af787cf6e9c1c8da3683f2756d0a92f30984b4aac7418307bbf87363697"
+        "bytes": 57197,
+        "sha256": "b3ac66801f7fb527b1692523ca07bed06fe73796bb639ccb59e10ecff4347e4c"
       },
       {
         "path": "docs/E3/plan.md",
-        "bytes": 40499,
-        "sha256": "388611401f1ad06222f1c0217dac4069825780fef1b90d316e8647ab2432adb8"
+        "bytes": 41342,
+        "sha256": "56973244b0bdc2d94755d32ef6e146a1fa66c54443ec317636eba6c0a453cae8"
       },
       {
         "path": "docs/E3/tasks.md",

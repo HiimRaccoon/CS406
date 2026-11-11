@@ -6,7 +6,7 @@
 
 **Architecture:** E3 owns source-checkpoint verification, deterministic cache indices, head-only sampling/training/recovery, stage gates and reports. Preserve the completed E1/E2 encoders and their feature boundaries, and narrowly reuse unchanged preprocessing and metric mechanics. Standalone cached-feature head training cannot update or reactivate a source encoder.
 
-**Tech stack:** Python/Torch/TorchVision and deterministic FP32 reference in spec Section 10; pytest with nonofficial CPU fixtures; separately authorized target acceptance. E3 optimizer, batch, horizon, pilot envelope and execution-resource choices remain PENDING until their required freezes.
+**Tech stack:** Python/Torch/TorchVision and deterministic FP32 reference in spec Section 10; pytest with nonofficial CPU fixtures; separately authorized target acceptance. Finite optimizer, head batch/budget, pilot, extraction loader/storage/recovery and runtime/resource candidates are defined for G1 review, not approved; actual target/cache/replay observations and later pilot/final outcomes remain pending.
 
 **Spec:** [specs.md](specs.md). **Current status:** The user approved proceeding to plan/task preparation and publication on 2026-11-11. E3-G0 is PASS for design preparation only, as recorded in [tasks.md](tasks.md). E3-G1 and all execution gates remain unapproved. The spec's draft gate table is the earlier review snapshot; this ledger records the later scoped G0 decision without changing scientific spec bytes. Publishing documentation does not freeze a numeric contract.
 
@@ -19,10 +19,10 @@
 - E1 feature is the exact 768-d output of `E1Model.encode`. E2 is `[G;mean(L)]`, 1536-d, with per-view final LayerNorm, one encoder, global-first then batch-major flattened locals. Preserve source final normalization/layer-scale; no added normalization, projection, PCA or learned fusion.
 - E1 global WH `[896,384]`; E2 global WH `[896,384]` plus four locals WH `[320,320]`, ordered `left,middle_left,middle_right,right_raised`, directly from frozen raw preprocessing. Both train and val cache extraction have jitter OFF and encoder eval/stochastic-depth OFF.
 - Fixed split/labels/preprocessing: 34997 train, 7497 val, 124 outputs and 106 val-supported labels. Verify the exact artifact/config/module hashes and six selected checkpoint references in spec Sections 3–5; do not regenerate split seed 406.
-- Six immutable source-cache bundles, twelve split payloads, one feature per original image/source checkpoint. Preserve extracted FP32 values losslessly; on-disk format/dtype/chunk/batch choices are PENDING. Bulk caching requires its own gate.
+- Six immutable source-cache bundles, twelve split payloads, one feature per original image/source checkpoint. Preserve extracted FP32 values losslessly. Finite storage/chunk and extraction loader candidates are defined for G1 review, not approved; actual cache outputs/acceptance remain pending. Bulk caching requires its own gate.
 - Natural sampling is shuffled image permutations without replacement within a pass. cRT draws a class with `1/124`, then an image uniformly within that class, with replacement across draws. Match actual presentations/updates/tails, never nominal epochs alone.
 - Only new biased linear weights/biases are trainable: E1 95,356 parameters, E2 190,588; representation trainable count zero. Standard unweighted CE, label smoothing 0, raw 124 logits, true group sample-mean loss.
-- Fixed-budget termination, early stopping OFF. Head checkpoint selection uses supported val Macro-F1, chronological improvement `>1e-6`, earlier ties; cadence/horizon PENDING. Every metric comes from that one selected head.
+- Fixed-budget termination, early stopping OFF. Head checkpoint selection uses supported val Macro-F1, chronological improvement `>1e-6`, earlier ties. Finite pilot budget and validation cadence candidates are defined for G1 review, not approved; official protocol selection and outcomes remain pending pilot/HEAD-FREEZE. Every metric comes from that one selected head.
 - Top-1/3/5 rank all 124 unchanged logits; exact ties use ascending label ID. Preserve supported-only F1, evaluation-support Weighted-F1, diagnostic sample-mean NLL and full-split cross-bucket false positives.
 - Buckets are `1-19`, `20-99`, `100-499`, `>=500`; `1-2` is an overlapping diagnostic subset, with only two val-supported labels/two val images. Resampling never changes unique support/buckets.
 - Aggregate all three seeds arithmetically with sample std `ddof=1`, no pre-rounding or ensembles; classification display uses four-decimal percentages and differences use percentage points.
@@ -59,18 +59,18 @@ E3-G0 (PASS: documentation preparation only)
 
 These are exactly the spec's gates; task numbers add no permission. TARGET-AUTH/G2 concern bounded selected-source loading, feature extraction/runtime and deterministic recovery. Optional fixture backward passes update a standalone head only; they neither reopen E1/E2 nor train an encoder. Passing acceptance emits evidence/candidates, never self-approved permissions.
 
-T00b must resolve every input needed to implement/accept the cache and execute each finite pilot candidate. The final selected optimizer/LR/init/budget may remain PENDING until T15/T16, but a pilot candidate must itself be complete. Official-head declarations reject unresolved fields and are unavailable before HEAD-FREEZE. Do not serialize an executable configuration containing `PENDING`, null, implicit defaults or source-recipe fallbacks.
+T00b has defined the finite candidate inputs needed to implement/accept the cache and run each pilot candidate; they are ready for G1 review, not approved. The final selected optimizer/LR/init/budget remains pending until pilot selection and HEAD-FREEZE. Official-head declarations reject unresolved fields and are unavailable before HEAD-FREEZE. Do not serialize an executable configuration containing `PENDING`, null, implicit defaults or source-recipe fallbacks.
 
 | Spec pending IDs | Required preparation / later outcome |
 |---|---|
 | P01 | T00b prepares explicit actual source paths/evidence bindings; T02/T13 verify actual binaries and six complete lineages before G2/bulk cache |
-| P02/P03 | T00b resolves lossless cache storage, extraction/worker/recovery policy and explicit float replay tolerances before G1/acceptance; T03/T13 prove them |
-| P04/P05 | T00b prepares actual pilot source/seed/coverage, finite candidates, caps and common-protocol selection/convergence criteria; PILOT-AUTH permits execution only after accepted caches |
-| P06/P07/P08 | T00b supplies complete candidate initializer/optimizer/LR/decay/schedule/batch/draw/update/validation values; T15 chooses ONE common profile and HEAD-FREEZE locks its final values |
-| P09/P10 | T00b fixes cRT RNG API/keys/state and applicable pilot runtime/resource/commit boundary before implementation; final bindings remain common across all arms |
-| P11 | This plan proposes file/interface ownership; T00b freezes schemas/paths/approval bindings; T12/T13 record actual consumed-source/device evidence rather than invented hashes |
+| P02/P03 | T00b defines lossless cache storage, extraction loader/chunk-recovery policy and float replay tolerances for G1 review, not approval; actual cache/runtime/replay evidence remains pending for T03/T13 and later acceptance |
+| P04/P05 | T00b defines pilot source/seed/coverage, finite candidates, caps and common-protocol selection/convergence criteria for G1 review, not approval; actual outcomes/winner remain pending, and PILOT-AUTH is still required after cache acceptance |
+| P06/P07/P08 | T00b defines candidate initializer/optimizer/LR/decay/schedule/batch/draw/update/validation values for G1 review, not approval; T15 proposes ONE common profile from pilot outcomes and HEAD-FREEZE approves exact final values |
+| P09/P10 | T00b defines candidate cRT RNG API/keys/state and applicable pilot runtime/resource/commit boundary for G1 review, not approval; actual target/runtime/recovery observations remain pending and final bindings remain common across all arms |
+| P11 | T00b defines candidate schemas/paths/approval bindings for G1 review, not approval; T12/T13 record actual consumed-source/device evidence and later cache/run/receipt observations rather than invented hashes |
 
-No current task writes the numeric candidates or resolves these scientific choices. Their separate design preparation is T00b. Existing source tuning ID 1001, source LRs and source eight-epoch accounting are history, not E3 pilot/head defaults.
+T00b has defined finite candidate values for G1 review without approving or freezing them. Actual observations, pilot outcomes and final protocol selection remain assigned to their later authorized gates. Existing source tuning ID 1001, source LRs and source eight-epoch accounting are history, not E3 pilot/head defaults.
 
 ## File ownership and reuse boundary
 
@@ -322,4 +322,4 @@ bash -n scripts/slurm/e3_head.sbatch
 | 11–12: comparator, exact metrics/buckets, reports/content integrity | T06/T07/T11/T17/T18 |
 | 13–15: gates/PENDING/acceptance | T00b/T01/T09/T12-T18 and every execution entrypoint |
 
-The current deliverable is this plan and the task ledger only. E3-G0 permits design preparation; candidate inputs, implementation method, E3-G1 freeze and later stages require their own review. No source implementation, contract, cache, model execution, training or test evaluator is delivered by this document. Next review concerns the plan/ledger and remaining T00b inputs, not an automatic implementation launch.
+The current preparation package includes the plan, task ledger and non-executable T00b candidate artifacts. E3-G0 permits design preparation only; candidate inputs are defined for G1 review but not approved, and implementation method, E3-G1 review and later stages require their own authorization. No source implementation, cache, model execution, training or test evaluator is delivered by this document. The next review is E3-G1 over the plan/ledger and exact candidate bytes, not an automatic implementation launch.

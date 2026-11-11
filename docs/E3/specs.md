@@ -2,7 +2,7 @@
 
 **DRAFT FOR USER REVIEW. E3 implementation, cache extraction, pilot execution and official head training remain NOT AUTHORIZED. Final test remains LOCKED / NOT AUTHORIZED.**
 
-Revision date: **2026-11-11 (Asia/Saigon)**. The E3 protocol is not frozen. E3-specific choices without a reviewed value are explicitly **PENDING** and require resolution through the gates in Section 13; library defaults and completed full-model recipes cannot resolve them.
+Revision date: **2026-11-11 (Asia/Saigon)**. The E3 protocol is not frozen. T00b finite policy candidates are **DEFINED FOR G1 REVIEW, NOT APPROVED**. Actual source/runtime/cache/replay observations and later pilot/final outcomes remain pending at their applicable gates; library defaults and completed full-model recipes cannot resolve them.
 
 **E3-G0 is PASS for documentation/design preparation only: plan/tasks and E3-T00b preparation. E3-G1, implementation, cache extraction, pilot execution, official head runs and test access remain NOT AUTHORIZED.**
 
@@ -54,13 +54,13 @@ Each arm reports **source seeds 2001, 3001 and 4001**, joined by matching ID. Th
 | Source families, six report arms and source-seed set | INHERITED from the intended study and completed final runs |
 | Exact feature definitions, data/labels, no augmentation and evaluation-mode extraction | INHERITED; representation remains frozen throughout E3 |
 | Natural retraining as the direct cRT control; only sampling differs within each pair | INHERITED and mandatory |
-| Official head protocol across E3-E1-N, E3-E1-cRT, E3-E2-N and E3-E2-cRT | FIXED: one common protocol across all four arms and all three source seeds; numeric choices remain PENDING |
+| Official head protocol across E3-E1-N, E3-E1-cRT, E3-E2-N and E3-E2-cRT | FIXED: one common protocol across all four arms and all three source seeds; finite pilot candidates are defined for G1 review, not approved; the official winner remains pending pilot/HEAD-FREEZE |
 | Source-head references | Unmodified original heads; no E3 optimization or reselection |
 | Metrics, frequency buckets, three-seed arithmetic mean/sample std and display conventions | INHERITED unchanged |
-| Head checkpoint comparator | Adopt the completed supported-Macro-F1 chronological comparator, `tau=1e-6`, earlier ties; cadence and horizon remain PENDING |
-| Head termination policy | Fixed budget; early stopping OFF. The numeric head budget is PENDING, not the source eight-epoch budget |
-| Head optimization, initialization and small-pilot envelope | PENDING under Section 14; require explicit review/freeze |
-| Cache storage/extraction operational choices and numerical acceptance tolerances | PENDING under Section 14; cannot change the feature definition |
+| Head checkpoint comparator | Adopt the completed supported-Macro-F1 chronological comparator, `tau=1e-6`, earlier ties; candidate cadence/horizon are defined for G1 review, not approved; official adoption remains pending HEAD-FREEZE |
+| Head termination policy | Fixed budget; early stopping OFF. Finite pilot budget candidates are defined for G1 review, not approved; the official final budget remains pending HEAD-FREEZE, not the source eight-epoch budget |
+| Head optimization, initialization and small-pilot envelope | Finite candidates are defined for G1 review, not approved; actual pilot outcomes and official final protocol remain pending under Section 14 |
+| Cache storage/extraction operational choices and numerical acceptance tolerances | Finite candidates are defined for G1 review, not approved; actual target/cache/replay observations remain pending under Section 14; cannot change the feature definition |
 | E3-G0 | PASS for documentation/design preparation only: plan/tasks and E3-T00b preparation |
 | E3-G1 and all implementation/execution gates | NOT AUTHORIZED |
 | Final test | LOCKED / NOT AUTHORIZED |
@@ -87,13 +87,13 @@ These are **recorded report/checksum references**; actual source binaries requir
 | E1 official aggregate JSON, logical filename `e1_three_seed_validation_report_v1.json` | `3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e` | `c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143` |
 | E2 official aggregate JSON, logical filename `e2_three_seed_validation_report_v1.json` | `75bdba59bccc8c8b7db498363d5c411cbde5165e0f9791bd925f41be6e5a82b9` | `ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72` |
 
-Neither report is present as a repository-relative file on branch `e3`. These logical filenames identify external/materialized source artifacts, not repository links. At **E3-T00b/P01**, supply each report's actual existing path, verify its exact bytes against the recorded SHA-256 above, and record that path/digest in the candidate source manifest. Do not fall back to an assumed `src/e1/` or `src/e2/` report path. The E1 aggregate digest also matches the completed E2 comparator pin; the recorded digests do not imply E3 acceptance or approval.
+Neither report is present as a repository-relative file on branch `e3`. These logical filenames identify external/materialized source artifacts, not repository links. T00b preparation verified the locally supplied report bytes against the recorded SHA-256 values, as documented in non-binding preparation evidence; runtime must still receive each actual artifact path explicitly and must not use preparation paths as defaults. Do not fall back to an assumed `src/e1/` or `src/e2/` report path. The E1 aggregate digest also matches the completed E2 comparator pin; report-byte verification does not imply source acceptance or approval.
 
-T00b must distinguish these path and binding classes:
+T00b distinguishes these path and binding classes:
 
 | Class | T00b treatment |
 |---|---|
-| Actual existing source-artifact inputs | Inventory actual supplied report/binary/analysis paths and available historical source evidence; verify report bytes at P01 and retain the source-byte acceptance requirements below. Unmaterialized inputs remain explicitly PENDING, not accepted merely because a prospective path is named |
+| Actual existing source-artifact inputs | Locally supplied report bytes and selected metadata were verified in non-binding T00b preparation evidence. Actual selected binaries, full analyses/predictions and complete source lineages remain pending; runtime paths remain explicit inputs, never preparation-path defaults |
 | Planned cache/output roots | Declare intended roles, locations and containment separately; these roots and payloads may not exist yet. A planned root is not an existing source input or an accepted cache |
 | Candidate schema/receipt bindings | Specify schemas, gate roles, prospective receipt paths and required binding fields for review. Future E3 accepted-cache indices and approved receipts are not prerequisites before G1; do not invent their hashes, approval status or contents. Existing historical source evidence is recorded separately from future E3 approvals |
 
@@ -175,11 +175,11 @@ Maintain **six distinct source-cache bundles**, each containing one train and on
 | Extraction identity | Consumed source hashes, actual software/device/runtime, batch/chunk policy, compute dtype, storage dtype/layout and extraction acceptance binding |
 | Payload identity | Exact files/chunks, shapes, byte counts/checksums, ordered key/label index and completion index; reject missing/extra/reordered/partial chunks |
 
-Extraction arithmetic inherits deterministic **FP32**, with AMP/scaler/TF32/compile OFF. Exact on-disk dtype/container/chunk size and extraction batch/worker policy are **PENDING**. Storage must preserve extracted FP32 feature values losslessly; FP16/quantization, feature centering/standardization, whitening, L2 normalization, PCA and learned transforms are not implicit storage optimizations. Any proposal changing values requires design review rather than promotion under the same feature identity.
+Extraction arithmetic inherits deterministic **FP32**, with AMP/scaler/TF32/compile OFF. Candidate on-disk dtype/container/chunk size, extraction batch/worker settings and prefetch policy are defined for G1 review, not approved. Storage must preserve extracted FP32 feature values losslessly; FP16/quantization, feature centering/standardization, whitening, L2 normalization, PCA and learned transforms are not implicit storage optimizations. Any proposal changing values requires design review rather than promotion under the same feature identity.
 
 Require finite features, exact dimension/coverage and a one-to-one `(source family, source seed, split, relative_path, label_id)` index. Validate hashes and bindings before use, not just matching row counts. Train labels must not be taken from validation support or inferred from cache order without checking the index.
 
-Extraction may publish deterministic chunks atomically, but a cache is usable only after its complete index is committed and validated. Recovery granularity is **PENDING**; partial caches, stale indices and mixed-checkpoint chunks cannot become accepted input. Existing accepted payloads are never overwritten by a different source/runtime extraction.
+Extraction may publish deterministic chunks atomically, but a cache is usable only after its complete index is committed and validated. Candidate chunk commit/recovery policy is defined for G1 review, not approved; actual chunk/cache observations remain pending; partial caches, stale indices and mixed-checkpoint chunks cannot become accepted input. Existing accepted payloads are never overwritten by a different source/runtime extraction.
 
 ### Original-head replay is a cache acceptance check
 
@@ -193,7 +193,7 @@ source_original_head(accepted_preclassifier_feature)
 
 Use train-only fixtures for bounded acceptance. Full validation replay and full train/validation caching need their explicit access/execution authorization. Verify ordered predictions/Top-5, full-split/bucket metrics and selected-source lineage against the original supplied validation analysis; do not accept equal aggregate scores as sufficient evidence of equal predictions.
 
-Discrete membership/GT/Top-k/confusion/coverage must agree with the authoritative selected-source outputs. Float-logit and NLL comparison tolerances are **PENDING** and must be frozen before cache acceptance; no tolerance may silently excuse wrong feature order, missing samples, label remapping or changed predictions. Batch-shape/runtime differences can affect floating-point replay even under deterministic execution; investigate mismatches and stop for review rather than silently replacing the original reference or changing the selected checkpoint.
+Discrete membership/GT/Top-k/confusion/coverage must agree with the authoritative selected-source outputs. Candidate float-logit and NLL comparison tolerances are defined for G1 review, not approved, and require applicable approval before cache acceptance; actual replay results remain pending; no tolerance may silently excuse wrong feature order, missing samples, label remapping or changed predictions. Batch-shape/runtime differences can affect floating-point replay even under deterministic execution; investigate mismatches and stop for review rather than silently replacing the original reference or changing the selected checkpoint.
 
 The original-head rows in E3 retain the verified original selected models/results. Cache replay is equivalence evidence, not a newly tuned baseline or permission to reselect original weights. Missing binaries/selected analyses or failed replay block the affected cache and the complete E3 handoff.
 
@@ -222,9 +222,9 @@ For every `(family, source_seed)` natural/cRT pair, require identical:
 
 Only the sampling policy changes. Create the paired head state once under the reviewed deterministic initializer and clone it before either branch trains. Fresh optimizer/scheduler states start each branch; they are not copied from the trained natural arm into cRT. RNG consumption by one branch must not change the other's initialization or loader state.
 
-The completed source initializer is `linear_default` with isolated CPU RNG and fan-in-specific bounds. **E3 adoption of that rule, its exact stream binding and any other initializer remains PENDING for the small pilot.** Do not silently retain it, use zeros, warm-start from the original head or hard-code a library default. E1/E2 head tensors have different shapes; equality is required within a pair, not across feature dimensions.
+The completed source initializer is `linear_default` with isolated CPU RNG and fan-in-specific bounds. **A finite E3 initializer/stream candidate is defined for G1 review, not approved. Actual paired tensors/hashes and official adoption remain pending for the pilot/HEAD-FREEZE.** Do not silently retain it, use zeros, warm-start from the original head or hard-code a library default. E1/E2 head tensors have different shapes; equality is required within a pair, not across feature dimensions.
 
-Use raw `[B,124]` logits and **standard unweighted CE with label_smoothing=0** for both retraining arms. No class weights, balancing loss, bias/logit prior correction, extra regularizer or auxiliary view loss may be added only to cRT. Optimizer family, LR, betas/eps or momentum, head weight decay/bias-decay policy, schedule and clipping are **PENDING**, not inherited automatically from full-model AdamW.
+Use raw `[B,124]` logits and **standard unweighted CE with label_smoothing=0** for both retraining arms. No class weights, balancing loss, bias/logit prior correction, extra regularizer or auxiliary view loss may be added only to cRT. Finite optimizer, LR, decay, schedule and clipping candidates are defined for G1 review, not approved; the official common profile remains pending pilot/HEAD-FREEZE and is not inherited automatically from full-model AdamW.
 
 ## 8. Natural versus class-uniform sampling and budget accounting
 
@@ -237,9 +237,9 @@ Let `N=34997` and `n_c` be unique fixed-split train support of label `c`. All 12
 
 cRT draws use replacement across draws; the same class/image can repeat, including within a batch. There is no rejection of repeats, quota forcing or guarantee of exact per-class counts in a window. Do not replace this two-stage distribution with a uniformly shuffled feature cache, remove rare classes, or renormalize over validation-supported labels.
 
-Natural pass ordering retains the completed SHA-256-derived CPU-generator/`torch.randperm` convention. New cRT generator API/stream keys, class/within-class draw consumption and exact resume state are **PENDING** and must be explicit before the pilot. The class-support index is immutable and each class's image index uses a deterministic manifest order. Do not use Python's process-dependent hash or global RNG coupling to feature loading/head initialization.
+Natural pass ordering retains the completed SHA-256-derived CPU-generator/`torch.randperm` convention. Candidate cRT generator API/stream keys, class/within-class draw consumption and resume state are defined for G1 review, not approved; actual generator states and replay observations remain pending. The class-support index is immutable and each class's image index uses a deterministic manifest order. Do not use Python's process-dependent hash or global RNG coupling to feature loading/head initialization.
 
-**E3 head batch, accumulation, epoch/window definition, draws, updates and horizon are PENDING.** The source values `2/2/1`, eight epochs, 17499 updates/epoch and 139992 total are completed full-model history, not a head recipe. Matching nominal epochs while giving cRT more presentations or updates is invalid.
+**Finite E3 head batch, accumulation, window, draws, updates, validation and horizon candidates are defined for G1 review, not approved; official adoption remains pending pilot/HEAD-FREEZE.** The source values `2/2/1`, eight epochs, 17499 updates/epoch and 139992 total are completed full-model history, not a head recipe. Matching nominal epochs while giving cRT more presentations or updates is invalid.
 
 At freeze, specify one complete budget basis. If a window is approved as one complete natural pass, its cRT counterpart necessarily has **34997 draws**, without implying 34997 distinct cRT images. For microbatch `m`, accumulation `a`, draws/window `D` and windows `E`:
 
@@ -257,11 +257,11 @@ Retain tails; with `D_group` actual feature rows in an accumulation group, divid
 
 The master design authorizes the **concept** of a small head pilot, not its execution or numeric envelope. There is no automatic four-LR campaign for E3 and no separate search per sampling arm/final seed.
 
-Before pilot authorization, review a bounded envelope specifying actual source lineage/cache inputs, pilot seed role/stream binding, finite candidate protocols, maximum trials/draws/updates/validation passes and selection/tie/convergence-evidence criteria. All of those E3-specific values are **PENDING**. Existing source tuning ID **1001** is not a fourth final seed and is not silently promoted to an E3 pilot choice. Do not add arbitrary new official final IDs or use split seed 406/pilot seed 3406 as defaults.
+Before pilot authorization, review a bounded envelope specifying actual source lineage/cache inputs, pilot seed role/stream binding, finite candidate protocols, maximum trials/draws/updates/validation passes and selection/tie/convergence-evidence criteria. Finite pilot candidate values and selection criteria are defined for G1 review, not approved; actual pilot outcomes and the official winner remain pending. Existing source tuning ID **1001** is not a fourth final seed and is not silently promoted to an E3 pilot choice. Do not add arbitrary new official final IDs or use split seed 406/pilot seed 3406 as defaults.
 
 The pilot must address whether head optimization is adequate under the proposed matched protocol, using recorded loss/LR/validation histories and the predefined rule. A bounded run is not proof of convergence merely because it completes. Predeclare the pilot's coverage of the four arms and how its evidence selects one common official protocol; independent best-per-arm or best-per-family tuning would invalidate the intended design.
 
-The pilot must select **ONE common official head-training protocol** shared by E3-E1-N, E3-E1-cRT, E3-E2-N and E3-E2-cRT and all three final source seeds. Protocol sharing is already fixed; only its unresolved values are PENDING. Apply the dimensional exceptions in Section 7 without independently tuned family profiles. No per-source-seed optimization or open-ended architecture/LR/initialization sweep is allowed.
+The pilot must select **ONE common official head-training protocol** shared by E3-E1-N, E3-E1-cRT, E3-E2-N and E3-E2-cRT and all three final source seeds. Protocol sharing is already fixed; only official profile adoption and outcome selection remain pending. Apply the dimensional exceptions in Section 7 without independently tuned family profiles. No per-source-seed optimization or open-ended architecture/LR/initialization sweep is allowed.
 
 Publish all pilot candidates/outcomes, failures/retries and the selection rationale. Exhausting the approved envelope causes a review stop, not an unrecorded extension or fifth trial. Pilot heads/results cannot count as final runs or supply trained initial states. Even if the same source cache is approved for reuse, final heads/optimizer/scheduler start freshly from the locked initialization contract.
 
@@ -271,13 +271,13 @@ After the pilot, require explicit `E3-HEAD-FREEZE` review of the complete common
 
 The extraction reference is the completed software lock: Python 3.11.17; Torch 2.8.0+cu128; TorchVision 0.23.0+cu128; Pillow 11.3.0; NumPy 2.1.3; pandas 2.2.3; scikit-learn 1.6.1; CUDA 12.8/cuDNN 91002. Preserve FP32, matmul precision `highest`, AMP/scaler/TF32/compile OFF, cuDNN benchmark=false/deterministic=true and deterministic algorithms=true/warn_only=false. Record actual effective settings, packages and device/driver. A reference version table is not new target acceptance.
 
-Head-only CPU versus target-GPU execution, loader/worker/thread settings, extraction batch/chunk policy and allocation/walltime are **PENDING**. The UIT H200 MIG/Slurm environment and nine-hour attempts are completed-stage references, not automatic E3 resource authorization. Any approved GPU work must occur inside its explicitly authorized allocation. A reduced head workload does not justify silently changing runtime precision or claiming inherited target acceptance.
+Candidate head runtime/resource and extraction loader/batch/chunk/recovery policies are defined for G1 review, not approved. Actual target/device/software/effective-runtime observations remain pending. The UIT H200 MIG/Slurm environment and nine-hour attempts are completed-stage references, not automatic E3 resource authorization. Any approved GPU work must occur inside its explicitly authorized allocation. A reduced head workload does not justify silently changing runtime precision or claiming inherited target acceptance.
 
-Keep final root IDs 2001/3001/4001. Inherit explicit Python/NumPy/CPU/all-CUDA seeding and the pipe-separated SHA-256 derived-seed convention: first eight bytes little-endian modulo `2**63-1`. New head-initializer/cRT/loader stream keys and pilot role remain PENDING. Separate streams prevent sampler or worker scheduling from changing the paired initial state. Record/save every actual generator state and cursor needed by the chosen sampling policy.
+Keep final root IDs 2001/3001/4001. Inherit explicit Python/NumPy/CPU/all-CUDA seeding and the pipe-separated SHA-256 derived-seed convention: first eight bytes little-endian modulo `2**63-1`. Candidate head-initializer/cRT/loader stream keys and pilot role are defined for G1 review, not approved; actual stream states and pilot outcomes remain pending. Separate streams prevent sampler or worker scheduling from changing the paired initial state. Record/save every actual generator state and cursor needed by the chosen sampling policy.
 
 After authorization, a head checkpoint must include head/optimizer/full scheduler state, inactive-scaler policy, root/derived RNG and loader/sampler states, source/cache/init/protocol/declaration hashes, committed presentation/update counters, complete validation history and selected head weights/state. It must contain no trainable source-representation state or borrowed source optimizer progression.
 
-Use a single writer, boundary-zero state, atomic committed checkpoints and authoritative `last` versus reporting-only `best` roles. Exact E3 commit/replay boundary units are **PENDING** with the budget protocol. They must permit deterministic discard/replay of uncommitted work, including cRT class/image draws and partial accumulation groups, without duplicate credit or additional budget. Restore the same immutable run; never resume training from reporting-only `best`, another seed/arm or an original E1/E2 checkpoint.
+Use a single writer, boundary-zero state, atomic committed checkpoints and authoritative `last` versus reporting-only `best` roles. A finite E3 commit/replay boundary candidate is defined for G1 review, not approved; actual target recovery evidence and official protocol adoption remain pending. They must permit deterministic discard/replay of uncommitted work, including cRT class/image draws and partial accumulation groups, without duplicate credit or additional budget. Restore the same immutable run; never resume training from reporting-only `best`, another seed/arm or an original E1/E2 checkpoint.
 
 No nonfinite/OOM outcome can silently skip data/updates or change LR/batch/dtype. Preserve attempts/failures/retries and unknown partial work. A completed budget may recover publication but cannot train again. Changed consumed scientific files, caches, source binaries or runtime bindings require review/renewed relevant acceptance rather than self-approved continuation.
 
@@ -285,7 +285,7 @@ Maintain explicit consumed-source maps and canonical fingerprints separately fro
 
 ## 11. Selection, metrics and fixed frequency buckets
 
-For retrained heads, full deterministic validation occurs at the **PENDING reviewed cadence**. At the first completed validation point, initialize selection; later replace only when `current_supported_macro_f1 - selected_supported_macro_f1 > 1e-6` on the `[0,1]` scale. Otherwise retain the earlier selected point. NLL, Top-k and test scores do not break ties. Log the selected update/presentation index and any defined pass/epoch number.
+For retrained heads, full deterministic validation occurs at the candidate cadence defined for G1 review, not approved; official adoption remains pending HEAD-FREEZE. At the first completed validation point, initialize selection; later replace only when `current_supported_macro_f1 - selected_supported_macro_f1 > 1e-6` on the `[0,1]` scale. Otherwise retain the earlier selected point. NLL, Top-k and test scores do not break ties. Log the selected update/presentation index and any defined pass/epoch number.
 
 Every successful head run completes its entire frozen budget with early stopping OFF, regardless of when its selected head occurs. All its reported metrics and prediction/error analysis use that **same selected head**, not best-per-metric epochs or automatically `last`. Original-head arms use the already selected source checkpoints in Section 3 and have no E3 checkpoint search.
 
@@ -337,7 +337,7 @@ Required later artifacts, with concrete filenames/layout finalized in planning:
 | Source handoff manifest | Six actual selected binaries; immutable recorded/verified hashes; original heads; reports/selected analyses and complete source bindings |
 | Accepted cache indices/payloads | Six source bundles/twelve split payloads; ordered keys/labels, complete coverage, exact feature/runtime identity, checksums and original-head replay evidence |
 | Pilot envelope and outcome ledger | Approved limits/candidates/inputs/seeds; every attempt/outcome/history; rationale and separate head-protocol freeze decision |
-| Frozen head protocol and declarations | One common official protocol for all four retraining arms; all formerly PENDING runtime/optimization/budget/init/sampling fields; explicit family/source seed/arm; accepted cache/init/source/approval bindings |
+| Frozen head protocol and declarations | One common official protocol for all four retraining arms; all approved common runtime/optimization/budget/init/sampling policy bindings; explicit family/source seed/arm; accepted cache/init/source/approval bindings |
 | Per-run state and histories | Initial head hash, `best`/`last`, complete presentations/updates/validation records, LR/loss curves, environments and failure/replay inventories |
 | Selected validation analysis | `analysis.json`, `overall.csv`, `per_class.csv`, `buckets.csv`, `predictions.csv`, `confusion.csv`, `most_confused.csv`, `learning_curves.csv`, with source/cache/head lineage |
 | E3 aggregate/comparison and inventory | All six report arms and exactly three source seeds per arm; ddof=1, coverage, paired contrasts, exact hashes and explicit verification scope/limitations |
@@ -376,21 +376,21 @@ Each receipt must identify the gate, actual approved contract/evidence/cache/dec
 
 ## 14. PENDING register and freeze obligations
 
-All entries below are genuinely unresolved E3 choices or not-yet-observed inputs. They are not invitations to tune inherited feature geometry, label mapping, bucket definitions or reporting semantics.
+This register separates candidate policies defined for G1 review but not approved from actual observations/outcomes that remain pending. It is not an invitation to tune inherited feature geometry, label mapping, bucket definitions or reporting semantics.
 
-| ID | PENDING item | Required resolution / latest stop |
+| ID | Candidate policy / remaining pending item | Required review or observation / latest stop |
 |---|---|---|
-| P01 | Actual existing external source-report/checkpoint/analysis paths, available historical source evidence and complete binary handoff | At E3-T00b supply actual existing report paths and verify their recorded SHA-256 values; inventory existing source inputs separately from planned cache/output roots and candidate future E3 receipt bindings. Complete six selected source lineages before E3-G2/cache declarations; recorded hashes/epochs remain fixed |
-| P02 | Cache format, storage dtype/layout/chunk size; extraction batch/worker policy and recovery boundary | Review lossless preservation and complete ordered coverage before E3-G1 implementation contract and relevant target acceptance |
-| P03 | Float-logit/NLL equivalence tolerances and replay comparison details | Freeze before acceptance/cache use; never waive discrete prediction, geometry or coverage errors |
-| P04 | Bounded pilot source lineage/cache subset, pilot seed/stream role and actual target scope | Explicit candidate before E3-G1; approve its execution at E3-PILOT-AUTH; source-final pairing remains 2001/3001/4001 |
-| P05 | Pilot candidate protocols, maximum trials/draws/updates/validations and convergence/selection/tie criteria | Complete bounded envelope before pilot authorization; select one common official protocol, with no independent family/arm LR search |
-| P06 | One shared head initialization rule and exact initialization/RNG stream binding | Pilot/freeze explicitly; allow mathematically required fan-in-dependent bounds; same actual weight/bias state within each pair; no source-head warm-start |
-| P07 | Common head optimizer family and numeric parameters; LR, weight/bias decay, schedule/warmup/floor and clipping | Define trial values in the pilot envelope, lock one common set for all four arms at HEAD-FREEZE; no silent source AdamW/LR adoption |
-| P08 | Common head microbatch, accumulation, budget basis, total windows/draws/presentations/updates and validation cadence | Exact matched accounting/tails across all four arms at HEAD-FREEZE; no automatic eight epochs or 139992 updates |
-| P09 | cRT RNG API/stream keys, deterministic class/image index/draw mechanics and serialization | Specify before pilot implementation/acceptance; preserve fixed two-stage probabilities and deterministic replay |
-| P10 | E3 head CPU/GPU execution, exact loader/thread/runtime/allocation/walltime policy and commit/replay boundary | Freeze applicable pilot values before implementation/acceptance and final values before final authorization; retain one common head numerical policy and deterministic FP32 requirements |
-| P11 | Concrete E3 contract/cache/run/report schemas, paths, consumed-source closure and approval/attempt bindings | Prepare in the separately authorized plan/contracts; require one common official head protocol; actual code/device/cache/head hashes are later observations, never invented now |
+| P01 | Actual selected checkpoint binaries, complete analyses and source handoff | Local report bytes/selected metadata were verified in non-binding T00b preparation evidence. Actual six binaries, full analyses/predictions and complete lineages remain pending before E3-G2/cache declarations; recorded hashes/epochs remain fixed |
+| P02 | Candidate cache format, storage dtype/layout/chunk size, extraction loader policy and chunk recovery boundary | Candidate values are defined for G1 review, not approved; actual accepted cache indices/payload hashes and target evidence remain pending before cache acceptance/use |
+| P03 | Candidate float-logit/NLL tolerances and replay comparison details | Candidate policy is defined for G1 review, not approved; actual numerical/discrete replay evidence remains pending before acceptance/cache use; never waive discrete errors |
+| P04 | Candidate pilot source/cache subset, seed/stream role and scope | Candidate is defined for G1 review, not approved; accepted-cache and authorization bindings remain pending before pilot execution; final seed pairing remains 2001/3001/4001 |
+| P05 | Finite pilot protocols, ceilings and convergence/selection/tie criteria | Candidate envelope is defined for G1 review, not approved; actual pilot outcomes and winner remain pending for HEAD-FREEZE; no independent family/arm LR search |
+| P06 | Candidate shared initializer and initialization/RNG stream binding | Candidate is defined for G1 review, not approved; actual paired tensor hashes and official adoption remain pending; same actual state within each pair, no source-head warm-start |
+| P07 | Common optimizer/LR/decay/schedule/clipping candidate profiles | Finite candidates are defined for G1 review, not approved; pilot outcomes propose one profile and HEAD-FREEZE approves exact common values; no silent source AdamW/LR adoption |
+| P08 | Common head batch, accumulation, presentation/update budget and validation cadence candidates | Finite candidates are defined for G1 review, not approved; official profile remains pending pilot/HEAD-FREEZE; preserve matched accounting/tails and do not inherit source epochs/updates |
+| P09 | Candidate cRT RNG API/keys/draw mechanics and state serialization | Candidate is defined for G1 review, not approved; actual generator/cursor bytes and replay evidence remain pending; preserve fixed two-stage probabilities |
+| P10 | Candidate head runtime/resource, extraction loader and commit/replay policies | Candidates are defined for G1 review, not approved; actual target/device/software/effective settings and acceptance evidence remain pending; preserve deterministic FP32 policy |
+| P11 | Candidate contract/cache/run/report schemas, roots and receipt bindings | Candidate schemas/roots/bindings are defined for G1 review, not approved; actual code/device/cache/head/receipt observations remain pending and must never be invented |
 
 **Protocol sharing is FIXED, not PENDING:** E3-E1-N, E3-E1-cRT, E3-E2-N and E3-E2-cRT use one common official head protocol. Only the mathematically required dimensional differences in Section 7 are permitted.
 
