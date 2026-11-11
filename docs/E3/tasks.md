@@ -53,7 +53,7 @@ Flow: **G0 → T00b → G1 → T01-T12 → TARGET-AUTH → T13 → G2 → CACHE-
 | Spec ID | Remaining input / owning task |
 |---|---|
 | P01 | Report observations verified in non-binding evidence; source registry/pins defined. Actual binary/analysis/history/current-data paths/hashes remain TARGET-AUTH/G2/cache blockers. |
-| P02 | Candidate lossless <f4 .npy v2.0, 1024-row chunks, batch-16 extraction and atomic chunk replay defined; generated payload/index hashes and cache acceptance remain future. |
+| P02 | Candidate lossless <f4 .npy v2.0, 1024-row chunks, batch-16 extraction (2 workers, pinned memory, prefetch_factor=2, persistent workers) and atomic chunk replay defined; generated payload/index hashes and cache acceptance remain future. |
 | P03 | Candidate logit atol/rtol 1e-5/1e-5 and NLL 1e-6/1e-5 with exact discrete replay defined; actual replay evidence remains future. |
 | P04 | Pilot candidate predeclares E1/E2 source seed 2001, root 1001, all four arms; actual accepted-cache bindings remain future. |
 | P05 | Two common AdamW LR candidates 0.001/0.003, eight complete head trials, finite work/attempt caps and common adequacy/selection rules defined; outcomes/winner pending. |

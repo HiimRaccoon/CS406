@@ -659,10 +659,10 @@
         "extraction": {
           "device": "cuda:0",
           "original_image_batch_size": 16,
-          "num_workers": 0,
-          "pin_memory": false,
-          "persistent_workers": false,
-          "prefetch_policy": "no prefetch; synchronous workers=0",
+          "num_workers": 2,
+          "pin_memory": true,
+          "persistent_workers": true,
+          "prefetch_policy": "Two worker processes, prefetch_factor=2 batches per worker (at most four prefetched batches / 64 original-image rows); persistent workers within a source/split loader lifetime; retain manifest order.",
           "drop_last": false,
           "compute_dtype": "float32",
           "autocast": false,
@@ -709,7 +709,11 @@
             "val_batches": 469,
             "val_tail_rows": 9,
             "full_batches_per_1024_row_chunk": 64
-          }
+          },
+          "prefetch_factor": 2,
+          "loader_order_policy": "Sequential manifest-ordered batches; shuffle=false, in_order=true, drop_last=false. Worker completion order cannot reorder published rows. Workers perform deterministic CPU decode/preprocessing only; model execution remains in the main CUDA process.",
+          "worker_rng_policy": "Use the isolated extraction loader generator derived from the existing loader_parts with stage=acceptance_fixture and the corresponding source root seed for bounded acceptance, or stage=final and root_seed=source_seed for authorized bulk extraction; split is train or val. For worker_id 0/1 seed Python and NumPy from torch.initial_seed() modulo 2**32 and preserve the Torch worker seed. No extraction augmentation or worker RNG consumption may alter features.",
+          "prefetch_recovery_policy": "Only fully committed chunks count as completed work. On interruption discard all uncommitted batches, worker queues, pinned buffers and temporary chunks; recreate the loader and workers at the first row of the first uncommitted chunk using the same source/split/root/stream and manifest order. Prefetched rows grant no coverage or progress credit; revalidate existing committed chunks before reuse."
         },
         "publication": {
           "single_writer": true,
@@ -2183,8 +2187,8 @@
       "executable": false,
       "schema_bundle": {
         "path": "docs/E3/schemas/e3_record_schemas_v1.json",
-        "bytes": 94843,
-        "sha256": "8156410673c321b85f2e7e9cd69cb5dbe8c87dbad5e2a15704b1203fab3895e3"
+        "bytes": 95395,
+        "sha256": "2146f541a46511826779914a794c85b1adca4a8c95826fc311c0a4301a0baba6"
       },
       "planned_output_roots": {
         "root_resolution": "All destinations are explicit caller-supplied project-relative roots beneath the execution workspace, resolved with containment/symlink checks; these are planned destinations, not existing inputs",
@@ -2416,8 +2420,8 @@
         "executable": false,
         "schema_bundle": {
           "path": "docs/E3/schemas/e3_record_schemas_v1.json",
-          "bytes": 94843,
-          "sha256": "8156410673c321b85f2e7e9cd69cb5dbe8c87dbad5e2a15704b1203fab3895e3"
+          "bytes": 95395,
+          "sha256": "2146f541a46511826779914a794c85b1adca4a8c95826fc311c0a4301a0baba6"
         },
         "schema_pointer": "/$defs/gate_receipt_schema_only",
         "prospective_root": "artifacts/E3/approvals/v1",
@@ -2495,8 +2499,8 @@
       },
       {
         "path": "docs/E3/tasks.md",
-        "bytes": 18109,
-        "sha256": "35ab60ce9b54d20425bec035292f2580a7f8c68f292848818e70ddc66056cef3"
+        "bytes": 18175,
+        "sha256": "b91bb6288345eb06ae64ff8ff394990dceddca296cbb8c807f64479b5f76d3b4"
       },
       {
         "path": "docs/master_spec.md",
@@ -2592,13 +2596,13 @@
     },
     "cache_pilot_contract": {
       "path": "docs/E3/e3_cache_pilot_contract_v1.json",
-      "bytes": 35392,
-      "sha256": "e4f18b3134289a4e4fd10d34dfe270028addd71cf9f29618fbd403e891a95a1a"
+      "bytes": 36792,
+      "sha256": "1626caa8bf87900ebcbd6962bcfed846d6a8c301a83d922162d07be7c9cf33bc"
     },
     "record_schemas": {
       "path": "docs/E3/schemas/e3_record_schemas_v1.json",
-      "bytes": 94843,
-      "sha256": "8156410673c321b85f2e7e9cd69cb5dbe8c87dbad5e2a15704b1203fab3895e3"
+      "bytes": 95395,
+      "sha256": "2146f541a46511826779914a794c85b1adca4a8c95826fc311c0a4301a0baba6"
     },
     "preparation_evidence": "docs/E3/e3_t00b_preparation_evidence_v1.json",
     "new_values_authority": "Current explicit user T00b candidate-design request; new values are neither previously approved nor measured results",

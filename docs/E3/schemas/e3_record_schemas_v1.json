@@ -1251,13 +1251,13 @@
               "const": 16
             },
             "num_workers": {
-              "const": 0
+              "const": 2
             },
             "pin_memory": {
-              "const": false
+              "const": true
             },
             "persistent_workers": {
-              "const": false
+              "const": true
             },
             "prefetch_policy": {
               "type": "string",
@@ -1324,6 +1324,21 @@
                 "val_tail_rows": 9,
                 "full_batches_per_1024_row_chunk": 64
               }
+            },
+            "prefetch_factor": {
+              "const": 2
+            },
+            "loader_order_policy": {
+              "type": "string",
+              "minLength": 1
+            },
+            "worker_rng_policy": {
+              "type": "string",
+              "minLength": 1
+            },
+            "prefetch_recovery_policy": {
+              "type": "string",
+              "minLength": 1
             }
           },
           "required": [
@@ -1339,7 +1354,11 @@
             "eval",
             "no_grad",
             "encoder_calls",
-            "batch_shapes"
+            "batch_shapes",
+            "prefetch_factor",
+            "loader_order_policy",
+            "worker_rng_policy",
+            "prefetch_recovery_policy"
           ],
           "additionalProperties": false
         },

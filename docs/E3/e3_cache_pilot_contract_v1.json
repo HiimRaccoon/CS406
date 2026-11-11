@@ -41,10 +41,10 @@
     "extraction": {
       "device": "cuda:0",
       "original_image_batch_size": 16,
-      "num_workers": 0,
-      "pin_memory": false,
-      "persistent_workers": false,
-      "prefetch_policy": "no prefetch; synchronous workers=0",
+      "num_workers": 2,
+      "pin_memory": true,
+      "persistent_workers": true,
+      "prefetch_policy": "Two worker processes, prefetch_factor=2 batches per worker (at most four prefetched batches / 64 original-image rows); persistent workers within a source/split loader lifetime; retain manifest order.",
       "drop_last": false,
       "compute_dtype": "float32",
       "autocast": false,
@@ -91,7 +91,11 @@
         "val_batches": 469,
         "val_tail_rows": 9,
         "full_batches_per_1024_row_chunk": 64
-      }
+      },
+      "prefetch_factor": 2,
+      "loader_order_policy": "Sequential manifest-ordered batches; shuffle=false, in_order=true, drop_last=false. Worker completion order cannot reorder published rows. Workers perform deterministic CPU decode/preprocessing only; model execution remains in the main CUDA process.",
+      "worker_rng_policy": "Use the isolated extraction loader generator derived from the existing loader_parts with stage=acceptance_fixture and the corresponding source root seed for bounded acceptance, or stage=final and root_seed=source_seed for authorized bulk extraction; split is train or val. For worker_id 0/1 seed Python and NumPy from torch.initial_seed() modulo 2**32 and preserve the Torch worker seed. No extraction augmentation or worker RNG consumption may alter features.",
+      "prefetch_recovery_policy": "Only fully committed chunks count as completed work. On interruption discard all uncommitted batches, worker queues, pinned buffers and temporary chunks; recreate the loader and workers at the first row of the first uncommitted chunk using the same source/split/root/stream and manifest order. Prefetched rows grant no coverage or progress credit; revalidate existing committed chunks before reuse."
     },
     "publication": {
       "single_writer": true,
