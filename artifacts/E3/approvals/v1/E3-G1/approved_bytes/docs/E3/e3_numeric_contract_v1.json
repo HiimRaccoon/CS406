@@ -1,0 +1,2737 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "e3_numeric_contract_v1",
+  "contract_id": "e3-numeric-v1",
+  "revision_date": "2026-11-11",
+  "timezone": "Asia/Saigon",
+  "artifact_role": "Non-executable, complete finite T00b implementation/cache/pilot policy candidate for E3-G1 review; official final head winner not selected, no freeze or authorization",
+  "status": "DRAFT FOR USER REVIEW",
+  "protocol_frozen": false,
+  "executable": false,
+  "authorization": {
+    "current_gate": "E3-G0",
+    "g0_status": "PASS",
+    "g0_scope": [
+      "plan/tasks documentation preparation",
+      "E3-T00b source/input inventory and numeric/schema design preparation"
+    ],
+    "g1_status": "NOT AUTHORIZED",
+    "implementation_authorized": false,
+    "cache_extraction_authorized": false,
+    "pilot_execution_authorized": false,
+    "official_head_training_authorized": false,
+    "test_access": "LOCKED / NOT AUTHORIZED",
+    "g1_approval_receipt_created": false,
+    "freeze_sidecar_created": false,
+    "preparation_permission_is_execution_permission": false,
+    "document_checks_are_gate_approval": false,
+    "g0_numeric_freeze": false,
+    "next_review": "E3-G1",
+    "next_review_readiness": "Finite candidate implementation/cache/pilot policy fields defined for G1 review, not approved. Actual source handoff and target/generated evidence remain explicit later blockers. G1 requires user review, named method/scope and exact approved bytes."
+  },
+  "scope": {
+    "experiment": "Frozen-representation long-tail classifier study",
+    "source_families": [
+      "E1",
+      "E2"
+    ],
+    "main_arm_count": 6,
+    "source_seeds": [
+      2001,
+      3001,
+      4001
+    ],
+    "final_root_seed": "Corresponding selected source seed",
+    "original_reference_count": 6,
+    "new_final_head_training_run_count": 12,
+    "final_head_pair_count": 6,
+    "reference_plus_retrained_seed_rows": 18,
+    "arms": [
+      {
+        "id": "E1-original",
+        "family": "E1",
+        "role": "original_reference",
+        "feature_dimension": 768,
+        "head_start": "unchanged_selected_source_head",
+        "e3_sampling": "none",
+        "e3_training": false,
+        "trainable_parameters": 0
+      },
+      {
+        "id": "E3-E1-N",
+        "family": "E1",
+        "role": "natural_retraining",
+        "feature_dimension": 768,
+        "head_start": "fresh_paired_initial_state",
+        "e3_sampling": "natural",
+        "e3_training": true,
+        "trainable_parameters": 95356
+      },
+      {
+        "id": "E3-E1-cRT",
+        "family": "E1",
+        "role": "class_uniform_retraining",
+        "feature_dimension": 768,
+        "head_start": "identical_to_matching_E3-E1-N_initial_state",
+        "e3_sampling": "crt",
+        "e3_training": true,
+        "trainable_parameters": 95356
+      },
+      {
+        "id": "E2-original",
+        "family": "E2",
+        "role": "original_reference",
+        "feature_dimension": 1536,
+        "head_start": "unchanged_selected_source_head",
+        "e3_sampling": "none",
+        "e3_training": false,
+        "trainable_parameters": 0
+      },
+      {
+        "id": "E3-E2-N",
+        "family": "E2",
+        "role": "natural_retraining",
+        "feature_dimension": 1536,
+        "head_start": "fresh_paired_initial_state",
+        "e3_sampling": "natural",
+        "e3_training": true,
+        "trainable_parameters": 190588
+      },
+      {
+        "id": "E3-E2-cRT",
+        "family": "E2",
+        "role": "class_uniform_retraining",
+        "feature_dimension": 1536,
+        "head_start": "identical_to_matching_E3-E2-N_initial_state",
+        "e3_sampling": "crt",
+        "e3_training": true,
+        "trainable_parameters": 190588
+      }
+    ],
+    "comparison_hierarchy": {
+      "primary": {
+        "formula": "cRT(family,seed) - N(family,seed)",
+        "conditioning": [
+          "same source family",
+          "same source seed",
+          "same selected source checkpoint",
+          "same accepted cache",
+          "identical actual paired initial weight/bias state",
+          "one common head-training protocol"
+        ],
+        "interpretation": "Sampling-policy effect"
+      },
+      "secondary": {
+        "formula": "N(family,seed) - original(family,seed)",
+        "interpretation": "Combined reset/additional head optimization and deterministic training-input effect; not pure balancing"
+      },
+      "exploratory": {
+        "formula": "Compare [E1-cRT(seed) - E1-N(seed)] with [E2-cRT(seed) - E2-N(seed)]",
+        "matched_source_seed_required": true,
+        "controlled_architecture_experiment": false,
+        "isolates_feature_dimension_architecture_local_detail_or_source_learning": false
+      },
+      "descriptive_only": "cRT - original may be reported as context, never substituted for the primary effect",
+      "winner_metric_selected": false,
+      "minimum_gain_requirement": false,
+      "three_seeds_establish_significance": false
+    },
+    "forbidden": [
+      "E1-HR in the main experiment matrix",
+      "StreetCLIP",
+      "new backbones",
+      "end-to-end fine-tuning",
+      "LayerNorm or layer-scale adaptation",
+      "original checkpoint/head reselection",
+      "new crop or fusion designs",
+      "multiple augmented features per image",
+      "feature normalization, centering, whitening, projection or PCA",
+      "auxiliary heads",
+      "class-weighted CE or logit adjustment",
+      "alternative balancing strengths",
+      "additional final seeds or head-seed sweeps",
+      "independent arm/family/seed optimization protocols",
+      "ensembles",
+      "split regeneration",
+      "train-plus-validation refit",
+      "test evaluation"
+    ]
+  },
+  "data": {
+    "split_version": "baseline124-v1",
+    "source_commit": "33cb29d72974f1677efab0f56ed92360e5a9f712",
+    "artifact_directory": "artifacts/baseline124",
+    "copy_policy": "Byte-for-byte; preserve all four frozen artifacts",
+    "artifacts": {
+      "manifest.csv": {
+        "path": "artifacts/baseline124/manifest.csv",
+        "bytes": 7519661,
+        "sha256": "9cbd8b70e8522b5aa4a20fba4fa7b2ecea855cf377f98e41ebb162a07f8a8040"
+      },
+      "summary.json": {
+        "path": "artifacts/baseline124/summary.json",
+        "bytes": 994,
+        "sha256": "cf3dcf909aefd17c531cd115d6c30e54bbeb3dbd13962f974317ccde8a2f3e4b"
+      },
+      "labels.json": {
+        "path": "artifacts/baseline124/labels.json",
+        "bytes": 1927,
+        "sha256": "5f7e8f5810e9ac8c43c1c22b2e4febe2e7a6174629b9031d3e943fce511832aa"
+      },
+      "class_support.csv": {
+        "path": "artifacts/baseline124/class_support.csv",
+        "bytes": 6308,
+        "sha256": "ff46f4074464644f573b4ca64eb61320a61a8cc3daed3a3886a350cbc3c6fb75"
+      }
+    },
+    "split_seed_historical_only": 406,
+    "regeneration_allowed": false,
+    "splits": {
+      "train": {
+        "unique_images": 34997,
+        "gt_supported_labels": 124
+      },
+      "val": {
+        "unique_images": 7497,
+        "gt_supported_labels": 106
+      },
+      "test": {
+        "unique_images": 7502,
+        "gt_supported_labels": 111,
+        "access": "metadata_only"
+      }
+    },
+    "total_unique_images": 49996,
+    "num_output_labels": 124,
+    "label_ids": {
+      "minimum": 0,
+      "maximum": 123,
+      "order_authority": "Index in frozen labels.json ordered list",
+      "sentinels": {
+        "0": "Aland",
+        "120": "United States",
+        "123": "Vietnam"
+      }
+    },
+    "all_train_labels_positive_support": true,
+    "data_root_and_current_audit": {
+      "status": "PENDING",
+      "executable": false,
+      "pending_id": "P01",
+      "description": "Actual E3 execution data root/current train-validation content, layout and software-bound audit/conformance; no server path inherited implicitly",
+      "resolve_before": [
+        "source/input acceptance",
+        "E3-G2"
+      ]
+    },
+    "membership": "Use frozen manifest order and original relative_path/label_id; reject missing, duplicate, extra, reordered or mismatched keys without skips/replacements",
+    "path_policy": "Resolve within approved root; reject traversal and symlink escapes, missing/corrupt images and wrong layouts; verify any reused audit's actual root/content/software bindings",
+    "test_isolation": {
+      "reject_before": [
+        "image opening",
+        "image-byte hashing",
+        "preprocessing",
+        "feature loading"
+      ],
+      "forbidden_inputs": [
+        "test images",
+        "precomputed test features",
+        "test previews",
+        "test predictions",
+        "test-based selection signals"
+      ],
+      "metadata_read_allowed": true,
+      "historical_test_statement": "The old pipeline previously inspected/evaluated test; the current lock does not imply test was never seen"
+    }
+  },
+  "sources": {
+    "selection": "Exactly the selected official final-seed complete model, including original classifier; no last.pt, tuning/pilot, fresh ImageNet or convenient checkpoint substitution",
+    "source_contracts": {
+      "E1": {
+        "path": "docs/E1/e1_numeric_contract_v1.json",
+        "bytes": 31796,
+        "sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143"
+      },
+      "E2": {
+        "path": "docs/E2/e2_numeric_contract_v1.json",
+        "bytes": 86335,
+        "sha256": "ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72"
+      }
+    },
+    "external_aggregate_reports": {
+      "E1": {
+        "logical_filename": "e1_three_seed_validation_report_v1.json",
+        "kind": "e1_three_seed_validation_report_v1",
+        "expected_sha256": "3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e",
+        "expected_source_contract_sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143",
+        "repository_relative_default_allowed": false,
+        "tracked_on_e3": false,
+        "runtime_rule": "Resolve explicit actual runtime artifact path; verify logical filename role, required SHA-256 and historical schema. Preparation evidence paths are never scientific bindings or path defaults.",
+        "materialization_status": "REPORT_BYTES_VERIFIED_IN_NON_BINDING_PREPARATION_EVIDENCE; runtime path must be explicitly supplied",
+        "preparation_evidence": "docs/E3/e3_t00b_preparation_evidence_v1.json#/local_report_observations"
+      },
+      "E2": {
+        "logical_filename": "e2_three_seed_validation_report_v1.json",
+        "kind": "e2_three_seed_validation_report_v1",
+        "expected_sha256": "75bdba59bccc8c8b7db498363d5c411cbde5165e0f9791bd925f41be6e5a82b9",
+        "expected_source_contract_sha256": "ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72",
+        "repository_relative_default_allowed": false,
+        "tracked_on_e3": false,
+        "runtime_rule": "Resolve explicit actual runtime artifact path; verify logical filename role, required SHA-256 and historical schema. Preparation evidence paths are never scientific bindings or path defaults.",
+        "materialization_status": "REPORT_BYTES_VERIFIED_IN_NON_BINDING_PREPARATION_EVIDENCE; runtime path must be explicitly supplied",
+        "preparation_evidence": "docs/E3/e3_t00b_preparation_evidence_v1.json#/local_report_observations"
+      }
+    },
+    "selected_checkpoints": [
+      {
+        "family": "E1",
+        "source_seed": 2001,
+        "recorded_source_run_id": "final-lr0.00010000-seed2001",
+        "recorded_selected_epoch": 8,
+        "recorded_best_sha256": "e9c6202568715d81cf0949f4a7cfcd2546839b9cb12f577cdfc2a603de910a4f",
+        "source_report_sha256": "3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e",
+        "source_contract_sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143",
+        "historical_source_learning_rate_not_head_lr": 0.0001,
+        "actual_binary_and_selected_analysis_bindings": {
+          "status": "PENDING",
+          "executable": false,
+          "pending_id": "P01",
+          "description": "Materialize E1 seed 2001 selected binary, original head, declarations/resolved config, selected full predictions/analysis, history, selection and available historical evidence; verify actual paths/bytes/seed/epoch/state/head shape against fixed pins",
+          "resolve_before": [
+            "E3-G2",
+            "cache declarations"
+          ]
+        },
+        "binary_verified": false
+      },
+      {
+        "family": "E1",
+        "source_seed": 3001,
+        "recorded_source_run_id": "final-lr0.00010000-seed3001",
+        "recorded_selected_epoch": 7,
+        "recorded_best_sha256": "2855d17ac932c3986a64363259d12334aa0a5af6f8f60f3fb9258a8be9544fdf",
+        "source_report_sha256": "3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e",
+        "source_contract_sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143",
+        "historical_source_learning_rate_not_head_lr": 0.0001,
+        "actual_binary_and_selected_analysis_bindings": {
+          "status": "PENDING",
+          "executable": false,
+          "pending_id": "P01",
+          "description": "Materialize E1 seed 3001 selected binary, original head, declarations/resolved config, selected full predictions/analysis, history, selection and available historical evidence; verify actual paths/bytes/seed/epoch/state/head shape against fixed pins",
+          "resolve_before": [
+            "E3-G2",
+            "cache declarations"
+          ]
+        },
+        "binary_verified": false
+      },
+      {
+        "family": "E1",
+        "source_seed": 4001,
+        "recorded_source_run_id": "final-lr0.00010000-seed4001",
+        "recorded_selected_epoch": 8,
+        "recorded_best_sha256": "eb74126015b3854cad78fb9c2dff7a59a2352b3299a8998ef963ca7f72c68ef2",
+        "source_report_sha256": "3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e",
+        "source_contract_sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143",
+        "historical_source_learning_rate_not_head_lr": 0.0001,
+        "actual_binary_and_selected_analysis_bindings": {
+          "status": "PENDING",
+          "executable": false,
+          "pending_id": "P01",
+          "description": "Materialize E1 seed 4001 selected binary, original head, declarations/resolved config, selected full predictions/analysis, history, selection and available historical evidence; verify actual paths/bytes/seed/epoch/state/head shape against fixed pins",
+          "resolve_before": [
+            "E3-G2",
+            "cache declarations"
+          ]
+        },
+        "binary_verified": false
+      },
+      {
+        "family": "E2",
+        "source_seed": 2001,
+        "recorded_source_run_id": "e2-final-lr0.00005000-seed2001",
+        "recorded_selected_epoch": 8,
+        "recorded_best_sha256": "d54dc636908085b6396766c9f7c8962ee707bf4862dab7891c18c3363029902c",
+        "source_report_sha256": "75bdba59bccc8c8b7db498363d5c411cbde5165e0f9791bd925f41be6e5a82b9",
+        "source_contract_sha256": "ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72",
+        "historical_source_learning_rate_not_head_lr": 5e-05,
+        "actual_binary_and_selected_analysis_bindings": {
+          "status": "PENDING",
+          "executable": false,
+          "pending_id": "P01",
+          "description": "Materialize E2 seed 2001 selected binary, original head, declarations/resolved config, selected full predictions/analysis, history, selection and available historical evidence; verify actual paths/bytes/seed/epoch/state/head shape against fixed pins",
+          "resolve_before": [
+            "E3-G2",
+            "cache declarations"
+          ]
+        },
+        "binary_verified": false
+      },
+      {
+        "family": "E2",
+        "source_seed": 3001,
+        "recorded_source_run_id": "e2-final-lr0.00005000-seed3001",
+        "recorded_selected_epoch": 8,
+        "recorded_best_sha256": "a8f2652b519cf55cb5281cc0c6cd993acc1eeb569102acbddff2e53695236e7d",
+        "source_report_sha256": "75bdba59bccc8c8b7db498363d5c411cbde5165e0f9791bd925f41be6e5a82b9",
+        "source_contract_sha256": "ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72",
+        "historical_source_learning_rate_not_head_lr": 5e-05,
+        "actual_binary_and_selected_analysis_bindings": {
+          "status": "PENDING",
+          "executable": false,
+          "pending_id": "P01",
+          "description": "Materialize E2 seed 3001 selected binary, original head, declarations/resolved config, selected full predictions/analysis, history, selection and available historical evidence; verify actual paths/bytes/seed/epoch/state/head shape against fixed pins",
+          "resolve_before": [
+            "E3-G2",
+            "cache declarations"
+          ]
+        },
+        "binary_verified": false
+      },
+      {
+        "family": "E2",
+        "source_seed": 4001,
+        "recorded_source_run_id": "e2-final-lr0.00005000-seed4001",
+        "recorded_selected_epoch": 8,
+        "recorded_best_sha256": "f759e266f04dd2d6f9693747468a1ea5ccc053a35e8cbf332d21ac0b7a818a5e",
+        "source_report_sha256": "75bdba59bccc8c8b7db498363d5c411cbde5165e0f9791bd925f41be6e5a82b9",
+        "source_contract_sha256": "ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72",
+        "historical_source_learning_rate_not_head_lr": 5e-05,
+        "actual_binary_and_selected_analysis_bindings": {
+          "status": "PENDING",
+          "executable": false,
+          "pending_id": "P01",
+          "description": "Materialize E2 seed 4001 selected binary, original head, declarations/resolved config, selected full predictions/analysis, history, selection and available historical evidence; verify actual paths/bytes/seed/epoch/state/head shape against fixed pins",
+          "resolve_before": [
+            "E3-G2",
+            "cache declarations"
+          ]
+        },
+        "binary_verified": false
+      }
+    ],
+    "handoff": "Strict-load actual complete state, validate all six lineages, and preserve original heads; report checksums alone are not binary verification. Missing/mismatched source blocks its cache and complete study aggregate",
+    "schema_compatibility": "E1 uses per_seed and lacks some later E2 fields. Verify actual historical schema/contract semantics; do not invent an E2 envelope or require equal architecture/runtime identity across source families"
+  },
+  "preprocessing": {
+    "id": "geoguessr-ui-global-local-v1",
+    "config": {
+      "path": "configs/preprocessing/geoguessr_v1.json",
+      "bytes": 10069,
+      "sha256": "4f49dd41738168cfc65d4322fbe1b659ef5595229bb487ad86dd671a26a8903f"
+    },
+    "runtime_read_checksum_sidecar": {
+      "path": "configs/preprocessing/geoguessr_v1.sha256",
+      "bytes": 84,
+      "sha256": "752db1ce69ce0a0fab3c12a04ce3e953efd6019d1f8860123f1df824809c48ba",
+      "runtime_read_required": true
+    },
+    "implementation": {
+      "path": "src/preprocessing/geoguessr_v1.py",
+      "bytes": 4924,
+      "sha256": "4d1dea328f69c1c7e1fa4f333c7276de0c3bc81b322db40dc33530969357e666"
+    },
+    "reuse_unchanged": true,
+    "global_wh": [
+      896,
+      384
+    ],
+    "global_chw": [
+      3,
+      384,
+      896
+    ],
+    "local_wh": [
+      320,
+      320
+    ],
+    "e2_local_kchw": [
+      4,
+      3,
+      320,
+      320
+    ],
+    "local_count": 4,
+    "local_order": [
+      "left",
+      "middle_left",
+      "middle_right",
+      "right_raised"
+    ],
+    "accepted_raw_layouts_wh": [
+      [
+        1536,
+        662
+      ],
+      [
+        1030,
+        703
+      ]
+    ],
+    "footer_bottom_px": 14,
+    "geometry_authority": "Pinned config layouts.<decoded_raw_wh>.masks_xywh and local_crops_xywh; use integer rectangles directly, not recomputed centers or a duplicate coordinate table",
+    "decode": "Pillow RGB without EXIF transpose; reject unknown layouts/corrupt images",
+    "tensor": "pil_to_tensor(rgb).to(float32).div(255.0); CPU CHW; no intermediate uint8 requantization",
+    "navigation_arrows": "Retained",
+    "mean_fill_rgb_float": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "normalization_mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "normalization_std": [
+      0.229,
+      0.224,
+      0.225
+    ],
+    "global": "Aspect-preserving centered letterbox; scale=min(target_w/source_w,target_h/source_h); size=min(target,max(1,floor(source*scale+0.5))); left/top=floor(remainder/2); remainder right/bottom; pad after resize; normalize last",
+    "resize": "TorchVision tensor bilinear, antialias=true, half-up nonnegative size rounding; preserve floating-point mean fill/boundary interpolation; no alternate backend or post-resize re-masking",
+    "local_source": "Same UI-processed raw float32 tensor as global; never resized global/padded canvas",
+    "train_jitter_enabled": false,
+    "validation_jitter_enabled": false,
+    "other_augmentation_enabled": false,
+    "test_time_augmentation_enabled": false,
+    "weights_transforms_allowed": false,
+    "one_feature_per_original_image_per_checkpoint": true,
+    "jittered_feature_bank_allowed": false
+  },
+  "representation": {
+    "backbone": "Completed selected torchvision ConvNeXt-Tiny representation",
+    "representation_trainable_parameters": 0,
+    "all_representation_requires_grad": false,
+    "final_layernorm_frozen": true,
+    "layer_scale_frozen": true,
+    "buffers_unchanged": true,
+    "extraction_mode": "eval",
+    "extraction_gradient_recording": false,
+    "stochastic_depth_active": false,
+    "parent_train_must_not_reactivate_encoder": true,
+    "E1": {
+      "source_interface": "E1Model.encode",
+      "formula": "flatten(final_norm(avgpool(features(global))))",
+      "feature_shape": [
+        "B",
+        768
+      ],
+      "dimension": 768,
+      "global_input_shape": [
+        "B",
+        3,
+        384,
+        896
+      ],
+      "head": {
+        "type": "Linear",
+        "in_features": 768,
+        "out_features": 124,
+        "bias": true,
+        "weight_shape": [
+          124,
+          768
+        ],
+        "bias_shape": [
+          124
+        ],
+        "trainable_parameter_count": 95356,
+        "parameter_formula": "124*768+124"
+      }
+    },
+    "E2": {
+      "source_interfaces": [
+        "E2Model.encode_view",
+        "E2Model.encode"
+      ],
+      "per_view_formula": "f(v)=flatten(final_norm(avgpool(features(v))))",
+      "global_formula": "G=f(global)",
+      "locals_formula": "L=f(local.flatten(0,1)).reshape(B,4,768)",
+      "fusion_formula": "concatenate([G,L.mean(dim=1)],dim=1)",
+      "fusion_order": [
+        "global",
+        "mean_four_locals"
+      ],
+      "per_view_dimension": 768,
+      "dimension": 1536,
+      "feature_shape": [
+        "B",
+        1536
+      ],
+      "global_input_shape": [
+        "B",
+        3,
+        384,
+        896
+      ],
+      "local_input_shape": [
+        "B",
+        4,
+        3,
+        320,
+        320
+      ],
+      "shared_encoder_parameter_sets": 1,
+      "final_layernorm_before_local_mean": true,
+      "view_execution": "global_then_flattened_locals_batch_major",
+      "encoder_calls_per_extraction_batch": 2,
+      "local_batch_order": "All four config-ordered crops of image 0, then all four of image 1, etc.",
+      "head": {
+        "type": "Linear",
+        "in_features": 1536,
+        "out_features": 124,
+        "bias": true,
+        "weight_shape": [
+          124,
+          1536
+        ],
+        "bias_shape": [
+          124
+        ],
+        "trainable_parameter_count": 190588,
+        "parameter_formula": "124*1536+124"
+      }
+    },
+    "feature_transformations_allowed": false,
+    "no_post_fusion_normalization_or_projection": true,
+    "freeze_source_and_preserve_original_head": true
+  },
+  "cache": {
+    "source_bundle_count": 6,
+    "split_payload_count": 12,
+    "bundle_key": [
+      "family",
+      "source_seed"
+    ],
+    "splits": [
+      "train",
+      "val"
+    ],
+    "rows_per_source": {
+      "train": 34997,
+      "val": 7497
+    },
+    "row_order": "Fixed manifest order for each split",
+    "unique_index_key": [
+      "family",
+      "source_seed",
+      "split",
+      "relative_path",
+      "label_id"
+    ],
+    "immutable_after_acceptance": true,
+    "natural_and_crt_share_same_bytes": true,
+    "compute_dtype": "float32",
+    "lossless_fp32_storage_required": true,
+    "storage_and_extraction": {
+      "status": "CANDIDATE_DEFINED_NOT_APPROVED",
+      "executable": false,
+      "candidate_value": {
+        "format": "NumPy .npy version 2.0, allow_pickle=False",
+        "feature_dtype": "<f4",
+        "feature_order": "C",
+        "lossless_fp32_values": true,
+        "quantization_or_transform": false,
+        "rows_per_chunk": 1024,
+        "chunks_per_split": {
+          "train": 35,
+          "val": 8
+        },
+        "tail_rows": {
+          "train": 181,
+          "val": 329
+        },
+        "feature_filename_template": "chunks/features_{zero_based_chunk_index:06d}.npy",
+        "row_index_filename": "rows.jsonl",
+        "row_index_format": {
+          "encoding": "UTF-8",
+          "newline": "LF",
+          "one_record_per_manifest_row": true,
+          "fields": [
+            "row_index",
+            "relative_path",
+            "label_id"
+          ],
+          "label_id_dtype": "JSON integer 0..123",
+          "order": "original fixed split manifest order"
+        },
+        "extraction": {
+          "device": "cuda:0",
+          "original_image_batch_size": 16,
+          "num_workers": 2,
+          "pin_memory": true,
+          "persistent_workers": true,
+          "prefetch_policy": "Two worker processes, prefetch_factor=2 batches per worker (at most four prefetched batches / 64 original-image rows); persistent workers within a source/split loader lifetime; retain manifest order.",
+          "drop_last": false,
+          "compute_dtype": "float32",
+          "autocast": false,
+          "eval": true,
+          "no_grad": true,
+          "encoder_calls": "E1: global only. E2: global first then one batch-major call of all four locals; no crop chunking",
+          "batch_shapes": {
+            "E1_global": [
+              16,
+              3,
+              384,
+              896
+            ],
+            "E1_features": [
+              16,
+              768
+            ],
+            "E2_global": [
+              16,
+              3,
+              384,
+              896
+            ],
+            "E2_locals": [
+              16,
+              4,
+              3,
+              320,
+              320
+            ],
+            "E2_flattened_locals": [
+              64,
+              3,
+              320,
+              320
+            ],
+            "E2_features": [
+              16,
+              1536
+            ],
+            "tail_policy": "Retain actual B rows, no padding, duplication or drop; global/features use B, locals use [B,4,...] and flattened locals [4*B,...]",
+            "train_batches": 2188,
+            "train_tail_rows": 5,
+            "val_batches": 469,
+            "val_tail_rows": 9,
+            "full_batches_per_1024_row_chunk": 64
+          },
+          "prefetch_factor": 2,
+          "loader_order_policy": "Sequential manifest-ordered batches; shuffle=false, in_order=true, drop_last=false. Worker completion order cannot reorder published rows. Workers perform deterministic CPU decode/preprocessing only; model execution remains in the main CUDA process.",
+          "worker_rng_policy": "Use the isolated extraction loader generator derived from the existing loader_parts with stage=acceptance_fixture and the corresponding source root seed for bounded acceptance, or stage=final and root_seed=source_seed for authorized bulk extraction; split is train or val. For worker_id 0/1 seed Python and NumPy from torch.initial_seed() modulo 2**32 and preserve the Torch worker seed. No extraction augmentation or worker RNG consumption may alter features.",
+          "prefetch_recovery_policy": "Only fully committed chunks count as completed work. On interruption discard all uncommitted batches, worker queues, pinned buffers and temporary chunks; recreate the loader and workers at the first row of the first uncommitted chunk using the same source/split/root/stream and manifest order. Prefetched rows grant no coverage or progress credit; revalidate existing committed chunks before reuse."
+        },
+        "publication": {
+          "single_writer": true,
+          "lock": "exclusive creation of .writer.lock; existing lock blocks; stale-lock removal requires operator review",
+          "temporary_files": "same-directory .tmp.<attempt_id> files; never consumed as completed data",
+          "commit": "write payload, flush/fsync, os.replace; write chunk-commit JSON only after complete payload hash/shape/index checks; fsync directory where supported and record platform capability",
+          "completion": "complete index.json is atomically published only after every committed chunk and rows.jsonl validates; no partial accepted index",
+          "overwrite_accepted_cache": false,
+          "chunk_commit_filename_template": "chunks/commit_{zero_based_chunk_index:06d}.json"
+        },
+        "recovery": {
+          "unit": "one fully committed chunk",
+          "resume": "Verify immutable source/input/runtime/policy bindings, all existing chunk-commit records and payload hashes/values/row indices before reuse; discard uncommitted temporary chunks; restart only uncommitted chunk from its first row",
+          "mix_source_runtime_or_policy": false,
+          "accepted_index_required_to_exist_before_g1": false,
+          "actual_payload_hashes": "future generated observations"
+        }
+      },
+      "candidate_reference": "docs/E3/e3_cache_pilot_contract_v1.json#/storage"
+    },
+    "planned_cache_output_roots": {
+      "status": "CANDIDATE_DEFINED_NOT_APPROVED",
+      "executable": false,
+      "candidate_value": {
+        "root_resolution": "All destinations are explicit caller-supplied project-relative roots beneath the execution workspace, resolved with containment/symlink checks; these are planned destinations, not existing inputs",
+        "paths": {
+          "cache": "artifacts/E3/features/v1",
+          "acceptance": "artifacts/E3/acceptance/v1",
+          "pilot": "runs/E3/pilot/v1",
+          "final": "runs/E3/final/v1",
+          "reports": "reports/E3/v1",
+          "receipts": "artifacts/E3/approvals/v1"
+        },
+        "cache_layout": "{cache}/{family}/seed{source_seed}/{source_checkpoint_sha256}/{extraction_identity_sha256}/{split}/",
+        "run_layout": "{pilot_or_final}/{run_id}/; run_id assigned only after full immutable declaration bindings exist",
+        "receipt_layout": "{receipts}/{gate}/{approved_contract_sha256}.json (prospective only; no receipt created)",
+        "roots_created_during_preparation": false,
+        "accepted_cache_or_receipt_pre_g1_required": false
+      },
+      "candidate_reference": "docs/E3/e3_cache_pilot_contract_v1.json#/planned_output_roots"
+    },
+    "required_identity_fields": [
+      "source family/seed/run/selected epoch",
+      "actual selected binary and original-head identity",
+      "source contract/report/selection bindings",
+      "exact feature boundary, dimensions, views/order/fusion",
+      "fixed artifact and preprocessing fingerprints",
+      "ordered keys, labels, counts and current root/audit bindings",
+      "actual extraction software/device/runtime/batch/storage policy",
+      "payload/chunk paths, shapes, byte counts and hashes",
+      "complete completion index and acceptance binding"
+    ],
+    "acceptance": "Finite features; exact dimension/coverage/order/labels/checksums; reject stale, reordered, partial, mixed-source/seed/runtime chunks; publish complete atomic index only after all payloads validate",
+    "original_head_replay": {
+      "required": true,
+      "equivalence": "source.forward(deterministic_input) versus original_head(accepted_preclassifier_feature)",
+      "bounded_fixture_split": "train",
+      "full_validation_replay_requires": "E3-CACHE-AUTH",
+      "discrete_equality": [
+        "ordered membership",
+        "ground truth labels",
+        "ordered predictions",
+        "Top-5 rankings",
+        "Top-k hits",
+        "confusion/counts",
+        "coverage and fixed bucket membership"
+      ],
+      "equal_scalar_scores_sufficient": false,
+      "float_logit_nll_tolerances": {
+        "status": "CANDIDATE_DEFINED_NOT_APPROVED",
+        "executable": false,
+        "candidate_value": {
+          "logits": {
+            "atol": 1e-05,
+            "rtol": 1e-05,
+            "comparison": "abs(candidate-reference) <= atol + rtol*abs(reference), every finite logit"
+          },
+          "nll": {
+            "atol": 1e-06,
+            "rtol": 1e-05,
+            "comparison": "abs(candidate-reference) <= atol + rtol*abs(reference), per-sample CE when available and full-split sample-mean NLL"
+          },
+          "direct_and_cached_original_head_batch_size": 16,
+          "full_validation_order": "fixed manifest order",
+          "discrete_equality_required": [
+            "membership and label IDs",
+            "predicted label",
+            "ordered Top-5 IDs",
+            "Top-k hits",
+            "confusion/counts",
+            "per-class/bucket membership and coverage"
+          ],
+          "discrete_mismatch_allowed_by_float_tolerance": false,
+          "reference_logits_unavailable": "Compare direct source.forward against original_head(extracted feature) under accepted runtime and compare complete discrete output/derived metrics/NLL with selected-source analysis; if authoritative NLL or selected outputs unavailable, block acceptance, not comparison waiver",
+          "tolerances_are_measured_target_results": false,
+          "failure": "Stop for source/runtime review; no widening of tolerances, baseline replacement, source reselection or changed prediction acceptance",
+          "batch_policy": "Use identical manifest-ordered batches of up to 16 for direct forward, extraction and cached original-head replay; retain train tail B=5 and validation tail B=9 without padding/drop. Preserve historical discrete equality and existing float tolerances; changed batching requires fresh target replay acceptance."
+        },
+        "candidate_reference": "docs/E3/e3_cache_pilot_contract_v1.json#/replay"
+      },
+      "original_references_reselected": false,
+      "mismatch_action": "Stop and investigate/review; no source replacement, relaxed discrete equality or baseline rewrite",
+      "actual_replay_results": {
+        "status": "PENDING",
+        "executable": false,
+        "pending_id": "P03",
+        "description": "Actual target/cache numerical and discrete replay evidence under the candidate tolerances",
+        "resolve_before": [
+          "E3-G2 applicable acceptance",
+          "E3-CACHE-ACCEPT"
+        ],
+        "phase": "FUTURE_OBSERVATION_OR_HEAD_FREEZE"
+      }
+    },
+    "accepted_cache_bindings": {
+      "status": "PENDING",
+      "executable": false,
+      "pending_id": "P02",
+      "description": "Actual six accepted bundles/twelve split indices, row/payload hashes and acceptance/replay evidence; no existing accepted payload required before G1",
+      "resolve_before": [
+        "E3-CACHE-ACCEPT",
+        "head input consumption"
+      ],
+      "phase": "FUTURE_OBSERVATION_OR_HEAD_FREEZE",
+      "field_names": [
+        "actual_cache_index_paths",
+        "actual_payload_sha256",
+        "accepted_cache_index_sha256",
+        "replay_evidence_sha256"
+      ]
+    }
+  },
+  "head_protocol": {
+    "common_protocol_required": true,
+    "official_profile_count": 1,
+    "applies_to_arms": [
+      "E3-E1-N",
+      "E3-E1-cRT",
+      "E3-E2-N",
+      "E3-E2-cRT"
+    ],
+    "applies_to_source_seeds": [
+      2001,
+      3001,
+      4001
+    ],
+    "shared_fields": [
+      "initialization_rule_and_stream_binding",
+      "optimizer_family_and_hyperparameters",
+      "learning_rate_and_schedule",
+      "weight_and_bias_decay_policy",
+      "microbatch_and_accumulation",
+      "presentation_and_update_budget",
+      "validation_cadence",
+      "checkpoint_selection_rule",
+      "numerical_policy"
+    ],
+    "family_specific_overrides_allowed": false,
+    "seed_specific_overrides_allowed": false,
+    "arm_specific_overrides_allowed": false,
+    "dimension_only_exceptions": [
+      "Linear(768,124) versus Linear(1536,124)",
+      "mathematically derived parameter counts/shapes",
+      "fan-in-dependent initialization bounds under one common initializer rule"
+    ],
+    "trainable_tensors": [
+      "new classifier weight",
+      "new classifier bias"
+    ],
+    "optimizer_exactly_head_tensors_once": true,
+    "source_head_warm_start_allowed": false,
+    "source_optimizer_state_reuse_allowed": false,
+    "fresh_optimizer_scheduler_each_branch": true,
+    "paired_initialization": "Create one new head state per (family,source_seed), hash and clone actual weight/bias tensors before N or cRT trains",
+    "paired_equal_fields": [
+      "selected source checkpoint",
+      "accepted train/validation cache bytes and indices",
+      "head architecture and initialization rule",
+      "actual initial weight/bias tensors and state hash",
+      "optimizer configuration and regularization groups",
+      "LR trajectory",
+      "batch/accumulation",
+      "total presentations and updates",
+      "validation schedule",
+      "fixed horizon and checkpoint selection",
+      "loss/numerics/metric/export logic and validation order"
+    ],
+    "only_pair_difference": "sampling policy",
+    "initialization_rule_and_stream_binding": {
+      "status": "PENDING",
+      "executable": false,
+      "pending_id": "P06",
+      "description": "Initializer/streams complete as candidates; official adoption waits for HEAD-FREEZE",
+      "resolve_before": [
+        "E3-HEAD-FREEZE"
+      ],
+      "phase": "FUTURE_OBSERVATION_OR_HEAD_FREEZE",
+      "g1_candidate_values_defined": true,
+      "complete_candidate_references": [
+        "docs/E3/e3_cache_pilot_contract_v1.json#/initializer",
+        "docs/E3/e3_cache_pilot_contract_v1.json#/rng"
+      ]
+    },
+    "actual_pair_initialization_hashes": {
+      "status": "PENDING",
+      "executable": false,
+      "pending_id": "P06",
+      "description": "Actual paired tensor payloads/hashes and derived integer seeds are later observations; no tensors created",
+      "resolve_before": [
+        "respective authorized pilot/final run"
+      ],
+      "phase": "FUTURE_OBSERVATION_OR_HEAD_FREEZE",
+      "field_names": [
+        "initial_tensor_state_sha256",
+        "tensor_payload_path",
+        "actual_initialization_seed"
+      ]
+    },
+    "optimizer_family_and_hyperparameters": {
+      "status": "PENDING",
+      "executable": false,
+      "pending_id": "P07",
+      "description": "Complete AdamW candidates defined; no official final winner selected",
+      "resolve_before": [
+        "E3-HEAD-FREEZE"
+      ],
+      "phase": "FUTURE_OBSERVATION_OR_HEAD_FREEZE",
+      "g1_candidate_values_defined": true,
+      "complete_candidate_references": [
+        "docs/E3/e3_cache_pilot_contract_v1.json#/candidate_profiles/0/optimizer",
+        "docs/E3/e3_cache_pilot_contract_v1.json#/candidate_profiles/1/optimizer"
+      ]
+    },
+    "learning_rate_and_schedule": {
+      "status": "PENDING",
+      "executable": false,
+      "pending_id": "P07",
+      "description": "Finite candidate LRs 0.001/0.003 and common schedule defined; official winner not selected",
+      "resolve_before": [
+        "E3-HEAD-FREEZE"
+      ],
+      "phase": "FUTURE_OBSERVATION_OR_HEAD_FREEZE",
+      "g1_candidate_values_defined": true,
+      "complete_candidate_references": [
+        "docs/E3/e3_cache_pilot_contract_v1.json#/candidate_profiles/0",
+        "docs/E3/e3_cache_pilot_contract_v1.json#/candidate_profiles/1"
+      ]
+    },
+    "weight_and_bias_decay_policy": {
+      "status": "PENDING",
+      "executable": false,
+      "pending_id": "P07",
+      "description": "Explicit common candidate decay groups defined; official adoption awaits HEAD-FREEZE",
+      "resolve_before": [
+        "E3-HEAD-FREEZE"
+      ],
+      "phase": "FUTURE_OBSERVATION_OR_HEAD_FREEZE",
+      "g1_candidate_values_defined": true,
+      "complete_candidate_references": [
+        "docs/E3/e3_cache_pilot_contract_v1.json#/candidate_profiles/0/optimizer/weight_decay_groups",
+        "docs/E3/e3_cache_pilot_contract_v1.json#/candidate_profiles/1/optimizer/weight_decay_groups"
+      ]
+    },
+    "gradient_clipping": {
+      "status": "PENDING",
+      "executable": false,
+      "pending_id": "P07",
+      "description": "Explicit common candidate clipping defined; official adoption awaits HEAD-FREEZE",
+      "resolve_before": [
+        "E3-HEAD-FREEZE"
+      ],
+      "phase": "FUTURE_OBSERVATION_OR_HEAD_FREEZE",
+      "g1_candidate_values_defined": true,
+      "complete_candidate_references": [
+        "docs/E3/e3_cache_pilot_contract_v1.json#/candidate_profiles/0/optimizer/clipping",
+        "docs/E3/e3_cache_pilot_contract_v1.json#/candidate_profiles/1/optimizer/clipping"
+      ]
+    },
+    "microbatch_and_accumulation": {
+      "status": "PENDING",
+      "executable": false,
+      "pending_id": "P08",
+      "description": "Candidate batch 512/accumulation 1 defined; official final profile not selected",
+      "resolve_before": [
+        "E3-HEAD-FREEZE"
+      ],
+      "phase": "FUTURE_OBSERVATION_OR_HEAD_FREEZE",
+      "g1_candidate_values_defined": true,
+      "complete_candidate_references": [
+        "docs/E3/e3_cache_pilot_contract_v1.json#/candidate_profiles/0/budget",
+        "docs/E3/e3_cache_pilot_contract_v1.json#/candidate_profiles/1/budget"
+      ]
+    },
+    "presentation_and_update_budget": {
+      "status": "PENDING",
+      "executable": false,
+      "pending_id": "P08",
+      "description": "Candidate 20*34997 presentations/1380 updates defined; official final profile not selected",
+      "resolve_before": [
+        "E3-HEAD-FREEZE"
+      ],
+      "phase": "FUTURE_OBSERVATION_OR_HEAD_FREEZE",
+      "g1_candidate_values_defined": true,
+      "complete_candidate_references": [
+        "docs/E3/e3_cache_pilot_contract_v1.json#/candidate_profiles/0/budget",
+        "docs/E3/e3_cache_pilot_contract_v1.json#/candidate_profiles/1/budget"
+      ]
+    },
+    "validation_cadence": {
+      "status": "PENDING",
+      "executable": false,
+      "pending_id": "P08",
+      "description": "Candidate 20 full validation passes, one after each complete window; official adoption not selected",
+      "resolve_before": [
+        "E3-HEAD-FREEZE"
+      ],
+      "phase": "FUTURE_OBSERVATION_OR_HEAD_FREEZE",
+      "g1_candidate_values_defined": true,
+      "complete_candidate_references": [
+        "docs/E3/e3_cache_pilot_contract_v1.json#/candidate_profiles/0/budget/validation",
+        "docs/E3/e3_cache_pilot_contract_v1.json#/candidate_profiles/1/budget/validation"
+      ]
+    },
+    "checkpoint_selection_rule": {
+      "design_value_reference": "/checkpoint",
+      "shared_by_all_four_arms": true
+    },
+    "numerical_policy": "Deterministic FP32 policy in runtime; shared by all four arms",
+    "loss": {
+      "name": "unweighted_cross_entropy",
+      "logits_shape": [
+        "B",
+        124
+      ],
+      "raw_logits": true,
+      "label_smoothing": 0,
+      "class_weighting": false,
+      "auxiliary_loss": false,
+      "logit_adjustment": false,
+      "group_reduction": "sum(row CE)/actual number of presented rows in accumulation group",
+      "retain_partial_tail": true,
+      "train_loss_weighting": "feature presentations including repeated cRT draws",
+      "validation_nll_weighting": "all unique validation samples"
+    },
+    "termination": {
+      "policy": "fixed_budget",
+      "early_stopping": false,
+      "complete_budget_regardless_of_selected_point": true
+    },
+    "official_final_configuration": {
+      "status": "NOT_CREATED",
+      "executable": false,
+      "requirement": "Only create a fully resolved, exact-byte HEAD-FREEZE-bound common profile and FINAL-AUTH-bound declarations; never execute this design artifact",
+      "winning_profile": {
+        "status": "PENDING",
+        "executable": false,
+        "pending_id": "P05",
+        "description": "Pilot outcomes must select one common winner; HEAD-FREEZE must approve exact complete final bytes",
+        "resolve_before": [
+          "E3-HEAD-FREEZE"
+        ],
+        "phase": "FUTURE_OBSERVATION_OR_HEAD_FREEZE"
+      }
+    },
+    "actual_run_and_attempt_ids": {
+      "status": "PENDING",
+      "executable": false,
+      "pending_id": "P11",
+      "description": "Actual immutable head-run and attempt IDs assigned after full materialized declarations",
+      "resolve_before": [
+        "respective authorized run"
+      ],
+      "phase": "FUTURE_OBSERVATION_OR_HEAD_FREEZE"
+    }
+  },
+  "sampling": {
+    "train_unique_images": 34997,
+    "class_count": 124,
+    "support_authority": "Unique fixed-split train counts; never resampled counts or validation support",
+    "natural": {
+      "policy": "Shuffled image permutation without replacement within a natural pass",
+      "each_image_once_per_complete_pass": true,
+      "class_probability": "n_c/34997",
+      "image_given_class_probability": "1/n_c",
+      "image_marginal_probability": "1/34997",
+      "generator": "Completed SHA-256-derived CPU torch.Generator/torch.randperm convention",
+      "new_stream_bindings": "See the explicit T00b candidate RNG keys; no global RNG coupling; approval remains pending"
+    },
+    "crt": {
+      "policy": "Uniform class, then uniform image within selected class",
+      "class_probability": {
+        "numerator": 1,
+        "denominator": 124
+      },
+      "image_given_class_probability": "1/n_c",
+      "image_marginal_probability": "1/(124*n_c)",
+      "replacement_across_draws": true,
+      "repeats_in_batch_allowed": true,
+      "all_124_classes_retained": true,
+      "class_index_order": "Immutable manifest order within each class",
+      "exact_empirical_class_quota_required": false,
+      "repeat_rejection": false
+    },
+    "matched_presentations_and_updates_all_four_arms": true,
+    "nominal_epoch_matching_sufficient": false,
+    "conditional_budget_arithmetic": {
+      "not_a_selected_budget": true,
+      "if_window_is_complete_natural_pass": {
+        "natural_presentations": 34997,
+        "crt_draws": 34997
+      },
+      "microbatches_per_window": "ceil(D/m)",
+      "updates_per_window": "ceil(ceil(D/m)/a)",
+      "total_updates": "E*ceil(ceil(D/m)/a)",
+      "symbols": {
+        "m": "reviewed microbatch",
+        "a": "reviewed accumulation",
+        "D": "reviewed presentations/draws per window",
+        "E": "reviewed windows"
+      },
+      "fixed_update_alternative": "Must define total presentations, permutation cycling/terminal partial-pass behavior, tail groups and validation boundaries explicitly"
+    },
+    "repeated_draws_change_unique_support": false,
+    "report_sampled_unique_image_and_class_coverage": true,
+    "api_draw_stream_state": {
+      "status": "CANDIDATE_DEFINED_NOT_APPROVED",
+      "executable": false,
+      "candidate_value": {
+        "derivation": "SHA-256 of UTF-8 pipe-separated str(parts); first 8 digest bytes little-endian modulo 9223372036854775807",
+        "domain_tag": "E3-v1",
+        "window_index_base": 0,
+        "stage_tags": [
+          "pilot",
+          "final",
+          "acceptance_fixture"
+        ],
+        "initialization_parts": [
+          "root_seed",
+          "E3-v1",
+          "stage",
+          "source_family",
+          "source_seed",
+          "head-init"
+        ],
+        "natural_parts": [
+          "root_seed",
+          "E3-v1",
+          "stage",
+          "source_seed",
+          "sampler",
+          "natural",
+          "window_index"
+        ],
+        "crt_class_parts": [
+          "root_seed",
+          "E3-v1",
+          "stage",
+          "source_seed",
+          "sampler",
+          "crt-class",
+          "window_index"
+        ],
+        "crt_image_parts": [
+          "root_seed",
+          "E3-v1",
+          "stage",
+          "source_seed",
+          "sampler",
+          "crt-image",
+          "window_index"
+        ],
+        "loader_parts": [
+          "root_seed",
+          "E3-v1",
+          "stage",
+          "source_seed",
+          "loader",
+          "split"
+        ],
+        "candidate_id_in_rng_key": false,
+        "sampling_arm_in_init_key": false,
+        "sampler_family_in_key": false,
+        "cross_family_sampling": "For matching root/source seed/stage/window, both families see identical natural permutations or cRT class/image draws. Initialization includes family because feature shapes differ.",
+        "generators": "Independent CPU torch.Generator per named stream; do not borrow global RNG",
+        "natural": "At each window initialize its stream then torch.randperm(34997,generator=natural_generator,device='cpu'); visit in permutation order, no replacement",
+        "crt": "At each draw call torch.randint(124,(1,),generator=class_generator,device='cpu') once, then torch.randint(n_c,(1,),generator=image_generator,device='cpu') once; map image index into immutable manifest-ordered class index. Do not vectorize, force quotas or reject repeats.",
+        "class_order": "label_id 0..123",
+        "within_class_order": "fixed train manifest order",
+        "sample_draws_per_window": 34997,
+        "resume_state_fields": [
+          "stage",
+          "root_seed",
+          "source_seed",
+          "window_index",
+          "presentation_cursor",
+          "natural permutation and cursor or both cRT generator byte states",
+          "loader generator byte states",
+          "Python/NumPy/torch CPU/all-CUDA global RNG states"
+        ],
+        "resume_validation": "Verify all identities and cursor bounds; completed windows committed once; uncommitted work rolls back to preceding window checkpoint",
+        "process_environment": {
+          "PYTHONHASHSEED": "str(root_seed), set before Python startup"
+        }
+      },
+      "candidate_reference": "docs/E3/e3_cache_pilot_contract_v1.json#/rng"
+    }
+  },
+  "pilot": {
+    "execution_authorized": false,
+    "separate_full_lr_search_branch": false,
+    "independent_best_per_arm_or_family_tuning": false,
+    "head_warm_start_or_final_result_reuse": false,
+    "selected_output": "ONE common official head-training protocol",
+    "source_cache_subset_seed_and_coverage": {
+      "status": "CANDIDATE_DEFINED_NOT_APPROVED",
+      "executable": false,
+      "candidate_value": {
+        "source_seeds": [
+          2001
+        ],
+        "families": [
+          "E1",
+          "E2"
+        ],
+        "arms": [
+          "E3-E1-N",
+          "E3-E1-cRT",
+          "E3-E2-N",
+          "E3-E2-cRT"
+        ],
+        "root_seed": 1001,
+        "seed_decision": "New explicit E3 pilot candidate choice, not an automatic adoption of E1/E2 tuning. Pilot is nonfinal; official final root IDs remain 2001/3001/4001.",
+        "source_choice": "Predeclare seed 2001 for both families without ranking source seeds by metrics; no source-seed search",
+        "cache_scope": "The accepted train+val bundle for E1/2001 and E2/2001; all six bulk source-cache bundles still require CACHE-ACCEPT under the unchanged gate sequence"
+      },
+      "candidate_reference": "docs/E3/e3_cache_pilot_contract_v1.json#/pilot"
+    },
+    "finite_candidate_protocols": {
+      "status": "CANDIDATE_DEFINED_NOT_APPROVED",
+      "executable": false,
+      "candidate_value": [
+        {
+          "candidate_id": "adamw_lr1e3",
+          "stage": "pilot_candidate",
+          "optimizer": {
+            "family": "AdamW",
+            "betas": [
+              0.9,
+              0.999
+            ],
+            "eps": 1e-08,
+            "amsgrad": false,
+            "maximize": false,
+            "foreach": false,
+            "fused": false,
+            "capturable": false,
+            "differentiable": false,
+            "weight_decay_groups": {
+              "weight": 0.01,
+              "bias": 0.0
+            },
+            "parameters": "Exactly new Linear weight and bias, once each; fresh state for every run",
+            "clipping": {
+              "enabled": true,
+              "max_norm": 1.0,
+              "norm_type": 2.0,
+              "error_if_nonfinite": true,
+              "foreach": false
+            }
+          },
+          "base_lr": 0.001,
+          "schedule": {
+            "name": "explicit_linear_warmup_then_cosine",
+            "index": "u is zero-based optimizer update before it is applied, u=0..1379",
+            "total_updates": 1380,
+            "warmup_updates": 69,
+            "cosine_floor_factor": 0.01,
+            "warmup_formula": "lr(u)=base_lr*(u+1)/69 for 0<=u<69",
+            "cosine_formula": "lr(u)=base_lr*(0.01+0.99*(1+cos(pi*(u-69)/(1380-69-1)))/2) for 69<=u<=1379",
+            "step_order": "Set LR for current u, zero_grad(set_to_none=True), forward/backward, finite/clipping check, optimizer.step, increment in-memory update counter; only a complete window checkpoint commits scientific progress. Next LR uses updated u. No schedule step after total budget.",
+            "warmup_first_factor": 0.014492753623188406,
+            "first_cosine_update": 69,
+            "last_update": 1379
+          },
+          "budget": {
+            "basis": "fixed_windows_of_equal_feature_presentations",
+            "windows": 20,
+            "presentations_per_window": 34997,
+            "microbatch": 512,
+            "accumulation": 1,
+            "full_microbatches_per_window": 68,
+            "tail_microbatch_rows": 181,
+            "microbatches_per_window": 69,
+            "updates_per_window": 69,
+            "total_presentations": 699940,
+            "total_updates": 1380,
+            "drop_last": false,
+            "partial_group_loss": "sum CE / actual presented rows, including the final 181-row batch",
+            "natural": "One new 34997-image permutation each window",
+            "crt": "34997 class-then-image draws with replacement each window",
+            "validation": {
+              "split": "val",
+              "rows": 7497,
+              "batch_size": 512,
+              "batches_per_pass": 15,
+              "tail_batch_rows": 329,
+              "after_every_windows": 1,
+              "validation_points": 20,
+              "validation_at_initialization": false,
+              "rank_all_outputs": 124,
+              "order": "fixed validation manifest"
+            },
+            "checkpoint_selection": {
+              "metric": "macro_f1_supported",
+              "tau": 1e-06,
+              "scale": [
+                0,
+                1
+              ],
+              "initial": "first completed validation point",
+              "improvement": "current-selected > tau",
+              "tie": "earlier",
+              "nll_or_topk_tie_break": false
+            },
+            "early_stopping": false,
+            "all_four_arms_same_budget": true
+          },
+          "initializer": {
+            "method": "isolated_cpu_linear_default",
+            "rule": "Use isolated CPU torch default generator seeded by rng.initialization_parts. Construct nn.Linear(d,124,bias=True) using Torch 2.8.0 default reset: kaiming_uniform_(weight,a=sqrt(5)), then uniform_(bias,-1/sqrt(d),+1/sqrt(d)); restore outer CPU RNG. No source classifier/optimizer state.",
+            "weight_distribution": "Uniform[-1/sqrt(d),+1/sqrt(d)]",
+            "bias_distribution": "Uniform[-1/sqrt(d),+1/sqrt(d)]",
+            "fan_in_by_family": {
+              "E1": 768,
+              "E2": 1536
+            },
+            "bias": true,
+            "draw_order": [
+              "weight matrix",
+              "bias vector"
+            ],
+            "initialization_device": "cpu",
+            "initialization_dtype": "float32",
+            "pairing": "Construct once per (stage,root_seed,family,source_seed), hash and clone exact CPU tensors for N/cRT and all LR candidates; transfer clones without changing values",
+            "actual_tensor_hashes": "future observations, never precomputed from declarations"
+          },
+          "runtime": {
+            "device": "cuda:0",
+            "single_process": true,
+            "distributed": false,
+            "dtype": "float32",
+            "amp": false,
+            "grad_scaler": false,
+            "tf32_matmul": false,
+            "tf32_cudnn": false,
+            "torch_compile": false,
+            "float32_matmul_precision": "highest",
+            "cudnn_benchmark": false,
+            "cudnn_deterministic": true,
+            "deterministic_algorithms": true,
+            "deterministic_warn_only": false,
+            "num_workers": 0,
+            "persistent_workers": false,
+            "pin_memory": false,
+            "prefetch_policy": "synchronous; workers=0",
+            "cpu_threads": 2,
+            "interop_threads": 1,
+            "environment": {
+              "OMP_NUM_THREADS": "2",
+              "MKL_NUM_THREADS": "2",
+              "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+              "PYTHONHASHSEED": "str(root_seed) before process start"
+            },
+            "software_lock": {
+              "python": "3.11.17",
+              "torch": "2.8.0+cu128",
+              "torchvision": "0.23.0+cu128",
+              "Pillow": "11.3.0",
+              "numpy": "2.1.3",
+              "pandas": "2.2.3",
+              "scikit-learn": "1.6.1",
+              "cuda": "12.8",
+              "cudnn": 91002
+            },
+            "allocation": {
+              "scheduler": "Slurm",
+              "partition": "normal",
+              "account": "uit",
+              "qos": "mig2-35",
+              "gres": "gpu:2g.35gb:1",
+              "ntasks": 1,
+              "cpus_per_task": 4,
+              "ram_gib": 16,
+              "slurm_mem_mib": 16384,
+              "walltime": "09:00:00",
+              "walltime_seconds": 32400,
+              "gpu_class": "NVIDIA H200 MIG 2g.35gb",
+              "specific_mig_uuid_required": false
+            },
+            "scope": "Explicit new E3 candidate resource policy for review; not inherited execution authorization or proof of current device/driver availability",
+            "actual_environment_identity": "Observe and bind at TARGET-AUTH/G2; no target acceptance exists now",
+            "no_oom_or_nonfinite_fallback": true
+          },
+          "sampling_policy": "per arm, fixed natural or class-uniform policy",
+          "official_final_selected": false,
+          "candidate_profile_sha256": "3df7880d6b04d0e22cac410af14889f3f3453607f99d1c27219911c75ab13baf"
+        },
+        {
+          "candidate_id": "adamw_lr3e3",
+          "stage": "pilot_candidate",
+          "optimizer": {
+            "family": "AdamW",
+            "betas": [
+              0.9,
+              0.999
+            ],
+            "eps": 1e-08,
+            "amsgrad": false,
+            "maximize": false,
+            "foreach": false,
+            "fused": false,
+            "capturable": false,
+            "differentiable": false,
+            "weight_decay_groups": {
+              "weight": 0.01,
+              "bias": 0.0
+            },
+            "parameters": "Exactly new Linear weight and bias, once each; fresh state for every run",
+            "clipping": {
+              "enabled": true,
+              "max_norm": 1.0,
+              "norm_type": 2.0,
+              "error_if_nonfinite": true,
+              "foreach": false
+            }
+          },
+          "base_lr": 0.003,
+          "schedule": {
+            "name": "explicit_linear_warmup_then_cosine",
+            "index": "u is zero-based optimizer update before it is applied, u=0..1379",
+            "total_updates": 1380,
+            "warmup_updates": 69,
+            "cosine_floor_factor": 0.01,
+            "warmup_formula": "lr(u)=base_lr*(u+1)/69 for 0<=u<69",
+            "cosine_formula": "lr(u)=base_lr*(0.01+0.99*(1+cos(pi*(u-69)/(1380-69-1)))/2) for 69<=u<=1379",
+            "step_order": "Set LR for current u, zero_grad(set_to_none=True), forward/backward, finite/clipping check, optimizer.step, increment in-memory update counter; only a complete window checkpoint commits scientific progress. Next LR uses updated u. No schedule step after total budget.",
+            "warmup_first_factor": 0.014492753623188406,
+            "first_cosine_update": 69,
+            "last_update": 1379
+          },
+          "budget": {
+            "basis": "fixed_windows_of_equal_feature_presentations",
+            "windows": 20,
+            "presentations_per_window": 34997,
+            "microbatch": 512,
+            "accumulation": 1,
+            "full_microbatches_per_window": 68,
+            "tail_microbatch_rows": 181,
+            "microbatches_per_window": 69,
+            "updates_per_window": 69,
+            "total_presentations": 699940,
+            "total_updates": 1380,
+            "drop_last": false,
+            "partial_group_loss": "sum CE / actual presented rows, including the final 181-row batch",
+            "natural": "One new 34997-image permutation each window",
+            "crt": "34997 class-then-image draws with replacement each window",
+            "validation": {
+              "split": "val",
+              "rows": 7497,
+              "batch_size": 512,
+              "batches_per_pass": 15,
+              "tail_batch_rows": 329,
+              "after_every_windows": 1,
+              "validation_points": 20,
+              "validation_at_initialization": false,
+              "rank_all_outputs": 124,
+              "order": "fixed validation manifest"
+            },
+            "checkpoint_selection": {
+              "metric": "macro_f1_supported",
+              "tau": 1e-06,
+              "scale": [
+                0,
+                1
+              ],
+              "initial": "first completed validation point",
+              "improvement": "current-selected > tau",
+              "tie": "earlier",
+              "nll_or_topk_tie_break": false
+            },
+            "early_stopping": false,
+            "all_four_arms_same_budget": true
+          },
+          "initializer": {
+            "method": "isolated_cpu_linear_default",
+            "rule": "Use isolated CPU torch default generator seeded by rng.initialization_parts. Construct nn.Linear(d,124,bias=True) using Torch 2.8.0 default reset: kaiming_uniform_(weight,a=sqrt(5)), then uniform_(bias,-1/sqrt(d),+1/sqrt(d)); restore outer CPU RNG. No source classifier/optimizer state.",
+            "weight_distribution": "Uniform[-1/sqrt(d),+1/sqrt(d)]",
+            "bias_distribution": "Uniform[-1/sqrt(d),+1/sqrt(d)]",
+            "fan_in_by_family": {
+              "E1": 768,
+              "E2": 1536
+            },
+            "bias": true,
+            "draw_order": [
+              "weight matrix",
+              "bias vector"
+            ],
+            "initialization_device": "cpu",
+            "initialization_dtype": "float32",
+            "pairing": "Construct once per (stage,root_seed,family,source_seed), hash and clone exact CPU tensors for N/cRT and all LR candidates; transfer clones without changing values",
+            "actual_tensor_hashes": "future observations, never precomputed from declarations"
+          },
+          "runtime": {
+            "device": "cuda:0",
+            "single_process": true,
+            "distributed": false,
+            "dtype": "float32",
+            "amp": false,
+            "grad_scaler": false,
+            "tf32_matmul": false,
+            "tf32_cudnn": false,
+            "torch_compile": false,
+            "float32_matmul_precision": "highest",
+            "cudnn_benchmark": false,
+            "cudnn_deterministic": true,
+            "deterministic_algorithms": true,
+            "deterministic_warn_only": false,
+            "num_workers": 0,
+            "persistent_workers": false,
+            "pin_memory": false,
+            "prefetch_policy": "synchronous; workers=0",
+            "cpu_threads": 2,
+            "interop_threads": 1,
+            "environment": {
+              "OMP_NUM_THREADS": "2",
+              "MKL_NUM_THREADS": "2",
+              "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+              "PYTHONHASHSEED": "str(root_seed) before process start"
+            },
+            "software_lock": {
+              "python": "3.11.17",
+              "torch": "2.8.0+cu128",
+              "torchvision": "0.23.0+cu128",
+              "Pillow": "11.3.0",
+              "numpy": "2.1.3",
+              "pandas": "2.2.3",
+              "scikit-learn": "1.6.1",
+              "cuda": "12.8",
+              "cudnn": 91002
+            },
+            "allocation": {
+              "scheduler": "Slurm",
+              "partition": "normal",
+              "account": "uit",
+              "qos": "mig2-35",
+              "gres": "gpu:2g.35gb:1",
+              "ntasks": 1,
+              "cpus_per_task": 4,
+              "ram_gib": 16,
+              "slurm_mem_mib": 16384,
+              "walltime": "09:00:00",
+              "walltime_seconds": 32400,
+              "gpu_class": "NVIDIA H200 MIG 2g.35gb",
+              "specific_mig_uuid_required": false
+            },
+            "scope": "Explicit new E3 candidate resource policy for review; not inherited execution authorization or proof of current device/driver availability",
+            "actual_environment_identity": "Observe and bind at TARGET-AUTH/G2; no target acceptance exists now",
+            "no_oom_or_nonfinite_fallback": true
+          },
+          "sampling_policy": "per arm, fixed natural or class-uniform policy",
+          "official_final_selected": false,
+          "candidate_profile_sha256": "8e8144b8f20c596c10499b02d3bf5b452d41bbb87302be72f3918d6aecfdd90a"
+        }
+      ],
+      "candidate_reference": "docs/E3/e3_cache_pilot_contract_v1.json#/candidate_profiles"
+    },
+    "ceilings": {
+      "status": "CANDIDATE_DEFINED_NOT_APPROVED",
+      "executable": false,
+      "candidate_value": {
+        "scientific_train_presentations": 5599520,
+        "scientific_optimizer_updates": 11040,
+        "full_validation_passes": 160,
+        "validation_sample_presentations": 1199520,
+        "total_attempts": 16,
+        "attempts_per_logical_trial": 2,
+        "operational_train_presentations_including_replay": 11199040,
+        "operational_optimizer_updates_including_replay": 22080,
+        "operational_validation_passes_including_replay": 320,
+        "operational_validation_sample_presentations": 2399040,
+        "walltime_seconds_per_attempt": 32400
+      },
+      "candidate_reference": "docs/E3/e3_cache_pilot_contract_v1.json#/pilot/caps"
+    },
+    "convergence_selection_tie_rule": {
+      "status": "CANDIDATE_DEFINED_NOT_APPROVED",
+      "executable": false,
+      "candidate_value": {
+        "completion": "Both candidate protocols must complete all four full-budget trials within caps, with complete histories and no nonfinite/skipped data/updates; otherwise stop, no automatic winner among survivors",
+        "adequacy_per_arm": {
+          "train_ce_comparison_windows_1based": {
+            "previous": [
+              11,
+              15
+            ],
+            "late": [
+              16,
+              20
+            ]
+          },
+          "relative_training_ce_mean_change_max": 0.01,
+          "relative_training_ce_formula": "abs(mean(CE[16..20])-mean(CE[11..15]))/max(abs(mean(CE[11..15])),1e-12)",
+          "late_validation_windows_1based": [
+            16,
+            20
+          ],
+          "late_macro_f1_range_max": 0.01,
+          "late_best_minus_earlier_best_max": 0.002,
+          "earlier_validation_windows_1based": [
+            1,
+            15
+          ],
+          "criterion": "All checks must pass for all four arms of a protocol. These are bounded optimization-stability diagnostics, not proof of convergence, statistical significance or a minimum gain over original/N/cRT.",
+          "not_a_comparison_outcome_threshold": true
+        },
+        "eligible_protocol": "A completed common protocol satisfying all four arms' adequacy checks",
+        "score": "Arithmetic mean of the four arms' selected-head supported validation Macro-F1 values, equal weight 1/4, using unrounded values; diagnostic pilot selection only",
+        "tie_tolerance": 1e-06,
+        "tie_scope": "global maximum-anchored: eligible if global_max_score-score <= tolerance",
+        "tie_break": "Choose lower base_lr among tied eligible protocols; candidate_id lexical order if needed",
+        "no_eligible_protocol": "STOP for review; no extra trials, horizon extension or winner",
+        "report": "All protocols, four-arm histories, adequacy checks, scores, attempts/failures and tradeoffs; one winner proposal only after authorized pilot"
+      },
+      "candidate_reference": "docs/E3/e3_cache_pilot_contract_v1.json#/pilot/common_protocol_selection"
+    },
+    "seed_restrictions": {
+      "final_ids": [
+        2001,
+        3001,
+        4001
+      ],
+      "historical_tuning_id_not_final_or_automatic_pilot": 1001,
+      "historical_split_seed_not_head_seed": 406,
+      "historical_pilot_id_not_default": 3406,
+      "no_extra_official_final_ids": true
+    },
+    "all_candidates_attempts_failures_and_retries_reported": true,
+    "envelope_exhaustion": "Stop for review; no automatic extension",
+    "completion_alone_proves_convergence": false,
+    "after_pilot": "Require explicit E3-HEAD-FREEZE review; no automatic final authorization",
+    "final_heads_optimizer_scheduler_start_fresh": true,
+    "actual_winner_and_outcomes": {
+      "status": "PENDING",
+      "executable": false,
+      "pending_id": "P05",
+      "description": "Actual pilot histories, adequacy, scores, outcome digest and proposed winner; no pilot executed",
+      "resolve_before": [
+        "E3-HEAD-FREEZE"
+      ],
+      "phase": "FUTURE_OBSERVATION_OR_HEAD_FREEZE"
+    }
+  },
+  "runtime": {
+    "dtype": "float32",
+    "amp": false,
+    "grad_scaler": false,
+    "tf32_matmul": false,
+    "tf32_cudnn": false,
+    "torch_compile": false,
+    "float32_matmul_precision": "highest",
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": false,
+    "reference_software_lock": {
+      "python": "3.11.17",
+      "torch": "2.8.0+cu128",
+      "torchvision": "0.23.0+cu128",
+      "Pillow": "11.3.0",
+      "numpy": "2.1.3",
+      "pandas": "2.2.3",
+      "scikit-learn": "1.6.1",
+      "cuda": "12.8",
+      "cudnn": 91002
+    },
+    "actual_target_acceptance_inherited": false,
+    "record_actual_software_device_driver_effective_settings": true,
+    "execution_device_workers_threads_allocation": {
+      "status": "CANDIDATE_DEFINED_NOT_APPROVED",
+      "executable": false,
+      "candidate_value": {
+        "device": "cuda:0",
+        "single_process": true,
+        "distributed": false,
+        "dtype": "float32",
+        "amp": false,
+        "grad_scaler": false,
+        "tf32_matmul": false,
+        "tf32_cudnn": false,
+        "torch_compile": false,
+        "float32_matmul_precision": "highest",
+        "cudnn_benchmark": false,
+        "cudnn_deterministic": true,
+        "deterministic_algorithms": true,
+        "deterministic_warn_only": false,
+        "num_workers": 0,
+        "persistent_workers": false,
+        "pin_memory": false,
+        "prefetch_policy": "synchronous; workers=0",
+        "cpu_threads": 2,
+        "interop_threads": 1,
+        "environment": {
+          "OMP_NUM_THREADS": "2",
+          "MKL_NUM_THREADS": "2",
+          "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+          "PYTHONHASHSEED": "str(root_seed) before process start"
+        },
+        "software_lock": {
+          "python": "3.11.17",
+          "torch": "2.8.0+cu128",
+          "torchvision": "0.23.0+cu128",
+          "Pillow": "11.3.0",
+          "numpy": "2.1.3",
+          "pandas": "2.2.3",
+          "scikit-learn": "1.6.1",
+          "cuda": "12.8",
+          "cudnn": 91002
+        },
+        "allocation": {
+          "scheduler": "Slurm",
+          "partition": "normal",
+          "account": "uit",
+          "qos": "mig2-35",
+          "gres": "gpu:2g.35gb:1",
+          "ntasks": 1,
+          "cpus_per_task": 4,
+          "ram_gib": 16,
+          "slurm_mem_mib": 16384,
+          "walltime": "09:00:00",
+          "walltime_seconds": 32400,
+          "gpu_class": "NVIDIA H200 MIG 2g.35gb",
+          "specific_mig_uuid_required": false
+        },
+        "scope": "Explicit new E3 candidate resource policy for review; not inherited execution authorization or proof of current device/driver availability",
+        "actual_environment_identity": "Observe and bind at TARGET-AUTH/G2; no target acceptance exists now",
+        "no_oom_or_nonfinite_fallback": true
+      },
+      "candidate_reference": "docs/E3/e3_cache_pilot_contract_v1.json#/runtime"
+    },
+    "gpu_work_requires_explicit_allocation": true,
+    "no_silent_oom_nonfinite_fallback": "No skipped rows/updates or unreviewed LR/batch/dtype change; preserve all failure/attempt/replay work",
+    "actual_target_observation": {
+      "status": "PENDING",
+      "executable": false,
+      "pending_id": "P10",
+      "description": "Actual device/driver/effective settings, code closure, audit/conformance and target acceptance evidence",
+      "resolve_before": [
+        "E3-G2",
+        "runtime use"
+      ],
+      "phase": "FUTURE_OBSERVATION_OR_HEAD_FREEZE"
+    }
+  },
+  "rng": {
+    "final_root_seeds": [
+      2001,
+      3001,
+      4001
+    ],
+    "seed_domains": [
+      "Python random",
+      "NumPy",
+      "torch CPU",
+      "all CUDA RNGs"
+    ],
+    "derived_seed": {
+      "encoding": "UTF-8 of pipe-separated str(parts)",
+      "digest": "SHA-256",
+      "digest_byte_slice": [
+        0,
+        8
+      ],
+      "byte_order": "little",
+      "modulus": 9223372036854775807,
+      "formula": "int.from_bytes(sha256('|'.join(str(part) for part in parts).encode('utf-8')).digest()[:8],'little') % (2**63-1)"
+    },
+    "python_process_hash_as_seed_allowed": false,
+    "independent_streams": [
+      "paired head initialization",
+      "natural order",
+      "cRT class and within-class draws",
+      "loaders/workers"
+    ],
+    "new_initializer_sampler_loader_stream_keys": {
+      "status": "CANDIDATE_DEFINED_NOT_APPROVED",
+      "executable": false,
+      "candidate_value": {
+        "derivation": "SHA-256 of UTF-8 pipe-separated str(parts); first 8 digest bytes little-endian modulo 9223372036854775807",
+        "domain_tag": "E3-v1",
+        "window_index_base": 0,
+        "stage_tags": [
+          "pilot",
+          "final",
+          "acceptance_fixture"
+        ],
+        "initialization_parts": [
+          "root_seed",
+          "E3-v1",
+          "stage",
+          "source_family",
+          "source_seed",
+          "head-init"
+        ],
+        "natural_parts": [
+          "root_seed",
+          "E3-v1",
+          "stage",
+          "source_seed",
+          "sampler",
+          "natural",
+          "window_index"
+        ],
+        "crt_class_parts": [
+          "root_seed",
+          "E3-v1",
+          "stage",
+          "source_seed",
+          "sampler",
+          "crt-class",
+          "window_index"
+        ],
+        "crt_image_parts": [
+          "root_seed",
+          "E3-v1",
+          "stage",
+          "source_seed",
+          "sampler",
+          "crt-image",
+          "window_index"
+        ],
+        "loader_parts": [
+          "root_seed",
+          "E3-v1",
+          "stage",
+          "source_seed",
+          "loader",
+          "split"
+        ],
+        "candidate_id_in_rng_key": false,
+        "sampling_arm_in_init_key": false,
+        "sampler_family_in_key": false,
+        "cross_family_sampling": "For matching root/source seed/stage/window, both families see identical natural permutations or cRT class/image draws. Initialization includes family because feature shapes differ.",
+        "generators": "Independent CPU torch.Generator per named stream; do not borrow global RNG",
+        "natural": "At each window initialize its stream then torch.randperm(34997,generator=natural_generator,device='cpu'); visit in permutation order, no replacement",
+        "crt": "At each draw call torch.randint(124,(1,),generator=class_generator,device='cpu') once, then torch.randint(n_c,(1,),generator=image_generator,device='cpu') once; map image index into immutable manifest-ordered class index. Do not vectorize, force quotas or reject repeats.",
+        "class_order": "label_id 0..123",
+        "within_class_order": "fixed train manifest order",
+        "sample_draws_per_window": 34997,
+        "resume_state_fields": [
+          "stage",
+          "root_seed",
+          "source_seed",
+          "window_index",
+          "presentation_cursor",
+          "natural permutation and cursor or both cRT generator byte states",
+          "loader generator byte states",
+          "Python/NumPy/torch CPU/all-CUDA global RNG states"
+        ],
+        "resume_validation": "Verify all identities and cursor bounds; completed windows committed once; uncommitted work rolls back to preceding window checkpoint",
+        "process_environment": {
+          "PYTHONHASHSEED": "str(root_seed), set before Python startup"
+        }
+      },
+      "candidate_reference": "docs/E3/e3_cache_pilot_contract_v1.json#/rng"
+    },
+    "state": "Record/serialize actual generator states, order/cursors and progress; one branch's RNG use cannot alter another's initialization or sampler"
+  },
+  "checkpoint": {
+    "selection_metric": "macro_f1_supported",
+    "metric_scale": [
+      0,
+      1
+    ],
+    "tolerance": 1e-06,
+    "comparator": "current_metric - selected_metric > tolerance",
+    "initial_selection": "First completed validation point",
+    "tie_break": "earlier",
+    "nll_or_topk_tie_break": false,
+    "all_metrics_use_same_selected_head": true,
+    "original_head_reselection": false,
+    "commit_replay_boundary": {
+      "status": "CANDIDATE_DEFINED_NOT_APPROVED",
+      "executable": false,
+      "candidate_value": {
+        "head_commit_unit": "one completed training window plus its complete validation/selection/history",
+        "initial_boundary_zero": true,
+        "atomic_full_state_last": true,
+        "report_only_best": true,
+        "resume_from_best": false,
+        "save_frequency_windows": 1,
+        "maximum_uncommitted_updates": 69,
+        "save_fields": [
+          "head and selected-head state",
+          "optimizer/scheduler state and inactive scaler policy",
+          "source/cache/init/protocol/schema/authorization identities",
+          "all RNG/loader/sampler states",
+          "window/presentation/update counters",
+          "complete training/validation/selection history"
+        ],
+        "resume": "Restore same immutable last; discard and replay the entire uncommitted window including sampling/optimizer/scheduler/validation; source/cache bytes cannot change",
+        "completed_budget": "Publication-only recovery; no more training/validation selection points",
+        "attempt_policy": "At most two attempts per logical pilot run (initial plus one same-identity retry), charged to operational caps; no new candidate or scientific updates credited by replay",
+        "partial_failure_charge": "Record exact observed partial work when known; otherwise conservatively charge the whole uncommitted window's 34997 presentations, 69 updates and one validation pass before replay",
+        "atomic_publication": "Same-directory write+flush/fsync+os.replace; one writer and immutable run lock; no hidden rollback of committed history",
+        "future_protocol_change": "Requires review; not automatic retry with changed batch/LR/dtype/budget"
+      },
+      "candidate_reference": "docs/E3/e3_cache_pilot_contract_v1.json#/head_recovery"
+    },
+    "resume_role": "last",
+    "reporting_role": "best",
+    "resume_from_best_allowed": false,
+    "single_writer": true,
+    "atomic_commit": true,
+    "required_state": [
+      "head weights and preserved selected head state",
+      "fresh head optimizer state",
+      "full scheduler state",
+      "inactive scaler policy",
+      "root/derived RNG and loader/sampler state/cursors",
+      "source/cache/init/protocol/declaration hashes",
+      "original budget and committed presentation/update counters",
+      "complete validation history and selection state",
+      "failure/attempt/replay inventory"
+    ],
+    "borrowed_source_optimizer_or_progress_allowed": false,
+    "restore_same_immutable_run_only": true,
+    "after_budget_complete": "Publication recovery only; cannot train again",
+    "changed_consumed_identity_requires_review_and_relevant_reacceptance": true
+  },
+  "metrics": {
+    "implementation": "Reuse unchanged src/e1/metrics.py Metrics124/rank_logits semantics",
+    "main_metrics": [
+      "top1",
+      "top3",
+      "top5",
+      "macro_f1_supported",
+      "weighted_f1"
+    ],
+    "diagnostic": "nll",
+    "ranking": {
+      "topk": [
+        1,
+        3,
+        5
+      ],
+      "output_count": 124,
+      "values": "Original unmodified finite raw logits",
+      "order": "descending",
+      "exact_ties": "ascending label ID using stable sorting",
+      "unsupported_label_masking": false,
+      "logit_perturbation": false
+    },
+    "confusion": {
+      "shape": [
+        124,
+        124
+      ],
+      "rows": "ground_truth",
+      "columns": "predicted",
+      "compute_over": "Entire validation split before F1; never average batch F1"
+    },
+    "per_class": {
+      "all_label_ids": true,
+      "fields": [
+        "label_id",
+        "label",
+        "n_train",
+        "bucket",
+        "support",
+        "predicted_count",
+        "precision",
+        "recall",
+        "f1"
+      ],
+      "precision_formula": "TP/max(predicted_count,1)",
+      "recall_formula": "TP/max(GT_support,1)",
+      "supported_f1_formula": "2*TP/max(GT_support+predicted_count,1)",
+      "unsupported_f1": "null",
+      "unsupported_precision_recall": "Preserve numeric completed denominator conventions; do not blanket-convert to null",
+      "gt_supported_zero_tp_f1": 0
+    },
+    "macro_f1_supported": {
+      "support": "validation GT > 0",
+      "label_count": 106,
+      "denominator": "GT-supported labels only"
+    },
+    "weighted_f1": "Sum(full-split per-class F1 * validation GT support)/7497; never train/draw weighting",
+    "nll": "Sum unweighted per-sample validation CE/7497; diagnostic, not percent or checkpoint/pilot tie default",
+    "frequency_buckets": {
+      "membership_authority": "Unique fixed-split n_train in class_support.csv",
+      "main_names": [
+        "1-19",
+        "20-99",
+        "100-499",
+        ">=500"
+      ],
+      "diagnostic_name": "1-2",
+      "definitions": [
+        {
+          "name": "1-19",
+          "lower_inclusive": 1,
+          "upper_inclusive": 19,
+          "total_labels": 42,
+          "unique_train_images": 243,
+          "validation_supported_labels": 24,
+          "validation_images": 49,
+          "overlapping_diagnostic": false
+        },
+        {
+          "name": "20-99",
+          "lower_inclusive": 20,
+          "upper_inclusive": 99,
+          "total_labels": 37,
+          "unique_train_images": 2077,
+          "validation_supported_labels": 37,
+          "validation_images": 445,
+          "overlapping_diagnostic": false
+        },
+        {
+          "name": "100-499",
+          "lower_inclusive": 100,
+          "upper_inclusive": 499,
+          "total_labels": 29,
+          "unique_train_images": 7049,
+          "validation_supported_labels": 29,
+          "validation_images": 1513,
+          "overlapping_diagnostic": false
+        },
+        {
+          "name": ">=500",
+          "lower_inclusive": 500,
+          "upper_inclusive": "unbounded",
+          "total_labels": 16,
+          "unique_train_images": 25628,
+          "validation_supported_labels": 16,
+          "validation_images": 5490,
+          "overlapping_diagnostic": false
+        },
+        {
+          "name": "1-2",
+          "lower_inclusive": 1,
+          "upper_inclusive": 2,
+          "total_labels": 20,
+          "unique_train_images": 21,
+          "validation_supported_labels": 2,
+          "validation_images": 2,
+          "overlapping_diagnostic": true
+        }
+      ],
+      "diagnostic_subset_of": "1-19",
+      "report_fields": [
+        "total labels",
+        "GT-supported labels",
+        "evaluation samples",
+        "macro_f1_supported",
+        "top1",
+        "top3",
+        "top5"
+      ],
+      "macro_f1": "Mean supported member per-class F1 computed on full validation, retaining cross-bucket false positives",
+      "topk": "Condition on GT bucket membership; rank all 124 outputs",
+      "no_supported_samples": "null metrics",
+      "resampling_changes_membership": false,
+      "extreme_tail_warning": "The overlapping 1-2 subset has only two validation-supported labels and two validation images; it cannot support strong extreme-tail generalization claims"
+    },
+    "aggregation": {
+      "seeds": [
+        2001,
+        3001,
+        4001
+      ],
+      "require_all_three_complete": true,
+      "mean": "arithmetic",
+      "std": "sample",
+      "ddof": 1,
+      "unrounded_inputs": true,
+      "ensemble": false,
+      "merged_confusion_as_seed_aggregate": false,
+      "paired_differences": "Join by matching seed, compute individual differences before mean/sample std; never subtract stds",
+      "exploratory_difference": "If shown, compute the difference of E1/E2 balancing effects within matching seed before aggregation"
+    },
+    "display": {
+      "classification": "percentages",
+      "decimal_places": 4,
+      "std_units": "same percentage units/four decimals",
+      "classification_differences": "percentage_points",
+      "nll_percent": false,
+      "machine_json_csv": "full precision"
+    },
+    "limitations": [
+      "Fixed split does not establish geographic/panorama independence",
+      "Scarce tail validation support",
+      "Three paired seeds do not establish significance or remove sampling uncertainty",
+      "Validation-only results; final test locked"
+    ]
+  },
+  "reporting": {
+    "main_table": "All six arms, each with exactly three selected-source seed rows and mean/sample std; no missing-seed partial aggregate",
+    "selected_validation_exports": [
+      "analysis.json",
+      "overall.csv",
+      "per_class.csv",
+      "buckets.csv",
+      "predictions.csv",
+      "confusion.csv",
+      "most_confused.csv",
+      "learning_curves.csv"
+    ],
+    "predictions": {
+      "rows": 7497,
+      "order": "fixed validation manifest",
+      "fields": "Every relative_path/GT, predicted label and five distinct valid ordered Top-5 label IDs",
+      "top5_count": 5,
+      "prediction_equals_top5_first": true
+    },
+    "most_confused_order": "descending count, then ascending true label ID and predicted label ID",
+    "reconstruct_from_predictions": [
+      "Top-k",
+      "confusion/counts",
+      "full-split per-class F1",
+      "overall and bucket discrete metrics"
+    ],
+    "nll_cannot_be_reconstructed_from_top5_ids": true,
+    "nll_binding": "Selected-head logits and sample-mean CE evaluation evidence",
+    "content_validation_beyond_recomputed_hashes": true,
+    "validate_all_derived_csv_headers_rows_and_histories": true,
+    "publish_analysis_index_after_all_exports": true,
+    "lineage_chain": [
+      "declaration",
+      "source/cache/init/common protocol",
+      "committed history",
+      "selected head",
+      "complete predictions/exports",
+      "aggregate and paired contrasts"
+    ],
+    "required_later_artifacts": [
+      "complete six-source handoff manifest",
+      "six accepted immutable source-cache bundles/twelve split payloads and replay evidence",
+      "all pilot candidates/outcomes/failures and selection rationale",
+      "one frozen common head protocol and twelve declarations",
+      "per-run initial state hashes, last/best, counters, histories and attempts",
+      "selected validation analyses",
+      "six-arm aggregate/contrasts and inventories"
+    ],
+    "efficiency": {
+      "role": "secondary_if_measured",
+      "separate_scopes": [
+        "source extraction",
+        "cache IO",
+        "head training",
+        "validation/checkpoint IO",
+        "attempt/replay",
+        "whole study"
+      ],
+      "presentations_are_not_unique_images": true,
+      "e2_views_per_second_is_not_original_images_per_second": true,
+      "minimum_speedup_or_gain_requirement": false
+    },
+    "schemas_paths_and_consumed_source_closure": {
+      "status": "CANDIDATE_DEFINED_NOT_APPROVED",
+      "executable": false,
+      "schema_bundle": {
+        "path": "docs/E3/schemas/e3_record_schemas_v1.json",
+        "bytes": 95395,
+        "sha256": "2146f541a46511826779914a794c85b1adca4a8c95826fc311c0a4301a0baba6"
+      },
+      "planned_output_roots": {
+        "root_resolution": "All destinations are explicit caller-supplied project-relative roots beneath the execution workspace, resolved with containment/symlink checks; these are planned destinations, not existing inputs",
+        "paths": {
+          "cache": "artifacts/E3/features/v1",
+          "acceptance": "artifacts/E3/acceptance/v1",
+          "pilot": "runs/E3/pilot/v1",
+          "final": "runs/E3/final/v1",
+          "reports": "reports/E3/v1",
+          "receipts": "artifacts/E3/approvals/v1"
+        },
+        "cache_layout": "{cache}/{family}/seed{source_seed}/{source_checkpoint_sha256}/{extraction_identity_sha256}/{split}/",
+        "run_layout": "{pilot_or_final}/{run_id}/; run_id assigned only after full immutable declaration bindings exist",
+        "receipt_layout": "{receipts}/{gate}/{approved_contract_sha256}.json (prospective only; no receipt created)",
+        "roots_created_during_preparation": false,
+        "accepted_cache_or_receipt_pre_g1_required": false
+      },
+      "runtime_schema_validation": "Strict JSON + matching record schema + mandatory scientific/cross-record/source/cache/protocol/authorization checks; no pending executable inputs",
+      "actual_consumed_source_closure": {
+        "status": "PENDING",
+        "executable": false,
+        "pending_id": "P11",
+        "description": "Actual transitive scientific imports/launch files and code hashes, with separate report/harness inventory",
+        "resolve_before": [
+          "implemented-source/target acceptance"
+        ],
+        "phase": "FUTURE_OBSERVATION_OR_HEAD_FREEZE"
+      }
+    }
+  },
+  "gates": {
+    "sequence": [
+      "E3-G0",
+      "E3-G1",
+      "E3-TARGET-AUTH",
+      "E3-G2",
+      "E3-CACHE-AUTH",
+      "E3-CACHE-ACCEPT",
+      "E3-PILOT-AUTH",
+      "E3-HEAD-FREEZE",
+      "E3-FINAL-AUTH",
+      "E3-CLOSEOUT"
+    ],
+    "entries": [
+      {
+        "id": "E3-G0",
+        "current_status": "PASS",
+        "current_execution_authorized": false,
+        "required_review": "Documentation/design preparation only",
+        "scope_after_explicit_approval": "Plan/tasks and E3-T00b preparation; no numeric freeze or execution",
+        "required_binding_fields": [
+          "reviewed specification and user-scoped preparation authorization"
+        ],
+        "permitted_splits_after_approval": []
+      },
+      {
+        "id": "E3-G1",
+        "current_status": "NOT GRANTED",
+        "current_execution_authorized": false,
+        "required_review": "Review plan and exact cache/pilot contract bytes; resolve all applicable stage fields; select method and explicitly authorize named implementation/CPU preparation",
+        "scope_after_explicit_approval": "Named implementation/CPU preparation only; no target/bulk cache/pilot/official final execution",
+        "required_binding_fields": [
+          "reviewed plan/ledger",
+          "complete applicable source/cache/acceptance/pilot candidate identities",
+          "exact contract/schema hashes",
+          "named method and implementation scope"
+        ],
+        "permitted_splits_after_approval": []
+      },
+      {
+        "id": "E3-TARGET-AUTH",
+        "current_status": "NOT GRANTED",
+        "current_execution_authorized": false,
+        "required_review": "Authorize bounded actual source-loading, feature-extraction/runtime and deterministic-recovery acceptance",
+        "scope_after_explicit_approval": "Train-only extraction and standalone-head/recovery fixtures; representations frozen; no full-model training, bulk cache, pilot selection or official runs",
+        "required_binding_fields": [
+          "actual source/runtime/device/data/checkpoint inputs",
+          "complete bounded fixture contract",
+          "explicit target authorization"
+        ],
+        "permitted_splits_after_approval": [
+          "train"
+        ]
+      },
+      {
+        "id": "E3-G2",
+        "current_status": "NOT GRANTED",
+        "current_execution_authorized": false,
+        "required_review": "Accept bounded implementation/CPU/target evidence, six-source handoff, extraction/runtime/recovery and numerical-replay policy",
+        "scope_after_explicit_approval": "Readiness accepted only; no E1/E2 reopening or automatic bulk extraction",
+        "required_binding_fields": [
+          "bounded evidence hashes",
+          "verified six-source handoff",
+          "extraction/runtime/recovery identity",
+          "numerical-replay policy",
+          "concrete cache declarations"
+        ],
+        "permitted_splits_after_approval": [
+          "train"
+        ]
+      },
+      {
+        "id": "E3-CACHE-AUTH",
+        "current_status": "NOT GRANTED",
+        "current_execution_authorized": false,
+        "required_review": "Approve six actual source identities and exact train/val extraction/replay scope",
+        "scope_after_explicit_approval": "Bulk deterministic train/val extraction and original-head validation replay only",
+        "required_binding_fields": [
+          "six source identities",
+          "accepted readiness",
+          "exact extraction/replay declarations and inputs",
+          "explicit operation/split authorization"
+        ],
+        "permitted_splits_after_approval": [
+          "train",
+          "val"
+        ]
+      },
+      {
+        "id": "E3-CACHE-ACCEPT",
+        "current_status": "NOT GRANTED",
+        "current_execution_authorized": false,
+        "required_review": "Review complete indices/payload coverage/checksums, replay, source/input/runtime lineage",
+        "scope_after_explicit_approval": "Accept immutable cache inputs; no head execution",
+        "required_binding_fields": [
+          "six complete bundles/twelve payload indices",
+          "coverage and checksums",
+          "original-head replay",
+          "source/input/runtime evidence"
+        ],
+        "permitted_splits_after_approval": [
+          "train",
+          "val"
+        ]
+      },
+      {
+        "id": "E3-PILOT-AUTH",
+        "current_status": "NOT GRANTED",
+        "current_execution_authorized": false,
+        "required_review": "Approve complete bounded pilot candidates, actual inputs/seeds, coverage/selection policy and ceilings",
+        "scope_after_explicit_approval": "Small head pilot only; no final runs or automatic envelope extension",
+        "required_binding_fields": [
+          "accepted cache indices",
+          "actual source/cache subset",
+          "pilot seed/stream roles",
+          "finite complete candidate protocols",
+          "selection/convergence/tie policy",
+          "maximum trial/draw/update/validation ceilings"
+        ],
+        "permitted_splits_after_approval": [
+          "train",
+          "val"
+        ]
+      },
+      {
+        "id": "E3-HEAD-FREEZE",
+        "current_status": "NOT GRANTED",
+        "current_execution_authorized": false,
+        "required_review": "Review every pilot outcome and fully resolved one-common official head protocol",
+        "scope_after_explicit_approval": "Lock exact common final protocol only; no final job permission",
+        "required_binding_fields": [
+          "all pilot outcome histories/attempts",
+          "one complete common head profile",
+          "exact bytes/sidecar",
+          "dimension-derived exceptions and paired constraints"
+        ],
+        "permitted_splits_after_approval": [
+          "train",
+          "val"
+        ]
+      },
+      {
+        "id": "E3-FINAL-AUTH",
+        "current_status": "NOT GRANTED",
+        "current_execution_authorized": false,
+        "required_review": "Approve accepted inputs, frozen common protocol and exactly twelve new head-run declarations",
+        "scope_after_explicit_approval": "Those final heads and their selected validation analyses only",
+        "required_binding_fields": [
+          "six source identities",
+          "accepted train/val caches",
+          "HEAD-FREEZE common protocol hash",
+          "exactly twelve declarations",
+          "paired initialization/source/cache bindings"
+        ],
+        "permitted_splits_after_approval": [
+          "train",
+          "val"
+        ]
+      },
+      {
+        "id": "E3-CLOSEOUT",
+        "current_status": "NOT STARTED \u2014 GATED",
+        "current_execution_authorized": false,
+        "required_review": "Verify twelve complete head runs, six unchanged source references, complete analyses/paired aggregate and lineage/failure inventories with user review",
+        "scope_after_explicit_approval": "Close E3 train/validation only",
+        "required_binding_fields": [
+          "all twelve run histories and selected heads",
+          "six verified original references",
+          "content-validated exports/aggregate/paired contrasts",
+          "all failure/retry/replay lineage"
+        ],
+        "permitted_splits_after_approval": [
+          "train",
+          "val"
+        ]
+      },
+      {
+        "id": "FINAL-EVALUATION",
+        "current_status": "LOCKED / NOT AUTHORIZED",
+        "current_execution_authorized": false,
+        "required_review": "All intended comparison protocols/checkpoints frozen and train/validation closed, plus separate explicit study-wide user authorization",
+        "scope_after_explicit_approval": "Outside this specification; no present authorization",
+        "required_binding_fields": [
+          "study-wide freeze/closeout",
+          "separate explicit final-evaluation authorization"
+        ],
+        "permitted_splits_after_approval": []
+      }
+    ],
+    "receipt_policy": {
+      "required_fields": [
+        "gate",
+        "actual approved contract/evidence/cache/declaration hashes applicable to that stage",
+        "allowed operations and splits",
+        "named scope"
+      ],
+      "candidate_schema_and_paths": {
+        "status": "CANDIDATE_DEFINED_NOT_APPROVED",
+        "executable": false,
+        "schema_bundle": {
+          "path": "docs/E3/schemas/e3_record_schemas_v1.json",
+          "bytes": 95395,
+          "sha256": "2146f541a46511826779914a794c85b1adca4a8c95826fc311c0a4301a0baba6"
+        },
+        "schema_pointer": "/$defs/gate_receipt_schema_only",
+        "prospective_root": "artifacts/E3/approvals/v1",
+        "prospective_layout": "{receipts}/{gate}/{approved_contract_sha256}.json (prospective only; no receipt created)",
+        "receipt_created": false,
+        "freeze_sidecar_created": false,
+        "actual_receipt_observations": {
+          "status": "PENDING",
+          "executable": false,
+          "pending_id": "P11",
+          "description": "Actual receipt paths/hashes, approval evidence and freeze sidecar bytes only after each gate's explicit approval",
+          "resolve_before": [
+            "the corresponding authorized gate operation"
+          ],
+          "phase": "FUTURE_OBSERVATION_OR_HEAD_FREEZE"
+        },
+        "binding_policy": {
+          "scientific_declarations": "Cache/acceptance/pilot/final declarations contain consumed scientific inputs and required gate ID, but not the receipt hash for that same operation.",
+          "approval": "The corresponding receipt may bind exact scientific declaration bytes/hashes and required earlier inputs/evidence.",
+          "execution": "Only a separate e3_stage_execution_request_v1 joins a complete declaration payload hash with an already-approved receipt hash. That wrapper is not a subject of the same receipt.",
+          "pre_target_request": "Source inputs and requested runtime/data/allocation/code identities only; it must not require source_acceptance_sha256 or accepted_runtime_sha256 produced by that target run.",
+          "post_target": "Bulk-cache/head source and runtime bindings require actual verified acceptance evidence and applicable G2 receipt.",
+          "cache_replay_no_self_hash_cycle": "Replay evidence binds source, ordered row index and complete payload identity, not the hash of index.json that embeds replay evidence. Validate full build payloads before publishing final complete index; no partial cache is a training input.",
+          "no_approved_receipts_created": true
+        }
+      },
+      "future_receipts_or_accepted_cache_indices_required_to_exist_before_g1": false,
+      "actual_historical_source_evidence_separate": true,
+      "no_self_approval": true,
+      "no_contract_receipt_self_hash_cycle": true,
+      "no_fabricated_future_hashes_status_or_contents": true,
+      "freeze_exact_approved_bytes_with_external_checksum_after_explicit_approval": true
+    },
+    "target_acceptance_is_full_model_training": false,
+    "target_g2_reopen_e1_e2": false,
+    "gate_pass_automatically_grants_next_operation": false,
+    "final_test_in_every_e3_stage": "LOCKED / NOT AUTHORIZED"
+  },
+  "serialization_and_identity": {
+    "document_encoding": "UTF-8 without BOM",
+    "document_newlines": "LF",
+    "file_byte_hash": "SHA-256 exact file bytes",
+    "object_fingerprint": "json.dumps(value, sort_keys=True, ensure_ascii=True, allow_nan=False) using default separators; SHA-256 of UTF-8 bytes",
+    "initial_tensor_state_identity": "Ordered tensor names, dtype, shape and contiguous tensor value bytes; not incidental checkpoint serialization",
+    "strict_json_requirements": [
+      "reject duplicate keys",
+      "reject NaN/Infinity",
+      "reject trailing content",
+      "finite numeric values",
+      "no comments"
+    ],
+    "candidate_kind_is_not_executable_run_kind": true,
+    "execution_rejection_rules": [
+      "Reject this design candidate as any extraction/acceptance/pilot/final command input",
+      "Reject any consumed pending/null/missing/default field in an executable stage configuration",
+      "Reject unresolved official final fields or family/arm/seed overrides",
+      "Require complete stage inputs, explicit exact-byte review and separate operation authorization",
+      "Do not resolve pending choices through source recipes, library defaults or implicit path fallbacks"
+    ],
+    "clean_git_commit_job_ids_and_harness_inventory_separate_from_scientific_identity": true,
+    "future_runtime_closure_not_inferred_from_document_inventory": true
+  },
+  "provenance": {
+    "authority": "Current user request and revised E3 specification; preserve inherited scientific decisions and current G0-only status",
+    "reference_files": [
+      {
+        "path": "docs/E3/specs.md",
+        "bytes": 57197,
+        "sha256": "b3ac66801f7fb527b1692523ca07bed06fe73796bb639ccb59e10ecff4347e4c"
+      },
+      {
+        "path": "docs/E3/plan.md",
+        "bytes": 41342,
+        "sha256": "56973244b0bdc2d94755d32ef6e146a1fa66c54443ec317636eba6c0a453cae8"
+      },
+      {
+        "path": "docs/E3/tasks.md",
+        "bytes": 18175,
+        "sha256": "b91bb6288345eb06ae64ff8ff394990dceddca296cbb8c807f64479b5f76d3b4"
+      },
+      {
+        "path": "docs/master_spec.md",
+        "bytes": 27380,
+        "sha256": "70ffa4af09a57bb101efabde3cc3c56c646a8d6e7015943212c0927e67e6f16b"
+      },
+      {
+        "path": "docs/E1/e1_numeric_contract_v1.json",
+        "bytes": 31796,
+        "sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143"
+      },
+      {
+        "path": "docs/E2/e2_numeric_contract_v1.json",
+        "bytes": 86335,
+        "sha256": "ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72"
+      },
+      {
+        "path": "artifacts/baseline124/provenance.json",
+        "bytes": 1321,
+        "sha256": "eb569adb68b1fe56dbf7052e6bf3de22f2007f3a0aed857293dc48270659f0fb"
+      },
+      {
+        "path": "configs/preprocessing/geoguessr_v1.json",
+        "bytes": 10069,
+        "sha256": "4f49dd41738168cfc65d4322fbe1b659ef5595229bb487ad86dd671a26a8903f"
+      },
+      {
+        "path": "configs/preprocessing/geoguessr_v1.sha256",
+        "bytes": 84,
+        "sha256": "752db1ce69ce0a0fab3c12a04ce3e953efd6019d1f8860123f1df824809c48ba"
+      },
+      {
+        "path": "src/preprocessing/geoguessr_v1.py",
+        "bytes": 4924,
+        "sha256": "4d1dea328f69c1c7e1fa4f333c7276de0c3bc81b322db40dc33530969357e666"
+      },
+      {
+        "path": "src/e1/model.py",
+        "bytes": 4358,
+        "sha256": "fcfaa567432004b105d88b3bddae3776ece91f23123fa46fe2183fbfceda93eb"
+      },
+      {
+        "path": "src/e2/model.py",
+        "bytes": 5436,
+        "sha256": "bfbcef7965fd9579ed08c898a2a66891b43e6aee6ba1bf60897c885effebf1c3"
+      },
+      {
+        "path": "src/e1/metrics.py",
+        "bytes": 4050,
+        "sha256": "3b1709b7813d26ee1fdc0516d6c47d1d5aef2782d04ed334c4d1d07fdce61448"
+      },
+      {
+        "path": "src/e1/report.py",
+        "bytes": 11605,
+        "sha256": "8ba72d0af4c763ea56dcefbcddf7d01072ff23af730a885b7b46662e4949e5b0"
+      },
+      {
+        "path": "src/e2/report.py",
+        "bytes": 21295,
+        "sha256": "e5dbbac9851eb429fb6ba0b91a015e6243a20cf1c7d2523af6ccb322b1b64a86"
+      }
+    ],
+    "reference_hash_scope": "Observed preparation file bytes, not a future consumed runtime closure, frozen G1 approval or target evidence",
+    "review_resolution": "T00b resolves candidate policies only. Scientific design and gates unchanged; no final protocol winner, approval, target observation or implementation implied.",
+    "metadata_checks_only": true,
+    "source_model_binaries_loaded": false,
+    "images_opened": false,
+    "caches_extracted": false,
+    "training_run": false,
+    "test_images_accessed": false,
+    "resolved_at_t00b": [
+      "Immutable scientific/source/feature/metric/test values preserved",
+      "Local external report bytes and selected-source metadata verified",
+      "Finite cache/replay/pilot/init/optimizer/LR/budget/RNG/runtime/recovery policies proposed explicitly",
+      "Concrete normalized schemas and prospective roots defined; no accepted caches/receipts required pre-G1"
+    ],
+    "unresolved_inputs_not_resolved_by_these_checks": [
+      "Actual source binaries/full evidence/current execution data/audit",
+      "Generated cache/tensor/run IDs/hashes and actual runtime/code/replay observations",
+      "Pilot outcomes/winner and final HEAD-FREEZE selection",
+      "Any approval receipt, freeze sidecar or operation permission"
+    ],
+    "machine_specific_paths_in_scientific_core": false,
+    "local_report_observations": "Only non-binding docs/E3/e3_t00b_preparation_evidence_v1.json; never runtime defaults"
+  },
+  "t00b_candidate_package": {
+    "status": "PREPARED_FOR_E3_G1_REVIEW_NOT_APPROVED",
+    "executable": false,
+    "source_manifest": {
+      "path": "docs/E3/e3_source_manifest_v1.json",
+      "bytes": 10185,
+      "sha256": "5f3fa03c908cccb920f2135ab594050a102211aef950885ac3c26f00366093df"
+    },
+    "cache_pilot_contract": {
+      "path": "docs/E3/e3_cache_pilot_contract_v1.json",
+      "bytes": 36792,
+      "sha256": "1626caa8bf87900ebcbd6962bcfed846d6a8c301a83d922162d07be7c9cf33bc"
+    },
+    "record_schemas": {
+      "path": "docs/E3/schemas/e3_record_schemas_v1.json",
+      "bytes": 95395,
+      "sha256": "2146f541a46511826779914a794c85b1adca4a8c95826fc311c0a4301a0baba6"
+    },
+    "preparation_evidence": "docs/E3/e3_t00b_preparation_evidence_v1.json",
+    "new_values_authority": "Current explicit user T00b candidate-design request; new values are neither previously approved nor measured results",
+    "candidate_policy_values_complete": true,
+    "final_head_winner_selected": false,
+    "source_handoff_status": "P01 pins/registry defined; actual selected binaries/full analyses/current data and runtime evidence still block applicable target/G2/cache stages",
+    "g1_decision": "Await user exact-byte review and named implementation method/scope; G1 not frozen"
+  },
+  "pending_register": {
+    "P01": {
+      "item": "Complete source registry and handoff",
+      "g1_candidate_state": "PARTIALLY_DEFINED_FOR_G1",
+      "candidate_policy_or_registry_defined": true,
+      "future_observations_or_selection": "Report pins/required schemas complete; actual binaries/analyses/current data/audit remain later materialization blockers",
+      "non_executable_future_field_pointers": [
+        "/data/data_root_and_current_audit",
+        "/sources/selected_checkpoints/0/actual_binary_and_selected_analysis_bindings",
+        "/sources/selected_checkpoints/1/actual_binary_and_selected_analysis_bindings",
+        "/sources/selected_checkpoints/2/actual_binary_and_selected_analysis_bindings",
+        "/sources/selected_checkpoints/3/actual_binary_and_selected_analysis_bindings",
+        "/sources/selected_checkpoints/4/actual_binary_and_selected_analysis_bindings",
+        "/sources/selected_checkpoints/5/actual_binary_and_selected_analysis_bindings"
+      ],
+      "g1_approval_granted": false
+    },
+    "P02": {
+      "item": "Lossless cache policy",
+      "g1_candidate_state": "CANDIDATE_DEFINED_FOR_G1",
+      "candidate_policy_or_registry_defined": true,
+      "future_observations_or_selection": "Actual cache/index/payload hashes and acceptance remain future",
+      "non_executable_future_field_pointers": [
+        "/cache/accepted_cache_bindings"
+      ],
+      "g1_approval_granted": false
+    },
+    "P03": {
+      "item": "Replay comparison policy",
+      "g1_candidate_state": "CANDIDATE_DEFINED_FOR_G1",
+      "candidate_policy_or_registry_defined": true,
+      "future_observations_or_selection": "Actual numerical/discrete replay evidence remains future",
+      "non_executable_future_field_pointers": [
+        "/cache/original_head_replay/actual_replay_results"
+      ],
+      "g1_approval_granted": false
+    },
+    "P04": {
+      "item": "Pilot sources/root/coverage",
+      "g1_candidate_state": "CANDIDATE_DEFINED_FOR_G1",
+      "candidate_policy_or_registry_defined": true,
+      "future_observations_or_selection": "Accepted cache/authorization bindings remain future",
+      "non_executable_future_field_pointers": [],
+      "g1_approval_granted": false
+    },
+    "P05": {
+      "item": "Finite pilot protocols/caps/selection",
+      "g1_candidate_state": "CANDIDATE_DEFINED_FOR_G1",
+      "candidate_policy_or_registry_defined": true,
+      "future_observations_or_selection": "Actual pilot results/winner remain future",
+      "non_executable_future_field_pointers": [
+        "/head_protocol/official_final_configuration/winning_profile",
+        "/pilot/actual_winner_and_outcomes"
+      ],
+      "g1_approval_granted": false
+    },
+    "P06": {
+      "item": "Shared initializer/seed candidate",
+      "g1_candidate_state": "CANDIDATE_DEFINED_FOR_G1",
+      "candidate_policy_or_registry_defined": true,
+      "future_observations_or_selection": "Actual paired tensors/hashes and official adoption remain future",
+      "non_executable_future_field_pointers": [
+        "/head_protocol/initialization_rule_and_stream_binding",
+        "/head_protocol/actual_pair_initialization_hashes"
+      ],
+      "g1_approval_granted": false
+    },
+    "P07": {
+      "item": "Complete optimizer/LR candidate profiles",
+      "g1_candidate_state": "CANDIDATE_DEFINED_FOR_G1",
+      "candidate_policy_or_registry_defined": true,
+      "future_observations_or_selection": "Official selected profile pending pilot/HEAD-FREEZE",
+      "non_executable_future_field_pointers": [
+        "/head_protocol/optimizer_family_and_hyperparameters",
+        "/head_protocol/learning_rate_and_schedule",
+        "/head_protocol/weight_and_bias_decay_policy",
+        "/head_protocol/gradient_clipping"
+      ],
+      "g1_approval_granted": false
+    },
+    "P08": {
+      "item": "Matched batch/presentation/update/validation candidates",
+      "g1_candidate_state": "CANDIDATE_DEFINED_FOR_G1",
+      "candidate_policy_or_registry_defined": true,
+      "future_observations_or_selection": "Official selected profile pending pilot/HEAD-FREEZE",
+      "non_executable_future_field_pointers": [
+        "/head_protocol/microbatch_and_accumulation",
+        "/head_protocol/presentation_and_update_budget",
+        "/head_protocol/validation_cadence"
+      ],
+      "g1_approval_granted": false
+    },
+    "P09": {
+      "item": "Exact RNG APIs/keys/draws/state contract",
+      "g1_candidate_state": "CANDIDATE_DEFINED_FOR_G1",
+      "candidate_policy_or_registry_defined": true,
+      "future_observations_or_selection": "Actual generator/cursor bytes remain future",
+      "non_executable_future_field_pointers": [],
+      "g1_approval_granted": false
+    },
+    "P10": {
+      "item": "Applicable runtime/resource/replay candidate",
+      "g1_candidate_state": "CANDIDATE_DEFINED_FOR_G1",
+      "candidate_policy_or_registry_defined": true,
+      "future_observations_or_selection": "Actual target/device/audit/code acceptance remains future",
+      "non_executable_future_field_pointers": [
+        "/runtime/actual_target_observation"
+      ],
+      "g1_approval_granted": false
+    },
+    "P11": {
+      "item": "Concrete schema/root/receipt-binding candidates",
+      "g1_candidate_state": "CANDIDATE_DEFINED_FOR_G1",
+      "candidate_policy_or_registry_defined": true,
+      "future_observations_or_selection": "Actual code/run/cache/approval observations remain future",
+      "non_executable_future_field_pointers": [
+        "/head_protocol/actual_run_and_attempt_ids",
+        "/reporting/schemas_paths_and_consumed_source_closure/actual_consumed_source_closure",
+        "/gates/receipt_policy/candidate_schema_and_paths/actual_receipt_observations"
+      ],
+      "g1_approval_granted": false
+    }
+  }
+}

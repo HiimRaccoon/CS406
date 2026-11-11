@@ -35,7 +35,7 @@ The approved planning input was the revised spec snapshot with exact file SHA-25
 | Gate | State | Required binding / permitted scope |
 |---|---|---|
 | E3-G0 | **PASS — documentation/design preparation only** | Plan/tasks and E3-T00b source-manifest/cache-pilot-candidate preparation only. No numeric freeze, E3-G1, implementation, caching, pilot, official head-run or test authorization |
-| E3-G1 | **NOT GRANTED** | Review plan, complete source/cache/acceptance/pilot candidates and exact bytes; resolve applicable T00b inputs; select method and explicitly authorize named T01-T12 preparation scope |
+| E3-G1 | **PASS ? T01-T12 IMPLEMENTATION/CPU PREPARATION ONLY** | Explicit user approval; inline/native executing-plans; approved exact bytes and receipt in artifacts/E3/approvals/v1/E3-G1. No target/cache/pilot/final/test operation authorized |
 | E3-TARGET-AUTH | **NOT GRANTED** | Explicit bounded target acceptance of selected-source loading, feature extraction/runtime and deterministic recovery; standalone-head fixtures only, no full-model training or bulk cache |
 | E3-G2 | **NOT GRANTED** | User accepts actual bounded evidence, six-source handoff, scientific/runtime identity and cache declarations; no E1/E2 reopening or automatic extraction |
 | E3-CACHE-AUTH | **NOT GRANTED** | Bind six sources and explicit full train/val extraction/original-head val replay scope |
@@ -108,8 +108,8 @@ Every production task T01 onward requires G1, even where its immediate dependenc
 - [x] Define finite P02/P03 cache/replay, P04/P05 two-profile/four-arm pilot, P06-P09 common numeric/RNG and applicable P10 runtime/recovery candidates; no winner or official final profile selected.
 - [x] Separate prospective roots/receipt schemas from source inputs, generated accepted caches and future approvals; no sidecar/receipt created.
 - [x] Validate strict JSON, schema references/record constraints, arithmetic/fingerprints and inherited metadata; supply exact package byte/digest inventory in non-binding evidence.
-- [ ] User reviews choices, incomplete P01 handoff and stage boundaries, selects implementation method/named scope and grants exact-byte G1 approval.
-- [ ] Only after explicit G1 approval, create its approved sidecar/receipt; all future cache/pilot/head gates remain separate.
+- [x] User reviews choices, incomplete P01 handoff and stage boundaries, selects implementation method/named scope and grants exact-byte G1 approval.
+- [x] Only after explicit G1 approval, create its approved sidecar/receipt; all future cache/pilot/head gates remain separate.
 
 ### T01-T12 — Implementation and preparation
 

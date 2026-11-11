@@ -1,0 +1,867 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "e3_cache_pilot_contract_v1",
+  "status": "CANDIDATE_FOR_G1_REVIEW",
+  "executable": false,
+  "g1_approved": false,
+  "authority": "Reviewed E3 scientific design plus the current explicit request to propose complete finite T00b implementation/pilot values. All newly specified values are review candidates, not measured evidence or final head selections.",
+  "stage_authorization": "No implementation, target acceptance, bulk cache, pilot, final training or test access is authorized",
+  "selection_state": "NO PILOT WINNER SELECTED",
+  "source_manifest": "docs/E3/e3_source_manifest_v1.json",
+  "schema_bundle": "docs/E3/schemas/e3_record_schemas_v1.json",
+  "storage": {
+    "format": "NumPy .npy version 2.0, allow_pickle=False",
+    "feature_dtype": "<f4",
+    "feature_order": "C",
+    "lossless_fp32_values": true,
+    "quantization_or_transform": false,
+    "rows_per_chunk": 1024,
+    "chunks_per_split": {
+      "train": 35,
+      "val": 8
+    },
+    "tail_rows": {
+      "train": 181,
+      "val": 329
+    },
+    "feature_filename_template": "chunks/features_{zero_based_chunk_index:06d}.npy",
+    "row_index_filename": "rows.jsonl",
+    "row_index_format": {
+      "encoding": "UTF-8",
+      "newline": "LF",
+      "one_record_per_manifest_row": true,
+      "fields": [
+        "row_index",
+        "relative_path",
+        "label_id"
+      ],
+      "label_id_dtype": "JSON integer 0..123",
+      "order": "original fixed split manifest order"
+    },
+    "extraction": {
+      "device": "cuda:0",
+      "original_image_batch_size": 16,
+      "num_workers": 2,
+      "pin_memory": true,
+      "persistent_workers": true,
+      "prefetch_policy": "Two worker processes, prefetch_factor=2 batches per worker (at most four prefetched batches / 64 original-image rows); persistent workers within a source/split loader lifetime; retain manifest order.",
+      "drop_last": false,
+      "compute_dtype": "float32",
+      "autocast": false,
+      "eval": true,
+      "no_grad": true,
+      "encoder_calls": "E1: global only. E2: global first then one batch-major call of all four locals; no crop chunking",
+      "batch_shapes": {
+        "E1_global": [
+          16,
+          3,
+          384,
+          896
+        ],
+        "E1_features": [
+          16,
+          768
+        ],
+        "E2_global": [
+          16,
+          3,
+          384,
+          896
+        ],
+        "E2_locals": [
+          16,
+          4,
+          3,
+          320,
+          320
+        ],
+        "E2_flattened_locals": [
+          64,
+          3,
+          320,
+          320
+        ],
+        "E2_features": [
+          16,
+          1536
+        ],
+        "tail_policy": "Retain actual B rows, no padding, duplication or drop; global/features use B, locals use [B,4,...] and flattened locals [4*B,...]",
+        "train_batches": 2188,
+        "train_tail_rows": 5,
+        "val_batches": 469,
+        "val_tail_rows": 9,
+        "full_batches_per_1024_row_chunk": 64
+      },
+      "prefetch_factor": 2,
+      "loader_order_policy": "Sequential manifest-ordered batches; shuffle=false, in_order=true, drop_last=false. Worker completion order cannot reorder published rows. Workers perform deterministic CPU decode/preprocessing only; model execution remains in the main CUDA process.",
+      "worker_rng_policy": "Use the isolated extraction loader generator derived from the existing loader_parts with stage=acceptance_fixture and the corresponding source root seed for bounded acceptance, or stage=final and root_seed=source_seed for authorized bulk extraction; split is train or val. For worker_id 0/1 seed Python and NumPy from torch.initial_seed() modulo 2**32 and preserve the Torch worker seed. No extraction augmentation or worker RNG consumption may alter features.",
+      "prefetch_recovery_policy": "Only fully committed chunks count as completed work. On interruption discard all uncommitted batches, worker queues, pinned buffers and temporary chunks; recreate the loader and workers at the first row of the first uncommitted chunk using the same source/split/root/stream and manifest order. Prefetched rows grant no coverage or progress credit; revalidate existing committed chunks before reuse."
+    },
+    "publication": {
+      "single_writer": true,
+      "lock": "exclusive creation of .writer.lock; existing lock blocks; stale-lock removal requires operator review",
+      "temporary_files": "same-directory .tmp.<attempt_id> files; never consumed as completed data",
+      "commit": "write payload, flush/fsync, os.replace; write chunk-commit JSON only after complete payload hash/shape/index checks; fsync directory where supported and record platform capability",
+      "completion": "complete index.json is atomically published only after every committed chunk and rows.jsonl validates; no partial accepted index",
+      "overwrite_accepted_cache": false,
+      "chunk_commit_filename_template": "chunks/commit_{zero_based_chunk_index:06d}.json"
+    },
+    "recovery": {
+      "unit": "one fully committed chunk",
+      "resume": "Verify immutable source/input/runtime/policy bindings, all existing chunk-commit records and payload hashes/values/row indices before reuse; discard uncommitted temporary chunks; restart only uncommitted chunk from its first row",
+      "mix_source_runtime_or_policy": false,
+      "accepted_index_required_to_exist_before_g1": false,
+      "actual_payload_hashes": "future generated observations"
+    }
+  },
+  "replay": {
+    "logits": {
+      "atol": 1e-05,
+      "rtol": 1e-05,
+      "comparison": "abs(candidate-reference) <= atol + rtol*abs(reference), every finite logit"
+    },
+    "nll": {
+      "atol": 1e-06,
+      "rtol": 1e-05,
+      "comparison": "abs(candidate-reference) <= atol + rtol*abs(reference), per-sample CE when available and full-split sample-mean NLL"
+    },
+    "direct_and_cached_original_head_batch_size": 16,
+    "full_validation_order": "fixed manifest order",
+    "discrete_equality_required": [
+      "membership and label IDs",
+      "predicted label",
+      "ordered Top-5 IDs",
+      "Top-k hits",
+      "confusion/counts",
+      "per-class/bucket membership and coverage"
+    ],
+    "discrete_mismatch_allowed_by_float_tolerance": false,
+    "reference_logits_unavailable": "Compare direct source.forward against original_head(extracted feature) under accepted runtime and compare complete discrete output/derived metrics/NLL with selected-source analysis; if authoritative NLL or selected outputs unavailable, block acceptance, not comparison waiver",
+    "tolerances_are_measured_target_results": false,
+    "failure": "Stop for source/runtime review; no widening of tolerances, baseline replacement, source reselection or changed prediction acceptance",
+    "batch_policy": "Use identical manifest-ordered batches of up to 16 for direct forward, extraction and cached original-head replay; retain train tail B=5 and validation tail B=9 without padding/drop. Preserve historical discrete equality and existing float tolerances; changed batching requires fresh target replay acceptance."
+  },
+  "rng": {
+    "derivation": "SHA-256 of UTF-8 pipe-separated str(parts); first 8 digest bytes little-endian modulo 9223372036854775807",
+    "domain_tag": "E3-v1",
+    "window_index_base": 0,
+    "stage_tags": [
+      "pilot",
+      "final",
+      "acceptance_fixture"
+    ],
+    "initialization_parts": [
+      "root_seed",
+      "E3-v1",
+      "stage",
+      "source_family",
+      "source_seed",
+      "head-init"
+    ],
+    "natural_parts": [
+      "root_seed",
+      "E3-v1",
+      "stage",
+      "source_seed",
+      "sampler",
+      "natural",
+      "window_index"
+    ],
+    "crt_class_parts": [
+      "root_seed",
+      "E3-v1",
+      "stage",
+      "source_seed",
+      "sampler",
+      "crt-class",
+      "window_index"
+    ],
+    "crt_image_parts": [
+      "root_seed",
+      "E3-v1",
+      "stage",
+      "source_seed",
+      "sampler",
+      "crt-image",
+      "window_index"
+    ],
+    "loader_parts": [
+      "root_seed",
+      "E3-v1",
+      "stage",
+      "source_seed",
+      "loader",
+      "split"
+    ],
+    "candidate_id_in_rng_key": false,
+    "sampling_arm_in_init_key": false,
+    "sampler_family_in_key": false,
+    "cross_family_sampling": "For matching root/source seed/stage/window, both families see identical natural permutations or cRT class/image draws. Initialization includes family because feature shapes differ.",
+    "generators": "Independent CPU torch.Generator per named stream; do not borrow global RNG",
+    "natural": "At each window initialize its stream then torch.randperm(34997,generator=natural_generator,device='cpu'); visit in permutation order, no replacement",
+    "crt": "At each draw call torch.randint(124,(1,),generator=class_generator,device='cpu') once, then torch.randint(n_c,(1,),generator=image_generator,device='cpu') once; map image index into immutable manifest-ordered class index. Do not vectorize, force quotas or reject repeats.",
+    "class_order": "label_id 0..123",
+    "within_class_order": "fixed train manifest order",
+    "sample_draws_per_window": 34997,
+    "resume_state_fields": [
+      "stage",
+      "root_seed",
+      "source_seed",
+      "window_index",
+      "presentation_cursor",
+      "natural permutation and cursor or both cRT generator byte states",
+      "loader generator byte states",
+      "Python/NumPy/torch CPU/all-CUDA global RNG states"
+    ],
+    "resume_validation": "Verify all identities and cursor bounds; completed windows committed once; uncommitted work rolls back to preceding window checkpoint",
+    "process_environment": {
+      "PYTHONHASHSEED": "str(root_seed), set before Python startup"
+    }
+  },
+  "initializer": {
+    "method": "isolated_cpu_linear_default",
+    "rule": "Use isolated CPU torch default generator seeded by rng.initialization_parts. Construct nn.Linear(d,124,bias=True) using Torch 2.8.0 default reset: kaiming_uniform_(weight,a=sqrt(5)), then uniform_(bias,-1/sqrt(d),+1/sqrt(d)); restore outer CPU RNG. No source classifier/optimizer state.",
+    "weight_distribution": "Uniform[-1/sqrt(d),+1/sqrt(d)]",
+    "bias_distribution": "Uniform[-1/sqrt(d),+1/sqrt(d)]",
+    "fan_in_by_family": {
+      "E1": 768,
+      "E2": 1536
+    },
+    "bias": true,
+    "draw_order": [
+      "weight matrix",
+      "bias vector"
+    ],
+    "initialization_device": "cpu",
+    "initialization_dtype": "float32",
+    "pairing": "Construct once per (stage,root_seed,family,source_seed), hash and clone exact CPU tensors for N/cRT and all LR candidates; transfer clones without changing values",
+    "actual_tensor_hashes": "future observations, never precomputed from declarations"
+  },
+  "candidate_profiles": [
+    {
+      "candidate_id": "adamw_lr1e3",
+      "stage": "pilot_candidate",
+      "optimizer": {
+        "family": "AdamW",
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "eps": 1e-08,
+        "amsgrad": false,
+        "maximize": false,
+        "foreach": false,
+        "fused": false,
+        "capturable": false,
+        "differentiable": false,
+        "weight_decay_groups": {
+          "weight": 0.01,
+          "bias": 0.0
+        },
+        "parameters": "Exactly new Linear weight and bias, once each; fresh state for every run",
+        "clipping": {
+          "enabled": true,
+          "max_norm": 1.0,
+          "norm_type": 2.0,
+          "error_if_nonfinite": true,
+          "foreach": false
+        }
+      },
+      "base_lr": 0.001,
+      "schedule": {
+        "name": "explicit_linear_warmup_then_cosine",
+        "index": "u is zero-based optimizer update before it is applied, u=0..1379",
+        "total_updates": 1380,
+        "warmup_updates": 69,
+        "cosine_floor_factor": 0.01,
+        "warmup_formula": "lr(u)=base_lr*(u+1)/69 for 0<=u<69",
+        "cosine_formula": "lr(u)=base_lr*(0.01+0.99*(1+cos(pi*(u-69)/(1380-69-1)))/2) for 69<=u<=1379",
+        "step_order": "Set LR for current u, zero_grad(set_to_none=True), forward/backward, finite/clipping check, optimizer.step, increment in-memory update counter; only a complete window checkpoint commits scientific progress. Next LR uses updated u. No schedule step after total budget.",
+        "warmup_first_factor": 0.014492753623188406,
+        "first_cosine_update": 69,
+        "last_update": 1379
+      },
+      "budget": {
+        "basis": "fixed_windows_of_equal_feature_presentations",
+        "windows": 20,
+        "presentations_per_window": 34997,
+        "microbatch": 512,
+        "accumulation": 1,
+        "full_microbatches_per_window": 68,
+        "tail_microbatch_rows": 181,
+        "microbatches_per_window": 69,
+        "updates_per_window": 69,
+        "total_presentations": 699940,
+        "total_updates": 1380,
+        "drop_last": false,
+        "partial_group_loss": "sum CE / actual presented rows, including the final 181-row batch",
+        "natural": "One new 34997-image permutation each window",
+        "crt": "34997 class-then-image draws with replacement each window",
+        "validation": {
+          "split": "val",
+          "rows": 7497,
+          "batch_size": 512,
+          "batches_per_pass": 15,
+          "tail_batch_rows": 329,
+          "after_every_windows": 1,
+          "validation_points": 20,
+          "validation_at_initialization": false,
+          "rank_all_outputs": 124,
+          "order": "fixed validation manifest"
+        },
+        "checkpoint_selection": {
+          "metric": "macro_f1_supported",
+          "tau": 1e-06,
+          "scale": [
+            0,
+            1
+          ],
+          "initial": "first completed validation point",
+          "improvement": "current-selected > tau",
+          "tie": "earlier",
+          "nll_or_topk_tie_break": false
+        },
+        "early_stopping": false,
+        "all_four_arms_same_budget": true
+      },
+      "initializer": {
+        "method": "isolated_cpu_linear_default",
+        "rule": "Use isolated CPU torch default generator seeded by rng.initialization_parts. Construct nn.Linear(d,124,bias=True) using Torch 2.8.0 default reset: kaiming_uniform_(weight,a=sqrt(5)), then uniform_(bias,-1/sqrt(d),+1/sqrt(d)); restore outer CPU RNG. No source classifier/optimizer state.",
+        "weight_distribution": "Uniform[-1/sqrt(d),+1/sqrt(d)]",
+        "bias_distribution": "Uniform[-1/sqrt(d),+1/sqrt(d)]",
+        "fan_in_by_family": {
+          "E1": 768,
+          "E2": 1536
+        },
+        "bias": true,
+        "draw_order": [
+          "weight matrix",
+          "bias vector"
+        ],
+        "initialization_device": "cpu",
+        "initialization_dtype": "float32",
+        "pairing": "Construct once per (stage,root_seed,family,source_seed), hash and clone exact CPU tensors for N/cRT and all LR candidates; transfer clones without changing values",
+        "actual_tensor_hashes": "future observations, never precomputed from declarations"
+      },
+      "runtime": {
+        "device": "cuda:0",
+        "single_process": true,
+        "distributed": false,
+        "dtype": "float32",
+        "amp": false,
+        "grad_scaler": false,
+        "tf32_matmul": false,
+        "tf32_cudnn": false,
+        "torch_compile": false,
+        "float32_matmul_precision": "highest",
+        "cudnn_benchmark": false,
+        "cudnn_deterministic": true,
+        "deterministic_algorithms": true,
+        "deterministic_warn_only": false,
+        "num_workers": 0,
+        "persistent_workers": false,
+        "pin_memory": false,
+        "prefetch_policy": "synchronous; workers=0",
+        "cpu_threads": 2,
+        "interop_threads": 1,
+        "environment": {
+          "OMP_NUM_THREADS": "2",
+          "MKL_NUM_THREADS": "2",
+          "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+          "PYTHONHASHSEED": "str(root_seed) before process start"
+        },
+        "software_lock": {
+          "python": "3.11.17",
+          "torch": "2.8.0+cu128",
+          "torchvision": "0.23.0+cu128",
+          "Pillow": "11.3.0",
+          "numpy": "2.1.3",
+          "pandas": "2.2.3",
+          "scikit-learn": "1.6.1",
+          "cuda": "12.8",
+          "cudnn": 91002
+        },
+        "allocation": {
+          "scheduler": "Slurm",
+          "partition": "normal",
+          "account": "uit",
+          "qos": "mig2-35",
+          "gres": "gpu:2g.35gb:1",
+          "ntasks": 1,
+          "cpus_per_task": 4,
+          "ram_gib": 16,
+          "slurm_mem_mib": 16384,
+          "walltime": "09:00:00",
+          "walltime_seconds": 32400,
+          "gpu_class": "NVIDIA H200 MIG 2g.35gb",
+          "specific_mig_uuid_required": false
+        },
+        "scope": "Explicit new E3 candidate resource policy for review; not inherited execution authorization or proof of current device/driver availability",
+        "actual_environment_identity": "Observe and bind at TARGET-AUTH/G2; no target acceptance exists now",
+        "no_oom_or_nonfinite_fallback": true
+      },
+      "sampling_policy": "per arm, fixed natural or class-uniform policy",
+      "official_final_selected": false,
+      "candidate_profile_sha256": "3df7880d6b04d0e22cac410af14889f3f3453607f99d1c27219911c75ab13baf"
+    },
+    {
+      "candidate_id": "adamw_lr3e3",
+      "stage": "pilot_candidate",
+      "optimizer": {
+        "family": "AdamW",
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "eps": 1e-08,
+        "amsgrad": false,
+        "maximize": false,
+        "foreach": false,
+        "fused": false,
+        "capturable": false,
+        "differentiable": false,
+        "weight_decay_groups": {
+          "weight": 0.01,
+          "bias": 0.0
+        },
+        "parameters": "Exactly new Linear weight and bias, once each; fresh state for every run",
+        "clipping": {
+          "enabled": true,
+          "max_norm": 1.0,
+          "norm_type": 2.0,
+          "error_if_nonfinite": true,
+          "foreach": false
+        }
+      },
+      "base_lr": 0.003,
+      "schedule": {
+        "name": "explicit_linear_warmup_then_cosine",
+        "index": "u is zero-based optimizer update before it is applied, u=0..1379",
+        "total_updates": 1380,
+        "warmup_updates": 69,
+        "cosine_floor_factor": 0.01,
+        "warmup_formula": "lr(u)=base_lr*(u+1)/69 for 0<=u<69",
+        "cosine_formula": "lr(u)=base_lr*(0.01+0.99*(1+cos(pi*(u-69)/(1380-69-1)))/2) for 69<=u<=1379",
+        "step_order": "Set LR for current u, zero_grad(set_to_none=True), forward/backward, finite/clipping check, optimizer.step, increment in-memory update counter; only a complete window checkpoint commits scientific progress. Next LR uses updated u. No schedule step after total budget.",
+        "warmup_first_factor": 0.014492753623188406,
+        "first_cosine_update": 69,
+        "last_update": 1379
+      },
+      "budget": {
+        "basis": "fixed_windows_of_equal_feature_presentations",
+        "windows": 20,
+        "presentations_per_window": 34997,
+        "microbatch": 512,
+        "accumulation": 1,
+        "full_microbatches_per_window": 68,
+        "tail_microbatch_rows": 181,
+        "microbatches_per_window": 69,
+        "updates_per_window": 69,
+        "total_presentations": 699940,
+        "total_updates": 1380,
+        "drop_last": false,
+        "partial_group_loss": "sum CE / actual presented rows, including the final 181-row batch",
+        "natural": "One new 34997-image permutation each window",
+        "crt": "34997 class-then-image draws with replacement each window",
+        "validation": {
+          "split": "val",
+          "rows": 7497,
+          "batch_size": 512,
+          "batches_per_pass": 15,
+          "tail_batch_rows": 329,
+          "after_every_windows": 1,
+          "validation_points": 20,
+          "validation_at_initialization": false,
+          "rank_all_outputs": 124,
+          "order": "fixed validation manifest"
+        },
+        "checkpoint_selection": {
+          "metric": "macro_f1_supported",
+          "tau": 1e-06,
+          "scale": [
+            0,
+            1
+          ],
+          "initial": "first completed validation point",
+          "improvement": "current-selected > tau",
+          "tie": "earlier",
+          "nll_or_topk_tie_break": false
+        },
+        "early_stopping": false,
+        "all_four_arms_same_budget": true
+      },
+      "initializer": {
+        "method": "isolated_cpu_linear_default",
+        "rule": "Use isolated CPU torch default generator seeded by rng.initialization_parts. Construct nn.Linear(d,124,bias=True) using Torch 2.8.0 default reset: kaiming_uniform_(weight,a=sqrt(5)), then uniform_(bias,-1/sqrt(d),+1/sqrt(d)); restore outer CPU RNG. No source classifier/optimizer state.",
+        "weight_distribution": "Uniform[-1/sqrt(d),+1/sqrt(d)]",
+        "bias_distribution": "Uniform[-1/sqrt(d),+1/sqrt(d)]",
+        "fan_in_by_family": {
+          "E1": 768,
+          "E2": 1536
+        },
+        "bias": true,
+        "draw_order": [
+          "weight matrix",
+          "bias vector"
+        ],
+        "initialization_device": "cpu",
+        "initialization_dtype": "float32",
+        "pairing": "Construct once per (stage,root_seed,family,source_seed), hash and clone exact CPU tensors for N/cRT and all LR candidates; transfer clones without changing values",
+        "actual_tensor_hashes": "future observations, never precomputed from declarations"
+      },
+      "runtime": {
+        "device": "cuda:0",
+        "single_process": true,
+        "distributed": false,
+        "dtype": "float32",
+        "amp": false,
+        "grad_scaler": false,
+        "tf32_matmul": false,
+        "tf32_cudnn": false,
+        "torch_compile": false,
+        "float32_matmul_precision": "highest",
+        "cudnn_benchmark": false,
+        "cudnn_deterministic": true,
+        "deterministic_algorithms": true,
+        "deterministic_warn_only": false,
+        "num_workers": 0,
+        "persistent_workers": false,
+        "pin_memory": false,
+        "prefetch_policy": "synchronous; workers=0",
+        "cpu_threads": 2,
+        "interop_threads": 1,
+        "environment": {
+          "OMP_NUM_THREADS": "2",
+          "MKL_NUM_THREADS": "2",
+          "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+          "PYTHONHASHSEED": "str(root_seed) before process start"
+        },
+        "software_lock": {
+          "python": "3.11.17",
+          "torch": "2.8.0+cu128",
+          "torchvision": "0.23.0+cu128",
+          "Pillow": "11.3.0",
+          "numpy": "2.1.3",
+          "pandas": "2.2.3",
+          "scikit-learn": "1.6.1",
+          "cuda": "12.8",
+          "cudnn": 91002
+        },
+        "allocation": {
+          "scheduler": "Slurm",
+          "partition": "normal",
+          "account": "uit",
+          "qos": "mig2-35",
+          "gres": "gpu:2g.35gb:1",
+          "ntasks": 1,
+          "cpus_per_task": 4,
+          "ram_gib": 16,
+          "slurm_mem_mib": 16384,
+          "walltime": "09:00:00",
+          "walltime_seconds": 32400,
+          "gpu_class": "NVIDIA H200 MIG 2g.35gb",
+          "specific_mig_uuid_required": false
+        },
+        "scope": "Explicit new E3 candidate resource policy for review; not inherited execution authorization or proof of current device/driver availability",
+        "actual_environment_identity": "Observe and bind at TARGET-AUTH/G2; no target acceptance exists now",
+        "no_oom_or_nonfinite_fallback": true
+      },
+      "sampling_policy": "per arm, fixed natural or class-uniform policy",
+      "official_final_selected": false,
+      "candidate_profile_sha256": "8e8144b8f20c596c10499b02d3bf5b452d41bbb87302be72f3918d6aecfdd90a"
+    }
+  ],
+  "pilot": {
+    "source_seeds": [
+      2001
+    ],
+    "families": [
+      "E1",
+      "E2"
+    ],
+    "arms": [
+      "E3-E1-N",
+      "E3-E1-cRT",
+      "E3-E2-N",
+      "E3-E2-cRT"
+    ],
+    "root_seed": 1001,
+    "seed_decision": "New explicit E3 pilot candidate choice, not an automatic adoption of E1/E2 tuning. Pilot is nonfinal; official final root IDs remain 2001/3001/4001.",
+    "source_choice": "Predeclare seed 2001 for both families without ranking source seeds by metrics; no source-seed search",
+    "cache_scope": "The accepted train+val bundle for E1/2001 and E2/2001; all six bulk source-cache bundles still require CACHE-ACCEPT under the unchanged gate sequence",
+    "candidate_ids": [
+      "adamw_lr1e3",
+      "adamw_lr3e3"
+    ],
+    "candidate_protocol_count": 2,
+    "logical_head_trial_count": 8,
+    "presentation_budget_per_head_trial": 699940,
+    "update_budget_per_head_trial": 1380,
+    "validation_passes_per_head_trial": 20,
+    "caps": {
+      "scientific_train_presentations": 5599520,
+      "scientific_optimizer_updates": 11040,
+      "full_validation_passes": 160,
+      "validation_sample_presentations": 1199520,
+      "total_attempts": 16,
+      "attempts_per_logical_trial": 2,
+      "operational_train_presentations_including_replay": 11199040,
+      "operational_optimizer_updates_including_replay": 22080,
+      "operational_validation_passes_including_replay": 320,
+      "operational_validation_sample_presentations": 2399040,
+      "walltime_seconds_per_attempt": 32400
+    },
+    "common_protocol_selection": {
+      "completion": "Both candidate protocols must complete all four full-budget trials within caps, with complete histories and no nonfinite/skipped data/updates; otherwise stop, no automatic winner among survivors",
+      "adequacy_per_arm": {
+        "train_ce_comparison_windows_1based": {
+          "previous": [
+            11,
+            15
+          ],
+          "late": [
+            16,
+            20
+          ]
+        },
+        "relative_training_ce_mean_change_max": 0.01,
+        "relative_training_ce_formula": "abs(mean(CE[16..20])-mean(CE[11..15]))/max(abs(mean(CE[11..15])),1e-12)",
+        "late_validation_windows_1based": [
+          16,
+          20
+        ],
+        "late_macro_f1_range_max": 0.01,
+        "late_best_minus_earlier_best_max": 0.002,
+        "earlier_validation_windows_1based": [
+          1,
+          15
+        ],
+        "criterion": "All checks must pass for all four arms of a protocol. These are bounded optimization-stability diagnostics, not proof of convergence, statistical significance or a minimum gain over original/N/cRT.",
+        "not_a_comparison_outcome_threshold": true
+      },
+      "eligible_protocol": "A completed common protocol satisfying all four arms' adequacy checks",
+      "score": "Arithmetic mean of the four arms' selected-head supported validation Macro-F1 values, equal weight 1/4, using unrounded values; diagnostic pilot selection only",
+      "tie_tolerance": 1e-06,
+      "tie_scope": "global maximum-anchored: eligible if global_max_score-score <= tolerance",
+      "tie_break": "Choose lower base_lr among tied eligible protocols; candidate_id lexical order if needed",
+      "no_eligible_protocol": "STOP for review; no extra trials, horizon extension or winner",
+      "report": "All protocols, four-arm histories, adequacy checks, scores, attempts/failures and tradeoffs; one winner proposal only after authorized pilot",
+      "winner": {
+        "status": "PENDING",
+        "executable": false,
+        "field_names": [
+          "winning_candidate_id",
+          "winning_profile_sha256",
+          "pilot_outcome_index_sha256"
+        ],
+        "required_before": "E3-HEAD-FREEZE",
+        "reason": "The pilot has not run; no winner selected"
+      }
+    }
+  },
+  "runtime": {
+    "device": "cuda:0",
+    "single_process": true,
+    "distributed": false,
+    "dtype": "float32",
+    "amp": false,
+    "grad_scaler": false,
+    "tf32_matmul": false,
+    "tf32_cudnn": false,
+    "torch_compile": false,
+    "float32_matmul_precision": "highest",
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": false,
+    "num_workers": 0,
+    "persistent_workers": false,
+    "pin_memory": false,
+    "prefetch_policy": "synchronous; workers=0",
+    "cpu_threads": 2,
+    "interop_threads": 1,
+    "environment": {
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "PYTHONHASHSEED": "str(root_seed) before process start"
+    },
+    "software_lock": {
+      "python": "3.11.17",
+      "torch": "2.8.0+cu128",
+      "torchvision": "0.23.0+cu128",
+      "Pillow": "11.3.0",
+      "numpy": "2.1.3",
+      "pandas": "2.2.3",
+      "scikit-learn": "1.6.1",
+      "cuda": "12.8",
+      "cudnn": 91002
+    },
+    "allocation": {
+      "scheduler": "Slurm",
+      "partition": "normal",
+      "account": "uit",
+      "qos": "mig2-35",
+      "gres": "gpu:2g.35gb:1",
+      "ntasks": 1,
+      "cpus_per_task": 4,
+      "ram_gib": 16,
+      "slurm_mem_mib": 16384,
+      "walltime": "09:00:00",
+      "walltime_seconds": 32400,
+      "gpu_class": "NVIDIA H200 MIG 2g.35gb",
+      "specific_mig_uuid_required": false
+    },
+    "scope": "Explicit new E3 candidate resource policy for review; not inherited execution authorization or proof of current device/driver availability",
+    "actual_environment_identity": "Observe and bind at TARGET-AUTH/G2; no target acceptance exists now",
+    "no_oom_or_nonfinite_fallback": true
+  },
+  "head_recovery": {
+    "head_commit_unit": "one completed training window plus its complete validation/selection/history",
+    "initial_boundary_zero": true,
+    "atomic_full_state_last": true,
+    "report_only_best": true,
+    "resume_from_best": false,
+    "save_frequency_windows": 1,
+    "maximum_uncommitted_updates": 69,
+    "save_fields": [
+      "head and selected-head state",
+      "optimizer/scheduler state and inactive scaler policy",
+      "source/cache/init/protocol/schema/authorization identities",
+      "all RNG/loader/sampler states",
+      "window/presentation/update counters",
+      "complete training/validation/selection history"
+    ],
+    "resume": "Restore same immutable last; discard and replay the entire uncommitted window including sampling/optimizer/scheduler/validation; source/cache bytes cannot change",
+    "completed_budget": "Publication-only recovery; no more training/validation selection points",
+    "attempt_policy": "At most two attempts per logical pilot run (initial plus one same-identity retry), charged to operational caps; no new candidate or scientific updates credited by replay",
+    "partial_failure_charge": "Record exact observed partial work when known; otherwise conservatively charge the whole uncommitted window's 34997 presentations, 69 updates and one validation pass before replay",
+    "atomic_publication": "Same-directory write+flush/fsync+os.replace; one writer and immutable run lock; no hidden rollback of committed history",
+    "future_protocol_change": "Requires review; not automatic retry with changed batch/LR/dtype/budget"
+  },
+  "planned_output_roots": {
+    "root_resolution": "All destinations are explicit caller-supplied project-relative roots beneath the execution workspace, resolved with containment/symlink checks; these are planned destinations, not existing inputs",
+    "paths": {
+      "cache": "artifacts/E3/features/v1",
+      "acceptance": "artifacts/E3/acceptance/v1",
+      "pilot": "runs/E3/pilot/v1",
+      "final": "runs/E3/final/v1",
+      "reports": "reports/E3/v1",
+      "receipts": "artifacts/E3/approvals/v1"
+    },
+    "cache_layout": "{cache}/{family}/seed{source_seed}/{source_checkpoint_sha256}/{extraction_identity_sha256}/{split}/",
+    "run_layout": "{pilot_or_final}/{run_id}/; run_id assigned only after full immutable declaration bindings exist",
+    "receipt_layout": "{receipts}/{gate}/{approved_contract_sha256}.json (prospective only; no receipt created)",
+    "roots_created_during_preparation": false,
+    "accepted_cache_or_receipt_pre_g1_required": false
+  },
+  "bounded_acceptance": {
+    "split": "train",
+    "source_registry_keys": [
+      {
+        "family": "E1",
+        "source_seed": 2001
+      },
+      {
+        "family": "E1",
+        "source_seed": 3001
+      },
+      {
+        "family": "E1",
+        "source_seed": 4001
+      },
+      {
+        "family": "E2",
+        "source_seed": 2001
+      },
+      {
+        "family": "E2",
+        "source_seed": 3001
+      },
+      {
+        "family": "E2",
+        "source_seed": 4001
+      }
+    ],
+    "fixture_members": [
+      {
+        "relative_path": "Aland/canvas_1629480180.jpg",
+        "label_id": 0,
+        "raw_wh": [
+          1536,
+          662
+        ],
+        "expected_image_sha256": "f9736d0e675d99415794dd0a6d35b2fcefa5637e941b318d392f5fc8e93e9898"
+      },
+      {
+        "relative_path": "Argentina/canvas_1630265960.jpg",
+        "label_id": 5,
+        "raw_wh": [
+          1030,
+          703
+        ],
+        "expected_image_sha256": "cec71c7c8920ede9ff3a1ed9c5897063a47d1970cdd562f050011bc7e8b4d147"
+      }
+    ],
+    "image_bytes_opened_during_t00b": false,
+    "maximum_source_original_image_presentations": 384,
+    "per_source_member_pass_cap": 32,
+    "operations": "For each of six sources, form one private 16-row train-only fixture batch alternating the two listed members eight times each in listed order. At most four complete batch presentations (direct forward, frozen extraction+original-head replay and interruption/recovery), 64 original-image presentations per source or 32 per source/member; total cap 384. E2 has 64 flattened locals per batch; count five views per original presentation separately. Repeated fixture rows are nonofficial and never published as cache inputs.",
+    "head_fixtures": {
+      "kind": "nonofficial_fixture",
+      "feature_dimensions": [
+        768,
+        1536
+      ],
+      "output_labels": 124,
+      "families": 2,
+      "arms_per_family": 2,
+      "microbatch": 512,
+      "logical_fixture_runs": 4,
+      "updates_per_fixture": 4,
+      "maximum_updates_including_replay": 32,
+      "maximum_feature_presentations_including_replay": 16384,
+      "validation_split_access": false,
+      "features": "Private deterministic synthetic full-dimension tensors or explicitly repeated train-only fixture features; exercise full batch 512 and tail 181; never publish as cache/pilot/final results",
+      "update_row_counts": [
+        512,
+        512,
+        512,
+        181
+      ],
+      "root_seed": 1001,
+      "source_seed": 2001,
+      "stage_tag": "acceptance_fixture"
+    },
+    "source_missing": "Source loading/extraction fixtures blocked until actual binaries and applicable identities materialized and verified; no fake checkpoint substitution",
+    "authorization_required": "E3-TARGET-AUTH",
+    "g2_readiness_requires": "All six source lineages and actual source/extraction/runtime/recovery evidence; source checksum references alone cannot pass"
+  },
+  "required_final_protocol": "Only a later HEAD-FREEZE-approved winner from this finite pilot may populate a fully resolved common official profile, and FINAL-AUTH is separate",
+  "no_implicit_defaults": true,
+  "future_generated_values": {
+    "status": "PENDING",
+    "executable": false,
+    "field_names": [
+      "actual_source_runtime_bindings",
+      "cache indices/payload hashes",
+      "paired tensor-state hashes",
+      "actual run/attempt IDs",
+      "source/runtime code closure",
+      "actual target software/device/audit",
+      "pilot outcomes and winner",
+      "approved receipts and freeze sidecars"
+    ],
+    "required_before": "respective later stage before consumption",
+    "reason": "Observations require authorized implementation/execution or explicit user approval"
+  },
+  "authorization_binding_policy": {
+    "scientific_declarations": "Cache/acceptance/pilot/final declarations contain consumed scientific inputs and required gate ID, but not the receipt hash for that same operation.",
+    "approval": "The corresponding receipt may bind exact scientific declaration bytes/hashes and required earlier inputs/evidence.",
+    "execution": "Only a separate e3_stage_execution_request_v1 joins a complete declaration payload hash with an already-approved receipt hash. That wrapper is not a subject of the same receipt.",
+    "pre_target_request": "Source inputs and requested runtime/data/allocation/code identities only; it must not require source_acceptance_sha256 or accepted_runtime_sha256 produced by that target run.",
+    "post_target": "Bulk-cache/head source and runtime bindings require actual verified acceptance evidence and applicable G2 receipt.",
+    "cache_replay_no_self_hash_cycle": "Replay evidence binds source, ordered row index and complete payload identity, not the hash of index.json that embeds replay evidence. Validate full build payloads before publishing final complete index; no partial cache is a training input.",
+    "no_approved_receipts_created": true
+  }
+}

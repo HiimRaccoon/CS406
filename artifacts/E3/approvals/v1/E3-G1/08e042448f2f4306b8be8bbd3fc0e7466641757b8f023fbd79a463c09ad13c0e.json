@@ -1,0 +1,49 @@
+{
+  "kind": "e3_gate_receipt_v1",
+  "gate": "E3-G1",
+  "status": "APPROVED",
+  "approved_by": "user",
+  "approval_evidence_path": "artifacts/E3/approvals/v1/E3-G1/user_decision.json",
+  "approval_evidence_sha256": "171e026f363eb19e20e0cab8165a24e4cfd4b944ab3e0c3f6ae74b0ec405af0b",
+  "approved_subjects": [
+    {
+      "role": "docs/E3/specs.md",
+      "sha256": "b3ac66801f7fb527b1692523ca07bed06fe73796bb639ccb59e10ecff4347e4c"
+    },
+    {
+      "role": "docs/E3/plan.md",
+      "sha256": "56973244b0bdc2d94755d32ef6e146a1fa66c54443ec317636eba6c0a453cae8"
+    },
+    {
+      "role": "docs/E3/tasks.md",
+      "sha256": "b91bb6288345eb06ae64ff8ff394990dceddca296cbb8c807f64479b5f76d3b4"
+    },
+    {
+      "role": "docs/E3/e3_numeric_contract_v1.json",
+      "sha256": "08e042448f2f4306b8be8bbd3fc0e7466641757b8f023fbd79a463c09ad13c0e"
+    },
+    {
+      "role": "docs/E3/e3_cache_pilot_contract_v1.json",
+      "sha256": "1626caa8bf87900ebcbd6962bcfed846d6a8c301a83d922162d07be7c9cf33bc"
+    },
+    {
+      "role": "docs/E3/e3_source_manifest_v1.json",
+      "sha256": "5f3fa03c908cccb920f2135ab594050a102211aef950885ac3c26f00366093df"
+    },
+    {
+      "role": "docs/E3/schemas/e3_record_schemas_v1.json",
+      "sha256": "2146f541a46511826779914a794c85b1adca4a8c95826fc311c0a4301a0baba6"
+    },
+    {
+      "role": "docs/E3/e3_t00b_preparation_evidence_v1.json",
+      "sha256": "93ed9d20251b75f29c41e3fca93401ea20aac3f41cf1bf9fe3516baf9563b763"
+    }
+  ],
+  "allowed_operations": [
+    "implementation",
+    "cpu_tests",
+    "deployment_preparation"
+  ],
+  "allowed_splits": [],
+  "named_scope": "E3-T01 through E3-T12 via executing-plans inline/native; nonofficial CPU tests and deployment preparation only"
+}
