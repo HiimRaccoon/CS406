@@ -82,7 +82,7 @@ One common official protocol is already fixed, not a pending choice. Do not fill
 | E3-T08 | T01/T04/T05/T07 | Atomic head checkpoints and deterministic committed-boundary replay | **COMPLETE — CPU EVIDENCE ONLY** |
 | E3-T09 | T01-T08 | E3 stage preflight/runtime, one-run lifecycle and attempt records | **COMPLETE — CPU EVIDENCE ONLY** |
 | E3-T10 | T01/T09 | Bounded common-protocol pilot selection, strict complete-run parser and twelve final declarations | **COMPLETE — CPU EVIDENCE ONLY** |
-| E3-T11 | T02/T03/T06/T10 | Complete selected exports, six-arm aggregate and PRIMARY/SECONDARY/EXPLORATORY report | **NOT STARTED — GATED** |
+| E3-T11 | T02/T03/T06/T10 | Complete selected exports, six-arm aggregate and PRIMARY/SECONDARY/EXPLORATORY report | **COMPLETE — CPU EVIDENCE ONLY** |
 | E3-T12 | T01-T11 | CPU/deployment readiness and opt-in bounded acceptance harness | **NOT STARTED — GATED** |
 | E3-T13 | T12 + TARGET-AUTH | Actual bounded source/extraction/runtime/recovery evidence and unapproved G2 candidate | **NOT STARTED — GATED** |
 | E3-T14 | T13 + G2 + CACHE-AUTH | Six complete caches/twelve split payloads, original-head full-val replay; CACHE-ACCEPT handoff | **NOT STARTED — GATED** |

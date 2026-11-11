@@ -32,3 +32,5 @@ Ruling T09: approved schemas bind several downstream artifacts by SHA without a 
 T09: complete — RED: five absent preflight/lifecycle behaviors; GREEN: E3 runtime/train/checkpoint and unchanged E2 runtime regressions, 29 passed; no pre-target G2 cycle, full-budget declining-F1 lifecycle and terminal no-update recovery. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
 
 T10: complete — RED: four missing campaign guards; GREEN: campaign/preflight/lifecycle, 10 passed; global maximum anchored LR tie, all eight trials, positive twelve-declaration matrix and pair-drift rejection; no jobs submitted. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
+
+T11: complete — RED: three missing report behaviors; GREEN: E3 report/metric/engine and unchanged E1/E2 reporting regressions, 30 passed; complete prediction/CSV validation, authoritative CE evidence, ddof=1 and matched-seed contrasts; per-row FP32 CE is accumulated with math.fsum for reproducible exported sample-mean NLL. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.

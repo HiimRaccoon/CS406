@@ -56,11 +56,12 @@ def _train_batches(head, loader, optimizer, scheduler, *, accumulation, clipping
     head.train()
     iterator = iter(loader)
     presentations, updates, loss_total = 0, 0, 0.
+    learning_rates = []
     while group := list(itertools.islice(iterator,accumulation)):
         count = sum(len(batch[1]) for batch in group)
         if not count:
             raise ValueError("Empty accumulation group")
-        scheduler.set_lr()
+        learning_rates.append(scheduler.set_lr())
         optimizer.zero_grad(set_to_none=True)
         group_loss = 0.
         for batch in group:
@@ -84,7 +85,8 @@ def _train_batches(head, loader, optimizer, scheduler, *, accumulation, clipping
         presentations += count; updates += 1; loss_total += group_loss
     if not presentations:
         raise ValueError("Empty training window")
-    return {"presentations":presentations,"updates":updates,"ce":loss_total/presentations}
+    return {"presentations":presentations,"updates":updates,"ce":loss_total/presentations,
+            "lr_first":learning_rates[0],"lr_last":learning_rates[-1]}
 
 
 def train_window(head, loader, optimizer, scheduler, *, protocol: dict, device) -> dict:
@@ -103,6 +105,7 @@ def train_window(head, loader, optimizer, scheduler, *, protocol: dict, device) 
 def _evaluate_batches(head, loader, *, records, n_train, labels, device, collect_predictions):
     head.eval()
     meter, predictions, cursor = Metrics124(), [], 0
+    row_losses = []
     for features, targets, keys in loader:
         expected = records[cursor:cursor+len(targets)]
         if (list(keys) != [r["relative_path"] for r in expected]
@@ -110,6 +113,7 @@ def _evaluate_batches(head, loader, *, records, n_train, labels, device, collect
             raise ValueError("Validation keys/labels/coverage/order differ")
         logits = head(features.to(device)); target = targets.to(device)
         losses = F.cross_entropy(logits,target,reduction="none",label_smoothing=0.)
+        row_losses.extend(losses.cpu().tolist())
         meter.update(logits,target,float(losses.sum()))
         if collect_predictions:
             ranks = rank_logits(logits)[:,:5].cpu().tolist()
@@ -118,6 +122,7 @@ def _evaluate_batches(head, loader, *, records, n_train, labels, device, collect
         cursor += len(targets)
     if cursor != len(records):
         raise ValueError("Truncated validation split")
+    meter.loss_sum = math.fsum(row_losses)
     return {"metrics":meter.compute(n_train,labels),"predictions":predictions}
 
 
