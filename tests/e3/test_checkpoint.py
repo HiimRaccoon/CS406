@@ -44,3 +44,8 @@ def test_authoritative_last_roundtrip_identity_and_best_rejection(tmp_path):
     assert restored["progress"]==progress
     with pytest.raises(ValueError): read_head_checkpoint(tmp_path/"last.pt",config=config,identity={"source":"other"})
     with pytest.raises(ValueError): read_head_checkpoint(tmp_path/"best.pt",config=config,identity={"source":"same"})
+    tampered=torch.load(tmp_path/"last.pt",map_location="cpu",weights_only=True)
+    tampered["head"]["weight"]=torch.zeros(124,1)
+    torch.save(tampered,tmp_path/"last.pt")
+    with pytest.raises(ValueError,match="shape"):
+        read_head_checkpoint(tmp_path/"last.pt",config=config,identity={"source":"same"})

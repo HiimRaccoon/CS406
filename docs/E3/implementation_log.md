@@ -34,3 +34,5 @@ T09: complete — RED: five absent preflight/lifecycle behaviors; GREEN: E3 runt
 T10: complete — RED: four missing campaign guards; GREEN: campaign/preflight/lifecycle, 10 passed; global maximum anchored LR tie, all eight trials, positive twelve-declaration matrix and pair-drift rejection; no jobs submitted. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
 
 T11: complete — RED: three missing report behaviors; GREEN: E3 report/metric/engine and unchanged E1/E2 reporting regressions, 30 passed; complete prediction/CSV validation, authoritative CE evidence, ddof=1 and matched-seed contrasts; per-row FP32 CE is accumulated with math.fsum for reproducible exported sample-mean NLL. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
+
+T12: complete — RED: CLI, GPU opt-in and wrapper guards; GREEN: E3 54 passed, full CPU regression 478 passed before last two added guard tests, compileall/shell/metaschema/snapshot checks passed; final whole-branch review pending; TARGET-AUTH not granted. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.

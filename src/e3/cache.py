@@ -10,7 +10,7 @@ import torch
 from torch.nn import functional as F
 from torch.utils.data import Dataset
 
-from .config import (DIMENSIONS, ROOT, contained, fingerprint, numeric, payload, policy, read_json,
+from .config import (DIMENSIONS, ROOT, contained, fingerprint, numeric, payload, policy, read_json, parse_json,
                      require_approval, sha256_file, validate_record, validate_source_binding, verify_payload)
 from .data import FixedManifest
 from .io import atomic_json, atomic_write, writer_lock
@@ -43,6 +43,10 @@ def _build_payloads(root, rows, batches, *, dimension, identity):
     with writer_lock(root):
         if (root / "index.json").exists():
             raise ValueError("Accepted/completed cache is immutable")
+        for temporary in root.rglob("*.tmp.*"):
+            if temporary.is_symlink() or not temporary.resolve().is_relative_to(root.resolve()):
+                raise ValueError("Unsafe temporary cache path")
+            if temporary.is_file(): temporary.unlink()
         identity = {"bindings": identity, "dimension": dimension, "rows_sha256": fingerprint(_row_records(rows))}
         if (root / "build_identity.json").exists():
             if read_json(root / "build_identity.json") != identity:
@@ -112,7 +116,7 @@ def _build_payloads(root, rows, batches, *, dimension, identity):
 
 def _validate_payloads(root, build, rows, *, dimension, full_row_index=None):
     row_path = verify_payload(build["row_index"], root)
-    indexed = [json.loads(line) for line in row_path.read_text(encoding="utf-8").splitlines()]
+    indexed = [validate_record(parse_json(line),"row_index_record") for line in row_path.read_text(encoding="utf-8").splitlines()]
     if indexed != _row_records(rows if full_row_index is None else full_row_index):
         raise ValueError("Row coverage/order/labels differ from fixed manifest")
     cursor = 0
@@ -121,9 +125,14 @@ def _validate_payloads(root, build, rows, *, dimension, full_row_index=None):
                 or chunk["feature_dimension"] != dimension or chunk["row_count"] != min(1024, len(rows) - cursor)):
             raise ValueError("Invalid chunk sequence/shape/coverage")
         file = verify_payload(chunk["payload"], root)
+        if chunk["payload"]["relative_path"] != f"chunks/features_{i:06d}.npy":
+            raise ValueError("Chunk payload path differs from approved layout")
         with file.open("rb") as stream:
             if np.lib.format.read_magic(stream) != (2, 0):
                 raise ValueError("Expected NumPy v2.0 payload")
+            shape,fortran,dtype=np.lib.format.read_array_header_2_0(stream)
+            if file.stat().st_size!=stream.tell()+int(np.prod(shape))*dtype.itemsize:
+                raise ValueError("Truncated/trailing bytes in NumPy payload")
         array = np.load(file, allow_pickle=False, mmap_mode="r")
         if (array.dtype.str != "<f4" or not array.flags.c_contiguous
                 or array.shape != (chunk["row_count"], dimension) or not np.isfinite(array).all()):
@@ -151,13 +160,26 @@ def validate_cache(index_path: Path, *, expected: dict) -> dict:
     if len(rows) != index["row_count"]:
         raise ValueError("Cache must cover every fixed manifest row")
     root = Path(index_path).parent
+    build_identity=read_json(root/"build_identity.json")
+    declaration=validate_record(build_identity["bindings"],"cache_request")
+    if (any(declaration[k]!=index[k] for k in ("family","source_seed","split","source","runtime","cache_policy_sha256","preprocessing_sha256"))
+            or contained(ROOT,declaration["output_root"])!=root.resolve()
+            or build_identity["dimension"]!=index["feature_dimension"]
+            or build_identity["rows_sha256"]!=fingerprint(_row_records(rows))):
+        raise ValueError("Original extraction declaration differs from published cache lineage")
     _validate_payloads(root, index, rows, dimension=index["feature_dimension"])
     for i, chunk in enumerate(index["chunks"]):
         commit = validate_record(read_json(root / f"chunks/commit_{i:06d}.json"), "cache_chunk_commit")
         if (commit["chunk"] != chunk or commit["source_checkpoint_sha256"] != index["source"]["binary_sha256"]
                 or commit["row_index_sha256"] != index["row_index"]["sha256"]
+                or commit["extraction_identity_sha256"] != fingerprint(build_identity)
                 or commit["cache_policy_sha256"] != index["cache_policy_sha256"]):
             raise ValueError("Chunk commit lineage mismatch")
+    expected_files={f"features_{i:06d}.npy" for i in range(len(index["chunks"]))}
+    expected_commits={f"commit_{i:06d}.json" for i in range(len(index["chunks"]))}
+    if ({p.name for p in (root/"chunks").glob("features_*.npy")}!=expected_files
+            or {p.name for p in (root/"chunks").glob("commit_*.json")}!=expected_commits):
+        raise ValueError("Extra/unlisted cache chunks or commits")
     replay = read_json(verify_payload(index["replay_evidence"], root))
     identity = {"source": index["source"], "runtime": index["runtime"],
                 "row_index": index["row_index"], "chunks": index["chunks"]}
@@ -168,9 +190,12 @@ def validate_cache(index_path: Path, *, expected: dict) -> dict:
 
 class CacheDataset(Dataset):
     def __init__(self, index_path: Path, *, expected: dict):
-        index = validate_cache(index_path, expected=expected)
+        if (expected.get("split") not in {"train","val"} or expected.get("family") not in DIMENSIONS
+                or expected.get("source_seed") not in {2001,3001,4001}):
+            raise ValueError("Explicit cache family/seed/train-val scope required before access")
         require_approval(expected["cache_acceptance_receipt"], gate="E3-CACHE-ACCEPT",
-                         expected={"subjects": {f"cache:{index['family']}:{index['source_seed']}:{index['split']}": sha256_file(index_path)}})
+                         expected={"subjects": {f"cache:{expected['family']}:{expected['source_seed']}:{expected['split']}": sha256_file(index_path)}})
+        index = validate_cache(index_path, expected=expected)
         self.root, self.index = Path(index_path).parent, index
         self.rows = _row_records(FixedManifest().records(index["split"]))
         self.ends = [c["row_start"] + c["row_count"] for c in index["chunks"]]

@@ -85,6 +85,8 @@ def make_source_loader(manifest, *, source: dict, request: dict):
 
 
 def audit_train_val(manifest, data_root: Path) -> dict:
+    import importlib.metadata
+    import platform
     rows = []
     for split in ("train", "val"):
         data = ImageRows(manifest.records(split), data_root, "E1")
@@ -94,4 +96,8 @@ def audit_train_val(manifest, data_root: Path) -> dict:
             rows.append((split, record["relative_path"], record["sha256"]))
     return {"kind": "e3_current_data_audit_v1", "actual_root": str(Path(data_root).resolve()),
             "ordered_content_sha256": fingerprint(rows), "rows": len(rows),
-            "fixed_metadata": manifest.fingerprints, "test_images_opened": 0}
+            "fixed_metadata": manifest.fingerprints, "test_images_opened": 0,
+            "software":{"python":platform.python_version(),"torch":str(torch.__version__),
+                **{k:importlib.metadata.version(k) for k in ("torchvision","Pillow","numpy","pandas","scikit-learn")},
+                "cuda":torch.version.cuda,"cudnn":torch.backends.cudnn.version()},
+            "preprocessing_sha256":fingerprint(policy()["storage"]["extraction"])}

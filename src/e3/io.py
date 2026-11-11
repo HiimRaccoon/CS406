@@ -35,6 +35,14 @@ def atomic_json(path: Path, value):
     return atomic_write(path, lambda stream: stream.write(raw))
 
 
+def publish_exact_bytes(path: Path, raw: bytes):
+    path=Path(path)
+    if path.exists():
+        if path.read_bytes()!=raw: raise ValueError("Existing immutable payload bytes differ")
+        return
+    atomic_write(path,lambda stream:stream.write(raw))
+
+
 @contextmanager
 def writer_lock(root: Path):
     root = Path(root)

@@ -64,3 +64,30 @@ def test_atomic_failure_preserves_old_bytes(tmp_path, monkeypatch):
         atomic_json(p, {"new": True})
     assert p.read_text() == '{"old":true}\n'
     assert not list(tmp_path.glob("*.tmp.*"))
+
+
+@pytest.mark.parametrize("corruption",["duplicate_json_key","trailing_npy_bytes"])
+def test_rehashed_payload_still_rejects_invalid_wire_format(tmp_path,corruption):
+    from src.e3.cache import _build_payloads,_validate_payloads
+    from src.e3.config import payload
+    rows=[{"relative_path":"A/0.jpg","label_id":0}]
+    build=_build_payloads(tmp_path,rows,[(torch.ones(1,768),torch.tensor([0]),["A/0.jpg"])],dimension=768,identity={"source":"nonofficial"})
+    if corruption=="duplicate_json_key":
+        path=tmp_path/"rows.jsonl"
+        path.write_text('{"row_index":0,"relative_path":"A/0.jpg","label_id":0,"label_id":0}\n')
+        build["row_index"]=payload(path,tmp_path)
+    else:
+        path=tmp_path/build["chunks"][0]["payload"]["relative_path"]
+        path.write_bytes(path.read_bytes()+b"unlisted trailing bytes")
+        build["chunks"][0]["payload"]=payload(path,tmp_path)
+    with pytest.raises(ValueError): _validate_payloads(tmp_path,build,rows,dimension=768)
+
+
+def test_dataset_checks_cache_acceptance_before_any_feature_validation(tmp_path,monkeypatch):
+    from src.e3 import cache
+    path=tmp_path/"index.json"; path.write_text('{}')
+    monkeypatch.setattr(cache,"validate_cache",lambda *a,**k:pytest.fail("unaccepted features must not be consumed"))
+    def rejected(*args,**kwargs): raise ValueError("wrong stage receipt")
+    monkeypatch.setattr(cache,"require_approval",rejected)
+    with pytest.raises(ValueError,match="wrong stage"):
+        cache.CacheDataset(path,expected={"family":"E1","source_seed":2001,"split":"val","cache_acceptance_receipt":tmp_path/"wrong.json"})

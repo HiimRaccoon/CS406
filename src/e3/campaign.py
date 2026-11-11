@@ -50,8 +50,14 @@ def validate_completed_head_run(run_dir: Path) -> dict:
         attempts=[read_json(verify_payload(p,root)) for p in complete["attempts"]]
         if (not 1<=len(attempts)<=2 or [a["attempt"] for a in attempts]!=list(range(1,len(attempts)+1))
                 or any(a["run_id"]!=declaration["run_id"] or a["declaration_sha256"]!=complete["declaration"]["sha256"] for a in attempts)
+                or any(a["status"] not in {"COMPLETE","STOPPED","FAILED","INTERRUPTED"} for a in attempts)
                 or attempts[-1]["status"]!="COMPLETE"):
             raise ValueError("Attempt inventory incomplete or outside retry cap")
+        from .train import _attempt_accounting
+        for attempt in attempts:
+            expected_charge=_attempt_accounting(start=attempt["started_window"],end=attempt["ended_window"],
+                budget=budget,interrupted=attempt["status"] in {"FAILED","INTERRUPTED"})
+            if attempt.get("operational_charge")!=expected_charge: raise ValueError("Attempt replay work is unaccounted")
         selected_metrics=progress["history"][progress["selected"]["window"]-1]["validation"]
         return {"run_dir":str(root),"declaration":declaration,"progress":progress,"selected_weights":progress["selected_weights"],
                 "selected_metrics":selected_metrics,"attempt_records":attempts,"complete":complete}
@@ -69,6 +75,11 @@ def _choose_protocol(trials: list[dict], envelope: dict) -> dict:
     if any(r["stage"]!="pilot" or r["source_seed"]!=2001 or r["root_seed"]!=1001
            or not 1<=r["attempts"]<=2 or len(r["history"])!=20 for r in trials):
         raise ValueError("Wrong pilot source/root/stage/budget/attempt scope")
+    for field,cap,basis in [("train_presentations","operational_train_presentations_including_replay",699940),
+                            ("optimizer_updates","operational_optimizer_updates_including_replay",1380),
+                            ("validation_passes","operational_validation_passes_including_replay",20)]:
+        charged=sum(r.get("operational_charge",{}).get(field,basis*r["attempts"]) for r in trials)
+        if charged>envelope["caps"][cap]: raise ValueError("Pilot operational cap exhausted")
     rule=envelope["common_protocol_selection"]; adequacy=rule["adequacy_per_arm"]
     diagnostics={}; scores={}
     for candidate in profiles:
@@ -115,7 +126,9 @@ def select_common_protocol(pilot_records: list[dict], envelope: dict) -> dict:
         trials.append({"candidate_id":d["profile"]["candidate_id"],"family":d["family"],"arm":d["arm"],
                        "source_seed":d["source_seed"],"root_seed":d["root_seed"],"stage":d["stage"],
                        "selected_metric":row["selected_metrics"]["macro_f1_supported"],"history":row["progress"]["history"],
-                       "attempts":len(row["attempt_records"])})
+                       "attempts":len(row["attempt_records"]),"operational_charge":{
+                           k:sum(a["operational_charge"][k] for a in row["attempt_records"])
+                           for k in ("train_presentations","optimizer_updates","validation_passes")}})
     result=_choose_protocol(trials,envelope)
     result["run_indices"]=[payload(Path(row["run_dir"])/"complete.json") for row in parsed]
     return result

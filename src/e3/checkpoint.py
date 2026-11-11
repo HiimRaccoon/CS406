@@ -71,6 +71,15 @@ def _validate_progress(progress, budget, scheduler):
         raise ValueError("Incomplete committed progress") from exc
 
 
+def _validate_head_tensors(state,config):
+    dimension=DIMENSIONS[config["family"]]
+    if (set(state)!={"weight","bias"} or tuple(state["weight"].shape)!=(124,dimension)
+            or tuple(state["bias"].shape)!=(124,)
+            or any(v.dtype!=torch.float32 for v in state.values())):
+        raise ValueError("Classifier state shape/dtype differs from declared family")
+    tensor_state_sha256(state)
+
+
 def publish_derived(path: Path, envelope: dict) -> dict:
     root=Path(path).parent; config=envelope["config"]; progress=envelope["progress"]
     _validate_progress(progress,config["original_budget"],envelope["scheduler"])
@@ -106,11 +115,9 @@ def save_head_checkpoint(path: Path, *, state: dict, config: dict, identity: dic
         raise ValueError("Only authoritative last.pt commits training state; best is derived")
     validate_record(config)
     _validate_progress(state["progress"],config["original_budget"],state["scheduler"])
-    dimension=DIMENSIONS[config["family"]]
-    if (set(state["head"]) != {"weight","bias"} or tuple(state["head"]["weight"].shape) != (124,dimension)
-            or tuple(state["head"]["bias"].shape) != (124,)):
-        raise ValueError("Classifier state shape differs from source feature dimension")
-    tensor_state_sha256(state["head"])
+    _validate_head_tensors(state["head"],config)
+    if state["progress"]["selected_weights"] is not None:
+        _validate_head_tensors(state["progress"]["selected_weights"],config)
     envelope={"kind":"e3_full_head_state_v1","role":"last","config":config,
               "config_sha256":fingerprint(config),"identity":identity,**copy.deepcopy(state)}
     atomic_write(path,lambda stream:torch.save(envelope,stream))
@@ -131,7 +138,9 @@ def read_head_checkpoint(path: Path, *, config: dict, identity: dict) -> dict:
             raise ValueError("Foreign checkpoint kind/config/source/cache/init/profile/identity")
         validate_record(config)
         _validate_progress(state["progress"],config["original_budget"],state["scheduler"])
-        tensor_state_sha256(state["head"])
+        _validate_head_tensors(state["head"],config)
+        if state["progress"]["selected_weights"] is not None:
+            _validate_head_tensors(state["progress"]["selected_weights"],config)
     except (KeyError,TypeError) as exc:
         raise ValueError("Incomplete E3 head checkpoint") from exc
     return state

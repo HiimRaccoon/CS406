@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader
 from .config import ROOT, contained, fingerprint, payload, policy, read_json, sha256_file
 from .checkpoint import capture_head_state,restore_head_state,save_head_checkpoint,read_head_checkpoint,publish_derived
 from .engine import train_window,evaluate_head,make_head_scheduler,select_head
-from .io import atomic_json,writer_lock
+from .io import atomic_json,writer_lock,publish_exact_bytes
 from .model import make_paired_heads,build_head_optimizer,tensor_state_sha256
 from .runtime import ExecutionContext,preflight,configure_runtime
 from ..e1.data import derived_seed
@@ -35,6 +35,14 @@ def _execute_windows(*, budget, progress, train, evaluate, weights, commit, stop
     return progress
 
 
+def _attempt_accounting(*, start, end, budget, interrupted):
+    if type(start) is not int or type(end) is not int or not 0<=start<=end<=budget["windows"]:
+        raise ValueError("Invalid attempt start/end boundary")
+    windows=end-start+int(interrupted and end<budget["windows"])
+    return {"train_presentations":windows*budget["presentations_per_window"],
+            "optimizer_updates":windows*budget["updates_per_window"],"validation_passes":windows}
+
+
 def run_head(config, run_dir: Path, *, resume: Path | None = None, stop_requested=lambda:False) -> dict:
     operation=config.request["operation"] if isinstance(config,ExecutionContext) else config["operation"]
     if operation not in {"pilot_head","final_head"}: raise ValueError("Head run requires head operation wrapper")
@@ -47,15 +55,29 @@ def run_head(config, run_dir: Path, *, resume: Path | None = None, stop_requeste
     protocol=next(p for p in policy()["candidate_profiles"] if p["candidate_id"]==declaration["profile"]["candidate_id"])
     identity={k:declaration[k] for k in ("source","cache","initialization","profile","runtime")}
     with writer_lock(root):
+        publish_exact_bytes(root/"declaration.json",verify_declaration_path(checked).read_bytes())
+        saved_resume=read_head_checkpoint(resume,config=declaration,identity=identity) if resume is not None else None
+        started_window=saved_resume["progress"]["window"] if saved_resume else 0
         attempts=root/"attempts"; attempts.mkdir(exist_ok=True)
-        previous=list(attempts.glob("attempt_*.json"))
+        previous=sorted(attempts.glob("attempt_*.json"))
         if len(previous)>=2: raise ValueError("At most initial plus one same-identity retry")
+        for previous_path in previous:
+            old=read_json(previous_path)
+            if old["run_id"]!=declaration["run_id"] or old["declaration_sha256"]!=sha256_file(root/"declaration.json"):
+                raise ValueError("Foreign attempt inventory")
+            if old["status"]=="STARTED":
+                old.update(status="INTERRUPTED",ended_window=started_window,
+                    operational_charge=_attempt_accounting(start=old.get("started_window",0),end=started_window,
+                        budget=declaration["original_budget"],interrupted=True))
+                atomic_json(previous_path,old)
         attempt=attempts/f"attempt_{len(previous)+1:04d}.json"
         record={"kind":"e3_head_attempt_v1","run_id":declaration["run_id"],"attempt":len(previous)+1,
-                "declaration_sha256":sha256_file(verify_declaration_path(checked)),"status":"STARTED"}
+                "declaration_sha256":sha256_file(root/"declaration.json"),"status":"STARTED","started_window":started_window}
         atomic_json(attempt,record)
         try:
             environment=configure_runtime(root_seed=declaration["root_seed"])
+            from .runtime import verify_current_environment
+            verify_current_environment(checked,environment)
             atomic_json(root/"execution_request.json",checked["context"].request)
             from .io import atomic_write
             inventory_bytes=Path(checked["context"].inventory_path).read_bytes()
@@ -97,10 +119,9 @@ def run_head(config, run_dir: Path, *, resume: Path | None = None, stop_requeste
                 captured=capture_head_state(head=head,optimizer=optimizer,scheduler=scheduler,loaders=loaders,sampler=sampler,progress=progress)
                 save_head_checkpoint(root/"last.pt",state=captured,config=declaration,identity=identity,role="last")
             if resume is not None:
-                saved=read_head_checkpoint(resume,config=declaration,identity=identity)
+                saved=saved_resume
                 progress=restore_head_state(saved,head=head,optimizer=optimizer,scheduler=scheduler,loaders=loaders,sampler=sampler)
             else:
-                atomic_json(root/"declaration.json",declaration)
                 commit(progress)
             manifest=FixedManifest()
             record["started_window"]=progress["window"]
@@ -116,7 +137,9 @@ def run_head(config, run_dir: Path, *, resume: Path | None = None, stop_requeste
                 evaluate=lambda:evaluate_head(head,loaders["val"],manifest=manifest,device="cuda:0",collect_predictions=False)["metrics"],
                 weights=lambda:{k:v.detach().cpu().clone() for k,v in head.state_dict().items()},commit=commit,stop_requested=stop_requested)
             record.update(status="COMPLETE" if final["window"]==20 else "STOPPED",committed_window=final["window"],
-                          committed_presentations=final["presentations"],committed_updates=final["updates"],environment=environment)
+                          committed_presentations=final["presentations"],committed_updates=final["updates"],environment=environment,
+                          ended_window=final["window"],operational_charge=_attempt_accounting(start=started_window,end=final["window"],
+                            budget=protocol["budget"],interrupted=False))
             atomic_json(attempt,record)
             if final["window"]==20:
                 saved=read_head_checkpoint(root/"last.pt",config=declaration,identity=identity)
@@ -128,8 +151,14 @@ def run_head(config, run_dir: Path, *, resume: Path | None = None, stop_requeste
                 atomic_json(root/"complete.json",completed)
             return {"run_id":declaration["run_id"],"status":record["status"],"progress":final}
         except BaseException as exc:
-            record.update(status="FAILED",exception=type(exc).__name__,message=str(exc),
-                          uncommitted_work_charge={"presentations":34997,"updates":69,"validation_passes":1})
+            end=started_window
+            if (root/"last.pt").exists():
+                try: end=read_head_checkpoint(root/"last.pt",config=declaration,identity=identity)["progress"]["window"]
+                except (ValueError,OSError,RuntimeError):
+                    end=protocol["budget"]["windows"]
+                    record["unknown_work"]="Unreadable last state; full remaining attempt charged; review required"
+            record.update(status="FAILED",exception=type(exc).__name__,message=str(exc),ended_window=end,
+                          operational_charge=_attempt_accounting(start=started_window,end=end,budget=protocol["budget"],interrupted=True))
             atomic_json(attempt,record)
             raise
 

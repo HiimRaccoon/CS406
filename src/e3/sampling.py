@@ -8,7 +8,7 @@ from pathlib import Path
 import torch
 from torch.utils.data import Sampler
 
-from .config import fingerprint, policy as approved_policy, validate_record, verify_payload
+from .config import fingerprint, policy as approved_policy, validate_record, verify_payload, parse_json
 from ..e1.data import derived_seed
 
 
@@ -93,7 +93,7 @@ def make_sampler(cache_index: dict, *, policy: str, seed: int, rng_contract: dic
     if (rng_contract["policy"] != approved_policy()["rng"] or seed != rng_contract["root_seed"]
             or cache_index["source_seed"] != rng_contract["source_seed"]):
         raise ValueError("Unreviewed RNG policy or source/root bindings")
-    rows = [json.loads(line) for line in verify_payload(cache_index["row_index"], cache_root).read_text(encoding="utf-8").splitlines()]
+    rows = [validate_record(parse_json(line),"row_index_record") for line in verify_payload(cache_index["row_index"], cache_root).read_text(encoding="utf-8").splitlines()]
     if len(rows) != 34997 or cache_index["row_count"] != 34997:
         raise ValueError("Complete train membership required")
     return DrawSampler(rows, policy=policy, root_seed=seed, source_seed=rng_contract["source_seed"], stage=rng_contract["stage"])

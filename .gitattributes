@@ -36,4 +36,5 @@ docs/E2/evidence/** -text -diff
 # E3 approval pins identify exact bytes on every platform.
 docs/E3/*.json text eol=lf
 docs/E3/schemas/*.json text eol=lf
+docs/E3/evidence/*.json text eol=lf
 artifacts/E3/approvals/** -text

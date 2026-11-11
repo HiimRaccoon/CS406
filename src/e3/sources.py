@@ -5,7 +5,7 @@ from pathlib import Path
 import torch
 from torch import nn
 
-from .config import (DIMENSIONS, ROOT, fingerprint, read_json, registry, sha256_file,
+from .config import (DIMENSIONS, ROOT, fingerprint, read_json, registry, sha256_file, source_path,
                      validate_source_binding, verify_payload)
 
 
@@ -73,10 +73,10 @@ def _authorized_source(entry, request):
 def verify_source(entry: dict, contract: dict) -> dict:
     _authorized_source(entry, contract)
     for name in ("binary", "report"):
-        path = Path(entry[f"actual_{name}_path"])
+        path = source_path(entry[f"actual_{name}_path"])
         if not path.is_file() or sha256_file(path) != entry[f"{name}_sha256"]:
             raise ValueError(f"Selected source {name} hash mismatch")
-    report = read_json(entry["actual_report_path"])
+    report = read_json(source_path(entry["actual_report_path"]))
     expected_kind = f"{entry['family'].lower()}_three_seed_validation_report_v1"
     if report.get("kind") != expected_kind:
         raise ValueError("Historical report schema/kind mismatch")
@@ -87,7 +87,7 @@ def load_frozen_source(entry: dict, *, contract: dict, device):
     verification = verify_source(entry, contract)
     # Trusted, explicitly authorized selected binaries only; the full historical envelope
     # contains RNG/optimizer objects, so weights_only=False is necessary after byte pins.
-    state = torch.load(entry["actual_binary_path"], map_location="cpu", weights_only=False)
+    state = torch.load(source_path(entry["actual_binary_path"]), map_location="cpu", weights_only=False)
     validate_selected_state(state, entry)
     if state["config"].get("contract_sha256") != entry["source_contract_sha256"]:
         raise ValueError("Source checkpoint contract mismatch")

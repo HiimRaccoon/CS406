@@ -30,9 +30,9 @@ def head_state_sha256(head) -> str:
 
 def make_paired_heads(*, family: str, seed: int, protocol: dict, stage: str, root_seed: int):
     validate_common_protocol(protocol)
-    if family not in DIMENSIONS or seed not in SEEDS or stage not in {"pilot", "final"}:
+    if family not in DIMENSIONS or seed not in SEEDS or stage not in {"pilot", "final", "acceptance_fixture"}:
         raise ValueError("Invalid paired head family/seed/stage")
-    if (stage == "pilot" and (seed != 2001 or root_seed != 1001)) or (stage == "final" and root_seed != seed):
+    if (stage in {"pilot","acceptance_fixture"} and (seed != 2001 or root_seed != 1001)) or (stage == "final" and root_seed != seed):
         raise ValueError("Wrong source/root seed role")
     actual_seed = derived_seed(root_seed,"E3-v1",stage,family,seed,"head-init")
     with torch.random.fork_rng(devices=[]):

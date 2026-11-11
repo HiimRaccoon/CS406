@@ -22,3 +22,22 @@ def test_completed_budget_publication_recovery_never_trains_again():
     result=_execute_windows(budget={"windows":3,"presentations_per_window":5,"updates_per_window":2},progress=progress,
         train=fail,evaluate=fail,weights=fail,commit=lambda p:pytest.fail("no new boundary"),stop_requested=lambda:False)
     assert result==progress
+
+
+def test_execution_archives_exact_approved_declaration_bytes(tmp_path):
+    from src.e3.io import publish_exact_bytes
+    raw=b'{"kind":"nonofficial_fixture", "value":1}\n'
+    target=tmp_path/"declaration.json"
+    publish_exact_bytes(target,raw)
+    assert target.read_bytes()==raw
+    publish_exact_bytes(target,raw)
+    with pytest.raises(ValueError): publish_exact_bytes(target,b'{"different":true}\n')
+
+
+def test_attempt_accounting_charges_unknown_uncommitted_window():
+    from src.e3.train import _attempt_accounting
+    budget={"presentations_per_window":34997,"updates_per_window":69,"windows":20}
+    result=_attempt_accounting(start=3,end=5,budget=budget,interrupted=True)
+    assert result=={"train_presentations":104991,"optimizer_updates":207,"validation_passes":3}
+    assert _attempt_accounting(start=20,end=20,budget=budget,interrupted=True)=={
+        "train_presentations":0,"optimizer_updates":0,"validation_passes":0}

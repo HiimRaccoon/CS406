@@ -159,7 +159,9 @@ def evaluate_selected(config, run_dir: Path) -> dict:
     if checked["declaration"]!=declaration: raise ValueError("Selected evaluation declaration differs")
     root=Path(run_dir).resolve(); output=root/"validation_analysis"
     with writer_lock(root):
-        configure_runtime(root_seed=declaration["root_seed"])
+        from .runtime import verify_current_environment
+        environment=configure_runtime(root_seed=declaration["root_seed"])
+        verify_current_environment(checked,environment)
         dataset=CacheDataset(contained(ROOT,declaration["cache"]["validation_index_path"]),expected={"family":declaration["family"],
             "source_seed":declaration["source_seed"],"split":"val","source":declaration["source"],"runtime":declaration["runtime"],
             "cache_acceptance_receipt":checked["artifact"](declaration["cache"]["cache_acceptance_sha256"])})

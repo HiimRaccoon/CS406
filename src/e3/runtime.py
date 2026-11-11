@@ -10,7 +10,7 @@ import platform
 from .config import (ROOT, OP_GATES, CACHE_SHA256, NUMERIC_SHA256, SCHEMA_SHA256,
                      DIMENSIONS, contained, fingerprint, g1_receipt, load_contract, numeric,
                      policy, read_json, reject_unresolved, require_approval, sha256_file,
-                     validate_record, validate_source_binding, verify_payload)
+                     validate_record, validate_source_binding, verify_payload, source_path)
 
 
 @dataclass(frozen=True)
@@ -41,6 +41,7 @@ def code_inventory() -> dict:
                 if module and module[0] == "src":
                     dependency = ROOT.joinpath(*module).with_suffix(".py")
                     if dependency.is_file(): pending.append(dependency)
+    files["requirements-e3.txt"] = sha256_file(ROOT/"requirements-e3.txt")
     return {"kind":"e3_consumed_source_inventory_v1","files":dict(sorted(files.items()))}
 
 
@@ -151,6 +152,10 @@ def preflight(request, *, operation: str) -> dict:
     if operation=="bounded_acceptance":
         verify_code_inventory(read_json(artifact(d["runtime"]["declared_code_inventory_sha256"])))
         checked["data_root"]=Path(d["runtime"]["actual_data_root"]).resolve()
+        for source in d["sources"]:
+            for name in ("binary","report"):
+                if sha256_file(source_path(source[f"actual_{name}_path"]))!=source[f"{name}_sha256"]:
+                    raise ValueError("Actual source bytes differ before target allocation")
         return checked
     runtime=d["runtime"]
     verify_code_inventory(read_json(artifact(runtime["consumed_source_sha256"])))
@@ -166,10 +171,31 @@ def preflight(request, *, operation: str) -> dict:
             or actual_runtime.get("environment_sha256") != runtime["actual_environment_evidence_sha256"]
             or actual_runtime.get("consumed_source_sha256") != runtime["consumed_source_sha256"]
             or actual_runtime.get("data_audit_sha256") != runtime["current_data_audit_sha256"]
-            or environment.get("software") != policy()["runtime"]["software_lock"]):
+            or environment.get("software") != policy()["runtime"]["software_lock"]
+            or audit.get("software") != environment.get("software")):
         raise ValueError("Runtime/device/software/code/data acceptance binding mismatch")
     acceptance_path=artifact(d["source"]["source_acceptance_sha256"])
     evidence=validate_record(read_json(acceptance_path),"source_acceptance_evidence")
+    if evidence["runtime_observations"]["sha256"]!=runtime["accepted_runtime_sha256"]:
+        raise ValueError("Accepted source and runtime evidence differ")
+    verify_payload(evidence["runtime_observations"])
+    recovery=read_json(verify_payload(evidence["recovery_evidence"]))
+    if (recovery.get("kind")!="nonofficial_e3_head_recovery_evidence_v1"
+            or len(recovery.get("trials",[]))!=4 or any(not t.get("logical_state_equal") for t in recovery["trials"])
+            or recovery.get("optimizer_updates")!=evidence["head_fixture_updates"]
+            or recovery.get("feature_presentations")!=evidence["head_fixture_presentations"]):
+        raise ValueError("Missing bounded deterministic head recovery proof")
+    strict=[]
+    for descriptor in evidence["source_strict_load_and_freeze_evidence"]:
+        proof=read_json(verify_payload(descriptor))
+        validate_source_binding(proof["source"],accepted=False)
+        if (proof.get("representation_trainable_parameters")!=0 or proof.get("test_images_opened")!=0
+                or not proof.get("reconstruction_equal") or not proof.get("original_head_replay",{}).get("discrete_equal")
+                or not proof.get("verification",{}).get("binary_verified")):
+            raise ValueError("Incomplete strict source/freeze/replay proof")
+        strict.append((proof["source"]["family"],proof["source"]["source_seed"]))
+    if len(strict)!=6 or set(strict)!={(f,s) for f in DIMENSIONS for s in (2001,3001,4001)}:
+        raise ValueError("All six actual source proofs required")
     source={k:v for k,v in d["source"].items() if k!="source_acceptance_sha256"}
     if source not in evidence["sources"]: raise ValueError("Source not covered by accepted evidence")
     require_approval(role("g2_receipt"),gate="E3-G2",expected={"subjects":{
@@ -183,6 +209,15 @@ def preflight(request, *, operation: str) -> dict:
             if sha256_file(file) != cache[key+"_index_sha256"]: raise ValueError("Cache index bytes changed")
             subjects[f"cache:{d['family']}:{d['source_seed']}:{split}"]=sha256_file(file)
         require_approval(acceptance,gate="E3-CACHE-ACCEPT",expected={"subjects":subjects})
+        from .cache import validate_cache
+        for split,key in [("train","train"),("val","validation")]:
+            validate_cache(contained(ROOT,cache[key+"_index_path"]),expected={"split":split,"family":d["family"],
+                "source_seed":d["source_seed"],"source":d["source"],"runtime":runtime})
+        init_path=contained(ROOT,d["initialization"]["tensor_payload_path"])
+        init_binding=next((p for p in inventory["artifacts"].values()
+                           if p["relative_path"]==init_path.relative_to(ROOT).as_posix()),None)
+        if init_binding is None: raise ValueError("Explicit initialization payload binding required")
+        verify_payload(init_binding)
         if operation=="final_head":
             require_approval(artifact(d["head_freeze_receipt_sha256"]),gate="E3-HEAD-FREEZE",
                              expected={"subjects":{"common_profile":d["profile"]["profile_sha256"]}})
@@ -196,14 +231,31 @@ def preflight(request, *, operation: str) -> dict:
     return checked
 
 
+def verify_current_environment(checked,current):
+    reference=read_json(checked["artifact"](checked["declaration"]["runtime"]["actual_environment_evidence_sha256"]))
+    for key in ("software","schema_dependencies","driver_version","device_name","device_memory"):
+        if current.get(key)!=reference.get(key) or key not in reference:
+            raise ValueError("Actual target environment differs from accepted evidence: "+key)
+
+
 def configure_runtime(*, root_seed: int) -> dict:
     """Called only after all public execution guards; never from check-config."""
     import importlib.metadata
     import random
     import numpy as np
     import torch
+    import subprocess
     p=policy()["runtime"]
     if not os.environ.get("SLURM_JOB_ID"): raise ValueError("Explicit Slurm GPU allocation required")
+    job=subprocess.check_output(["scontrol","show","job",os.environ["SLURM_JOB_ID"],"--oneliner"],text=True)
+    fields=dict(part.split("=",1) for part in job.split() if "=" in part)
+    for key,value in {"Partition":"normal","Account":"uit","QOS":"mig2-35","NumCPUs":"4"}.items():
+        if fields.get(key)!=value: raise ValueError("Actual Slurm allocation differs: "+key)
+    if (fields.get("TimeLimit") not in {"09:00:00","9:00:00"}
+            or fields.get("MinMemoryNode") not in {"16G","16384M"}
+            or "gres/gpu:2g.35gb=1" not in fields.get("AllocTRES","")
+            or os.environ.get("SLURM_CPUS_PER_TASK")!="4" or os.environ.get("SLURM_MEM_PER_NODE")!="16384"):
+        raise ValueError("Actual GPU/CPU/RAM/walltime allocation differs from reviewed policy")
     for key,value in {**p["environment"],"PYTHONHASHSEED":str(root_seed)}.items():
         if os.environ.get(key)!=value: raise ValueError("Process environment differs from reviewed runtime: "+key)
     software={"python":platform.python_version(),"torch":str(torch.__version__),
@@ -211,6 +263,11 @@ def configure_runtime(*, root_seed: int) -> dict:
                  [("torchvision","torchvision"),("Pillow","Pillow"),("numpy","numpy"),("pandas","pandas"),("scikit-learn","scikit-learn")]},
               "cuda":torch.version.cuda,"cudnn":torch.backends.cudnn.version()}
     if software!=p["software_lock"]: raise ValueError("Actual software differs from reviewed target lock")
+    dependencies={}
+    for line in (ROOT/"requirements-e3.txt").read_text().splitlines():
+        if line and not line.startswith("#"):
+            name,version=line.split("=="); dependencies[name]=importlib.metadata.version(name)
+            if dependencies[name]!=version: raise ValueError("E3 schema dependency changed: "+name)
     if not torch.cuda.is_available(): raise ValueError("Reviewed CUDA device required")
     props=torch.cuda.get_device_properties(0)
     if "H200" not in props.name or not 30*1024**3 <= props.total_memory <= 40*1024**3:
@@ -221,7 +278,10 @@ def configure_runtime(*, root_seed: int) -> dict:
     torch.backends.cudnn.benchmark=False; torch.backends.cudnn.deterministic=True
     torch.use_deterministic_algorithms(True,warn_only=False)
     random.seed(root_seed); np.random.seed(root_seed); torch.manual_seed(root_seed); torch.cuda.manual_seed_all(root_seed)
-    return {"software":software,"device_name":props.name,"device_memory":props.total_memory,
+    drivers=set(subprocess.check_output(["nvidia-smi","--query-gpu=driver_version","--format=csv,noheader"],text=True).split())
+    if len(drivers)!=1: raise ValueError("Unambiguous actual driver version required")
+    return {"software":software,"schema_dependencies":dependencies,"driver_version":drivers.pop(),
+            "device_name":props.name,"device_memory":props.total_memory,
             "slurm_job_id":os.environ["SLURM_JOB_ID"],"effective_policy":p}
 
 

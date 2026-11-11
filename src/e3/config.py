@@ -37,14 +37,18 @@ def _float(value):
     return parsed
 
 
-def read_json(path: Path) -> dict:
+def parse_json(text: str):
     def invalid(value):
         raise ValueError(f"Nonstandard JSON constant: {value}")
     try:
-        return json.loads(Path(path).read_bytes().decode("utf-8"), object_pairs_hook=_pairs,
+        return json.loads(text, object_pairs_hook=_pairs,
                           parse_float=_float, parse_constant=invalid)
     except (UnicodeError, json.JSONDecodeError) as exc:
-        raise ValueError(f"Invalid strict JSON: {path}") from exc
+        raise ValueError("Invalid strict JSON") from exc
+
+
+def read_json(path: Path) -> dict:
+    return parse_json(Path(path).read_bytes().decode("utf-8"))
 
 
 def fingerprint(value) -> str:
@@ -194,6 +198,8 @@ def load_contract(path: Path, *, stage: str) -> dict:
 
 def validate_source_binding(source: dict, *, accepted: bool = True) -> dict:
     validate_record(source, "source_binding" if accepted else "source_input")
+    if Path(source["actual_binary_path"]).suffix != ".pt" or Path(source["actual_report_path"]).suffix != ".json":
+        raise ValueError("Source inputs must have checkpoint/report roles, never image/feature roles")
     reference = next((r for r in registry()["selected_sources"] if (r["family"], r["source_seed"]) ==
                       (source["family"], source["source_seed"])), None)
     mapping = {"selected_epoch": "selected_epoch", "binary_sha256": "required_binary_sha256",
@@ -203,6 +209,11 @@ def validate_source_binding(source: dict, *, accepted: bool = True) -> dict:
     if source["source_manifest_sha256"] != SOURCE_SHA256:
         raise ValueError("Source manifest identity mismatch")
     return source
+
+
+def source_path(value: str) -> Path:
+    path = Path(value)
+    return path.resolve() if path.is_absolute() else contained(ROOT, value)
 
 
 def resolve_cache_request(contract: dict, source: dict, paths: dict) -> dict:
