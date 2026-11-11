@@ -75,7 +75,7 @@ One common official protocol is already fixed, not a pending choice. Do not fill
 | E3-T01 | E3-G1 | E3 schemas/common-protocol/stage-permission guards and private CPU fixtures | **NOT STARTED — GATED** |
 | E3-T02 | T01 | Fixed metadata/preprocessing and strict selected-source adapters/freeze | **COMPLETE — CPU EVIDENCE ONLY** |
 | E3-T03 | T01/T02 | Immutable cache construction/validation and original-head replay mechanics | **COMPLETE — CPU EVIDENCE ONLY** |
-| E3-T04 | T01/T03 | Natural/cRT samplers and deterministic resumable draw state | **NOT STARTED — GATED** |
+| E3-T04 | T01/T03 | Natural/cRT samplers and deterministic resumable draw state | **COMPLETE — CPU EVIDENCE ONLY** |
 | E3-T05 | T01/T03 | Paired linear heads, init hashes and approved common optimizer | **NOT STARTED — GATED** |
 | E3-T06 | T01/T02 | Narrow metric reuse with independent exact bucket/ranking oracles | **NOT STARTED — GATED** |
 | E3-T07 | T03/T04/T05/T06 | Head-only engine, sample-weighted tails/common schedule/full budget/comparator | **NOT STARTED — GATED** |

@@ -16,3 +16,5 @@ T02: complete — RED: five missing source/data behaviors; GREEN: source/preproc
 Correction after T02: IDE root lacked the checkout .gitattributes; mirroring a new E3 file replaced inherited rules. Restored all pre-E3 rules from the parent commit and appended only E3 exact-byte rules before further staging.
 
 T03: complete — RED: five absent cache/replay/publication behaviors; GREEN: cache/source/preprocessing regressions, 13 passed; committed chunks are normalized schema records and only index publication marks complete. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
+
+T04: complete — RED: three absent sampling behaviors; GREEN: sampler and cache tests, 8 passed; literal cRT class/image oracle and exact restored suffixes; explicit cache_root added to sampler to resolve relative row payloads. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
