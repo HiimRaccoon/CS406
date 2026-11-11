@@ -20,3 +20,5 @@ T03: complete — RED: five absent cache/replay/publication behaviors; GREEN: ca
 T04: complete — RED: three absent sampling behaviors; GREEN: sampler and cache tests, 8 passed; literal cRT class/image oracle and exact restored suffixes; explicit cache_root added to sampler to resolve relative row payloads. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
 
 T05: complete — RED: three missing paired-head/optimizer behaviors; GREEN: E3 config/model plus E1/E2 model regressions, 20 passed; exact paired tensors, outer CPU RNG restoration and LR-independent initialization. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
+
+T06: complete — RED: two missing metric behaviors; GREEN: E3 and unchanged E1/E2 metrics, 9 passed; independent tie/F1/cross-bucket/NLL and fixed extreme-tail coverage oracles. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
