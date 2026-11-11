@@ -18,3 +18,5 @@ Correction after T02: IDE root lacked the checkout .gitattributes; mirroring a n
 T03: complete — RED: five absent cache/replay/publication behaviors; GREEN: cache/source/preprocessing regressions, 13 passed; committed chunks are normalized schema records and only index publication marks complete. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
 
 T04: complete — RED: three absent sampling behaviors; GREEN: sampler and cache tests, 8 passed; literal cRT class/image oracle and exact restored suffixes; explicit cache_root added to sampler to resolve relative row payloads. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
+
+T05: complete — RED: three missing paired-head/optimizer behaviors; GREEN: E3 config/model plus E1/E2 model regressions, 20 passed; exact paired tensors, outer CPU RNG restoration and LR-independent initialization. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
