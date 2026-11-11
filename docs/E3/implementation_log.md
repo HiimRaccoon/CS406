@@ -22,3 +22,5 @@ T04: complete — RED: three absent sampling behaviors; GREEN: sampler and cache
 T05: complete — RED: three missing paired-head/optimizer behaviors; GREEN: E3 config/model plus E1/E2 model regressions, 20 passed; exact paired tensors, outer CPU RNG restoration and LR-independent initialization. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
 
 T06: complete — RED: two missing metric behaviors; GREEN: E3 and unchanged E1/E2 metrics, 9 passed; independent tie/F1/cross-bucket/NLL and fixed extreme-tail coverage oracles. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
+
+T07: complete — RED: three missing head engine behaviors; GREEN: E3 engine/metrics and unchanged E1/E2 engine regressions, 18 passed; direct 4+1 sample-mean tail oracle, schedule endpoints/interior/exhaustion and nonfinite no-update. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
