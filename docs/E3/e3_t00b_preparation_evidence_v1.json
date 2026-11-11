@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "e3_t00b_preparation_evidence_v1",
+  "non_binding": true,
+  "is_approval_receipt": false,
+  "is_freeze_sidecar": false,
+  "execution_authorized": false,
+  "date": "2026-11-11",
+  "timezone": "Asia/Saigon",
+  "local_report_observations": [
+    {
+      "family": "E1",
+      "actual_existing_absolute_path": "C:\\Users\\Windows\\Downloads\\GeoLocation\\src\\e1\\e1_three_seed_validation_report_v1.json",
+      "bytes": 53691,
+      "sha256": "3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e",
+      "status": "VERIFIED_REPORT_BYTES_AND_SELECTED_METADATA_ONLY",
+      "observation_date": "2026-11-11",
+      "execution_path_default": false,
+      "scope": "Local supplied aggregate bytes/hash/kind/contract/seed/epoch/checksum metadata checked; no binary loading, source acceptance, full prediction reconstruction or server verification",
+      "non_binding": true,
+      "runtime_default": false
+    },
+    {
+      "family": "E2",
+      "actual_existing_absolute_path": "C:\\Users\\Windows\\Downloads\\GeoLocation\\src\\e2\\e2_three_seed_validation_report_v1.json",
+      "bytes": 138818,
+      "sha256": "75bdba59bccc8c8b7db498363d5c411cbde5165e0f9791bd925f41be6e5a82b9",
+      "status": "VERIFIED_REPORT_BYTES_AND_SELECTED_METADATA_ONLY",
+      "observation_date": "2026-11-11",
+      "execution_path_default": false,
+      "scope": "Local supplied aggregate bytes/hash/kind/contract/seed/epoch/checksum metadata checked; no binary loading, source acceptance, full prediction reconstruction or server verification",
+      "non_binding": true,
+      "runtime_default": false
+    }
+  ],
+  "local_path_policy": "Observed paths are non-binding preparation observations only; never runtime defaults or scientific equality bindings.",
+  "package_inventory": [
+    {
+      "path": "docs/E3/e3_numeric_contract_v1.json",
+      "bytes": 111489,
+      "sha256": "381bc3685d8ebb715ac3d4d4d82880a1a4be20b01b0ad50a899bd82eefa93f6c"
+    },
+    {
+      "path": "docs/E3/e3_source_manifest_v1.json",
+      "bytes": 10185,
+      "sha256": "5f3fa03c908cccb920f2135ab594050a102211aef950885ac3c26f00366093df"
+    },
+    {
+      "path": "docs/E3/e3_cache_pilot_contract_v1.json",
+      "bytes": 33900,
+      "sha256": "59af31dc33c71103d0d7cbf051c4e27ac81dbd46253dce82c09c8fd963dbaa74"
+    },
+    {
+      "path": "docs/E3/schemas/e3_record_schemas_v1.json",
+      "bytes": 93468,
+      "sha256": "6e44352695841d917a6df435de74abc93d571df874a6580a4182147d89b22fb5"
+    },
+    {
+      "path": "docs/E3/tasks.md",
+      "bytes": 18108,
+      "sha256": "4dec1281ec9fd99e930ed891bbcc47af2d5c630734c14cfa0915def56462bffc"
+    }
+  ],
+  "inventory_scope": "Preparation byte inventory only, excludes itself and grants no G1 approval. Future approval/sidecar/receipt requires explicit user action, none created.",
+  "verification_scope": "Strict JSON/schema-reference/record checks and metadata-only hash/arithmetic checks; no image/model/cache/training/pilot/test execution.",
+  "verification_status": "PASS_DOCUMENT_AND_METADATA_CHECKS_ONLY",
+  "source_handoff_status": "Local report bytes/hash/selected metadata verified; actual selected checkpoint binaries/full analyses/history/current data and target acceptance unverified.",
+  "verification_details": {
+    "status": "PASS",
+    "checks": 421,
+    "strict_json_files": 5,
+    "schema_definitions": 52,
+    "schema_record_kinds": 14,
+    "schema_check_method": "one-off standard-library evaluation of all constraints used; not external metaschema validation or production E3 implementation",
+    "future_pending_fields": 24,
+    "model_or_images_opened": false,
+    "training_or_cache_execution": false,
+    "G1": "NOT GRANTED"
+  },
+  "verification_limits": [
+    "No external JSON-Schema metaschema validator was installed or run; every constraint used in this bundle was checked by a one-off standard-library document checker",
+    "Schema checks and synthetic invalid-document probes are not implementation/CPU/target acceptance evidence",
+    "No source checkpoint or image was loaded; no training/cache/pilot/test access occurred",
+    "No G1 decision, approved sidecar or receipt was created"
+  ]
+}

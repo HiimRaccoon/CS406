@@ -4,6 +4,8 @@
 
 Revision date: **2026-11-11 (Asia/Saigon)**. The E3 protocol is not frozen. E3-specific choices without a reviewed value are explicitly **PENDING** and require resolution through the gates in Section 13; library defaults and completed full-model recipes cannot resolve them.
 
+**E3-G0 is PASS for documentation/design preparation only: plan/tasks and E3-T00b preparation. E3-G1, implementation, cache extraction, pilot execution, official head runs and test access remain NOT AUTHORIZED.**
+
 ## 1. Research question, scope and authority
 
 **On each completed E1/E2 representation, what changes when a reset linear classifier is trained with class-uniform sampling instead of natural sampling?** The principal controlled contrast is **cRT versus natural head retraining on the same frozen representation and cache**. Original heads remain references for the effect of resetting/retraining the classifier and removing training augmentation.
@@ -59,7 +61,8 @@ Each arm reports **source seeds 2001, 3001 and 4001**, joined by matching ID. Th
 | Head termination policy | Fixed budget; early stopping OFF. The numeric head budget is PENDING, not the source eight-epoch budget |
 | Head optimization, initialization and small-pilot envelope | PENDING under Section 14; require explicit review/freeze |
 | Cache storage/extraction operational choices and numerical acceptance tolerances | PENDING under Section 14; cannot change the feature definition |
-| E3-G0 and all implementation/execution gates | AWAITING REVIEW / NOT GRANTED |
+| E3-G0 | PASS for documentation/design preparation only: plan/tasks and E3-T00b preparation |
+| E3-G1 and all implementation/execution gates | NOT AUTHORIZED |
 | Final test | LOCKED / NOT AUTHORIZED |
 
 The head comparator and fixed-budget policy are explicit E3 design adoptions of completed conventions for review. They do not imply that an E3 protocol has already been approved or executed.
@@ -79,12 +82,20 @@ Use the **selected official final-seed checkpoint** for each source, including i
 
 These are **recorded report/checksum references**; actual source binaries require independent verification at source-byte acceptance. The LR column describes completed representation training; it supplies **no E3 head LR**.
 
-| Local source-report reference | Recorded exact file-byte SHA-256 | Source contract SHA-256 |
+| External/materialized source-report artifact | Recorded exact file-byte SHA-256 | Source contract SHA-256 |
 |---|---|---|
-| [E1 aggregate JSON](../../src/e1/e1_three_seed_validation_report_v1.json) | `3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e` | `c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143` |
-| [E2 aggregate JSON](../../src/e2/e2_three_seed_validation_report_v1.json) | `75bdba59bccc8c8b7db498363d5c411cbde5165e0f9791bd925f41be6e5a82b9` | `ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72` |
+| E1 official aggregate JSON, logical filename `e1_three_seed_validation_report_v1.json` | `3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e` | `c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143` |
+| E2 official aggregate JSON, logical filename `e2_three_seed_validation_report_v1.json` | `75bdba59bccc8c8b7db498363d5c411cbde5165e0f9791bd925f41be6e5a82b9` | `ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72` |
 
-The E1 aggregate digest also matches the completed E2 comparator pin. The E2 aggregate digest is a measured local-file reference submitted with this draft, not an invented prior E3 approval. Bind approved source-report bytes in the later E3 source manifest; explicit runtime paths may differ from these documentation links.
+Neither report is present as a repository-relative file on branch `e3`. These logical filenames identify external/materialized source artifacts, not repository links. At **E3-T00b/P01**, supply each report's actual existing path, verify its exact bytes against the recorded SHA-256 above, and record that path/digest in the candidate source manifest. Do not fall back to an assumed `src/e1/` or `src/e2/` report path. The E1 aggregate digest also matches the completed E2 comparator pin; the recorded digests do not imply E3 acceptance or approval.
+
+T00b must distinguish these path and binding classes:
+
+| Class | T00b treatment |
+|---|---|
+| Actual existing source-artifact inputs | Inventory actual supplied report/binary/analysis paths and available historical source evidence; verify report bytes at P01 and retain the source-byte acceptance requirements below. Unmaterialized inputs remain explicitly PENDING, not accepted merely because a prospective path is named |
+| Planned cache/output roots | Declare intended roles, locations and containment separately; these roots and payloads may not exist yet. A planned root is not an existing source input or an accepted cache |
+| Candidate schema/receipt bindings | Specify schemas, gate roles, prospective receipt paths and required binding fields for review. Future E3 accepted-cache indices and approved receipts are not prerequisites before G1; do not invent their hashes, approval status or contents. Existing historical source evidence is recorded separately from future E3 approvals |
 
 Before source-byte acceptance, obtain the actual six selected binaries and applicable declarations/resolved configurations, selected analyses/predictions, histories/summaries, selection bindings and recorded source contract identities. Hash the actual files, strict-load compatible complete state dictionaries and reconcile source family/seed/selected epoch/head shape with the registry. The current specification does not presume server checkpoint paths, receipt paths or receipt contents; those are **PENDING materialization**. Missing/mismatched source bytes block E3 use of that source, without silently replacing it or treating the other two seeds as a complete aggregate.
 
@@ -341,13 +352,13 @@ Efficiency is secondary if measured. Separate source feature extraction, cache I
 
 ## 13. E3 gates and authorization design
 
-**All E3-specific gates below remain unapproved.** Existing E1/E1-HR/E2 approvals do not authorize E3 caching or head training. Keep two distinct freezes: a reviewed **cache/acceptance/pilot contract** before implementation and pilot access, and the **one common final head protocol** after pilot review. This avoids requiring a pilot outcome before the pilot can be authorized while preventing official defaults from slipping through unresolved fields.
+**E3-G0 is PASS for documentation/design preparation only: plan/tasks and E3-T00b preparation. E3-G1 and all later implementation/execution gates remain NOT AUTHORIZED.** Existing E1/E1-HR/E2 approvals do not authorize E3 caching or head training. Keep two distinct freezes: a reviewed **cache/acceptance/pilot contract** before implementation and pilot access, and the **one common final head protocol** after pilot review. This avoids requiring a pilot outcome before the pilot can be authorized while preventing official defaults from slipping through unresolved fields.
 
 **E3-TARGET-AUTH and E3-G2 concern bounded acceptance of source checkpoint loading, feature extraction/runtime and deterministic recovery.** Any head/recovery fixture trains only a standalone classifier while representations remain frozen. These are not full-model training gates and do not reopen E1/E2, change their checkpoints or authorize further backbone optimization.
 
 | Gate / stage | Concrete review requirement | Scope after explicit approval | Current status |
 |---|---|---|---|
-| E3-G0 | Review this specification, inherited decisions, pending register and six-arm design | Prepare the E3 plan/ledger, source manifest and bounded cache/pilot contract candidates | **AWAITING REVIEW** |
+| E3-G0 | Specification reviewed for documentation/design preparation only | Plan/tasks and E3-T00b source-manifest/cache-pilot-candidate preparation only; no numeric freeze, implementation or execution | **PASS** |
 | E3-G1 | Review plan and exact cache/pilot contract bytes; resolve every field needed by those stages; select method and explicitly authorize named implementation/CPU-preparation scope | Implement/verify only the approved E3 scope; final-head numeric outcomes may remain PENDING and official head execution must fail closed | **NOT GRANTED** |
 | E3-TARGET-AUTH | Explicitly authorize bounded source-checkpoint-loading, feature-extraction/runtime and deterministic-recovery acceptance on actual E3 inputs | Train-only extraction and standalone-head/recovery fixtures with frozen representations; no full-model training, bulk cache, pilot selection or official head training | **NOT GRANTED** |
 | E3-G2 | Accept the bounded source-loading/extraction/runtime/recovery evidence, verified source handoff, numerical-replay policy and concrete cache declarations | E3 readiness accepted; no E1/E2 reopening or full-model training; does not itself authorize bulk extraction | **NOT GRANTED** |
@@ -369,7 +380,7 @@ All entries below are genuinely unresolved E3 choices or not-yet-observed inputs
 
 | ID | PENDING item | Required resolution / latest stop |
 |---|---|---|
-| P01 | Actual source checkpoint/analysis/receipt paths and complete binary handoff | Materialize and verify six selected source lineages before E3-G2/cache declarations; recorded hashes/epochs are already in Section 3 |
+| P01 | Actual existing external source-report/checkpoint/analysis paths, available historical source evidence and complete binary handoff | At E3-T00b supply actual existing report paths and verify their recorded SHA-256 values; inventory existing source inputs separately from planned cache/output roots and candidate future E3 receipt bindings. Complete six selected source lineages before E3-G2/cache declarations; recorded hashes/epochs remain fixed |
 | P02 | Cache format, storage dtype/layout/chunk size; extraction batch/worker policy and recovery boundary | Review lossless preservation and complete ordered coverage before E3-G1 implementation contract and relevant target acceptance |
 | P03 | Float-logit/NLL equivalence tolerances and replay comparison details | Freeze before acceptance/cache use; never waive discrete prediction, geometry or coverage errors |
 | P04 | Bounded pilot source lineage/cache subset, pilot seed/stream role and actual target scope | Explicit candidate before E3-G1; approve its execution at E3-PILOT-AUTH; source-final pairing remains 2001/3001/4001 |

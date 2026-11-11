@@ -1,0 +1,213 @@
+{
+  "schema_version": "1.0.0",
+  "kind": "e3_source_manifest_v1",
+  "status": "CANDIDATE_FOR_G1_REVIEW",
+  "executable": false,
+  "report_artifacts": {
+    "E1": {
+      "logical_filename": "e1_three_seed_validation_report_v1.json",
+      "kind": "e1_three_seed_validation_report_v1",
+      "expected_sha256": "3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e",
+      "expected_source_contract_sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143",
+      "repository_relative_default_allowed": false,
+      "tracked_on_e3": false,
+      "runtime_rule": "Resolve explicit actual runtime artifact path; verify logical filename role, required SHA-256 and historical schema. Preparation evidence paths are never scientific bindings or path defaults.",
+      "materialization_status": "REPORT_BYTES_VERIFIED_IN_NON_BINDING_PREPARATION_EVIDENCE; runtime path must be explicitly supplied",
+      "preparation_evidence": "docs/E3/e3_t00b_preparation_evidence_v1.json#/local_report_observations"
+    },
+    "E2": {
+      "logical_filename": "e2_three_seed_validation_report_v1.json",
+      "kind": "e2_three_seed_validation_report_v1",
+      "expected_sha256": "75bdba59bccc8c8b7db498363d5c411cbde5165e0f9791bd925f41be6e5a82b9",
+      "expected_source_contract_sha256": "ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72",
+      "repository_relative_default_allowed": false,
+      "tracked_on_e3": false,
+      "runtime_rule": "Resolve explicit actual runtime artifact path; verify logical filename role, required SHA-256 and historical schema. Preparation evidence paths are never scientific bindings or path defaults.",
+      "materialization_status": "REPORT_BYTES_VERIFIED_IN_NON_BINDING_PREPARATION_EVIDENCE; runtime path must be explicitly supplied",
+      "preparation_evidence": "docs/E3/e3_t00b_preparation_evidence_v1.json#/local_report_observations"
+    }
+  },
+  "fixed_artifacts": {
+    "manifest.csv": {
+      "path": "artifacts/baseline124/manifest.csv",
+      "bytes": 7519661,
+      "sha256": "9cbd8b70e8522b5aa4a20fba4fa7b2ecea855cf377f98e41ebb162a07f8a8040"
+    },
+    "summary.json": {
+      "path": "artifacts/baseline124/summary.json",
+      "bytes": 994,
+      "sha256": "cf3dcf909aefd17c531cd115d6c30e54bbeb3dbd13962f974317ccde8a2f3e4b"
+    },
+    "labels.json": {
+      "path": "artifacts/baseline124/labels.json",
+      "bytes": 1927,
+      "sha256": "5f7e8f5810e9ac8c43c1c22b2e4febe2e7a6174629b9031d3e943fce511832aa"
+    },
+    "class_support.csv": {
+      "path": "artifacts/baseline124/class_support.csv",
+      "bytes": 6308,
+      "sha256": "ff46f4074464644f573b4ca64eb61320a61a8cc3daed3a3886a350cbc3c6fb75"
+    }
+  },
+  "source_contracts": {
+    "E1": {
+      "path": "docs/E1/e1_numeric_contract_v1.json",
+      "bytes": 31796,
+      "sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143"
+    },
+    "E2": {
+      "path": "docs/E2/e2_numeric_contract_v1.json",
+      "bytes": 86335,
+      "sha256": "ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72"
+    }
+  },
+  "selected_sources": [
+    {
+      "family": "E1",
+      "source_seed": 2001,
+      "recorded_source_run_id": "final-lr0.00010000-seed2001",
+      "selected_epoch": 8,
+      "required_binary_sha256": "e9c6202568715d81cf0949f4a7cfcd2546839b9cb12f577cdfc2a603de910a4f",
+      "required_report_sha256": "3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e",
+      "required_source_contract_sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143",
+      "feature_dimension": 768,
+      "runtime_bindings": {
+        "status": "PENDING",
+        "executable": false,
+        "field_names": [
+          "actual_checkpoint_path",
+          "actual_report_path",
+          "selected_analysis_and_predictions_paths",
+          "resolved_config_and_history_paths",
+          "source_selection_and_historical_evidence_bindings",
+          "actual_verified_binary_and_evidence_hashes"
+        ],
+        "required_before": "E3-TARGET-AUTH/E3-G2 before bulk cache use",
+        "reason": "Selected binaries and full source evidence have not been materialized/loaded/verified by this task"
+      }
+    },
+    {
+      "family": "E1",
+      "source_seed": 3001,
+      "recorded_source_run_id": "final-lr0.00010000-seed3001",
+      "selected_epoch": 7,
+      "required_binary_sha256": "2855d17ac932c3986a64363259d12334aa0a5af6f8f60f3fb9258a8be9544fdf",
+      "required_report_sha256": "3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e",
+      "required_source_contract_sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143",
+      "feature_dimension": 768,
+      "runtime_bindings": {
+        "status": "PENDING",
+        "executable": false,
+        "field_names": [
+          "actual_checkpoint_path",
+          "actual_report_path",
+          "selected_analysis_and_predictions_paths",
+          "resolved_config_and_history_paths",
+          "source_selection_and_historical_evidence_bindings",
+          "actual_verified_binary_and_evidence_hashes"
+        ],
+        "required_before": "E3-TARGET-AUTH/E3-G2 before bulk cache use",
+        "reason": "Selected binaries and full source evidence have not been materialized/loaded/verified by this task"
+      }
+    },
+    {
+      "family": "E1",
+      "source_seed": 4001,
+      "recorded_source_run_id": "final-lr0.00010000-seed4001",
+      "selected_epoch": 8,
+      "required_binary_sha256": "eb74126015b3854cad78fb9c2dff7a59a2352b3299a8998ef963ca7f72c68ef2",
+      "required_report_sha256": "3387477c40a97388e967f10fd74d313664946d0b7ec1ae963ad0e49a98b3db9e",
+      "required_source_contract_sha256": "c9153c53534e95099c374e8ab7b54bc347588f11b200adcc92b3c23ad6ac4143",
+      "feature_dimension": 768,
+      "runtime_bindings": {
+        "status": "PENDING",
+        "executable": false,
+        "field_names": [
+          "actual_checkpoint_path",
+          "actual_report_path",
+          "selected_analysis_and_predictions_paths",
+          "resolved_config_and_history_paths",
+          "source_selection_and_historical_evidence_bindings",
+          "actual_verified_binary_and_evidence_hashes"
+        ],
+        "required_before": "E3-TARGET-AUTH/E3-G2 before bulk cache use",
+        "reason": "Selected binaries and full source evidence have not been materialized/loaded/verified by this task"
+      }
+    },
+    {
+      "family": "E2",
+      "source_seed": 2001,
+      "recorded_source_run_id": "e2-final-lr0.00005000-seed2001",
+      "selected_epoch": 8,
+      "required_binary_sha256": "d54dc636908085b6396766c9f7c8962ee707bf4862dab7891c18c3363029902c",
+      "required_report_sha256": "75bdba59bccc8c8b7db498363d5c411cbde5165e0f9791bd925f41be6e5a82b9",
+      "required_source_contract_sha256": "ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72",
+      "feature_dimension": 1536,
+      "runtime_bindings": {
+        "status": "PENDING",
+        "executable": false,
+        "field_names": [
+          "actual_checkpoint_path",
+          "actual_report_path",
+          "selected_analysis_and_predictions_paths",
+          "resolved_config_and_history_paths",
+          "source_selection_and_historical_evidence_bindings",
+          "actual_verified_binary_and_evidence_hashes"
+        ],
+        "required_before": "E3-TARGET-AUTH/E3-G2 before bulk cache use",
+        "reason": "Selected binaries and full source evidence have not been materialized/loaded/verified by this task"
+      }
+    },
+    {
+      "family": "E2",
+      "source_seed": 3001,
+      "recorded_source_run_id": "e2-final-lr0.00005000-seed3001",
+      "selected_epoch": 8,
+      "required_binary_sha256": "a8f2652b519cf55cb5281cc0c6cd993acc1eeb569102acbddff2e53695236e7d",
+      "required_report_sha256": "75bdba59bccc8c8b7db498363d5c411cbde5165e0f9791bd925f41be6e5a82b9",
+      "required_source_contract_sha256": "ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72",
+      "feature_dimension": 1536,
+      "runtime_bindings": {
+        "status": "PENDING",
+        "executable": false,
+        "field_names": [
+          "actual_checkpoint_path",
+          "actual_report_path",
+          "selected_analysis_and_predictions_paths",
+          "resolved_config_and_history_paths",
+          "source_selection_and_historical_evidence_bindings",
+          "actual_verified_binary_and_evidence_hashes"
+        ],
+        "required_before": "E3-TARGET-AUTH/E3-G2 before bulk cache use",
+        "reason": "Selected binaries and full source evidence have not been materialized/loaded/verified by this task"
+      }
+    },
+    {
+      "family": "E2",
+      "source_seed": 4001,
+      "recorded_source_run_id": "e2-final-lr0.00005000-seed4001",
+      "selected_epoch": 8,
+      "required_binary_sha256": "f759e266f04dd2d6f9693747468a1ea5ccc053a35e8cbf332d21ac0b7a818a5e",
+      "required_report_sha256": "75bdba59bccc8c8b7db498363d5c411cbde5165e0f9791bd925f41be6e5a82b9",
+      "required_source_contract_sha256": "ef8767460bbd54454baa22ce289ed4222742954bcdefa8024a8972f5dc958f72",
+      "feature_dimension": 1536,
+      "runtime_bindings": {
+        "status": "PENDING",
+        "executable": false,
+        "field_names": [
+          "actual_checkpoint_path",
+          "actual_report_path",
+          "selected_analysis_and_predictions_paths",
+          "resolved_config_and_history_paths",
+          "source_selection_and_historical_evidence_bindings",
+          "actual_verified_binary_and_evidence_hashes"
+        ],
+        "required_before": "E3-TARGET-AUTH/E3-G2 before bulk cache use",
+        "reason": "Selected binaries and full source evidence have not been materialized/loaded/verified by this task"
+      }
+    }
+  ],
+  "source_handoff_complete": false,
+  "g1_preparation_status": "Registry, pins and required runtime binding schemas are complete candidates; missing actual binaries are explicit TARGET-AUTH/G2/CACHE blockers, not fabricated accepted evidence",
+  "materialization_policy": "Actual source/report paths are supplied explicitly at runtime and verified; report preparation paths only live in non-binding evidence. No source paths inferred from planned output roots."
+}
