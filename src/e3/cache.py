@@ -170,7 +170,7 @@ class CacheDataset(Dataset):
     def __init__(self, index_path: Path, *, expected: dict):
         index = validate_cache(index_path, expected=expected)
         require_approval(expected["cache_acceptance_receipt"], gate="E3-CACHE-ACCEPT",
-                         expected={"subjects": {"cache_index": sha256_file(index_path)}})
+                         expected={"subjects": {f"cache:{index['family']}:{index['source_seed']}:{index['split']}": sha256_file(index_path)}})
         self.root, self.index = Path(index_path).parent, index
         self.rows = _row_records(FixedManifest().records(index["split"]))
         self.ends = [c["row_start"] + c["row_count"] for c in index["chunks"]]

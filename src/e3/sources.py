@@ -60,7 +60,8 @@ def validate_selected_state(state: dict, entry: dict) -> None:
 def _authorized_source(entry, request):
     # Stage inspection is intentionally before any model or binary deserialization.
     from .runtime import preflight
-    accepted = preflight(request, operation=request["operation"])
+    raw = request.request if hasattr(request, "request") else request
+    accepted = preflight(request, operation=raw["operation"])
     declaration = accepted["declaration"]
     entries = declaration.get("sources", [declaration.get("source")])
     if entry not in entries:

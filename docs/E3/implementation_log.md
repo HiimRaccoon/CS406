@@ -26,3 +26,7 @@ T06: complete — RED: two missing metric behaviors; GREEN: E3 and unchanged E1/
 T07: complete — RED: three missing head engine behaviors; GREEN: E3 engine/metrics and unchanged E1/E2 engine regressions, 18 passed; direct 4+1 sample-mean tail oracle, schedule endpoints/interior/exhaustion and nonfinite no-update. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
 
 T08: complete — RED: three missing capture/replay/last-state behaviors; GREEN: E3 checkpoint/engine plus E1/E2 checkpoint regressions, 11 passed; safe tensor/primitives full state and derived publication repair. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.
+
+Ruling T09: approved schemas bind several downstream artifacts by SHA without a locator. Add an explicit ExecutionContext(request, inventory_path) and input inventory bound by the same operation receipt; keep normalized scientific schemas and approved candidate bytes unchanged. Missing/changed inventory fails before allocation. Cost if wrong: deployment needs a reviewed inventory in addition to its declaration/wrapper.
+
+T09: complete — RED: five absent preflight/lifecycle behaviors; GREEN: E3 runtime/train/checkpoint and unchanged E2 runtime regressions, 29 passed; no pre-target G2 cycle, full-budget declining-F1 lifecycle and terminal no-update recovery. Protected source/data/preprocessing bytes unchanged. Nonofficial CPU evidence only.

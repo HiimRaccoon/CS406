@@ -73,7 +73,7 @@ def make_source_loader(manifest, *, source: dict, request: dict):
         raise ValueError("Extraction root must match source seed")
     records = manifest.records(split)
     start = request.get("row_start", 0)
-    if type(start) is not int or not 0 <= start < len(records) or start % policy()["storage"]["rows_per_chunk"]:
+    if type(start) is not int or not 0 <= start <= len(records) or (start != len(records) and start % policy()["storage"]["rows_per_chunk"]):
         raise ValueError("Extraction resumes only from an uncommitted chunk start")
     generator = torch.Generator(device="cpu").manual_seed(derived_seed(root_seed, "E3-v1", stage, source["source_seed"], "loader", split))
     settings = policy()["storage"]["extraction"]
