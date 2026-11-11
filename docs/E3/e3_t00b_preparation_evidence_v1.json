@@ -37,8 +37,8 @@
   "package_inventory": [
     {
       "path": "docs/E3/e3_numeric_contract_v1.json",
-      "bytes": 111489,
-      "sha256": "381bc3685d8ebb715ac3d4d4d82880a1a4be20b01b0ad50a899bd82eefa93f6c"
+      "bytes": 112858,
+      "sha256": "7c3a2d7e8004254fee727c1d8f82e1c6a17243de59968ac07317c60f575edeef"
     },
     {
       "path": "docs/E3/e3_source_manifest_v1.json",
@@ -47,18 +47,18 @@
     },
     {
       "path": "docs/E3/e3_cache_pilot_contract_v1.json",
-      "bytes": 33900,
-      "sha256": "59af31dc33c71103d0d7cbf051c4e27ac81dbd46253dce82c09c8fd963dbaa74"
+      "bytes": 35392,
+      "sha256": "e4f18b3134289a4e4fd10d34dfe270028addd71cf9f29618fbd403e891a95a1a"
     },
     {
       "path": "docs/E3/schemas/e3_record_schemas_v1.json",
-      "bytes": 93468,
-      "sha256": "6e44352695841d917a6df435de74abc93d571df874a6580a4182147d89b22fb5"
+      "bytes": 94843,
+      "sha256": "8156410673c321b85f2e7e9cd69cb5dbe8c87dbad5e2a15704b1203fab3895e3"
     },
     {
       "path": "docs/E3/tasks.md",
-      "bytes": 18108,
-      "sha256": "4dec1281ec9fd99e930ed891bbcc47af2d5c630734c14cfa0915def56462bffc"
+      "bytes": 18109,
+      "sha256": "35ab60ce9b54d20425bec035292f2580a7f8c68f292848818e70ddc66056cef3"
     }
   ],
   "inventory_scope": "Preparation byte inventory only, excludes itself and grants no G1 approval. Future approval/sidecar/receipt requires explicit user action, none created.",
@@ -67,7 +67,7 @@
   "source_handoff_status": "Local report bytes/hash/selected metadata verified; actual selected checkpoint binaries/full analyses/history/current data and target acceptance unverified.",
   "verification_details": {
     "status": "PASS",
-    "checks": 421,
+    "checks": 432,
     "strict_json_files": 5,
     "schema_definitions": 52,
     "schema_record_kinds": 14,
@@ -75,7 +75,8 @@
     "future_pending_fields": 24,
     "model_or_images_opened": false,
     "training_or_cache_execution": false,
-    "G1": "NOT GRANTED"
+    "G1": "NOT GRANTED",
+    "revision_scope": "Extraction and direct/cached replay batch 16; explicit shapes/tails and 384-presentation bounded source fixture cap; pilot/head batch 512 unchanged"
   },
   "verification_limits": [
     "No external JSON-Schema metaschema validator was installed or run; every constraint used in this bundle was checked by a one-off standard-library document checker",

@@ -1248,7 +1248,7 @@
               "const": "cuda:0"
             },
             "original_image_batch_size": {
-              "const": 1
+              "const": 16
             },
             "num_workers": {
               "const": 0
@@ -1281,6 +1281,49 @@
             "encoder_calls": {
               "type": "string",
               "minLength": 1
+            },
+            "batch_shapes": {
+              "const": {
+                "E1_global": [
+                  16,
+                  3,
+                  384,
+                  896
+                ],
+                "E1_features": [
+                  16,
+                  768
+                ],
+                "E2_global": [
+                  16,
+                  3,
+                  384,
+                  896
+                ],
+                "E2_locals": [
+                  16,
+                  4,
+                  3,
+                  320,
+                  320
+                ],
+                "E2_flattened_locals": [
+                  64,
+                  3,
+                  320,
+                  320
+                ],
+                "E2_features": [
+                  16,
+                  1536
+                ],
+                "tail_policy": "Retain actual B rows, no padding, duplication or drop; global/features use B, locals use [B,4,...] and flattened locals [4*B,...]",
+                "train_batches": 2188,
+                "train_tail_rows": 5,
+                "val_batches": 469,
+                "val_tail_rows": 9,
+                "full_batches_per_1024_row_chunk": 64
+              }
             }
           },
           "required": [
@@ -1295,7 +1338,8 @@
             "autocast",
             "eval",
             "no_grad",
-            "encoder_calls"
+            "encoder_calls",
+            "batch_shapes"
           ],
           "additionalProperties": false
         },
@@ -1423,7 +1467,7 @@
           "$ref": "#/$defs/float_tolerance"
         },
         "direct_and_cached_original_head_batch_size": {
-          "const": 1
+          "const": 16
         },
         "full_validation_order": {
           "type": "string",
@@ -1451,6 +1495,10 @@
         "failure": {
           "type": "string",
           "minLength": 1
+        },
+        "batch_policy": {
+          "type": "string",
+          "minLength": 1
         }
       },
       "required": [
@@ -1462,7 +1510,8 @@
         "discrete_mismatch_allowed_by_float_tolerance",
         "reference_logits_unavailable",
         "tolerances_are_measured_target_results",
-        "failure"
+        "failure",
+        "batch_policy"
       ],
       "additionalProperties": false
     },
@@ -1858,10 +1907,10 @@
           "const": false
         },
         "maximum_source_original_image_presentations": {
-          "const": 48
+          "const": 384
         },
         "per_source_member_pass_cap": {
-          "const": 4
+          "const": 32
         },
         "operations": {
           "type": "string",

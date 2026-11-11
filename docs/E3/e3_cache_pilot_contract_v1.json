@@ -40,7 +40,7 @@
     },
     "extraction": {
       "device": "cuda:0",
-      "original_image_batch_size": 1,
+      "original_image_batch_size": 16,
       "num_workers": 0,
       "pin_memory": false,
       "persistent_workers": false,
@@ -50,7 +50,48 @@
       "autocast": false,
       "eval": true,
       "no_grad": true,
-      "encoder_calls": "E1: global only. E2: global first then one batch-major call of all four locals; no crop chunking"
+      "encoder_calls": "E1: global only. E2: global first then one batch-major call of all four locals; no crop chunking",
+      "batch_shapes": {
+        "E1_global": [
+          16,
+          3,
+          384,
+          896
+        ],
+        "E1_features": [
+          16,
+          768
+        ],
+        "E2_global": [
+          16,
+          3,
+          384,
+          896
+        ],
+        "E2_locals": [
+          16,
+          4,
+          3,
+          320,
+          320
+        ],
+        "E2_flattened_locals": [
+          64,
+          3,
+          320,
+          320
+        ],
+        "E2_features": [
+          16,
+          1536
+        ],
+        "tail_policy": "Retain actual B rows, no padding, duplication or drop; global/features use B, locals use [B,4,...] and flattened locals [4*B,...]",
+        "train_batches": 2188,
+        "train_tail_rows": 5,
+        "val_batches": 469,
+        "val_tail_rows": 9,
+        "full_batches_per_1024_row_chunk": 64
+      }
     },
     "publication": {
       "single_writer": true,
@@ -80,7 +121,7 @@
       "rtol": 1e-05,
       "comparison": "abs(candidate-reference) <= atol + rtol*abs(reference), per-sample CE when available and full-split sample-mean NLL"
     },
-    "direct_and_cached_original_head_batch_size": 1,
+    "direct_and_cached_original_head_batch_size": 16,
     "full_validation_order": "fixed manifest order",
     "discrete_equality_required": [
       "membership and label IDs",
@@ -93,7 +134,8 @@
     "discrete_mismatch_allowed_by_float_tolerance": false,
     "reference_logits_unavailable": "Compare direct source.forward against original_head(extracted feature) under accepted runtime and compare complete discrete output/derived metrics/NLL with selected-source analysis; if authoritative NLL or selected outputs unavailable, block acceptance, not comparison waiver",
     "tolerances_are_measured_target_results": false,
-    "failure": "Stop for source/runtime review; no widening of tolerances, baseline replacement, source reselection or changed prediction acceptance"
+    "failure": "Stop for source/runtime review; no widening of tolerances, baseline replacement, source reselection or changed prediction acceptance",
+    "batch_policy": "Use identical manifest-ordered batches of up to 16 for direct forward, extraction and cached original-head replay; retain train tail B=5 and validation tail B=9 without padding/drop. Preserve historical discrete equality and existing float tolerances; changed batching requires fresh target replay acceptance."
   },
   "rng": {
     "derivation": "SHA-256 of UTF-8 pipe-separated str(parts); first 8 digest bytes little-endian modulo 9223372036854775807",
@@ -758,9 +800,9 @@
       }
     ],
     "image_bytes_opened_during_t00b": false,
-    "maximum_source_original_image_presentations": 48,
-    "per_source_member_pass_cap": 4,
-    "operations": "For each of the 12 source/member pairs: direct forward, frozen extraction+original-head replay, and bounded extraction interruption/recovery; at most four original-image presentations per pair. Record E2's five views separately.",
+    "maximum_source_original_image_presentations": 384,
+    "per_source_member_pass_cap": 32,
+    "operations": "For each of six sources, form one private 16-row train-only fixture batch alternating the two listed members eight times each in listed order. At most four complete batch presentations (direct forward, frozen extraction+original-head replay and interruption/recovery), 64 original-image presentations per source or 32 per source/member; total cap 384. E2 has 64 flattened locals per batch; count five views per original presentation separately. Repeated fixture rows are nonofficial and never published as cache inputs.",
     "head_fixtures": {
       "kind": "nonofficial_fixture",
       "feature_dimensions": [

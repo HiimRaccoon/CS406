@@ -658,7 +658,7 @@
         },
         "extraction": {
           "device": "cuda:0",
-          "original_image_batch_size": 1,
+          "original_image_batch_size": 16,
           "num_workers": 0,
           "pin_memory": false,
           "persistent_workers": false,
@@ -668,7 +668,48 @@
           "autocast": false,
           "eval": true,
           "no_grad": true,
-          "encoder_calls": "E1: global only. E2: global first then one batch-major call of all four locals; no crop chunking"
+          "encoder_calls": "E1: global only. E2: global first then one batch-major call of all four locals; no crop chunking",
+          "batch_shapes": {
+            "E1_global": [
+              16,
+              3,
+              384,
+              896
+            ],
+            "E1_features": [
+              16,
+              768
+            ],
+            "E2_global": [
+              16,
+              3,
+              384,
+              896
+            ],
+            "E2_locals": [
+              16,
+              4,
+              3,
+              320,
+              320
+            ],
+            "E2_flattened_locals": [
+              64,
+              3,
+              320,
+              320
+            ],
+            "E2_features": [
+              16,
+              1536
+            ],
+            "tail_policy": "Retain actual B rows, no padding, duplication or drop; global/features use B, locals use [B,4,...] and flattened locals [4*B,...]",
+            "train_batches": 2188,
+            "train_tail_rows": 5,
+            "val_batches": 469,
+            "val_tail_rows": 9,
+            "full_batches_per_1024_row_chunk": 64
+          }
         },
         "publication": {
           "single_writer": true,
@@ -751,7 +792,7 @@
             "rtol": 1e-05,
             "comparison": "abs(candidate-reference) <= atol + rtol*abs(reference), per-sample CE when available and full-split sample-mean NLL"
           },
-          "direct_and_cached_original_head_batch_size": 1,
+          "direct_and_cached_original_head_batch_size": 16,
           "full_validation_order": "fixed manifest order",
           "discrete_equality_required": [
             "membership and label IDs",
@@ -764,7 +805,8 @@
           "discrete_mismatch_allowed_by_float_tolerance": false,
           "reference_logits_unavailable": "Compare direct source.forward against original_head(extracted feature) under accepted runtime and compare complete discrete output/derived metrics/NLL with selected-source analysis; if authoritative NLL or selected outputs unavailable, block acceptance, not comparison waiver",
           "tolerances_are_measured_target_results": false,
-          "failure": "Stop for source/runtime review; no widening of tolerances, baseline replacement, source reselection or changed prediction acceptance"
+          "failure": "Stop for source/runtime review; no widening of tolerances, baseline replacement, source reselection or changed prediction acceptance",
+          "batch_policy": "Use identical manifest-ordered batches of up to 16 for direct forward, extraction and cached original-head replay; retain train tail B=5 and validation tail B=9 without padding/drop. Preserve historical discrete equality and existing float tolerances; changed batching requires fresh target replay acceptance."
         },
         "candidate_reference": "docs/E3/e3_cache_pilot_contract_v1.json#/replay"
       },
@@ -2141,8 +2183,8 @@
       "executable": false,
       "schema_bundle": {
         "path": "docs/E3/schemas/e3_record_schemas_v1.json",
-        "bytes": 93468,
-        "sha256": "6e44352695841d917a6df435de74abc93d571df874a6580a4182147d89b22fb5"
+        "bytes": 94843,
+        "sha256": "8156410673c321b85f2e7e9cd69cb5dbe8c87dbad5e2a15704b1203fab3895e3"
       },
       "planned_output_roots": {
         "root_resolution": "All destinations are explicit caller-supplied project-relative roots beneath the execution workspace, resolved with containment/symlink checks; these are planned destinations, not existing inputs",
@@ -2374,8 +2416,8 @@
         "executable": false,
         "schema_bundle": {
           "path": "docs/E3/schemas/e3_record_schemas_v1.json",
-          "bytes": 93468,
-          "sha256": "6e44352695841d917a6df435de74abc93d571df874a6580a4182147d89b22fb5"
+          "bytes": 94843,
+          "sha256": "8156410673c321b85f2e7e9cd69cb5dbe8c87dbad5e2a15704b1203fab3895e3"
         },
         "schema_pointer": "/$defs/gate_receipt_schema_only",
         "prospective_root": "artifacts/E3/approvals/v1",
@@ -2453,8 +2495,8 @@
       },
       {
         "path": "docs/E3/tasks.md",
-        "bytes": 18108,
-        "sha256": "4dec1281ec9fd99e930ed891bbcc47af2d5c630734c14cfa0915def56462bffc"
+        "bytes": 18109,
+        "sha256": "35ab60ce9b54d20425bec035292f2580a7f8c68f292848818e70ddc66056cef3"
       },
       {
         "path": "docs/master_spec.md",
@@ -2550,13 +2592,13 @@
     },
     "cache_pilot_contract": {
       "path": "docs/E3/e3_cache_pilot_contract_v1.json",
-      "bytes": 33900,
-      "sha256": "59af31dc33c71103d0d7cbf051c4e27ac81dbd46253dce82c09c8fd963dbaa74"
+      "bytes": 35392,
+      "sha256": "e4f18b3134289a4e4fd10d34dfe270028addd71cf9f29618fbd403e891a95a1a"
     },
     "record_schemas": {
       "path": "docs/E3/schemas/e3_record_schemas_v1.json",
-      "bytes": 93468,
-      "sha256": "6e44352695841d917a6df435de74abc93d571df874a6580a4182147d89b22fb5"
+      "bytes": 94843,
+      "sha256": "8156410673c321b85f2e7e9cd69cb5dbe8c87dbad5e2a15704b1203fab3895e3"
     },
     "preparation_evidence": "docs/E3/e3_t00b_preparation_evidence_v1.json",
     "new_values_authority": "Current explicit user T00b candidate-design request; new values are neither previously approved nor measured results",
